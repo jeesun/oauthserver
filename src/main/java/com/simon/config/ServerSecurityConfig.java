@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,15 +29,14 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Override
+    /*@Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/hystrix.stream/**", "/info", "/error");
-    }
+        web.ignoring().antMatchers("/hystrix.stream*//**", "/info", "/error");
+     }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .jdbcAuthentication().dataSource(dataSource);
+        auth.jdbcAuthentication().dataSource(dataSource);
     }
 
     @Override
@@ -57,10 +57,5 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic().disable()
                 .csrf().disable();
-    }
-
-    @Override
-    public void setAuthenticationConfiguration(AuthenticationConfiguration authenticationConfiguration) {
-        super.setAuthenticationConfiguration(authenticationConfiguration);
     }
 }
