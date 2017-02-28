@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -38,7 +39,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .secret("secretId")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password")
                 .scopes("app");*/
-        clients.jdbc(dataSource);
+        clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder(11));
     }
 
     @Override
