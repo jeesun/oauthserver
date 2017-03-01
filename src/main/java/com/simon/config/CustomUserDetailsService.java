@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new Object[]{s}, (ResultSet resultSet, int i)-> {
                     User user = new User();
                     user.setUsername(resultSet.getString("username"));
-                    user.setPassword(resultSet.getString("password"));
+                    //user.setPassword(resultSet.getString("password"));
                     user.setEnabled(resultSet.getBoolean("enabled"));
                     return user;
                 });

@@ -54,7 +54,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("permitAll()");
+                .checkTokenAccess("permitAll()").passwordEncoder(new BCryptPasswordEncoder(11));
     }
 
     @Bean
