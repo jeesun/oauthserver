@@ -39,7 +39,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .secret("secretId")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password")
                 .scopes("app");*/
-        clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder(11));
+        clients.jdbc(dataSource);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("permitAll()").passwordEncoder(new BCryptPasswordEncoder(11));
+                .checkTokenAccess("permitAll()");
     }
 
     @Bean
