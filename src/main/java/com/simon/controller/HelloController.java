@@ -16,13 +16,22 @@ import java.util.Map;
 @RequestMapping("/api/hellos")
 public class HelloController {
 
+    private static final Long timestamp = System.currentTimeMillis();
+
     @RequestMapping(value = "/ip", method = RequestMethod.GET)
     public Map<String, Object> hello(){
         Map<String, Object> responseMap = new LinkedHashMap<>();
         try {
-            responseMap.put("ip", InetAddress.getLocalHost().getHostAddress());
+            responseMap.put("timestamp", timestamp);
+            responseMap.put("HostAddress", InetAddress.getLocalHost().getHostAddress());
+            responseMap.put("HostName", InetAddress.getLocalHost().getHostName());
+            responseMap.put("CanonicalHostName", InetAddress.getLocalHost().getCanonicalHostName());
+            responseMap.put("Address", InetAddress.getLocalHost().getAddress());
+            responseMap.put("LocalHost", InetAddress.getLocalHost().toString());
         } catch (UnknownHostException e) {
             e.printStackTrace();
+            responseMap.put("error", e.toString());
+            responseMap.put("errorMsg", e.getMessage());
         }
         return responseMap;
     }
