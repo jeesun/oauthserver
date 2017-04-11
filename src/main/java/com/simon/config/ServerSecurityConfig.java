@@ -42,17 +42,6 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http.anonymous().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-//                    .accessDeniedHandler(accessDeniedHandler()) // handle access denied in general (for example comming from @PreAuthorization
-//                    .authenticationEntryPoint(entryPointBean()) // handle authentication exceptions for unauthorized calls.
-                .and()
-                .authorizeRequests()
-//                    .antMatchers("/hystrix.stream*//**", "/info", "/error").permitAll()
-                .anyRequest().authenticated().and().csrf().disable();*/
         http.authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .and()
