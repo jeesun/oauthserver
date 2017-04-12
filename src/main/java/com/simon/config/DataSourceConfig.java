@@ -27,14 +27,14 @@ public class DataSourceConfig {
         dataSource.setUrl(env.getProperty("spring.datasource.url"));
         dataSource.setUsername(env.getProperty("spring.datasource.username"));
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
-        dataSource.setMaxActive(20);
-        dataSource.setInitialSize(1);
-        dataSource.setMaxWait(60000);
-        dataSource.setMinIdle(3);
-        dataSource.setRemoveAbandoned(true);
-        dataSource.setRemoveAbandonedTimeout(180);
-        dataSource.setConnectionProperties("clientEncoding=UTF-8");
-        dataSource.setTestWhileIdle(false);
+        dataSource.setMaxActive(env.getProperty("spring.datasource.druid.max-active", Integer.class));
+        dataSource.setInitialSize(env.getProperty("spring.datasource.druid.initial-size", Integer.class));
+        dataSource.setMaxWait(env.getProperty("spring.datasource.druid.max-wait", Integer.class));
+        dataSource.setMinIdle(env.getProperty("spring.datasource.druid.min-idle", Integer.class));
+        dataSource.setRemoveAbandoned(env.getProperty("spring.datasource.druid.remove-abandoned", Boolean.class));
+        dataSource.setRemoveAbandonedTimeout(env.getProperty("spring.datasource.druid.remove-abandoned-timeout", Integer.class));
+        dataSource.setConnectionProperties(env.getProperty("spring.datasource.druid.connection-properties"));
+        dataSource.setTestWhileIdle(env.getProperty("spring.datasource.druid.test-while-idle", Boolean.class));
         return dataSource;
     }
 
