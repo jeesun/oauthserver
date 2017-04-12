@@ -1,5 +1,6 @@
 package com.simon.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private DataSource dataSource;
+    private DruidDataSource dataSource;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

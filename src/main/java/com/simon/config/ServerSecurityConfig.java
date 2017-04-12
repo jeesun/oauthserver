@@ -1,5 +1,6 @@
 package com.simon.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private DataSource dataSource;
+    private DruidDataSource dataSource;
 
     @Override
     @Bean
