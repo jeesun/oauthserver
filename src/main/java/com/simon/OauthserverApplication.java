@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 public class OauthserverApplication {
 
 	public static void main(String[] args) {
-//		SpringApplication.run(OauthserverApplication.class, args);
-		new SpringApplicationBuilder(Application.class).web(true).run(args);
+		SpringApplication.run(OauthserverApplication.class, args);
+//		new SpringApplicationBuilder(Application.class).web(true).run(args);
 	}
 }
