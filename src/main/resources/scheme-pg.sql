@@ -59,10 +59,22 @@ CREATE TABLE IF NOT EXISTS users (
   phone VARCHAR(256) UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS authorities (
+username VARCHAR(50) NOT NULL,
+authority VARCHAR(50) NOT NULL
+);
+
 -- 自增序列
 CREATE SEQUENCE if NOT EXISTS users_id_seq;
 alter TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq');
 
+-- 两列唯一索引
+CREATE UNIQUE INDEX if NOT EXISTS ix_auth_username ON authorities (username, authority);
+
+-- 添加外键
+ALTER TABLE authorities ADD FOREIGN KEY (username) REFERENCES users (username) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- 添加初始数据
 INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', 'secret', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, null);
 
 -- 密码经过了加密，全都是1234567890c

@@ -50,6 +50,18 @@ CREATE TABLE if NOT EXISTS users (
   email varchar(255) DEFAULT NULL UNIQUE
 );
 
+CREATE TABLE if NOT EXISTS authorities (
+username VARCHAR(50) NOT NULL,
+authority VARCHAR(50) NOT NULL
+);
+
+-- 两列唯一索引
+CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
+
+-- 添加外键
+ALTER TABLE authorities ADD FOREIGN KEY (username) REFERENCES users (username) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
 INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', 'secret', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, null);
 
 -- 密码经过了加密，全都是1234567890c
