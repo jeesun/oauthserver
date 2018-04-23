@@ -6,6 +6,13 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 - PostgreSQL
 - MySQL
 
+已实现的功能：
+1. 集成Spring Boot Oauth2，实现Oauth服务；
+2. token保存到关系型数据库；
+3. 日志记录保存到文件，并按日归档；
+4. 数据库连接信息加密；
+5. 集成Druid数据库连接池。
+
 ## 使用流程
 ### 1. 建表
 - PostgreSQL
