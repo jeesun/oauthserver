@@ -52,6 +52,13 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
     "scope": "read write trust"
 }
 ```
+失败示例（用户名或者密码错误）
+``` json
+{
+    "error": "invalid_grant",
+    "error_description": "Bad credentials"
+}
+```
 
 > 2、检查access_token
 >> GET [http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb](http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb)
