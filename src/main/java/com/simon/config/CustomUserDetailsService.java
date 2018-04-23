@@ -1,34 +1,58 @@
 package com.simon.config;
 
-import com.simon.domain.User;
+import com.simon.domain.UserEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by simon on 2017/2/24.
  */
-@Configuration
+@Component
 public class CustomUserDetailsService implements UserDetailsService {
+    private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
+
+    private final String sqlLoadUser;
+    private final String sqlLoadAuthorities;
+    private final RowMapper<UserEntity> myUserDetailsRowMapper;
+    private final RowMapper<GrantedAuthority> authorityRowMapper;
+
+    public CustomUserDetailsService() {
+        super();
+        sqlLoadUser = "select id,username,password,enabled,phone,email from users where username=? OR phone=? OR email=?";
+        sqlLoadAuthorities = "select authority from authorities where username = ?";
+
+        myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"));
+
+        authorityRowMapper = (rs,i) -> new SimpleGrantedAuthority(rs.getString(1));
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return jdbcTemplate.queryForObject("SELECT username,password,enabled FROM users where username=?",
-                new Object[]{s}, (ResultSet resultSet, int i)-> {
-                    User user = new User();
-                    user.setUsername(resultSet.getString("username"));
-                    //user.setPassword(resultSet.getString("password"));
-                    user.setEnabled(resultSet.getBoolean("enabled"));
-                    return user;
-                });
+        try{
+            UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, s, s, s);
+            logger.error("查询得到用户：{}", userFromQuery);
+            List<GrantedAuthority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getUsername());
+            logger.error("得到其权限：{}", authorities);
+
+            return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), userFromQuery.getAuthorities());
+        }catch (EmptyResultDataAccessException e){
+            logger.error("查询结果集为空：{}", s);
+            throw new UsernameNotFoundException("用户名或密码不正确");
+        }
     }
 }
