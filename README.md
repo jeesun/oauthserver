@@ -98,5 +98,5 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 }
 ```
 
-## app实践
+## app实践指南
 app获取到token信息后，需要保存token信息和请求时间。在传access_token之前，需要检查access_token是否过期。为了减少后台压力，检查access_token是否过期应该是在app本地完成。通过token的key`expires_in`（剩余有效期）的值，以及本地记录的请求时间，和当前时间做对比，可以很方便地判断出access_token是否过期。如果过期了，需要通过refresh_token获取新的access_token。因为access_token的有效期只有2个小时，这个验证是必须的。refresh_token同理。
