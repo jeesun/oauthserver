@@ -41,11 +41,24 @@ create table if NOT EXISTS oauth_code (
   code VARCHAR(255), authentication BLOB
 );
 
-CREATE TABLE IF NOT EXISTS users (
-  id int(8) NOT NULL AUTO_INCREMENT UNIQUE,
+CREATE TABLE if NOT EXISTS users (
+  id int(8) AUTO_INCREMENT UNIQUE,
   username varchar(255) NOT NULL PRIMARY KEY,
   password varchar(255) NOT NULL,
   enabled tinyint(1) DEFAULT NULL,
   phone varchar(255) DEFAULT NULL UNIQUE,
   email varchar(255) DEFAULT NULL UNIQUE
 );
+
+INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', 'secret', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, null);
+
+-- 密码经过了加密，全都是1234567890c
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('jeesun', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', true, 1, 'simon.sun.dev@hotmail.com', '18362102427');
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('user2711', '$2a$11$BUiKPp8.pcym7sxXYPvZeOjl0BOoVl3PZT.1Wfb3kmIgooO/GfQ4G', true, 2, null, '18860902711');
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('user6745', '$2a$11$a7XDbu2RvLjZdr4kCvqh2u7gwVXhwxdauIzbX3ZizbBU.HeV8BOky', true, 4, null, '18550046745');
+
+INSERT INTO authorities VALUES ('jeesun', 'ROLE_ADMIN');
+INSERT INTO authorities VALUES ('jeesun', 'ROLE_USER');
+INSERT INTO authorities VALUES ('user2711', 'ROLE_USER');
+INSERT INTO authorities VALUES ('user6745', 'ROLE_USER');
+

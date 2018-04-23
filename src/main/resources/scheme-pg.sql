@@ -62,3 +62,15 @@ CREATE TABLE IF NOT EXISTS users (
 -- 自增序列
 CREATE SEQUENCE if NOT EXISTS users_id_seq;
 alter TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq');
+
+INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', 'secret', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, null);
+
+-- 密码经过了加密，全都是1234567890c
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('jeesun', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', true, 1, 'simon.sun.dev@hotmail.com', '18362102427');
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('user2711', '$2a$11$BUiKPp8.pcym7sxXYPvZeOjl0BOoVl3PZT.1Wfb3kmIgooO/GfQ4G', true, 2, null, '18860902711');
+INSERT INTO users (username, password, enabled, id, email, phone) VALUES ('user6745', '$2a$11$a7XDbu2RvLjZdr4kCvqh2u7gwVXhwxdauIzbX3ZizbBU.HeV8BOky', true, 4, null, '18550046745');
+
+INSERT INTO authorities VALUES ('jeesun', 'ROLE_ADMIN');
+INSERT INTO authorities VALUES ('jeesun', 'ROLE_USER');
+INSERT INTO authorities VALUES ('user2711', 'ROLE_USER');
+INSERT INTO authorities VALUES ('user6745', 'ROLE_USER');
