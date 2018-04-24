@@ -1,4 +1,3 @@
-# oauthserver
 <p align="center">
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
@@ -6,6 +5,8 @@
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
 <img src="https://img.shields.io/badge/release-1.0.0-brightgreen.svg">
 </p>
+
+# oauthserver
 ## 简介
 oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器。仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth服务器。
 
