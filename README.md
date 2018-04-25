@@ -92,6 +92,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 >> GET [http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb](http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb)
 
 成功示例
+即使用户被封enabled=false，access_token未过期仍然可用。
 ``` json
 {
     "aud": [
@@ -124,7 +125,6 @@ access_token已过期
 >> POST [http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487](http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487)
 
 成功示例  
-即使用户被封enabled=false，access_token未过期仍然可用。
 ``` json
 {
     "access_token": "690ecd7d-f2b7-4faa-ac45-5b7a319478e8",
