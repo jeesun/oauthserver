@@ -65,7 +65,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 > 1、根据用户名和密码获取access_token
 >> POST [http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c](http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c)
 
-成功示例：
+**成功示例**  
 status=200，返回的json数据：
 ``` json
 {
@@ -76,7 +76,7 @@ status=200，返回的json数据：
     "scope": "read write trust"
 }
 ```
-失败示例  
+**失败示例**  
 1. 用户名错误  
 status=400，返回的json数据：
 ``` json
@@ -105,8 +105,8 @@ status=400，返回的json数据：
 > 2、检查access_token
 >> GET [http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb](http://localhost:8182/oauth/check_token?token=ca582cd1-be6c-4a5a-82ec-10af7a8e06eb)
 
-成功示例  
-即使用户被封enabled=false，access_token未过期仍然可用。
+**成功示例**  
+即使用户被封enabled=false，access_token未过期仍然可用。  
 status=200，返回的json数据：
 ``` json
 {
@@ -127,7 +127,7 @@ status=200，返回的json数据：
     ]
 }
 ```
-失败示例  
+**失败示例**  
 access_token已过期  
 status=400，返回的json数据：
 ``` json
@@ -141,7 +141,7 @@ status=400，返回的json数据：
 > 3、根据refresh_token获取新的access_token
 >> POST [http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487](http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487)
 
-成功示例  
+**成功示例**  
 status=200，返回的json数据：
 ``` json
 {
@@ -153,8 +153,8 @@ status=200，返回的json数据：
 }
 ```
 
-失败示例  
-用户被封enabled=false
+**失败示例**  
+用户被封enabled=false  
 status=401，返回的json数据：
 ``` json
 {
