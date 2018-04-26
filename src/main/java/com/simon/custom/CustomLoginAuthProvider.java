@@ -4,12 +4,12 @@ import com.simon.domain.UserEntity;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -27,13 +27,16 @@ public class CustomLoginAuthProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         UserEntity userEntity = (UserEntity) userDetailsService.loadUserByUsername(username);
         if (null == userEntity){
-            throw new BadCredentialsException("用户名错误");
+            throw new InvalidGrantException("用户名错误");
+        }
+        if (!userEntity.isEnabled()){
+            throw new InvalidGrantException("您已被封号");
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(11);
 
         if(!encoder.matches(password, userEntity.getPassword())){
-            throw new BadCredentialsException("密码错误");
+            throw new InvalidGrantException("密码错误");
         }
 
         Collection<? extends GrantedAuthority> authorities = userEntity.getAuthorities();

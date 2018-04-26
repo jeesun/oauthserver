@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @create 2018-04-25 23:25
  **/
 
-@Order(Ordered.LOWEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
     private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);

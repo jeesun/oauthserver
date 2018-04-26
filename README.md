@@ -66,6 +66,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 >> POST [http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c](http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c)
 
 成功示例：
+status=200，返回的json数据：
 ``` json
 {
     "access_token": "ca582cd1-be6c-4a5a-82ec-10af7a8e06eb",
@@ -76,19 +77,28 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 }
 ```
 失败示例  
-用户名或者密码错误
+1. 用户名错误  
+status=400，返回的json数据：
 ``` json
 {
     "error": "invalid_grant",
-    "error_description": "Bad credentials"
+    "error_description": "用户名错误"
 }
 ```
-失败示例  
-用户被封号enabled=false
+2. 密码错误  
+status=400，返回的json数据：
 ``` json
 {
     "error": "invalid_grant",
-    "error_description": "User is disabled"
+    "error_description": "密码错误"
+}
+```
+3. 账号被封enabled=false  
+status=400，返回的json数据：
+``` json
+{
+    "error": "invalid_grant",
+    "error_description": "您已被封号"
 }
 ```
 
@@ -97,6 +107,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 
 成功示例  
 即使用户被封enabled=false，access_token未过期仍然可用。
+status=200，返回的json数据：
 ``` json
 {
     "aud": [
@@ -117,8 +128,10 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 }
 ```
 失败示例  
-access_token已过期
+access_token已过期  
+status=400，返回的json数据：
 ``` json
+
 {
     "error": "invalid_token",
     "error_description": "Token was not recognised"
@@ -129,6 +142,7 @@ access_token已过期
 >> POST [http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487](http://localhost:8182/oauth/token?grant_type=refresh_token&refresh_token=c24a6143-97c8-4642-88b9-d5c5b902b487)
 
 成功示例  
+status=200，返回的json数据：
 ``` json
 {
     "access_token": "690ecd7d-f2b7-4faa-ac45-5b7a319478e8",
@@ -138,8 +152,10 @@ access_token已过期
     "scope": "read write trust"
 }
 ```
+
 失败示例  
 用户被封enabled=false
+status=401，返回的json数据：
 ``` json
 {
     "error": "unauthorized",

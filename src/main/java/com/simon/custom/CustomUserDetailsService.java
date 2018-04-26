@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), authorities);
         }catch (EmptyResultDataAccessException e){
             logger.info("查询结果集为空：{}", s);
-            throw new UsernameNotFoundException("用户名或密码不正确");
+            throw new InvalidGrantException("用户名错误");
         }
     }
 }
