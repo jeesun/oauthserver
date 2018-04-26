@@ -62,7 +62,9 @@ bug修复。
 在建表时，我已经向表添加了测试数据。以下请求参数的值，均是测试数据，在数据表中可以找得到。请根据需求到数据表中修改对应的值。    
 在表`oauth_client_details`表中，已有一条测试数据。列`client_id`和`client_secret`的值，分别对应Basic Oauth的请求参数`username`和`password`的值。而列`access_token_validity`和列`refresh_token_validity`，分别代表access_token和refresh_token的有效期时间，以秒为单位。测试数据7200和5184000，分别代表2个小时和2个月（60天）。这是一个比较合理的有效期时间的设置，可以参考。
 
-**token相关的接口，都需要进行Basic Oauth认证。**
+**token相关的接口，都需要进行Basic Oauth认证。**  
+如下图所示：  
+![截图](screenshots/2018-04-26_234934.png)
 > 1、根据用户名和密码获取access_token
 >> POST [http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c](http://localhost:8182/oauth/token?grant_type=password&username=jeesun&password=1234567890c)
 
