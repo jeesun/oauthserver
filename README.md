@@ -24,13 +24,12 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器�
 5. 集成Druid数据库连接池。
 
 ## 更新日志
->v1.0.3
->>bug修复。
->v1.0.1
->>获取token时，username允许传用户名、手机号或者邮箱。
-
->v1.0.0
->>完成基础Oauth服务。
+- v1.0.3  
+bug修复。
+- v1.0.1  
+获取token时，username允许传用户名、手机号或者邮箱。  
+- v1.0.0  
+完成基础Oauth服务。
 
 ## 使用流程
 ### 1. 建表
