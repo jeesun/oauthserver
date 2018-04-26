@@ -44,8 +44,8 @@ bug修复。
 # PostgreSQL连接信息
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
-    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+)
-    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4)
+    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
+    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
 ```
 
 - MySQL
@@ -53,8 +53,8 @@ bug修复。
 # MySQL连接信息
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: ENC(YiYjVwTulDGN//YaB3KbuA==)
-    password: ENC(9oaIJkFgGSDFaHH3OXY63RHWQ+amDmiJ)
+    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
+    password: ENC(9oaIJkFgGSDFaHH3OXY63RHWQ+amDmiJ) #明文19941017
 ```
 ### 3. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
