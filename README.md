@@ -10,7 +10,7 @@
 
 # oauthserver
 ## 简介
-oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth服务器。仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth服务器。
+oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth微服务。仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth微服务。
 
 支持的关系型数据库：
 - PostgreSQL
