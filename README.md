@@ -22,15 +22,18 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth微服务�
 3. 获取token时，username允许传用户名、手机号或者邮箱；
 4. 日志记录保存到文件，并按日归档；
 5. 数据库连接信息加密；
-6. 集成Druid数据库连接池。
+6. 集成Druid数据库连接池；
+7. 自定义Oauth2Exception异常返回的json信息。
 
 ## 更新日志
-- v1.0.3  
-bug修复。
-- v1.0.1  
-获取token时，username允许传用户名、手机号或者邮箱。  
-- v1.0.0  
-完成基础Oauth服务。
+### v1.1.0(2018-06-01)  
+- 自定义Oauth2Exception异常返回的json信息。
+### v1.0.3  
+- bug修复。
+### v1.0.1  
+- 获取token时，username允许传用户名、手机号或者邮箱。  
+### v1.0.0  
+- 完成基础Oauth服务。
 
 ## 使用流程
 ### 1. 建表
