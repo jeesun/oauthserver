@@ -43,7 +43,7 @@ public class TokenErrorController extends BasicErrorController {
         Map<String, Object> resultMap = new LinkedHashMap<>();
         HttpStatus status = getStatus(request);
         resultMap.put("code", status.value());
-        resultMap.put("msg", body.get("message"));
+        resultMap.put("message", body.get("message"));
         resultMap.put("data", null);
         return new ResponseEntity<>(resultMap, status);
     }
