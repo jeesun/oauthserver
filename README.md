@@ -85,24 +85,27 @@ status=200，返回的json数据：
 status=400，返回的json数据：
 ``` json
 {
-    "error": "invalid_grant",
-    "error_description": "用户名错误"
+    "code": 400,
+    "message": "用户名不存在",
+    "data": null
 }
 ```
 2. 密码错误  
 status=400，返回的json数据：
 ``` json
 {
-    "error": "invalid_grant",
-    "error_description": "密码错误"
+    "code": 400,
+    "message": "密码错误",
+    "data": null
 }
 ```
 3. 账号被封enabled=false  
 status=400，返回的json数据：
 ``` json
 {
-    "error": "invalid_grant",
-    "error_description": "您已被封号"
+    "code": 400,
+    "message": "您已被封号",
+    "data": null
 }
 ```
 
@@ -135,10 +138,10 @@ status=200，返回的json数据：
 access_token已过期  
 status=400，返回的json数据：
 ``` json
-
 {
-    "error": "invalid_token",
-    "error_description": "Token was not recognised"
+    "code": 400,
+    "message": "Token was not recognised",
+    "data": null
 }
 ```
 
@@ -162,8 +165,9 @@ status=200，返回的json数据：
 status=401，返回的json数据：
 ``` json
 {
-    "error": "unauthorized",
-    "error_description": "用户已失效"
+    "code": 401,
+    "msg": "用户已失效",
+    "data": null
 }
 ```
 ## app实践指南
