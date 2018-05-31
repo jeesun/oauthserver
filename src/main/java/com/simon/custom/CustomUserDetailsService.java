@@ -50,7 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), authorities);
         }catch (EmptyResultDataAccessException e){
             logger.info("查询结果集为空：{}", s);
-            throw new InvalidGrantException("用户名错误");
+            throw new InvalidGrantException("用户名不存在");
         }
     }
 }

@@ -23,11 +23,12 @@ public class CustomLoginAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         logger.info("authenticate");
+
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         UserEntity userEntity = (UserEntity) userDetailsService.loadUserByUsername(username);
         if (null == userEntity){
-            throw new InvalidGrantException("用户名错误");
+            throw new InvalidGrantException("用户名不存在");
         }
         if (!userEntity.isEnabled()){
             throw new InvalidGrantException("您已被封号");

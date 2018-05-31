@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 全局异常处理类
@@ -22,11 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
     private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(value = Exception.class)
-    public ResultMsg grantError(HttpServletRequest request, Exception e){
+    @ExceptionHandler(value = {RuntimeException.class, Exception.class})
+    public ResultMsg grantError(HttpServletRequest request, HttpServletResponse response, RuntimeException e){
         ResultMsg resultMsg = new ResultMsg();
-        resultMsg.setCode(500);
-        resultMsg.setMsg(e.getMessage());
+        resultMsg.setCode(response.getStatus());
+        resultMsg.setMessage(e.getMessage());
         resultMsg.setData(e.toString());
         logger.error(e);
         return resultMsg;
