@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.simon.config.AppConfig;
 import org.apache.log4j.Logger;
 import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
@@ -42,9 +43,9 @@ public class TokenErrorController extends BasicErrorController {
         }*/
         Map<String, Object> resultMap = new LinkedHashMap<>();
         HttpStatus status = getStatus(request);
-        resultMap.put("code", status.value());
-        resultMap.put("message", body.get("message"));
-        resultMap.put("data", null);
+        resultMap.put(AppConfig.CODE, status.value());
+        resultMap.put(AppConfig.MESSAGE, body.get("message"));
+        resultMap.put(AppConfig.DATA, null);
         return new ResponseEntity<>(resultMap, status);
     }
 

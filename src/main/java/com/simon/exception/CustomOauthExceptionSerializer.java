@@ -3,6 +3,7 @@ package com.simon.exception;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.simon.config.AppConfig;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,9 +28,9 @@ public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthExc
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         gen.writeStartObject();
-        gen.writeNumberField("code", value.getHttpErrorCode());
-        gen.writeStringField("message", value.getMessage());
-        gen.writeNullField("data");
+        gen.writeNumberField(AppConfig.CODE, value.getHttpErrorCode());
+        gen.writeStringField(AppConfig.MESSAGE, value.getMessage());
+        gen.writeNullField(AppConfig.DATA);
 //        gen.writeStringField("message", "用户名或密码错误");
         //gen.writeStringField("path", request.getServletPath());
         //gen.writeStringField("timestamp", String.valueOf(new Date().getTime()));
