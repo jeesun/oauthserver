@@ -4,6 +4,8 @@ import com.simon.domain.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +18,7 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,6 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    private Locale locale = LocaleContextHolder.getLocale();
 
     private final String sqlLoadUser;
     private final String sqlLoadAuthorities;
@@ -50,7 +58,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), authorities);
         }catch (EmptyResultDataAccessException e){
             logger.info("查询结果集为空：{}", s);
-            throw new InvalidGrantException("用户名不存在");
+            throw new InvalidGrantException(messageSource.getMessage("usernameNotFound", null, locale));
         }
     }
 }
