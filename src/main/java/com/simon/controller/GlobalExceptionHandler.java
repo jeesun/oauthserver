@@ -4,6 +4,7 @@ import com.simon.domain.ResultMsg;
 import org.apache.log4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
     private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(value = {RuntimeException.class, Exception.class})
+    @ExceptionHandler(value = {InvalidTokenException.class, RuntimeException.class, Exception.class})
     public ResultMsg grantError(HttpServletRequest request, HttpServletResponse response, RuntimeException e){
         ResultMsg resultMsg = new ResultMsg();
         resultMsg.setCode(response.getStatus());

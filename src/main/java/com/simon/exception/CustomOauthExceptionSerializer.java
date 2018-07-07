@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.simon.config.AppConfig;
+import org.apache.log4j.Logger;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -19,12 +20,16 @@ import java.util.Map;
  **/
 
 public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthException> {
+    private static Logger logger = Logger.getLogger(CustomOauthExceptionSerializer.class);
+
     public CustomOauthExceptionSerializer() {
         super(CustomOauthException.class);
     }
 
     @Override
     public void serialize(CustomOauthException value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        logger.warn("CustomOauthException = " + value);
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         gen.writeStartObject();
@@ -38,6 +43,8 @@ public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthExc
             for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {
                 String key = entry.getKey();
                 String add = entry.getValue();
+                logger.warn("key = " + key);
+                logger.warn("add = " + add);
                 gen.writeStringField(key, add);
             }
         }
