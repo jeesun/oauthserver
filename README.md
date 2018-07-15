@@ -1,10 +1,10 @@
 <p align="center">
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
-<a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.14-990066.svg"></a>
+<a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-2.0.3-990066.svg"></a>
 <img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL-brightgreen.svg">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
-<img src="https://img.shields.io/badge/release-1.1.1-brightgreen.svg">
+<img src="https://img.shields.io/badge/release-2.0.0.alpha-brightgreen.svg">
 
 </p>
 
@@ -25,7 +25,26 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 6. 集成Druid数据库连接池；
 7. 自定义Oauth2Exception异常返回的json信息。
 
+
+请下载与Spring Boot对应版本的oauthserver：
+<table border="1">
+  <tr>
+    <th>Spring Boot version</th>
+    <th>oauthserver version</th>
+  </tr>
+  <tr>
+    <td>1.x.x</td>
+    <td>1.x.x</td>
+  </tr>
+  <tr>
+    <td>2.x.x</td>
+    <td>2.x.x</td>
+   </tr> 
+</table>
+
 ## 更新日志
+### v2.0.0.alpha(2018-07-16)
+- 升级Spring Boot版本从1.5.14.RELEASE到2.0.3.RELEASE。
 ### v1.1.1(2018-07-07)
 - 升级Spring Boot版本从1.5.13.RELEASE到1.5.14.RELEASE；
 - 修复检查的access_token无法识别时，返回中文message。
