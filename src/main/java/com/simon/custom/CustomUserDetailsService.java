@@ -3,7 +3,6 @@ package com.simon.custom;
 import com.simon.domain.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,10 +24,10 @@ import java.util.Locale;
 public class CustomUserDetailsService implements UserDetailsService {
     private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+    @Resource
+    private JdbcTemplate jdbcTemplate;
 
-    @Autowired
+    @Resource
     private MessageSource messageSource;
 
     private Locale locale = LocaleContextHolder.getLocale();

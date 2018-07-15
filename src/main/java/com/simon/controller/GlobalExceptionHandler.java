@@ -1,7 +1,8 @@
 package com.simon.controller;
 
 import com.simon.domain.ResultMsg;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
-    private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = {InvalidTokenException.class, RuntimeException.class, Exception.class})
     public ResultMsg grantError(HttpServletRequest request, HttpServletResponse response, RuntimeException e){
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
         resultMsg.setCode(response.getStatus());
         resultMsg.setMessage(e.getMessage());
         resultMsg.setData(e.toString());
-        logger.error(e);
+        logger.error(e.getMessage());
         return resultMsg;
     }
 }

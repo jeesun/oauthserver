@@ -1,8 +1,8 @@
 package com.simon.handler;
 
 import com.simon.exception.CustomOauthException;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Locale;
 
 /**
@@ -24,9 +25,9 @@ import java.util.Locale;
 
 @Component("customWebResponseExceptionTranslator")
 public class CustomWebResponseExceptionTranslator implements WebResponseExceptionTranslator {
-    private static Logger logger = Logger.getLogger(CustomWebResponseExceptionTranslator.class);
+    private static Logger logger = LoggerFactory.getLogger(CustomWebResponseExceptionTranslator.class);
 
-    @Autowired
+    @Resource
     private MessageSource messageSource;
 
     private Locale locale = LocaleContextHolder.getLocale();

@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.simon.config.AppConfig;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  **/
 
 public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauthException> {
-    private static Logger logger = Logger.getLogger(CustomOauthExceptionSerializer.class);
+    private static Logger logger = LoggerFactory.getLogger(CustomOauthExceptionSerializer.class);
 
     public CustomOauthExceptionSerializer() {
         super(CustomOauthException.class);

@@ -1,8 +1,8 @@
 package com.simon.custom;
 
 import com.simon.domain.UserEntity;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,16 +16,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Locale;
 
 @Component
 public class CustomLoginAuthProvider implements AuthenticationProvider {
-    private static final Logger logger = Logger.getLogger(CustomLoginAuthProvider.class);
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(CustomLoginAuthProvider.class);
+    @Resource
     private CustomUserDetailsService userDetailsService;
 
-    @Autowired
+    @Resource
     private MessageSource messageSource;
 
     private Locale locale = LocaleContextHolder.getLocale();

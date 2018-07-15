@@ -1,8 +1,6 @@
 server:
   port: 8182
-security:
-  basic:
-    enabled: false
+
 spring:
   datasource:
 # PostgreSQL连接信息
@@ -22,21 +20,28 @@ logging:
       springframework:
         web: INFO
     Hibernate: ERROR
-eureka:
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka/
-  instance:
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:8761/eureka/
+#  instance:
+#    prefer-ip-address: true
 
 jasypt:
   encryptor:
     password: 19941017
+    property:
+      prefix: "ENC("
+      suffix: ")"
 
 info:
   app:
+    encoding: @project.build.sourceEncoding@
     name: @project.name@
     description: @project.description@
+    java:
+      source: @java.version@
+      target: @java.version@
   build:
     groupId: @project.groupId@
     artifact: @project.artifactId@
@@ -58,5 +63,3 @@ management:
   info:
     git:
       mode: full
-  security:
-    enabled: false

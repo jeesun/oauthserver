@@ -1,11 +1,12 @@
 package com.simon.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -13,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 @Configuration
 public class DataSourceConfig {
-    @Autowired
+    @Resource
     private Environment env;
 
     @Bean

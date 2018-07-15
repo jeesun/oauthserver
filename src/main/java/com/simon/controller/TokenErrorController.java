@@ -1,10 +1,11 @@
 package com.simon.controller;
 
 import com.simon.config.AppConfig;
-import org.apache.log4j.Logger;
-import org.springframework.boot.autoconfigure.web.BasicErrorController;
-import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
+import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+/*import org.springframework.boot.autoconfigure.web.BasicErrorController;
+import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;*/
 
 /**
  * 全局错误处理
@@ -25,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "error")
 public class TokenErrorController extends BasicErrorController {
-    private static Logger logger = Logger.getLogger(TokenErrorController.class);
+    private static Logger logger = LoggerFactory.getLogger(TokenErrorController.class);
     private static final String PATH = "/error";
 
     public TokenErrorController(){
