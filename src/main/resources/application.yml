@@ -1,3 +1,9 @@
+# ----------------------------------------
+# CORE PROPERTIES
+# ----------------------------------------
+debug: false # Enable debug logs.
+trace: false # Enable trace logs.
+
 server:
   port: 8182
 
@@ -14,6 +20,11 @@ spring:
 #    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
 #    password: ENC(9oaIJkFgGSDFaHH3OXY63RHWQ+amDmiJ) #明文19941017
     type: com.alibaba.druid.pool.DruidDataSource
+    
+  banner:
+    charset: UTF-8
+    location: classpath:banner.txt
+
 logging:
   level:
     org:
