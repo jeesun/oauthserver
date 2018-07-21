@@ -4,6 +4,8 @@ security:
   basic:
     enabled: false
 spring:
+  jmx:
+    default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException
   datasource:
 # PostgreSQL连接信息
     driver-class-name: org.postgresql.Driver
@@ -16,6 +18,15 @@ spring:
 #    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
 #    password: ENC(9oaIJkFgGSDFaHH3OXY63RHWQ+amDmiJ) #明文19941017
     type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      max-active: 20
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 3
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
+      connection-properties: clientEncoding=UTF-8
+      test-while-idle: false
 logging:
   level:
     org:
@@ -60,3 +71,7 @@ management:
       mode: full
   security:
     enabled: false
+
+#endpoints:
+#  jmx:
+#    unique-names: true

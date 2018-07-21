@@ -43,4 +43,21 @@ public class ResultMsg {
     public void setData(Object data) {
         this.data = data;
     }
+
+    public static ResultMsg success(Integer code, String message){
+        return new ResultMsg(code, message);
+    }
+
+    public static ResultMsg success(Integer code, String message, Object data){
+        return new ResultMsg(code, message, data);
+    }
+
+
+    public static ResultMsg fail(Integer code, String message, Object data){
+        return new ResultMsg(code, message, data);
+    }
+
+    public static ResultMsg fail(Integer code, String message){
+        return new ResultMsg(code, message, null);
+    }
 }

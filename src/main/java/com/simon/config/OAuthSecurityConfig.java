@@ -1,11 +1,11 @@
 package com.simon.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.simon.custom.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +29,14 @@ import java.util.List;
 @EnableAuthorizationServer
 public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
+    @Qualifier("authenticationManagerBean")//认证方式
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private DruidDataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired(required = false)
     private JwtAccessTokenConverter jwtAccessTokenConverter;
@@ -65,7 +67,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
         //扩展token返回结果
         if (jwtAccessTokenConverter != null && jwtTokenEnhancer != null) {
             TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-            List<TokenEnhancer> enhancerList = new ArrayList();
+            List<TokenEnhancer> enhancerList = new ArrayList<>();
             enhancerList.add(jwtTokenEnhancer);
             enhancerList.add(jwtAccessTokenConverter);
             tokenEnhancerChain.setTokenEnhancers(enhancerList);

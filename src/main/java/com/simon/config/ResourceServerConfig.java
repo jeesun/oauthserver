@@ -27,6 +27,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // cause the url "http://localhost:8080/swagger-ui.html" be blank html,
                 //just remaining the head.
                 .and()
+                .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

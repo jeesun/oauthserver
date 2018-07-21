@@ -1,6 +1,5 @@
 package com.simon.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.simon.custom.CustomLoginAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.sql.DataSource;
+
 /**
  * Created by simon on 2017/2/18.
  */
@@ -21,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private DruidDataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
     private CustomLoginAuthProvider authProvider;

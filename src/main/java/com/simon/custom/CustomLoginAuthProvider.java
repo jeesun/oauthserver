@@ -1,10 +1,10 @@
 package com.simon.custom;
 
+import com.simon.config.AppConfig;
 import com.simon.domain.UserEntity;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,20 +19,20 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.Locale;
 
+@Slf4j
 @Component
 public class CustomLoginAuthProvider implements AuthenticationProvider {
-    private static final Logger logger = Logger.getLogger(CustomLoginAuthProvider.class);
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private MessageSource messageSource;
 
-    private Locale locale = LocaleContextHolder.getLocale();
+    private Locale locale = AppConfig.getLocale();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        logger.info("authenticate");
+        log.info("authenticate");
 
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();

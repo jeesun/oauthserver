@@ -1,7 +1,7 @@
 package com.simon.controller;
 
 import com.simon.config.AppConfig;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
@@ -21,11 +21,10 @@ import java.util.Map;
  * @author simon
  * @create 2018-05-30 17:26
  **/
-
+@Slf4j
 @RestController
 @RequestMapping(value = "error")
 public class TokenErrorController extends BasicErrorController {
-    private static Logger logger = Logger.getLogger(TokenErrorController.class);
     private static final String PATH = "/error";
 
     public TokenErrorController(){

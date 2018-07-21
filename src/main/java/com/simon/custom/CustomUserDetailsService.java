@@ -1,11 +1,10 @@
 package com.simon.custom;
 
+import com.simon.config.AppConfig;
 import com.simon.domain.UserEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,17 +19,16 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Locale;
 
+@Slf4j
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
-    private static Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
-
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Autowired
     private MessageSource messageSource;
 
-    private Locale locale = LocaleContextHolder.getLocale();
+    private Locale locale = AppConfig.getLocale();
 
     private final String sqlLoadUser;
     private final String sqlLoadAuthorities;
@@ -51,13 +49,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         try{
             UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, s, s, s);
-            logger.info("查询得到用户：{}", userFromQuery);
+            log.info("查询得到用户：{}", userFromQuery);
             List<GrantedAuthority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getUsername());
-            logger.info("得到其权限：{}", authorities);
+            log.info("得到其权限：{}", authorities);
 
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), authorities);
         }catch (EmptyResultDataAccessException e){
-            logger.info("查询结果集为空：{}", s);
+            log.info("查询结果集为空：{}", s);
             throw new InvalidGrantException(messageSource.getMessage("usernameNotFound", null, locale));
         }
     }
