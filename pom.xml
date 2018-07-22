@@ -68,6 +68,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter -->
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper-spring-boot-starter</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+
+
 		<!-- Spring Boot 热部署 start -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -244,7 +252,7 @@
 					<dependency>
 						<groupId>org.postgresql</groupId>
 						<artifactId>postgresql</artifactId>
-                        <scope>runtime</scope>
+                        <version>9.4-1206-jdbc42</version>
 					</dependency>
 				</dependencies>
 			</plugin>

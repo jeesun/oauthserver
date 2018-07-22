@@ -1,9 +1,10 @@
 package com.simon.mapper;
 
+import com.simon.common.mapper.MyMapper;
 import com.simon.model.Authority;
+import org.springframework.stereotype.Repository;
 
-public interface AuthorityMapper {
-    int insert(Authority record);
+@Repository
+public interface AuthorityMapper extends MyMapper<Authority> {
 
-    int insertSelective(Authority record);
 }

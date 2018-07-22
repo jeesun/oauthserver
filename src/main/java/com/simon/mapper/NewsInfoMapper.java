@@ -1,17 +1,10 @@
 package com.simon.mapper;
 
+import com.simon.common.mapper.MyMapper;
 import com.simon.model.NewsInfo;
+import org.springframework.stereotype.Repository;
 
-public interface NewsInfoMapper {
-    int deleteByPrimaryKey(Long id);
+@Repository
+public interface NewsInfoMapper extends MyMapper<NewsInfo> {
 
-    int insert(NewsInfo record);
-
-    int insertSelective(NewsInfo record);
-
-    NewsInfo selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(NewsInfo record);
-
-    int updateByPrimaryKey(NewsInfo record);
 }

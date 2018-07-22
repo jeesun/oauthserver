@@ -1,17 +1,10 @@
 package com.simon.mapper;
 
+import com.simon.common.mapper.MyMapper;
 import com.simon.model.OauthUser;
+import org.springframework.stereotype.Repository;
 
-public interface OauthUserMapper {
-    int deleteByPrimaryKey(String username);
+@Repository
+public interface OauthUserMapper extends MyMapper<OauthUser> {
 
-    int insert(OauthUser record);
-
-    int insertSelective(OauthUser record);
-
-    OauthUser selectByPrimaryKey(String username);
-
-    int updateByPrimaryKeySelective(OauthUser record);
-
-    int updateByPrimaryKey(OauthUser record);
 }

@@ -1,17 +1,10 @@
 package com.simon.mapper;
 
+import com.simon.common.mapper.MyMapper;
 import com.simon.model.UserInfo;
+import org.springframework.stereotype.Repository;
 
-public interface UserInfoMapper {
-    int deleteByPrimaryKey(Long id);
+@Repository
+public interface UserInfoMapper extends MyMapper<UserInfo> {
 
-    int insert(UserInfo record);
-
-    int insertSelective(UserInfo record);
-
-    UserInfo selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(UserInfo record);
-
-    int updateByPrimaryKey(UserInfo record);
 }

@@ -2,30 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.AuthorityMapper">
   <resultMap id="BaseResultMap" type="com.simon.model.Authority">
-    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="authority" jdbcType="VARCHAR" property="authority" />
   </resultMap>
-  <insert id="insert" parameterType="com.simon.model.Authority">
-    insert into authorities (username, authority)
-    values (#{username,jdbcType=VARCHAR}, #{authority,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.simon.model.Authority">
-    insert into authorities
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
-      </if>
-      <if test="authority != null">
-        authority,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
-      </if>
-      <if test="authority != null">
-        #{authority,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
 </mapper>
