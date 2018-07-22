@@ -63,13 +63,20 @@ public class HelloWorldController {
     @ApiOperation(value = "测试获取用户名")
     @GetMapping("getUsername")
     public ResultMsg getUserName(Principal principal){
-        return ResultMsg.success(200, principal.getName());
+        return ResultMsg.success(200, "",principal.getName());
     }
 
     @ApiOperation(value = "测试获取用户名2")
     @GetMapping("currentUserName")
     public ResultMsg currentUserName(Authentication authentication) {
-        return ResultMsg.success(200, authentication.getName());
+        return ResultMsg.success(200, "", authentication.getName());
+    }
+
+    @ApiOperation(value = "测试获取用户名3")
+    @GetMapping("currentUserNameSimple")
+    public ResultMsg currentUserNameSimple(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        return ResultMsg.success(200, "", principal.getName());
     }
 
     @ApiOperation(value = "测试获取用户")
@@ -77,4 +84,5 @@ public class HelloWorldController {
     public ResultMsg currentUser(Authentication authentication) {
         return ResultMsg.success(200, "", authentication.getPrincipal());
     }
+
 }
