@@ -1,23 +1,29 @@
 package com.simon.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "authorities")
 @Entity
-public class Authority {
+public class Authority implements GrantedAuthority {
     @Id
-    private String username;
+    private Long userId;
 
     private String authority;
 
-    public String getUsername() {
-        return username;
+    public Authority(String authority) {
+        this.authority = authority;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getAuthority() {

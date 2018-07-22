@@ -2,14 +2,13 @@ package com.simon.custom;
 
 import com.simon.config.AppConfig;
 import com.simon.domain.UserEntity;
+import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,16 +32,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final String sqlLoadUser;
     private final String sqlLoadAuthorities;
     private final RowMapper<UserEntity> myUserDetailsRowMapper;
-    private final RowMapper<GrantedAuthority> authorityRowMapper;
+    private final RowMapper<Authority> authorityRowMapper;
 
     public CustomUserDetailsService() {
         super();
         sqlLoadUser = "select id,username,password,enabled,phone,email from users where username=? OR phone=? OR email=?";
-        sqlLoadAuthorities = "select authority from authorities where username = ?";
+        sqlLoadAuthorities = "select authority from authorities where user_id = ?";
 
         myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"));
 
-        authorityRowMapper = (rs,i) -> new SimpleGrantedAuthority(rs.getString(1));
+        authorityRowMapper = (rs,i) -> new Authority(rs.getString(1));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         try{
             UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, s, s, s);
             log.info("查询得到用户：{}", userFromQuery);
-            List<GrantedAuthority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getUsername());
+            List<Authority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getId());
             log.info("得到其权限：{}", authorities);
 
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), authorities);

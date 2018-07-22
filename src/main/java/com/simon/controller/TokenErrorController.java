@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
@@ -21,6 +22,8 @@ import java.util.Map;
  * @author simon
  * @create 2018-05-30 17:26
  **/
+
+@ApiIgnore()
 @Slf4j
 @RestController
 @RequestMapping(value = "error")

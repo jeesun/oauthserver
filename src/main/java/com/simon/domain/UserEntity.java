@@ -1,9 +1,9 @@
 package com.simon.domain;
 
-import org.springframework.security.core.GrantedAuthority;
+import com.simon.model.Authority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by simon on 2017/2/24.
@@ -17,7 +17,7 @@ public class UserEntity implements UserDetails{
     private boolean enabled;
     private String phone;
     private String email;
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<Authority> authorities;
 
     public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email) {
         super();
@@ -29,7 +29,7 @@ public class UserEntity implements UserDetails{
         this.email = email;
     }
 
-    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, Collection<? extends GrantedAuthority> authorities) {
+    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, List<Authority> authorities) {
         super();
         this.id = id;
         this.username = username;
@@ -81,7 +81,7 @@ public class UserEntity implements UserDetails{
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<Authority> getAuthorities() {
         return authorities;
     }
 
@@ -127,6 +127,12 @@ public class UserEntity implements UserDetails{
 
     @Override
     public boolean equals(Object obj) {
-        return this.toString().equals(obj.toString());
+        if(null == obj){
+            return false;
+        }
+        if(!(obj instanceof UserEntity)){
+            return false;
+        }
+        return this.getId().equals(((UserEntity)obj).getId());
     }
 }
