@@ -1,9 +1,6 @@
 package com.simon.controller;
 
-import com.simon.annotation.CurrentUser;
-import com.simon.annotation.IgnoreSecurity;
 import com.simon.domain.ResultMsg;
-import com.simon.model.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +40,11 @@ public class HelloWorldController {
     @ApiOperation("测试")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
-    public ResultMsg all(@CurrentUser UserInfo userInfo){
+    /*public ResultMsg all(@CurrentUser UserInfo userInfo){
         return ResultMsg.success(200, "", userInfo);
+    }*/
+    public ResultMsg all(){
+        return ResultMsg.success(200, "需要登录");
     }
 
     @ApiOperation("测试（不需要传Authentication）")
@@ -53,7 +53,7 @@ public class HelloWorldController {
         return ResultMsg.success(200, "无需登录");
     }
 
-    @IgnoreSecurity
+    //@IgnoreSecurity
     @ApiOperation(value = "测试国际化，传locale参数，值可取zh_CN, en_US等，例如locale=zh_CN", notes = "忽略安全，不需要传token")
     @GetMapping("testLocale")
     public ResultMsg testLocale(HttpServletRequest request, HttpServletResponse response, Locale locale){

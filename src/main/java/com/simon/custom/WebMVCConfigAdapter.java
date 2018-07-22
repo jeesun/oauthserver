@@ -27,13 +27,13 @@ public class WebMVCConfigAdapter extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
         registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/**");//资源国际化变化拦截
-        registry.addInterceptor(authInterceptor()).addPathPatterns("/**").excludePathPatterns("**/swagger-ui.html");//token登录拦截
+        //registry.addInterceptor(authInterceptor()).addPathPatterns("/**").excludePathPatterns("**/swagger-ui.html");//token登录拦截
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         super.addArgumentResolvers(argumentResolvers);
-        argumentResolvers.add(currentUserMethodArgumentResolver());
+        //argumentResolvers.add(currentUserMethodArgumentResolver());
     }
 
     @Bean
