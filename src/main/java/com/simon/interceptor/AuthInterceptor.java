@@ -2,12 +2,14 @@ package com.simon.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.simon.annotation.IgnoreSecurity;
-import com.simon.domain.UserInfo;
-import com.simon.domain.jdbc.OauthUser;
+import com.simon.config.AppConfig;
+import com.simon.model.OauthUser;
+import com.simon.model.UserInfo;
 import com.simon.repository.OauthUserRepository;
 import com.simon.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 /**
  * Auth拦截器读取token向request添加CurrentUser
@@ -36,6 +39,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    private Locale locale = AppConfig.getLocale();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -58,14 +66,17 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
         String token = request.getHeader("Authorization");
         if(StringUtils.isEmpty(token)){
-            throw new InvalidTokenException("无效的token");
+            log.error(messageSource.getMessage("invalidToken", null, locale));
+            throw new InvalidTokenException(messageSource.getMessage("invalidToken", null, locale));
         }
         token = token.substring(token.indexOf("Bearer ") + "Bearer ".length());
         log.info("token = " + token);
         String username = getUsernameByAccessToken(token);
+        log.info("username = " + username);
         OauthUser oauthUser = oauthUserRepository.findByUsername(username);
+        log.info("oauthUser = " + JSON.toJSONString(oauthUser));
         UserInfo userInfo = userInfoRepository.findByUserId(oauthUser.getId());
-        log.info(JSON.toJSONString(userInfo));
+        log.info("userInfo = " + JSON.toJSONString(userInfo));
         request.setAttribute("currentUser", userInfo);
         return true;
     }

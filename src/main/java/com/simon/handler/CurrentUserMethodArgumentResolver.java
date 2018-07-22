@@ -1,7 +1,7 @@
 package com.simon.handler;
 
 import com.simon.annotation.CurrentUser;
-import com.simon.domain.UserInfo;
+import com.simon.model.UserInfo;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

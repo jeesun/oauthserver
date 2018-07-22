@@ -1,6 +1,6 @@
 package com.simon.repository;
 
-import com.simon.domain.UserInfo;
+import com.simon.model.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

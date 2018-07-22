@@ -1,30 +1,32 @@
-package com.simon.domain.jdbc;
+package com.simon.model;
 
 import javax.persistence.*;
 
-/**
- * Created by simon on 2017/2/26.
- */
 @Table(name = "users")
 @Entity
 public class OauthUser {
+    private String username;
+
+    private String password;
+
+    private Boolean enabled;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
-    private String password;
-    private boolean enabled;
     private String email;
+
     private String phone;
+
+    private Boolean enable;
 
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
     public String getPassword() {
@@ -32,14 +34,14 @@ public class OauthUser {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
-    public boolean isEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -56,7 +58,7 @@ public class OauthUser {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email == null ? null : email.trim();
     }
 
     public String getPhone() {
@@ -64,18 +66,14 @@ public class OauthUser {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phone == null ? null : phone.trim();
     }
 
-    @Override
-    public String toString() {
-        return "OauthUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

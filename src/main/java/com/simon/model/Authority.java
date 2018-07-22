@@ -1,4 +1,4 @@
-package com.simon.domain.jdbc;
+package com.simon.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +9,7 @@ import javax.persistence.Table;
 public class Authority {
     @Id
     private String username;
+
     private String authority;
 
     public String getUsername() {
@@ -16,7 +17,7 @@ public class Authority {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
     public String getAuthority() {
@@ -24,6 +25,6 @@ public class Authority {
     }
 
     public void setAuthority(String authority) {
-        this.authority = authority;
+        this.authority = authority == null ? null : authority.trim();
     }
 }

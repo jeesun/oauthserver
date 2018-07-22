@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.OauthUserMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.OauthUser">
+    <id column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="enable" jdbcType="BIT" property="enable" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    username, password, enabled, id, email, phone, enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from users
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.simon.model.OauthUser">
+    insert into users (username, password, enabled, 
+      id, email, phone, enable
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{enabled,jdbcType=BIT}, 
+      #{id,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.model.OauthUser">
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="enable != null">
+        enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.model.OauthUser">
+    update users
+    <set>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
+      </if>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=BIT},
+      </if>
+    </set>
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.model.OauthUser">
+    update users
+    set password = #{password,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=BIT},
+      id = #{id,jdbcType=BIGINT},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      enable = #{enable,jdbcType=BIT}
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.UserInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="head_photo" jdbcType="VARCHAR" property="headPhoto" />
+    <result column="person_brief" jdbcType="VARCHAR" property="personBrief" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="sex" jdbcType="BIT" property="sex" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="visit_card" jdbcType="VARCHAR" property="visitCard" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, 
+    visit_card
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.simon.model.UserInfo">
+    insert into user_info (id, address, age, 
+      birth, email, head_photo, 
+      person_brief, phone, sex, 
+      user_id, username, visit_card
+      )
+    values (#{id,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{birth,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{headPhoto,jdbcType=VARCHAR}, 
+      #{personBrief,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{sex,jdbcType=BIT}, 
+      #{userId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{visitCard,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.simon.model.UserInfo">
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="birth != null">
+        birth,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="headPhoto != null">
+        head_photo,
+      </if>
+      <if test="personBrief != null">
+        person_brief,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="visitCard != null">
+        visit_card,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhoto != null">
+        #{headPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="personBrief != null">
+        #{personBrief,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=BIT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCard != null">
+        #{visitCard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simon.model.UserInfo">
+    update user_info
+    <set>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        birth = #{birth,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhoto != null">
+        head_photo = #{headPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="personBrief != null">
+        person_brief = #{personBrief,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=BIT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCard != null">
+        visit_card = #{visitCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.simon.model.UserInfo">
+    update user_info
+    set address = #{address,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      birth = #{birth,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      head_photo = #{headPhoto,jdbcType=VARCHAR},
+      person_brief = #{personBrief,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=BIT},
+      user_id = #{userId,jdbcType=BIGINT},
+      username = #{username,jdbcType=VARCHAR},
+      visit_card = #{visitCard,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

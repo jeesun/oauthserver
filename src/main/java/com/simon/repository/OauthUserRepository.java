@@ -1,6 +1,6 @@
 package com.simon.repository;
 
-import com.simon.domain.jdbc.OauthUser;
+import com.simon.model.OauthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OauthUserRepository extends JpaRepository<OauthUser, Long> {
