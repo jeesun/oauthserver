@@ -1,12 +1,21 @@
 package com.simon.controller;
 
+import com.simon.annotation.CurrentUser;
 import com.simon.domain.ResultMsg;
+import com.simon.domain.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
  * 测试
@@ -18,10 +27,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/helloWorlds")
 public class HelloWorldController {
+    @Autowired
+    private MessageSource messageSource;
+
+    @ApiOperation("测试仅ADMIN可访问")
+    @RolesAllowed("ADMIN")
+    @GetMapping(value = "/admin")
+    public ResultMsg admin(){
+        return ResultMsg.success(200, "你是admin用户");
+    }
 
     @ApiOperation("测试")
-    @GetMapping(value = "")
-    public ResultMsg test(@RequestParam String access_token){
-        return ResultMsg.success(200, "");
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/all")
+    public ResultMsg all(@CurrentUser UserInfo userInfo){
+        return ResultMsg.success(200, "", userInfo);
+    }
+
+    @ApiOperation("测试（不需要传Authentication）")
+    @GetMapping("notAuth")
+    public ResultMsg notAuth(){
+        return ResultMsg.success(200, "无需登录");
+    }
+
+    @ApiOperation("测试国际化，传locale参数，值可取zh_CN, en_US等，例如locale=zh_CN")
+    @GetMapping("testLocale")
+    public ResultMsg testLocale(HttpServletRequest request, HttpServletResponse response, Locale locale){
+        return ResultMsg.success(200, messageSource.getMessage("helloWorld", null, locale));
     }
 }

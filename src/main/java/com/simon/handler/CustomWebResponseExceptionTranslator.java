@@ -32,6 +32,7 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
 
     @Override
     public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
+        log.error(e.getMessage());
         if(e instanceof InvalidTokenException){
             InvalidTokenException invalidTokenException = (InvalidTokenException) e;
             if("Token was not recognised".equals(invalidTokenException.getMessage())){

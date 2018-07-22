@@ -3,6 +3,11 @@ server:
 security:
   basic:
     enabled: false
+  oauth2:
+    resource:
+      filter-order: 3
+    client:
+      client-authentication-scheme: header
 spring:
   jmx:
     default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException

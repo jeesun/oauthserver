@@ -44,6 +44,7 @@ public class TokenErrorController extends BasicErrorController {
         HttpStatus status = getStatus(request);
         resultMap.put(AppConfig.CODE, status.value());
         resultMap.put(AppConfig.MESSAGE, body.get("message"));
+        log.error(body.get("message").toString());
         resultMap.put(AppConfig.DATA, null);
         return new ResponseEntity<>(resultMap, status);
     }

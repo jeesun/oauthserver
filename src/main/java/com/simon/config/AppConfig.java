@@ -1,5 +1,7 @@
 package com.simon.config;
 
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import java.util.Locale;
 
 /**
@@ -15,7 +17,7 @@ public class AppConfig {
     public static final String DATA = "data";
 
     //private static Locale locale = LocaleContextHolder.getLocale();
-    private static Locale locale = Locale.ENGLISH;
+    private static Locale locale = LocaleContextHolder.getLocale();//messages国际化语言指定
 
     public static Locale getLocale(){
         return locale;
