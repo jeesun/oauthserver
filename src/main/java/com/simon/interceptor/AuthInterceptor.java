@@ -3,7 +3,6 @@ package com.simon.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.simon.annotation.IgnoreSecurity;
 import com.simon.config.AppConfig;
-import com.simon.model.OauthUser;
 import com.simon.model.UserInfo;
 import com.simon.repository.OauthUserRepository;
 import com.simon.repository.UserInfoRepository;
@@ -11,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -73,17 +74,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         log.info("token = " + token);
         String username = getUsernameByAccessToken(token);
         log.info("username = " + username);
-        OauthUser oauthUser = oauthUserRepository.findByUsername(username);
-        log.info("oauthUser = " + JSON.toJSONString(oauthUser));
-        UserInfo userInfo = userInfoRepository.findByUserId(oauthUser.getId());
+        UserInfo userInfo = userInfoRepository.findByUsername(username);
         log.info("userInfo = " + JSON.toJSONString(userInfo));
         request.setAttribute("currentUser", userInfo);
         return true;
     }
 
     private String getUsernameByAccessToken(String access_token){
-        return jdbcTemplate.queryForObject("SELECT user_name FROM oauth_access_token" +
-                " WHERE encode(token, 'escape') LIKE CONCAT('%', ?)", new Object[]{access_token}, String.class);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return currentPrincipalName;
+        /*return jdbcTemplate.queryForObject("SELECT user_name FROM oauth_access_token" +
+                " WHERE encode(token, 'escape') LIKE CONCAT('%', ?)", new Object[]{access_token}, String.class);*/
         /*return jdbcTemplate.queryForObject("SELECT user_name FROM oauth_access_token" +
                 " WHERE right(cast(token as char), 36)=?", new Object[]{access_token}, String.class);*/
     }

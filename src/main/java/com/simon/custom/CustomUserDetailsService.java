@@ -37,11 +37,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetailsService() {
         super();
         sqlLoadUser = "select id,username,password,enabled,phone,email from users where username=? OR phone=? OR email=?";
-        sqlLoadAuthorities = "select authority from authorities where user_id = ?";
+        sqlLoadAuthorities = "select user_id,authority from authorities where user_id = ?";
 
         myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"));
 
-        authorityRowMapper = (rs,i) -> new Authority(rs.getString(1));
+        authorityRowMapper = (rs,i) -> new Authority(rs.getLong(1), rs.getString(2));
     }
 
     @Override

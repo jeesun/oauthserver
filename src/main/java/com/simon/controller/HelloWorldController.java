@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Locale;
 
 /**
@@ -56,5 +58,23 @@ public class HelloWorldController {
     @GetMapping("testLocale")
     public ResultMsg testLocale(HttpServletRequest request, HttpServletResponse response, Locale locale){
         return ResultMsg.success(200, messageSource.getMessage("helloWorld", null, locale));
+    }
+
+    @ApiOperation(value = "测试获取用户名")
+    @GetMapping("getUsername")
+    public ResultMsg getUserName(Principal principal){
+        return ResultMsg.success(200, principal.getName());
+    }
+
+    @ApiOperation(value = "测试获取用户名2")
+    @GetMapping("currentUserName")
+    public ResultMsg currentUserName(Authentication authentication) {
+        return ResultMsg.success(200, authentication.getName());
+    }
+
+    @ApiOperation(value = "测试获取用户")
+    @GetMapping("currentUser")
+    public ResultMsg currentUser(Authentication authentication) {
+        return ResultMsg.success(200, "", authentication.getPrincipal());
     }
 }
