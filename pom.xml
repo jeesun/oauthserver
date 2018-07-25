@@ -176,6 +176,19 @@
 			<version>1.2.4</version>
 		</dependency>
 		<!-- MyBatis end -->
+
+		<!-- ali dayu start -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dayu</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dayu-source</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- ali dayu end -->
 	</dependencies>
 
 	<dependencyManagement>
