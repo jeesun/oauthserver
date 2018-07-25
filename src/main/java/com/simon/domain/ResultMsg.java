@@ -1,8 +1,17 @@
 package com.simon.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public class ResultMsg {
+    @ApiModelProperty(value = "返回码")
     private Integer code;
+
+    @ApiModelProperty(value = "返回信息")
     private String message;
+
+    @ApiModelProperty(value = "返回数据")
     private Object data;
 
     public ResultMsg() {
