@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.VeriCodeMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.VeriCode">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="INTEGER" property="code" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="expires" jdbcType="INTEGER" property="expires" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, code, create_time, expires, phone
+  </sql>
+</mapper>

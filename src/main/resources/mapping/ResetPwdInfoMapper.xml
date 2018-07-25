@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.ResetPwdInfoMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.ResetPwdInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="expires_in" jdbcType="TIMESTAMP" property="expiresIn" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, expires_in, secret_key, user_id, valid
+  </sql>
+</mapper>

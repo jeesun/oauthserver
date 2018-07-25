@@ -3,6 +3,7 @@ package com.simon.controller;
 import com.simon.domain.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import java.util.Locale;
  * @author simon
  * @create 2018-05-31 10:10
  **/
+@Slf4j
 @Api("测试")
 @RestController
 @RequestMapping("/api/helloWorlds")

@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,14 +44,14 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
         return ResultMsg.fail(response.getStatus(), e.getMessage());
     }
 
-    @ExceptionHandler(value = {OAuth2Exception.class})
-    public ResultMsg grantOAuth2Error(HttpServletRequest request, HttpServletResponse response, OAuth2Exception e){
+    @ExceptionHandler(value = {OAuth2Exception.class, InvalidGrantException.class})
+    public ResultMsg grantOAuth2Error(HttpServletRequest request, HttpServletResponse response, Exception e){
         log.error("grantOAuth2Error");
         log.error(e.getMessage());
         return ResultMsg.fail(response.getStatus(), e.getMessage());
     }
 
-    @ExceptionHandler(value = {RuntimeException.class, Exception.class})
+    //@ExceptionHandler(value = {RuntimeException.class, Exception.class})
     public ResultMsg grantRuntimeError(HttpServletRequest request, HttpServletResponse response, RuntimeException e){
         log.error("grantRuntimeError");
         log.error(e.getMessage());

@@ -5,14 +5,18 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Table(name = "authorities")
 @Entity
-public class Authority implements GrantedAuthority {
+public class Authority implements GrantedAuthority, Serializable {
     @Id
     private Long userId;
 
     private String authority;
+
+    public Authority() {
+    }
 
     public Authority(String authority) {
         this.authority = authority;
