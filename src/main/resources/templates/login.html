@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.2/css/bootstrap.min.css}">
+    <title>登录</title>
+    <style>
+        body,html {
+            height: 100%;
+        }
+        body {
+            display:flex;
+            align-items:center;
+        }
+    </style>
+</head>
+<body>
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+        <form th:action="@{/login}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+            <div class="form-group">
+                <label for="username"></label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+            </div>
+            <div class="form-group">
+                <label for="password"></label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary col-12">登录</button>
+        </form>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.1.2/js/bootstrap.min.js}"></script>
+</body>
+</html>

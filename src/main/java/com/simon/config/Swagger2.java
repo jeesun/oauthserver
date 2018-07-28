@@ -92,8 +92,7 @@ public class Swagger2 {
     private List<SecurityContext> securityContexts(){
         List<SecurityContext> securityContextList = new ArrayList<>();
         //所有包含"auth"的接口不需要使用securitySchemes
-        securityContextList.add(SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("^(?!auth).*$")).build());
-        securityContextList.add(SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("^(?!notAuth).*$")).build());
+        securityContextList.add(SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("^(?!oauth).*$")).build());
         return securityContextList;
     }
 }

@@ -1,4 +1,4 @@
-package com.simon.custom;
+package com.simon.config;
 
 import com.simon.handler.CurrentUserMethodArgumentResolver;
 import com.simon.interceptor.AuthInterceptor;
@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -21,7 +22,7 @@ import java.util.Locale;
  * @create 2018-07-21 19:20
  **/
 @Configuration
-public class WebMVCConfigAdapter extends WebMvcConfigurerAdapter {
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -58,5 +59,13 @@ public class WebMVCConfigAdapter extends WebMvcConfigurerAdapter {
     @Bean
     public CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver(){
         return new CurrentUserMethodArgumentResolver();
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        super.addViewControllers(registry);
+        //registry.addViewController("/login").setViewName("login");
+        //registry.addViewController("/").setViewName("index");
+        //registry.addViewController("/index").setViewName("index");
     }
 }

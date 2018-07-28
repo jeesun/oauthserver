@@ -1,7 +1,7 @@
 package com.simon.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author simon
@@ -12,11 +12,21 @@ import java.sql.Timestamp;
 @Table(name = "log_login")
 public class LogLogin {
     private long id;
-    private Timestamp createTime;
+    private Date createTime;
     private String ip;
     private String username;
 
+    public LogLogin() {
+    }
+
+    public LogLogin(Date createTime, String ip, String username) {
+        this.createTime = createTime;
+        this.ip = ip;
+        this.username = username;
+    }
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long getId() {
         return id;
@@ -28,11 +38,11 @@ public class LogLogin {
 
     @Basic
     @Column(name = "create_time")
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

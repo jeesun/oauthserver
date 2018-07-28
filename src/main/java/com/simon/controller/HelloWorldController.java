@@ -65,7 +65,7 @@ public class HelloWorldController {
     @ApiOperation(value = "测试获取用户名")
     @GetMapping("getUsername")
     public ResultMsg getUserName(Principal principal){
-        return ResultMsg.success(200, "",principal.getName());
+        return ResultMsg.success(200, "",principal);
     }
 
     @ApiOperation(value = "测试获取用户名2")

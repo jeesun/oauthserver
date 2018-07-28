@@ -1,6 +1,7 @@
 package com.simon.config;
 
 import com.simon.custom.CustomLoginAuthProvider;
+import com.simon.handler.AuthSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomLoginAuthProvider authProvider;
 
+    @Autowired
+    private AuthSuccessHandler authSuccessHandler;
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean()
@@ -49,11 +53,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .formLogin().permitAll()
+                .successHandler(authSuccessHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/oauth/**").permitAll()
+                .antMatchers("oauth/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .and()
+                .httpBasic().disable()
                 .csrf().disable();
     }
 }

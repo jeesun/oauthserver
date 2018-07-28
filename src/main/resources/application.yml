@@ -3,14 +3,21 @@ server:
 security:
   basic:
     enabled: false
-  oauth2:
-    resource:
-      filter-order: 3
-    client:
-      client-authentication-scheme: header
+#  oauth2:
+#    resource:
+#      filter-order: 3
+#    client:
+#      client-authentication-scheme: header
 spring:
-  jmx:
-    default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException
+  thymeleaf:
+    prefix: classpath:/templates/ #默认值
+    suffix: .html
+    mode: LEGACYHTML5 #启用不严格检查html
+    encoding: UTF-8
+    content-type: text/html
+    cache: false #页面热部署
+#  jmx:
+#    default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException
   datasource:
 # PostgreSQL连接信息
     driver-class-name: org.postgresql.Driver

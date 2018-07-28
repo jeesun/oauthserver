@@ -55,7 +55,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .secret("secretId")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password")
                 .scopes("app");*/
-        clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder(11));
+        clients.jdbc(dataSource);
     }
 
     @Override
@@ -84,6 +84,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
         oauthServer
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
+                .passwordEncoder(new BCryptPasswordEncoder(11))//client password加密即oauth_client_details表的client_secret字段
                 .allowFormAuthenticationForClients();
     }
 
