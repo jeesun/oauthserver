@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.1.2/css/bootstrap.min.css}">
-    <title th:text="#{login}"></title>
+    <title th:text="#{appApproval}"></title>
     <style>
         body,html {
             height: 100%;
@@ -25,20 +25,23 @@
 <body>
 <div class="container h-100">
     <div class="row align-items-center h-100">
-        <form th:action="@{/login}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
-            <h1 class="text-center" th:text="#{signIn}"></h1>
+        <form id="confirmationForm" name="confirmationForm" action="/oauth/authorize" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+            <h1 class="text-center" th:text="#{appApproval}"></h1>
+            <p><span th:text="#{doYouAuthorize}"></span> <span th:text="${client_id}" class="font-weight-bold"></span> <span th:text="#{toAccessYouProtectedResources}"></span></p>
+            <input name="user_oauth_approval" value="true" type="hidden"/>
             <div class="form-group">
-                <label for="username"></label>
-                <input type="text" class="form-control" id="username" name="username" th:placeholder="#{username}">
+                <div class="radio">
+                    <input type="radio" name="scope.read" value="true"><span th:text="#{approve}"></span>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="scope.read" value="false" checked><span th:text="#{deny}"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password"></label>
-                <input type="password" class="form-control" id="password" name="password" th:placeholder="#{password}">
-            </div>
-            <button type="submit" name="submit" class="btn btn-primary col-12" th:text="#{login}"></button>
+            <input type="submit" name="authorize" th:value="#{authorize}" class="btn btn-primary col-12" />
         </form>
     </div>
 </div>
+
 <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.14.3/dist/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.1.2/js/bootstrap.min.js}"></script>
