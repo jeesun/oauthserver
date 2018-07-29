@@ -222,7 +222,7 @@ status=401，返回的json数据：
 同意授权，跳转到`https://www.baidu.com/?code=jgA1h3`，`jgA1h3`就是授权码。  
 使用授权码获取token:   
 >>POST [http://localhost:8182/oauth/token?grant_type=authorization_code&code=jgA1h3&redirect_uri=http://www.baidu.com](http://localhost:8182/oauth/token?grant_type=authorization_code&code=jgA1h3&redirect_uri=http://www.baidu.com)  
-<br />
+
 **成功示例**  
 status=200，返回的json数据：
 ``` json
