@@ -2,13 +2,16 @@ package com.simon.controller;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.util.HtmlUtils;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 自定义Oauth授权页面
@@ -33,5 +36,20 @@ public class OauthController {
         log.info(JSON.toJSONString(resultMap));
         model.putAll(resultMap);
         return "oauth_approval";
+    }
+
+    @RequestMapping("/oauth/my_error_page")
+    public String oauthError(Map<String, Object> model, HttpServletRequest request){
+        Object error = request.getAttribute("error");
+        String errorSummary;
+        if(error instanceof OAuth2Exception) {
+            OAuth2Exception oauthError = (OAuth2Exception) error;
+            errorSummary = HtmlUtils.htmlEscape(oauthError.getSummary());
+            log.error(oauthError.getMessage());
+        } else {
+            errorSummary = "Unknown error";
+        }
+        model.put("errorSummary", errorSummary);
+        return "oauth_error";
     }
 }
