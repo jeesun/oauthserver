@@ -30,7 +30,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 
 
 请下载与Spring Boot对应版本的oauthserver：
-<table border="1">
+<table border="0">
   <tr>
     <th>Spring Boot version</th>
     <th>oauthserver version</th>
@@ -49,7 +49,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6。
 
 ## 更新日志
-### v1.2.0(2018-07-25)
+### v1.2.0(2018-07-25)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.0)
 - 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
 - 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
 - authorities表使用user_id代替username字段；
@@ -57,23 +57,23 @@ oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是�
 - 自定义登录页面和授权页面，并修复授权码模式与密码模式共存问题；
 - 更棒的接口示例HelloWorldController，强烈建议您阅读该Controller代码。
 
-### v2.0.0.alpha(2018-07-16)
+### v2.0.0.alpha(2018-07-16)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v2.0.0.alpha)
 - 升级Spring Boot版本从1.5.14.RELEASE到2.0.3.RELEASE。
 
-### v1.1.1(2018-07-07)
+### v1.1.1(2018-07-07)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.1)
 - 升级Spring Boot版本从1.5.13.RELEASE到1.5.14.RELEASE；
 - 修复检查的access_token无法识别时，返回中文message。
 
-### v1.1.0(2018-06-01)  
+### v1.1.0(2018-06-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.0)
 - 自定义Oauth2Exception异常返回的json信息。
 
-### v1.0.3  
+### v1.0.3[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.3)
 - bug修复。
 
-### v1.0.1  
+### v1.0.1[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.1)
 - 获取token时，username允许传用户名、手机号或者邮箱。  
 
-### v1.0.0  
+### v1.0.0[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.0)
 - 完成基础Oauth服务。
 
 ## 使用流程
