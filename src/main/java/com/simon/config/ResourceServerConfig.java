@@ -35,7 +35,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                                         new AntPathRequestMatcher("/login"),
                                         new AntPathRequestMatcher("/logout"),
                                         new AntPathRequestMatcher("/oauth/authorize"),
-                                        new AntPathRequestMatcher("/oauth/confirm_access")
+                                        new AntPathRequestMatcher("/oauth/confirm_access"),
+                                        new AntPathRequestMatcher("/oauth/my_approval_page"),
+                                        new AntPathRequestMatcher("/oauth/my_error_page")
                                 )
                         )
                 )

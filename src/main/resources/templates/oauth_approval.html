@@ -25,7 +25,7 @@
 <body>
 <div class="container h-100">
     <div class="row align-items-center h-100">
-        <form id="confirmationForm" name="confirmationForm" action="/oauth/authorize" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+        <form id="confirmationForm" name="confirmationForm" th:action="@{/oauth/authorize}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
             <h1 class="text-center" th:text="#{appApproval}"></h1>
             <p><span th:text="#{doYouAuthorize}"></span> <span th:text="${client_id}" class="font-weight-bold"></span> <span th:text="#{toAccessYouProtectedResources}"></span></p>
             <input name="user_oauth_approval" value="true" type="hidden"/>
