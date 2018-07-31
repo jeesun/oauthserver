@@ -1,5 +1,8 @@
 package com.simon.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +10,8 @@ import javax.persistence.*;
  * @create 2018-07-25 22:17
  **/
 
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "qr_code")
 public class QrCode {
@@ -64,29 +69,5 @@ public class QrCode {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        QrCode qrCode = (QrCode) o;
-
-        if (id != qrCode.id) return false;
-        if (sid != null ? !sid.equals(qrCode.sid) : qrCode.sid != null) return false;
-        if (token != null ? !token.equals(qrCode.token) : qrCode.token != null) return false;
-        if (username != null ? !username.equals(qrCode.username) : qrCode.username != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (sid != null ? sid.hashCode() : 0);
-        result = 31 * result + (token != null ? token.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        return result;
     }
 }

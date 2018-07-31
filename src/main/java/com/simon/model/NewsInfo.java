@@ -1,6 +1,9 @@
 package com.simon.model;
 
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -8,7 +11,8 @@ import java.sql.Timestamp;
  * @author simon
  * @create 2018-07-24 0:01
  **/
-
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "news_info")
 public class NewsInfo {
@@ -100,38 +104,5 @@ public class NewsInfo {
 
     public void setTags(String tags) {
         this.tags = tags;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        NewsInfo newsInfo = (NewsInfo) o;
-
-        if (id != newsInfo.id) return false;
-        if (title != null ? !title.equals(newsInfo.title) : newsInfo.title != null) return false;
-        if (userId != null ? !userId.equals(newsInfo.userId) : newsInfo.userId != null) return false;
-        if (status != null ? !status.equals(newsInfo.status) : newsInfo.status != null) return false;
-        if (content != null ? !content.equals(newsInfo.content) : newsInfo.content != null) return false;
-        if (imageUrl != null ? !imageUrl.equals(newsInfo.imageUrl) : newsInfo.imageUrl != null) return false;
-        if (publishDate != null ? !publishDate.equals(newsInfo.publishDate) : newsInfo.publishDate != null)
-            return false;
-        if (tags != null ? !tags.equals(newsInfo.tags) : newsInfo.tags != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
-        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
-        return result;
     }
 }

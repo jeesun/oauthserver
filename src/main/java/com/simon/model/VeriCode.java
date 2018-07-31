@@ -1,5 +1,8 @@
 package com.simon.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +10,8 @@ import javax.persistence.*;
  * @create 2018-07-25 22:17
  **/
 
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "veri_code")
 public class VeriCode {
@@ -64,31 +69,5 @@ public class VeriCode {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VeriCode veriCode = (VeriCode) o;
-
-        if (id != veriCode.id) return false;
-        if (code != null ? !code.equals(veriCode.code) : veriCode.code != null) return false;
-        if (createTime != null ? !createTime.equals(veriCode.createTime) : veriCode.createTime != null) return false;
-        if (expires != null ? !expires.equals(veriCode.expires) : veriCode.expires != null) return false;
-        if (phone != null ? !phone.equals(veriCode.phone) : veriCode.phone != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (expires != null ? expires.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        return result;
     }
 }

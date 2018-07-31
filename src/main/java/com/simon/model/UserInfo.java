@@ -1,7 +1,12 @@
 package com.simon.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 
+@EqualsAndHashCode
+@ToString
 @Table(name = "user_info")
 @Entity
 public class UserInfo {
