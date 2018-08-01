@@ -49,7 +49,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 
 ## 更新日志
 
-### v1.2.2(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.1)
+### v1.2.2(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.2)
 - 合并users和user_info表,authorities表使用user_id代替username字段；
 - 集成阿里大鱼，需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat；
 - 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
