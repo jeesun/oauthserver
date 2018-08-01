@@ -1,4 +1,4 @@
-package com.simon.exception;
+package com.simon.common.exception;
 
 /**
  * 手机号已注册

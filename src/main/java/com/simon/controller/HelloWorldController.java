@@ -1,6 +1,6 @@
 package com.simon.controller;
 
-import com.simon.domain.ResultMsg;
+import com.simon.common.domain.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

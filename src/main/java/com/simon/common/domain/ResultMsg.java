@@ -1,4 +1,4 @@
-package com.simon.domain;
+package com.simon.common.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

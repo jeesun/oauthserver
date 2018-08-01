@@ -1,9 +1,9 @@
-package com.simon.handler;
+package com.simon.common.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.simon.common.utils.DateUtil;
 import com.simon.common.utils.IpUtil;
-import com.simon.domain.UserEntity;
+import com.simon.common.domain.UserEntity;
 import com.simon.model.LogLogin;
 import com.simon.repository.LogLoginRepository;
 import org.apache.log4j.Logger;

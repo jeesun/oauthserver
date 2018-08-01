@@ -1,8 +1,8 @@
 package com.simon.serviceImpl;
 
-import com.simon.exception.CodeInvalidException;
-import com.simon.exception.PhoneRegisteredException;
-import com.simon.exception.UserNotValidException;
+import com.simon.common.exception.CodeInvalidException;
+import com.simon.common.exception.PhoneRegisteredException;
+import com.simon.common.exception.UserNotValidException;
 import com.simon.mapper.OauthUserMapper;
 import com.simon.model.Authority;
 import com.simon.model.OauthUser;
