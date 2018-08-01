@@ -47,28 +47,19 @@ CREATE TABLE if NOT EXISTS users (
   password varchar(255) NOT NULL,
   enabled tinyint(1) NOT NULL,
   phone varchar(255) DEFAULT NULL UNIQUE,
-  email varchar(255) DEFAULT NULL UNIQUE
+  email varchar(255) DEFAULT NULL UNIQUE,
+  address varchar(255),
+  age int(4),
+  birth varchar(255),
+  head_photo varchar(255),
+  person_brief varchar(255),
+  sex tinyint(1),
+  visit_card varchar(255)
 );
 
 CREATE TABLE if NOT EXISTS authorities (
 user_id int(8) NOT NULL,
 authority VARCHAR(50) NOT NULL
-);
-
--- 用户信息
-CREATE TABLE IF NOT EXISTS user_info (
-id int(8) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-address varchar(255),
-age int(4),
-birth varchar(255),
-email varchar(255),
-head_photo varchar(255),
-person_brief varchar(255),
-phone varchar(255),
-sex tinyint(1),
-user_id int(8),
-username varchar(255),
-visit_card varchar(255)
 );
 
 -- 登录日志
@@ -143,9 +134,3 @@ INSERT INTO authorities VALUES (1, 'ROLE_ADMIN');
 INSERT INTO authorities VALUES (1, 'ROLE_USER');
 INSERT INTO authorities VALUES (2, 'ROLE_USER');
 INSERT INTO authorities VALUES (3, 'ROLE_USER');
-
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (1, NULL, NULL, NULL, 'simon.sun.dev@hotmail.com', NULL, NULL, '18362102427', NULL, 1, 'jeesun', NULL);
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (3, NULL, NULL, NULL, '18860902711@163.com', NULL, NULL, '18860902711', NULL, 2, 'user2711', NULL);
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (5, NULL, NULL, NULL, NULL, NULL, NULL, '18550046745', NULL, 3, 'user6745', NULL);
-
-

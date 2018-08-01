@@ -5,12 +5,12 @@ import com.simon.model.VeriCode;
 import com.simon.repository.VeriCodeRepository;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
-import com.taobao.api.TaobaoClient;
 import com.taobao.api.domain.BizResult;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.var;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +57,7 @@ public class VeriCodeController {
     @RequestMapping(value = "/getRegisterCode", method = RequestMethod.GET)
     public ResultMsg getVeriCode(@RequestParam String phone){
 
-        VeriCode veriCode = veriCodeRepository.findByPhone(phone);
+        var veriCode = veriCodeRepository.findByPhone(phone);
         if (null==veriCode){
             veriCode = new VeriCode();
             veriCode.setPhone(phone);
@@ -73,9 +73,9 @@ public class VeriCodeController {
                 veriCodeRepository.save(veriCode);
             }
         }
-        TaobaoClient client = new DefaultTaobaoClient(
+        var client = new DefaultTaobaoClient(
                 DAYU_URL_REAL, DAYU_APP_KEY, DAYU_APP_SECRET);
-        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        var req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("");
         req.setSmsType(DAYU_SMS_TYPE);
         req.setSmsFreeSignName(DAYU_SMS_FREE_SIGN_NAME);
@@ -90,11 +90,11 @@ public class VeriCodeController {
                 return new ResultMsg(200, "验证码已发送");
             }else{
                 logger.error("请确认阿里大于账号还有余额");
-                return new ResultMsg(500, "验证码发送失败，请稍后重试");
+                return ResultMsg.fail(500, "验证码发送失败，请稍后重试");
             }
         } catch (ApiException e) {
             e.printStackTrace();
-            return new ResultMsg(500, e.getErrMsg());
+            return ResultMsg.fail(500, e.getErrMsg());
         }
     }
 
@@ -102,14 +102,14 @@ public class VeriCodeController {
     @RequestMapping(value = "/checkVeriCode", method = RequestMethod.GET)
     public ResultMsg checkVeriCode(@RequestParam String phone, @RequestParam Integer code){
         try{
-            VeriCode veriCode = veriCodeRepository.findByPhoneAndCode(phone, code);
+            var veriCode = veriCodeRepository.findByPhoneAndCode(phone, code);
             if (null!=veriCode){
-                return new ResultMsg(200, "验证码正确");
+                return ResultMsg.success(200, "验证码正确");
             }else{
-                return new ResultMsg(404, "验证码错误");
+                return ResultMsg.fail(404, "验证码错误");
             }
         }catch (Exception e){
-            return new ResultMsg(404, "验证码错误", e.getMessage());
+            return ResultMsg.fail(500, "验证码错误", e.getMessage());
         }
     }
 }

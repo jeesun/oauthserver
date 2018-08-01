@@ -1,84 +1,53 @@
 package com.simon.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
 import javax.persistence.*;
 
-@EqualsAndHashCode
-@ToString
+@ApiModel(value = "OauthUser", description = "用户")
+@Data
 @Table(name = "users")
 @Entity
 public class OauthUser {
-    private String username;
-
-    private String password;
-
-    private Boolean enabled;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(value = "用户名")
+    private String username;
+
+    @ApiModelProperty(value = "密码")
+    private String password;
+
+    @ApiModelProperty(value = "是否有效")
+    private Boolean enabled;
+
+    @ApiModelProperty(value = "邮箱")
     private String email;
 
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
-    private Boolean enable;
+    @ApiModelProperty(value = "年龄")
+    private Integer age;
 
-    public String getUsername() {
-        return username;
-    }
+    @ApiModelProperty(value = "生日")
+    private String birth;
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
+    @ApiModelProperty(value = "地址")
+    private String address;
 
-    public String getPassword() {
-        return password;
-    }
+    @ApiModelProperty(value = "头像")
+    private String headPhoto;
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
+    @ApiModelProperty(value = "个人简介")
+    private String personBrief;
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+    @ApiModelProperty(value = "性别")
+    private Boolean sex;
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public Boolean getEnable() {
-        return enable;
-    }
-
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
-    }
+    @ApiModelProperty(value = "邀请码")
+    private String visitCard;
 }

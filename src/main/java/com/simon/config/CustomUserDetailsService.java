@@ -1,6 +1,5 @@
-package com.simon.custom;
+package com.simon.config;
 
-import com.simon.config.AppConfig;
 import com.simon.domain.UserEntity;
 import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
