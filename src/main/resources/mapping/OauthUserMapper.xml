@@ -8,9 +8,19 @@
     <result column="enabled" jdbcType="BIT" property="enabled" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="enable" jdbcType="BIT" property="enable" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="headPhoto" jdbcType="VARCHAR" property="head_photo" />
+    <result column="personBrief" jdbcType="VARCHAR" property="person_brief" />
+    <result column="sex" jdbcType="BIT" property="sex" />
+    <result column="visitCard" jdbcType="VARCHAR" property="visit_card" />
   </resultMap>
   <sql id="Base_Column_List">
     id, username, password, enabled, email, phone, enable
   </sql>
+
+  <update id="updatePwdByPhone">
+    update users set password=#{password} where phone=#{phone}
+  </update>
 </mapper>

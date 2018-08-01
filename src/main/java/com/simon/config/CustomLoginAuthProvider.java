@@ -1,6 +1,7 @@
-package com.simon.custom;
+package com.simon.config;
 
 import com.simon.config.AppConfig;
+import com.simon.config.CustomUserDetailsService;
 import com.simon.domain.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

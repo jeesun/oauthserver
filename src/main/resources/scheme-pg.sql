@@ -56,7 +56,14 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(256) NOT NULL,
   enabled bool NOT NULL,
   email VARCHAR(256) DEFAULT NULL UNIQUE,
-  phone VARCHAR(256) DEFAULT NULL UNIQUE
+  phone VARCHAR(256) DEFAULT NULL UNIQUE,
+  address varchar(255),
+  age int4,
+  birth varchar(255),
+  head_photo varchar(255),
+  person_brief varchar(255),
+  sex bool,
+  visit_card varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS authorities (
@@ -64,21 +71,6 @@ user_id bigint NOT NULL,
 authority VARCHAR(50) NOT NULL
 );
 
--- 用户信息
-CREATE TABLE IF NOT EXISTS user_info (
-id int8 NOT NULL PRIMARY KEY,
-address varchar(255),
-age int4,
-birth varchar(255),
-email varchar(255),
-head_photo varchar(255),
-person_brief varchar(255),
-phone varchar(255),
-sex bool,
-user_id int8,
-username varchar(255),
-visit_card varchar(255)
-);
 
 -- 登录日志
 CREATE TABLE IF NOT EXISTS log_login (
@@ -137,8 +129,6 @@ tag_id int8
 -- 自增序列
 CREATE SEQUENCE if NOT EXISTS users_id_seq;
 ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq');
-CREATE SEQUENCE if NOT EXISTS user_info_id_seq;
-ALTER TABLE user_info ALTER COLUMN id SET DEFAULT nextval('user_info_id_seq');
 CREATE SEQUENCE if NOT EXISTS log_login_id_seq;
 ALTER TABLE log_login ALTER COLUMN id SET DEFAULT nextval('log_login_id_seq');
 CREATE SEQUENCE if NOT EXISTS reset_pwd_info_id_seq;
@@ -170,8 +160,3 @@ INSERT INTO authorities VALUES (1, 'ROLE_ADMIN');
 INSERT INTO authorities VALUES (1, 'ROLE_USER');
 INSERT INTO authorities VALUES (2, 'ROLE_USER');
 INSERT INTO authorities VALUES (3, 'ROLE_USER');
-
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (1, NULL, NULL, NULL, 'simon.sun.dev@hotmail.com', NULL, NULL, '18362102427', NULL, 1, 'jeesun', NULL);
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (3, NULL, NULL, NULL, '18860902711@163.com', NULL, NULL, '18860902711', NULL, 2, 'user2711', NULL);
-INSERT INTO user_info (id, address, age, birth, email, head_photo, person_brief, phone, sex, user_id, username, visit_card) VALUES (5, NULL, NULL, NULL, NULL, NULL, NULL, '18550046745', NULL, 3, 'user6745', NULL);
-

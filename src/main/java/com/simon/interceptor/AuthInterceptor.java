@@ -3,9 +3,8 @@ package com.simon.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.simon.annotation.IgnoreSecurity;
 import com.simon.config.AppConfig;
-import com.simon.model.UserInfo;
+import com.simon.model.OauthUser;
 import com.simon.repository.OauthUserRepository;
-import com.simon.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -37,9 +36,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private OauthUserRepository oauthUserRepository;
-
-    @Autowired
-    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private MessageSource messageSource;
@@ -74,9 +70,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         log.info("token = " + token);
         String username = getUsernameByAccessToken(token);
         log.info("username = " + username);
-        UserInfo userInfo = userInfoRepository.findByUsername(username);
-        log.info("userInfo = " + JSON.toJSONString(userInfo));
-        request.setAttribute("currentUser", userInfo);
+        OauthUser oauthUser = oauthUserRepository.findByUsername(username);
+        log.info("userInfo = " + JSON.toJSONString(oauthUser));
+        request.setAttribute("currentUser", oauthUser);
         return true;
     }
 
