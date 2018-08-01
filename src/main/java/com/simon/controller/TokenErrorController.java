@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +25,8 @@ import java.util.Map;
 
 @ApiIgnore()
 @Slf4j
-//@RestController
-//@RequestMapping(value = "error")
+@RestController
+@RequestMapping(value = "error")
 public class TokenErrorController extends BasicErrorController {
     private static final String PATH = "/error";
 

@@ -19,17 +19,13 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 - MySQL
 
 已实现的功能：
-1. 集成Spring Boot Oauth2，实现Oauth服务；
-2. token保存到关系型数据库；
-3. 获取token时，username允许传用户名、手机号或者邮箱；
-4. 自定义登录页面和授权页面，token获取支持密码模式和授权码模式；
-5. 日志记录保存到文件，并按日归档；
-6. 数据库连接信息加密；
-7. 集成Druid数据库连接池；
-8. 自定义Oauth2Exception异常返回的json信息；
-9. 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
-10. 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
-11. 集成Redis缓存。
+1. token保存到关系型数据库；
+2. 获取token时，username允许传用户名、手机号或者邮箱；
+3. 自定义登录页面和授权页面，token获取支持密码模式和授权码模式；
+4. 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
+5. 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
+6. 集成Redis缓存;
+7. 集成阿里大鱼（需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat）。
 
 请下载与Spring Boot对应版本的oauthserver：
 <table border="0">
@@ -53,11 +49,11 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 
 ## 更新日志
 
-### v1.2.1(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.1)
+### v1.2.2(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.1)
+- 合并users和user_info表,authorities表使用user_id代替username字段；
 - 集成阿里大鱼，需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat；
 - 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
 - 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
-- authorities表使用user_id代替username字段；
 - 集成Redis缓存，默认不开启；
 - 自定义登录页面和授权页面，并修复授权码模式与密码模式共存问题；
 - 更棒的接口示例HelloWorldController，强烈建议您阅读该Controller代码。
@@ -68,18 +64,6 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 ### v1.1.1(2018-07-07)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.1)
 - 升级Spring Boot版本从1.5.13.RELEASE到1.5.14.RELEASE；
 - 修复检查的access_token无法识别时，返回中文message。
-
-### v1.1.0(2018-06-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.0)
-- 自定义Oauth2Exception异常返回的json信息。
-
-### v1.0.3[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.3)
-- bug修复。
-
-### v1.0.1[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.1)
-- 获取token时，username允许传用户名、手机号或者邮箱。  
-
-### v1.0.0[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.0.0)
-- 完成基础Oauth服务。
 
 ## 使用流程
 ### 1. 建表
