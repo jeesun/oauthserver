@@ -1,8 +1,8 @@
 package com.simon.controller;
 
 import com.simon.common.utils.ImageUtil;
-import com.simon.domain.ResultMsg;
-import com.simon.exception.UserNotValidException;
+import com.simon.common.domain.ResultMsg;
+import com.simon.common.exception.UserNotValidException;
 import com.simon.model.OauthUser;
 import com.simon.service.OauthUserService;
 import io.swagger.annotations.Api;

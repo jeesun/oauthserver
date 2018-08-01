@@ -1,6 +1,6 @@
-package com.simon.handler;
+package com.simon.common.handler;
 
-import com.simon.annotation.CurrentUser;
+import com.simon.common.annotation.CurrentUser;
 import com.simon.model.OauthUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

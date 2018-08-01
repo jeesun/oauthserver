@@ -1,6 +1,6 @@
 package com.simon.controller;
 
-import com.simon.domain.ResultMsg;
+import com.simon.common.domain.ResultMsg;
 import com.simon.service.NewsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

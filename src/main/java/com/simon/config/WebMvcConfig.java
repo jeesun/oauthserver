@@ -1,7 +1,7 @@
 package com.simon.config;
 
-import com.simon.handler.CurrentUserMethodArgumentResolver;
-import com.simon.interceptor.AuthInterceptor;
+import com.simon.common.handler.CurrentUserMethodArgumentResolver;
+import com.simon.common.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

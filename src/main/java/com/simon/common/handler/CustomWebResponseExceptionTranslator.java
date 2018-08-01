@@ -1,7 +1,7 @@
-package com.simon.handler;
+package com.simon.common.handler;
 
 import com.simon.config.AppConfig;
-import com.simon.exception.CustomOauthException;
+import com.simon.common.exception.CustomOauthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

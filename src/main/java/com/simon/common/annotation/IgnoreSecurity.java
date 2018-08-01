@@ -1,4 +1,4 @@
-package com.simon.annotation;
+package com.simon.common.annotation;
 
 import java.lang.annotation.*;
 

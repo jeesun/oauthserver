@@ -1,4 +1,4 @@
-package com.simon.domain;
+package com.simon.common.domain;
 
 import com.simon.model.Authority;
 import org.springframework.security.core.userdetails.UserDetails;

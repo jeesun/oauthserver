@@ -1,6 +1,6 @@
 package com.simon.config;
 
-import com.simon.domain.UserEntity;
+import com.simon.common.domain.UserEntity;
 import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

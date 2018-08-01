@@ -1,4 +1,4 @@
-package com.simon.exception;
+package com.simon.common.exception;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;

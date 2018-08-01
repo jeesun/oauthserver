@@ -1,6 +1,6 @@
 package com.simon.controller;
 
-import com.simon.domain.ResultMsg;
+import com.simon.common.domain.ResultMsg;
 import com.simon.model.VeriCode;
 import com.simon.repository.VeriCodeRepository;
 import com.taobao.api.ApiException;
