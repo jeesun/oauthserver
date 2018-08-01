@@ -1,5 +1,8 @@
 package com.simon.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -8,6 +11,8 @@ import java.sql.Timestamp;
  * @create 2018-07-25 22:17
  **/
 
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "reset_password_info")
 public class ResetPwdInfo {
@@ -65,31 +70,5 @@ public class ResetPwdInfo {
 
     public void setValid(boolean valid) {
         this.valid = valid;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ResetPwdInfo that = (ResetPwdInfo) o;
-
-        if (id != that.id) return false;
-        if (valid != that.valid) return false;
-        if (expiresIn != null ? !expiresIn.equals(that.expiresIn) : that.expiresIn != null) return false;
-        if (secretKey != null ? !secretKey.equals(that.secretKey) : that.secretKey != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (expiresIn != null ? expiresIn.hashCode() : 0);
-        result = 31 * result + (secretKey != null ? secretKey.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (valid ? 1 : 0);
-        return result;
     }
 }

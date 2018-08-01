@@ -48,14 +48,17 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 </table>
 
 ## 升级指南
-oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6。
+1. oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6；
+2. oauthserver v1.2.0添加了阿里大鱼的发送验证码功能，需要阿里大鱼的jar，安装方法：运行src/main/resources/jars/install.bat。
 
 ## 更新日志
-### v1.2.0(2018-07-25)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.0)
+
+### v1.2.1(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.1)
+- 集成阿里大鱼，需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat；
 - 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
 - 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
 - authorities表使用user_id代替username字段；
-- 集成Redis缓存；
+- 集成Redis缓存，默认不开启；
 - 自定义登录页面和授权页面，并修复授权码模式与密码模式共存问题；
 - 更棒的接口示例HelloWorldController，强烈建议您阅读该Controller代码。
 

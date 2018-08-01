@@ -1,12 +1,16 @@
 package com.simon.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
  * @author simon
  * @create 2018-07-25 22:17
  **/
-
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "news_tag")
 public class NewsTag {
@@ -42,27 +46,5 @@ public class NewsTag {
 
     public void setTagId(Long tagId) {
         this.tagId = tagId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        NewsTag newsTag = (NewsTag) o;
-
-        if (id != newsTag.id) return false;
-        if (newsInfoId != null ? !newsInfoId.equals(newsTag.newsInfoId) : newsTag.newsInfoId != null) return false;
-        if (tagId != null ? !tagId.equals(newsTag.tagId) : newsTag.tagId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (newsInfoId != null ? newsInfoId.hashCode() : 0);
-        result = 31 * result + (tagId != null ? tagId.hashCode() : 0);
-        return result;
     }
 }
