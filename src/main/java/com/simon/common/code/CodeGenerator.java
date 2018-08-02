@@ -1,6 +1,8 @@
 package com.simon.common.code;
 
+import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateExceptionHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -15,42 +17,74 @@ import java.util.*;
  * 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。
  */
 public class CodeGenerator {
-    private static final String BASE_PACKAGE = "com.remix";//项目基础包名称，根据自己公司的项目修改
-    private static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";//Model所在包
-    private static final String MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";//Mapper所在包
 
+    private static final String BASE_PACKAGE = "com.simon";//项目基础包名称，根据自己的项目修改
 
-    private static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".common.mapper.MyMapper";//Mapper插件基础接口的完全限定名
-    //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://rm-bp15387s9i571eo7do.mysql.rds.aliyuncs.com/remix?characterEncoding=utf8&useSSL=true";
-    private static final String JDBC_USERNAME = "remix";
-    private static final String JDBC_PASSWORD = "!QAZ2wsx";
-    private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
-    //private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    private static final String PROJECT_PATH = "E:\\git\\oauthserver";//项目在硬盘上的基础路径
-    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
-    private static final String JAVA_PATH = "/src/main/java"; //java文件路径
-    private static final String RESOURCES_PATH = "/src/main/resources";//资源文件路径
-    private static final String PACKAGE_PATH_SERVICE = packageConvertPath("");//生成的Service存放路径
-    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath("");//生成的Service实现存放路径
-    private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath("");//生成的Controller存放路径
+    /*生成文件地址配置*/
+    private static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";//生成的Model类所在包
+    private static final String MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";//生成的Mapper所在包
+    private static final String REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";//生成Repository所在包
+    private static final String SERVICE_PACKAGE = BASE_PACKAGE + ".service";//生成的Service所在包
+    private static final String SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".serviceImpl";//生成的ServiceImpl所在包
+    private static final String CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";//生成的Controller所在包
+
+    private static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".common.mapper.MyMapper";//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
+
+    /*数据库配置*/
+    private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8";//数据库url
+    private static final String JDBC_USERNAME = "postgres";
+    private static final String JDBC_PASSWORD = "19961120";
+    private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";
+
+    private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
+    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/test/resources/generator/template";//模板位置
+
+    private static final String JAVA_PATH = "/src/test/java"; //java文件路径
+    private static final String RESOURCES_PATH = "/test/main/resources";//资源文件路径
+
+    private static final String PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
+    private static final String PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);//生成的Service存放路径
+    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);//生成的Service实现存放路径
+    private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);//生成的Controller存放路径
+
     private static final String AUTHOR = "SimonSun";//@author
-    private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
+    private static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
 
-    public static void main (String[] args) {
-        genCode("app_terminal_management", "app_search_last_info");
+    /*main函数入口,放入表名运行即可生成代码*/
+    public static void main(String[] args) {
+        //genCode("users", "news_info");
+
+        //genCodeByCustomModelName("输入表名","输入自定义Model名称");
+        genCodeByCustomModelName("users","User");
     }
 
-    public static void genCode (String... tableNames) {
+    /**
+     * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。
+     * 如输入表名称 "t_user_detail" 将生成 TUserDetail、TUserDetailMapper、TUserDetailService ...
+     * @param tableNames 数据表名称...
+     */
+    public static void genCode(String... tableNames) {
         for (String tableName : tableNames) {
-            //根据需求生成，不需要的注掉，模板有问题的话可以自己修改。
-            genModelAndMapper(tableName);
-            //genService(tableName);
-            //genController(tableName);
+            genCodeByCustomModelName(tableName, null);
         }
     }
 
-    public static void genModelAndMapper (String tableName) {
+    /**
+     * 通过数据表名称，和自定义的 Model 名称生成代码
+     * 如输入表名称 "t_user_detail" 和自定义的 Model 名称 "User" 将生成 User、UserMapper、UserService ...
+     * @param tableName 数据表名称
+     * @param modelName 自定义的 Model 名称
+     */
+    public static void genCodeByCustomModelName(String tableName, String modelName) {
+        genModelAndMapper(tableName, modelName);
+        genRepository(tableName, modelName);
+		genService(tableName, modelName);
+		genController(tableName, modelName);
+
+    }
+
+
+    public static void genModelAndMapper(String tableName, String modelName) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -76,7 +110,7 @@ public class CodeGenerator {
 
         SqlMapGeneratorConfiguration sqlMapGeneratorConfiguration = new SqlMapGeneratorConfiguration();
         sqlMapGeneratorConfiguration.setTargetProject(PROJECT_PATH + RESOURCES_PATH);
-        sqlMapGeneratorConfiguration.setTargetPackage("mapper");
+        sqlMapGeneratorConfiguration.setTargetPackage("Mapping");
         context.setSqlMapGeneratorConfiguration(sqlMapGeneratorConfiguration);
 
         JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = new JavaClientGeneratorConfiguration();
@@ -87,6 +121,7 @@ public class CodeGenerator {
 
         TableConfiguration tableConfiguration = new TableConfiguration(context);
         tableConfiguration.setTableName(tableName);
+        if (StringUtils.isNotEmpty(modelName))tableConfiguration.setDomainObjectName(modelName);
         tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
         context.addTableConfiguration(tableConfiguration);
 
@@ -109,24 +144,48 @@ public class CodeGenerator {
         if (generator.getGeneratedJavaFiles().isEmpty() || generator.getGeneratedXmlFiles().isEmpty()) {
             throw new RuntimeException("生成Model和Mapper失败：" + warnings);
         }
-
-        String modelName = tableNameConvertUpperCamel(tableName);
+        if (StringUtils.isEmpty(modelName)) modelName = tableNameConvertUpperCamel(tableName);
         System.out.println(modelName + ".java 生成成功");
         System.out.println(modelName + "Mapper.java 生成成功");
         System.out.println(modelName + "Mapper.xml 生成成功");
     }
 
-    public static void genService (String tableName) {
+    public static void genRepository(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
             Map<String, Object> data = new HashMap<>();
-            data.put("date", DATE);
-            data.put("author", AUTHOR);
-            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
+            data.put("AUTHOR", AUTHOR);
+            data.put("CREATE", CREATE);
+            String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
             data.put("modelNameUpperCamel", modelNameUpperCamel);
             data.put("modelNameLowerCamel", tableNameConvertLowerCamel(tableName));
-            data.put("basePackage", "");
+            data.put("basePackage", BASE_PACKAGE);
+
+            File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_REPOSITORY + modelNameUpperCamel + "Repository.java");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("repository.ftl").process(data,
+                    new FileWriter(file));
+            System.out.println(modelNameUpperCamel + "Repository.java 生成成功");
+
+        } catch (Exception e) {
+            throw new RuntimeException("生成repository失败", e);
+        }
+    }
+
+    public static void genService(String tableName, String modelName) {
+        try {
+            freemarker.template.Configuration cfg = getConfiguration();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("AUTHOR", AUTHOR);
+            data.put("CREATE", CREATE);
+            String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
+            data.put("modelNameUpperCamel", modelNameUpperCamel);
+            data.put("modelNameLowerCamel", tableNameConvertLowerCamel(tableName));
+            data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
             if (!file.getParentFile().exists()) {
@@ -148,18 +207,18 @@ public class CodeGenerator {
         }
     }
 
-    public static void genController (String tableName) {
+    public static void genController(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
             Map<String, Object> data = new HashMap<>();
-            data.put("date", DATE);
-            data.put("author", AUTHOR);
-            data.put("baseRequestMapping", tableNameConvertMappingPath(tableName));
-            String modelNameUpperCamel = tableNameConvertUpperCamel(tableName);
+            data.put("AUTHOR", AUTHOR);
+            data.put("CREATE", CREATE);
+            String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
+            data.put("baseRequestMapping", modelNameConvertMappingPath(modelNameUpperCamel));
             data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", tableNameConvertLowerCamel(tableName));
-            data.put("basePackage", "");
+            data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+            data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_CONTROLLER + modelNameUpperCamel + "Controller.java");
             if (!file.getParentFile().exists()) {
@@ -175,7 +234,7 @@ public class CodeGenerator {
 
     }
 
-    private static freemarker.template.Configuration getConfiguration () throws IOException {
+    private static freemarker.template.Configuration getConfiguration() throws IOException {
         freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_23);
         cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_FILE_PATH));
         cfg.setDefaultEncoding("UTF-8");
@@ -183,40 +242,27 @@ public class CodeGenerator {
         return cfg;
     }
 
-    private static String tableNameConvertLowerCamel (String tableName) {
-        StringBuilder result = new StringBuilder();
-        if (tableName != null && tableName.length() > 0) {
-            tableName = tableName.toLowerCase();//兼容使用大写的表名
-            boolean flag = false;
-            for (int i = 0; i < tableName.length(); i++) {
-                char ch = tableName.charAt(i);
-                if ("_".charAt(0) == ch) {
-                    flag = true;
-                } else {
-                    if (flag) {
-                        result.append(Character.toUpperCase(ch));
-                        flag = false;
-                    } else {
-                        result.append(ch);
-                    }
-                }
-            }
-        }
-        return result.toString();
+    private static String tableNameConvertLowerCamel(String tableName) {
+        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, tableName.toLowerCase());
     }
 
-    private static String tableNameConvertUpperCamel (String tableName) {
-        String camel = tableNameConvertLowerCamel(tableName);
-        return camel.substring(0, 1).toUpperCase() + camel.substring(1);
+    private static String tableNameConvertUpperCamel(String tableName) {
+        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName.toLowerCase());
 
     }
 
-    private static String tableNameConvertMappingPath (String tableName) {
+    private static String tableNameConvertMappingPath(String tableName) {
         tableName = tableName.toLowerCase();//兼容使用大写的表名
         return "/" + (tableName.contains("_") ? tableName.replaceAll("_", "/") : tableName);
     }
 
-    private static String packageConvertPath (String packageName) {
+    private static String modelNameConvertMappingPath(String modelName) {
+        String tableName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelName);
+        return tableNameConvertMappingPath(tableName);
+    }
+
+    private static String packageConvertPath(String packageName) {
         return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
     }
+
 }
