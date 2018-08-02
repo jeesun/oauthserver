@@ -30,10 +30,22 @@ spring:
       initial-size: 1
       max-wait: 60000
       min-idle: 3
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
       remove-abandoned: true
       remove-abandoned-timeout: 180
       connection-properties: clientEncoding=UTF-8
       test-while-idle: false
+      test-on-borrow: true
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      use-global-data-source-stat: true
+
+
+
 #  redis:
 #    database: 0 #Redis数据库索引（默认为0）
 #    host: 127.0.0.1 #Redis服务器地址
