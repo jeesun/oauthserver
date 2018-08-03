@@ -16,7 +16,7 @@ spring:
   datasource:
 # PostgreSQL连接信息
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
+    url: jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8
     username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
     password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
 # MySQL连接信息

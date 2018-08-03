@@ -1,11 +1,11 @@
 package ${basePackage}.service;
 import ${basePackage}.model.${modelNameUpperCamel};
-import ${basePackage}.core.Service;
-
+import ${basePackage}.common.service.BasicService;
 
 /**
- * Created by ${author} on ${date}.
- */
-public interface ${modelNameUpperCamel}Service extends Service<${modelNameUpperCamel}> {
+* @author ${AUTHOR}
+* @create ${CREATE}
+**/
+public interface ${modelNameUpperCamel}Service extends BasicService<${modelNameUpperCamel}> {
 
 }

@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import com.simon.common.domain.UserEntity;
 import lombok.extern.slf4j.Slf4j;

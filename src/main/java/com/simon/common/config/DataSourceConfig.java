@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;

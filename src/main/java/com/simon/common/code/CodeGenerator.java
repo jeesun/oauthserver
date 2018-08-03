@@ -37,10 +37,10 @@ public class CodeGenerator {
     private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/test/resources/generator/template";//模板位置
+    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
 
     private static final String JAVA_PATH = "/src/test/java"; //java文件路径
-    private static final String RESOURCES_PATH = "/test/main/resources";//资源文件路径
+    private static final String RESOURCES_PATH = "/src/test/resources";//资源文件路径
 
     private static final String PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
     private static final String PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);//生成的Service存放路径
@@ -159,7 +159,7 @@ public class CodeGenerator {
             data.put("CREATE", CREATE);
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
             data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", tableNameConvertLowerCamel(tableName));
+            data.put("modelNameLowerCamel", modelNameConvertLowerCamel(modelNameUpperCamel));
             data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_REPOSITORY + modelNameUpperCamel + "Repository.java");
@@ -184,7 +184,7 @@ public class CodeGenerator {
             data.put("CREATE", CREATE);
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
             data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", tableNameConvertLowerCamel(tableName));
+            data.put("modelNameLowerCamel", modelNameConvertLowerCamel(modelNameUpperCamel));
             data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE + modelNameUpperCamel + "Service.java");
@@ -263,6 +263,13 @@ public class CodeGenerator {
 
     private static String packageConvertPath(String packageName) {
         return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
+    }
+
+    private static String modelNameConvertLowerCamel(String modelName){
+        if(Character.isLowerCase(modelName.charAt(0)))
+            return modelName;
+        else
+            return (new StringBuilder()).append(Character.toLowerCase(modelName.charAt(0))).append(modelName.substring(1)).toString();
     }
 
 }

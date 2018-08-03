@@ -1,6 +1,6 @@
 package com.simon.controller;
 
-import com.simon.config.AppConfig;
+import com.simon.common.config.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;

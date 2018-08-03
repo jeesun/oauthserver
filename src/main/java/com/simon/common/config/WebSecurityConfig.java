@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import com.simon.common.handler.AuthSuccessHandler;
 import lombok.extern.slf4j.Slf4j;

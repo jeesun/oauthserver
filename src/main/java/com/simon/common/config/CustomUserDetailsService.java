@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import com.simon.common.domain.UserEntity;
 import com.simon.model.Authority;

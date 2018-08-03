@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
