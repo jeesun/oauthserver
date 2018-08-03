@@ -43,9 +43,15 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       filters: stat,wall,log4j
       use-global-data-source-stat: true
-
-
-
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+        login-username: simon
+        login-password: 19961120
+        reset-enable: false
+        allow: 127.0.0.1
+        url-pattern: /druid/*
 #  redis:
 #    database: 0 #Redis数据库索引（默认为0）
 #    host: 127.0.0.1 #Redis服务器地址
