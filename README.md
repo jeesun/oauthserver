@@ -46,7 +46,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 </table>
 
 ## 升级指南
-1. oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6；
+1. 使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6；
 2. oauthserver v1.2.0添加了阿里大鱼的发送验证码功能，需要阿里大鱼的jar，安装方法：运行src/main/resources/jars/install.bat。
 
 ## 更新日志
@@ -69,10 +69,6 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 
 ### v2.0.0.alpha(2018-07-16)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v2.0.0.alpha)
 - 升级Spring Boot版本从1.5.14.RELEASE到2.0.3.RELEASE。
-
-### v1.1.1(2018-07-07)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.1)
-- 升级Spring Boot版本从1.5.13.RELEASE到1.5.14.RELEASE；
-- 修复检查的access_token无法识别时，返回中文message。
 
 ## 使用流程
 ### 1. 建表
