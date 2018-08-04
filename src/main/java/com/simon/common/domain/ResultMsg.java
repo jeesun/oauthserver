@@ -3,8 +3,12 @@ package com.simon.common.domain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 @ApiModel
-public class ResultMsg {
+public class ResultMsg implements Serializable {
+    private static final long serialVersionUID = -452209559974344268L;
+
     @ApiModelProperty(value = "返回码")
     private Integer code;
 

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -15,7 +16,8 @@ import java.sql.Timestamp;
 @ToString
 @Entity
 @Table(name = "news_info")
-public class NewsInfo {
+public class NewsInfo implements Serializable {
+    private static final long serialVersionUID = 2260208401573792959L;
     private Long id;
     private String title;
     private Long userId;

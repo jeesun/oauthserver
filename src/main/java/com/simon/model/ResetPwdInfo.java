@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -15,7 +16,8 @@ import java.sql.Timestamp;
 @ToString
 @Entity
 @Table(name = "reset_password_info")
-public class ResetPwdInfo {
+public class ResetPwdInfo implements Serializable {
+    private static final long serialVersionUID = -4603483163651853056L;
     private long id;
     private Timestamp expiresIn;
     private String secretKey;

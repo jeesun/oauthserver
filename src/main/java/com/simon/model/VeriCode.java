@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author simon
@@ -14,7 +15,8 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "veri_code")
-public class VeriCode {
+public class VeriCode implements Serializable {
+    private static final long serialVersionUID = -7844171612339151339L;
     private long id;
     private Integer code;
     private Long createTime;
