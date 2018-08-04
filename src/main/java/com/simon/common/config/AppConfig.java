@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -22,4 +22,7 @@ public class AppConfig {
     public static Locale getLocale(){
         return locale;
     }
+
+    public final static int DEFAULT_PAGE_SIZE = 10;
+    public final static int DEFAULT_PAGE_NO = 1;
 }

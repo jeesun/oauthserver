@@ -2,7 +2,7 @@ package com.simon.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.simon.common.annotation.IgnoreSecurity;
-import com.simon.config.AppConfig;
+import com.simon.common.config.AppConfig;
 import com.simon.model.OauthUser;
 import com.simon.repository.OauthUserRepository;
 import lombok.extern.slf4j.Slf4j;

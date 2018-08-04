@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

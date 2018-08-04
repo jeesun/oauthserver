@@ -2,6 +2,8 @@ package com.simon.service;
 
 import com.github.pagehelper.PageInfo;
 import com.simon.model.NewsInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 新闻
@@ -12,4 +14,5 @@ import com.simon.model.NewsInfo;
 
 public interface NewsInfoService {
     PageInfo<NewsInfo> getAll(int pageNo);
+    Page<NewsInfo> getAll(Pageable pageable);
 }

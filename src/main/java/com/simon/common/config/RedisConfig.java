@@ -1,9 +1,10 @@
-package com.simon.config;
+package com.simon.common.config;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -28,10 +29,10 @@ import java.lang.reflect.Method;
  * @author simon
  * @create 2018-06-19 17:08
  **/
+@Slf4j
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
-    private static Logger logger = Logger.getLogger(RedisConfig.class);
 
     @Autowired
     private RedisConnectionFactory factory;
@@ -40,7 +41,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager(RedisTemplate redisTemplate){
         RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
         //设置缓存过期时间
-        cacheManager.setDefaultExpiration(60);//60秒
+        cacheManager.setDefaultExpiration(7200);//1小时
         cacheManager.setUsePrefix(true);//将key的前后缀合并在一起
         return cacheManager;
     }
@@ -66,33 +67,27 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public KeyGenerator simpleKey(){
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(target.getClass().getName()+":");
-                for (Object obj : params) {
-                    sb.append(obj.toString());
-                }
-                return sb.toString();
+        return (Object target, Method method, Object... params) -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append(target.getClass().getName()+":");
+            for (Object obj : params) {
+                sb.append(obj.toString());
             }
+            return sb.toString();
         };
     }
 
     @Bean
     public KeyGenerator objectId(){
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params){
-                StringBuilder sb = new StringBuilder();
-                sb.append(target.getClass().getName()+":");
-                try {
-                    sb.append(params[0].getClass().getMethod("getId", null).invoke(params[0], null).toString());
-                }catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException no){
-                    no.printStackTrace();
-                }
-                return sb.toString();
+        return (Object target, Method method, Object... params) -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append(target.getClass().getName()+":");
+            try {
+                sb.append(params[0].getClass().getMethod("getId", null).invoke(params[0], null).toString());
+            }catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException no){
+                no.printStackTrace();
             }
+            return sb.toString();
         };
     }
 
@@ -102,17 +97,17 @@ public class RedisConfig extends CachingConfigurerSupport {
         CacheErrorHandler cacheErrorHandler = new CacheErrorHandler() {
             @Override
             public void handleCacheGetError(RuntimeException e, Cache cache, Object key) {
-                logger.error(key);
+                log.error(JSON.toJSONString(key));
             }
 
             @Override
             public void handleCachePutError(RuntimeException e, Cache cache, Object key, Object value) {
-                logger.error(value);
+                log.error(JSON.toJSONString(key));
             }
 
             @Override
             public void handleCacheEvictError(RuntimeException e, Cache cache, Object key) {
-                logger.error(key);
+                log.error(JSON.toJSONString(key));
             }
 
             @Override

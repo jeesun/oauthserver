@@ -1,4 +1,4 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import com.simon.common.handler.CurrentUserMethodArgumentResolver;
 import com.simon.common.interceptor.AuthInterceptor;

@@ -1,10 +1,12 @@
-package com.simon.config;
+package com.simon.common.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -35,7 +37,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private DataSource dataSource;
@@ -49,14 +51,21 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private WebResponseExceptionTranslator customWebResponseExceptionTranslator;
 
+    @Autowired
+    private RedisConnectionFactory connectionFactory;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        /*clients.inMemory()
-                .withClient("clientId")
-                .secret("secretId")
-                .authorizedGrantTypes("authorization_code", "client_credentials", "password")
-                .scopes("app");*/
-        clients.jdbc(dataSource);
+        clients.inMemory()
+                .withClient("clientIdPassword")
+                .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6")
+                .scopes("read,write,trust")
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password", "client_credentials")
+                .authorities("ROLE_ADMIN", "ROLE_USER")
+                .accessTokenValiditySeconds(7200)//access_token有效期为2小时
+                .refreshTokenValiditySeconds(5184000)//refresh_token有效期为2个月60天
+                .autoApprove(false);
+        //clients.jdbc(dataSource);
     }
 
     @Override
@@ -92,6 +101,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
+        //return new RedisTokenStore(connectionFactory);
     }
 
     @Autowired
