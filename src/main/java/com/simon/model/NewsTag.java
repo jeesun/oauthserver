@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author simon
@@ -13,7 +14,8 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "news_tag")
-public class NewsTag {
+public class NewsTag implements Serializable {
+    private static final long serialVersionUID = -1622210657684111480L;
     private long id;
     private Long newsInfoId;
     private Long tagId;

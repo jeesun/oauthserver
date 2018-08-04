@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author simon
@@ -14,7 +15,8 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "qr_code")
-public class QrCode {
+public class QrCode implements Serializable {
+    private static final long serialVersionUID = -3433674612562240900L;
     private long id;
     private Boolean isOk;
     private String sid;

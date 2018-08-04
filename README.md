@@ -22,10 +22,12 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 1. token保存到关系型数据库；
 2. 获取token时，username允许传用户名、手机号或者邮箱；
 3. 自定义登录页面和授权页面，token获取支持密码模式和授权码模式；
+4. 集成druid，并开启druid监控，访问[http://localhost:8182/druid](http://localhost:8182/druid)，用户名simon，密码19961120；
 4. 集成Mybatis，以及Mybatis三大插件：通用Mapper，Mybatis-Plus，PageHelper；
-5. 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)；
-6. 集成Redis缓存;
-7. 集成阿里大鱼（需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat）。
+5. 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)，全局Authorize的值为"Bearer "+"access_token"，注意"Bearer"和"access_token"之间有一个空格；
+6. 集成Redis缓存，默认使用Ehcache缓存，若要切换成Redis缓存，请查看`application.yml`缓存配置注释；
+7. 集成阿里大鱼（需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat）；
+8. 代码生成器，运行`com/simon/common/code/CodeGenerator.java`的main方法进行代码生成，代码生成位置默认是当前项目的test文件夹。可生成Model、Mapper、Repository、Service、ServiceImpl、Controller。需要注意的是，生成的Model需要手动添加`@Entity`注解，生成的Mapper需要手动添加`@Repository`注解。
 
 请下载与Spring Boot对应版本的oauthserver：
 <table border="0">
@@ -44,10 +46,17 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 </table>
 
 ## 升级指南
-1. oauthserver从v1.2.0以前版本（不包括v1.2.0）升级到v2.x，或者是使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6；
+1. 使用v2.x版本，需要修改数据表oauth_client_details的clicent_secret列的值，从明文secret改为经过Scrypt加密的字符串$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6；
 2. oauthserver v1.2.0添加了阿里大鱼的发送验证码功能，需要阿里大鱼的jar，安装方法：运行src/main/resources/jars/install.bat。
 
 ## 更新日志
+
+### v1.2.3(2018-08-05)(当前版本)
+- 内置代码生成器；
+- 移动config目录到common目录下；
+- 缓存UserDetails到Ehcache，若`spring.cache.type=redis`，则自动缓存UserDetails到Redis；
+- clients信息存入内存，提高查询效率；
+- 开启druid监控，访问[http://localhost:8182/druid](http://localhost:8182/druid)，用户名simon，密码19961120。
 
 ### v1.2.2(2018-08-01)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.2.2)
 - 合并users和user_info表,authorities表使用user_id代替username字段；
@@ -61,40 +70,37 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 ### v2.0.0.alpha(2018-07-16)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v2.0.0.alpha)
 - 升级Spring Boot版本从1.5.14.RELEASE到2.0.3.RELEASE。
 
-### v1.1.1(2018-07-07)[下载](https://codeload.github.com/jeesun/oauthserver/zip/v1.1.1)
-- 升级Spring Boot版本从1.5.13.RELEASE到1.5.14.RELEASE；
-- 修复检查的access_token无法识别时，返回中文message。
-
 ## 使用流程
 ### 1. 建表
-- PostgreSQL
+- PostgreSQL  
 请执行`src/main/resources/schema-pg.sql`，完成数据表的创建和测试数据的导入。
-- MySQL
+- MySQL  
 请执行`src/main/resources/schema-mysql.sql`，完成数据表的创建和测试数据的导入。
 ### 2. 修改数据库连接信息
-在application.yml中，配置着数据库的连接信息。其中，配置项username和password是要经过jasypt加密的，~~不能直接填明文~~，也可直接填明文。加密密钥由`jasypt.encryptor.password`配置。你需要使用test目录下的UtilTests工具得到加密字符串。
-- PostgreSQL
-```
-# PostgreSQL连接信息
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
-    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
-    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
-```
-
-- MySQL
-```
-# MySQL连接信息
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
-    password: ENC(BZUIhx1tIC75T4JTYROwbsPIRuhrPQMx) #明文19941017
-```
+- PostgreSQL  
+连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=pg`。
+- MySQL  
+连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=mysql`。  
+数据库连接信息的配置项username和password可以经过jasypt加密，也可以直接填明文。若要使用jasypt加密，加密密钥由`jasypt.encryptor.password`配置，你可以使用test目录下的UtilTests工具得到加密字符串。
 ### 3. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
 ### 4. 测试
-在建表时，我已经向表添加了测试数据。以下请求参数的值，均是测试数据，在数据表中可以找得到。请根据需求到数据表中修改对应的值。    
-在表`oauth_client_details`表中，已有一条测试数据。列`client_id`和`client_secret`的值，分别对应Basic Oauth的请求参数`username`和`password`的值。而列`access_token_validity`和列`refresh_token_validity`，分别代表access_token和refresh_token的有效期时间，以秒为单位。测试数据7200和5184000，分别代表2个小时和2个月（60天）。这是一个比较合理的有效期时间的设置，可以参考。
+`com.simon.common.config.OAuthSecurityConfig.java`的`clients`配置如下：
+``` java
+@Override
+public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    clients.inMemory()
+            .withClient("clientIdPassword")
+            .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6") //明文secret
+            .scopes("read,write,trust")
+            .authorizedGrantTypes("authorization_code", "refresh_token", "password", "client_credentials")
+            .authorities("ROLE_ADMIN", "ROLE_USER")
+            .accessTokenValiditySeconds(7200)//access_token有效期为2小时
+            .refreshTokenValiditySeconds(5184000)//refresh_token有效期为2个月60天
+            .autoApprove(false);
+    //clients.jdbc(dataSource);
+}
+```
 
 **token相关的接口，都需要进行Basic Oauth认证。**  
 如下图所示：  

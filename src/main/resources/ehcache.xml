@@ -23,7 +23,15 @@
            overflowToDisk="true"
            memoryStoreEvictionPolicy="LRU" />
 
-    <cache name="userCache"
+    <cache name="userDetailsCache"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+    <cache name="oauthUserCache"
            maxElementsInMemory="0"
            eternal="true"
            overflowToDisk="true"

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,9 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "log_login")
-public class LogLogin {
+public class LogLogin implements Serializable {
+    private static final long serialVersionUID = -4527200937557834187L;
+
     private long id;
     private Date createTime;
     private String ip;

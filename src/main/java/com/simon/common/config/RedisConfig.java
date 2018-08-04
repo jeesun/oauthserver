@@ -24,14 +24,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * redis配置
+ * redis缓存配置，若要使用Redis缓存，请注释EhcacheConfig的@Configuration和@EnableCaching注解，并取消RedisConfig的@Configuration和@EnableCaching注解的注释。
  *
  * @author simon
  * @create 2018-06-19 17:08
  **/
 @Slf4j
-@Configuration
-@EnableCaching
+//@Configuration
+//@EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Autowired
@@ -112,7 +112,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
             @Override
             public void handleCacheClearError(RuntimeException e, Cache cache) {
-
+                log.error(e.getMessage());
             }
         };
         return cacheErrorHandler;

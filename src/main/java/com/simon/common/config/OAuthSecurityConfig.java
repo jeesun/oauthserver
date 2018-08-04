@@ -58,7 +58,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("clientIdPassword")
-                .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6")
+                .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6") //明文secret
                 .scopes("read,write,trust")
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password", "client_credentials")
                 .authorities("ROLE_ADMIN", "ROLE_USER")
