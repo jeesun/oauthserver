@@ -13,6 +13,7 @@ import com.simon.service.OauthUserService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +105,7 @@ public class OauthUserServiceImpl implements OauthUserService {
         }
     }
 
+    @Cacheable(key="#username", cacheNames = "oauthUserCache")
     @Override
     public OauthUser findByUsername(String username) {
         return oauthUserRepository.findByUsername(username);
