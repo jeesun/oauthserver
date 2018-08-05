@@ -34,7 +34,7 @@ mybatis-plus:
     #数据库大写下划线转换
     #capital-mode: true
     # Sequence序列接口实现类配置
-    key-generator: com.baomidou.mybatisplus.incrementer.OracleKeyGenerator
+    key-generator: com.baomidou.mybatisplus.incrementer.PostgreKeyGenerator
     #逻辑删除配置（下面3个配置）
     logic-delete-value: 1
     logic-not-delete-value: 0
