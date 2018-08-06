@@ -15,6 +15,7 @@ import java.util.List;
 
 public interface BasicService<T> {
     T save(T model);
+    List<T> save(List<T> modelList);
     PageInfo<T> findAll(int pageNo);
     Page<T> findAll(Pageable pageable);
     List<T> findAll();

@@ -36,9 +36,14 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     }
 
     @Override
+    public List<${modelNameUpperCamel}> save(List<${modelNameUpperCamel}> ${modelNameLowerCamel}List) {
+        return ${modelNameLowerCamel}Repository.save(${modelNameLowerCamel}List);
+    }
+
+    @Override
     public PageInfo<${modelNameUpperCamel}> findAll(int pageNo){
-    PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
-    List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.selectAll();
+        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+        List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.selectAll();
         return new PageInfo<>(list);
     }
 

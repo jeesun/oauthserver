@@ -55,7 +55,14 @@ public class CodeGenerator {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        genCodeByCustomModelName("users","User");
+        /*genCodeByCustomModelName("news_info","NewsInfo");
+        genCodeByCustomModelName("users", "OauthUser");
+        genCodeByCustomModelName("veri_code", "VeriCode");
+        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
+        genCodeByCustomModelName("qr_code", "QrCode");
+        genCodeByCustomModelName("log_login", "LogLogin");
+        genCodeByCustomModelName("news_tag", "NewsTag");*/
+
     }
 
     /**
@@ -75,16 +82,16 @@ public class CodeGenerator {
      * @param tableName 数据表名称
      * @param modelName 自定义的 Model 名称
      */
-    public static void genCodeByCustomModelName(String tableName, String modelName) {
+    private static void genCodeByCustomModelName(String tableName, String modelName) {
         genModelAndMapper(tableName, modelName);
         genRepository(tableName, modelName);
 		genService(tableName, modelName);
-		genController(tableName, modelName);
+		//genController(tableName, modelName);
 
     }
 
 
-    public static void genModelAndMapper(String tableName, String modelName) {
+    private static void genModelAndMapper(String tableName, String modelName) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -134,7 +141,7 @@ public class CodeGenerator {
 
             boolean overwrite = true;
             DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-            warnings = new ArrayList<String>();
+            warnings = new ArrayList<>();
             generator = new MyBatisGenerator(config, callback, warnings);
             generator.generate(null);
         } catch (Exception e) {
@@ -150,7 +157,7 @@ public class CodeGenerator {
         System.out.println(modelName + "Mapper.xml 生成成功");
     }
 
-    public static void genRepository(String tableName, String modelName) {
+    private static void genRepository(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -175,7 +182,7 @@ public class CodeGenerator {
         }
     }
 
-    public static void genService(String tableName, String modelName) {
+    private static void genService(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -207,7 +214,7 @@ public class CodeGenerator {
         }
     }
 
-    public static void genController(String tableName, String modelName) {
+    private static void genController(String tableName, String modelName) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -217,7 +224,7 @@ public class CodeGenerator {
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
             data.put("baseRequestMapping", modelNameConvertMappingPath(modelNameUpperCamel));
             data.put("modelNameUpperCamel", modelNameUpperCamel);
-            data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
+            data.put("modelNameLowerCamel", modelNameConvertLowerCamel(modelNameUpperCamel));
             data.put("basePackage", BASE_PACKAGE);
 
             File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_CONTROLLER + modelNameUpperCamel + "Controller.java");
@@ -266,10 +273,7 @@ public class CodeGenerator {
     }
 
     private static String modelNameConvertLowerCamel(String modelName){
-        if(Character.isLowerCase(modelName.charAt(0)))
-            return modelName;
-        else
-            return (new StringBuilder()).append(Character.toLowerCase(modelName.charAt(0))).append(modelName.substring(1)).toString();
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelName);
     }
 
 }

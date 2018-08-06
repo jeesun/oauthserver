@@ -1,76 +1,98 @@
 package com.simon.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
-/**
- * @author simon
- * @create 2018-07-25 22:17
- **/
-
-@EqualsAndHashCode
-@ToString
 @Entity
-@Table(name = "reset_password_info")
+@Table(name = "reset_pwd_info")
 public class ResetPwdInfo implements Serializable {
-    private static final long serialVersionUID = -4603483163651853056L;
-    private long id;
-    private Timestamp expiresIn;
-    private String secretKey;
-    private Long userId;
-    private boolean valid;
-
+    private static final long serialVersionUID = 980999113275832311L;
     @Id
-    @Column(name = "id")
-    public long getId() {
+    @GeneratedValue(generator = "sequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
+    private Long id;
+
+    @Column(name = "expires_in")
+    private Date expiresIn;
+
+    @Column(name = "secret_key")
+    private String secretKey;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    private Boolean valid;
+
+    /**
+     * @return id
+     */
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    /**
+     * @param id
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "expires_in")
-    public Timestamp getExpiresIn() {
+    /**
+     * @return expires_in
+     */
+    public Date getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(Timestamp expiresIn) {
+    /**
+     * @param expiresIn
+     */
+    public void setExpiresIn(Date expiresIn) {
         this.expiresIn = expiresIn;
     }
 
-    @Basic
-    @Column(name = "secret_key")
+    /**
+     * @return secret_key
+     */
     public String getSecretKey() {
         return secretKey;
     }
 
+    /**
+     * @param secretKey
+     */
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
 
-    @Basic
-    @Column(name = "user_id")
+    /**
+     * @return user_id
+     */
     public Long getUserId() {
         return userId;
     }
 
+    /**
+     * @param userId
+     */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    @Basic
-    @Column(name = "valid")
-    public boolean isValid() {
+    /**
+     * @return valid
+     */
+    public Boolean getValid() {
         return valid;
     }
 
-    public void setValid(boolean valid) {
+    /**
+     * @param valid
+     */
+    public void setValid(Boolean valid) {
         this.valid = valid;
     }
 }

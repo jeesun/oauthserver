@@ -1,5 +1,6 @@
 package com.simon.service;
 
+import com.simon.common.service.BasicService;
 import com.simon.model.VeriCode;
 
 /**
@@ -9,7 +10,7 @@ import com.simon.model.VeriCode;
  * @create 2018-07-31 15:24
  **/
 
-public interface VeriCodeService {
+public interface VeriCodeService extends BasicService<VeriCode> {
     VeriCode findByPhone(String phone);
     VeriCode findByPhoneAndCode(String phone, Integer code);
 }

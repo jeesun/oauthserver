@@ -34,7 +34,7 @@ public class QrCodeController {
         if (null != qrCode){
             qrCode.setUsername(username);
             qrCode.setToken(access_token);
-            qrCode.setOk(true);
+            qrCode.setIsOk(true);
             qrCodeRepository.save(qrCode);
             return ResultMsg.success(200, "扫码成功");
         }else{
