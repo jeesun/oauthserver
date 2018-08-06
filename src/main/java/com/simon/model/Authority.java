@@ -1,7 +1,5 @@
 package com.simon.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -9,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@EqualsAndHashCode
-@ToString
 @Table(name = "authorities")
 @Entity
 public class Authority implements GrantedAuthority, Serializable {

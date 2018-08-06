@@ -1,74 +1,94 @@
 package com.simon.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * @author simon
- * @create 2018-07-25 22:17
- **/
-
-@EqualsAndHashCode
-@ToString
 @Entity
 @Table(name = "veri_code")
 public class VeriCode implements Serializable {
-    private static final long serialVersionUID = -7844171612339151339L;
-    private long id;
+    private static final long serialVersionUID = -4954084806431911715L;
+    @Id
+    @GeneratedValue(generator = "sequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
+    private Long id;
+
     private Integer code;
+
+    @Column(name = "create_time")
     private Long createTime;
+
     private Integer expires;
+
     private String phone;
 
-    @Id
-    @Column(name = "id")
-    public long getId() {
+    /**
+     * @return id
+     */
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    /**
+     * @param id
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "code")
+    /**
+     * @return code
+     */
     public Integer getCode() {
         return code;
     }
 
+    /**
+     * @param code
+     */
     public void setCode(Integer code) {
         this.code = code;
     }
 
-    @Basic
-    @Column(name = "create_time")
+    /**
+     * @return create_time
+     */
     public Long getCreateTime() {
         return createTime;
     }
 
+    /**
+     * @param createTime
+     */
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "expires")
+    /**
+     * @return expires
+     */
     public Integer getExpires() {
         return expires;
     }
 
+    /**
+     * @param expires
+     */
     public void setExpires(Integer expires) {
         this.expires = expires;
     }
 
-    @Basic
-    @Column(name = "phone")
+    /**
+     * @return phone
+     */
     public String getPhone() {
         return phone;
     }
 
+    /**
+     * @param phone
+     */
     public void setPhone(String phone) {
         this.phone = phone;
     }

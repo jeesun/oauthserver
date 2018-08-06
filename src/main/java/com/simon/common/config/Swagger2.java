@@ -21,6 +21,9 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class Swagger2 {
+    @Value("${swagger2.base-package}")
+    private String basePackage;
+
     @Value("${swagger2.title}")
     private String title;
 
@@ -55,8 +58,8 @@ public class Swagger2 {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors
-                        .basePackage("com.simon.controller"))
-                .paths(PathSelectors.regex("^(?!auth).*$"))
+                        .basePackage(basePackage))
+                .paths(PathSelectors.regex("^(?!oauth).*$"))
                 .build()
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts());

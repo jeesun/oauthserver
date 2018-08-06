@@ -1,109 +1,145 @@
 package com.simon.model;
 
-
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
-/**
- * @author simon
- * @create 2018-07-24 0:01
- **/
-@EqualsAndHashCode
-@ToString
 @Entity
 @Table(name = "news_info")
 public class NewsInfo implements Serializable {
-    private static final long serialVersionUID = 2260208401573792959L;
+    private static final long serialVersionUID = 3237531145721255719L;
+    @Id
+    @GeneratedValue(generator = "sequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
+
     private String title;
+
+    @Column(name = "user_id")
     private Long userId;
+
     private Integer status;
+
     private String content;
+
+    @Column(name = "image_url")
     private String imageUrl;
-    private Timestamp publishDate;
+
+    @Column(name = "publish_date")
+    private Date publishDate;
+
     private String tags;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    /**
+     * @return id
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * @param id
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "title")
+    /**
+     * @return title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "user_id")
+    /**
+     * @return user_id
+     */
     public Long getUserId() {
         return userId;
     }
 
+    /**
+     * @param userId
+     */
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    @Basic
-    @Column(name = "status")
+    /**
+     * @return status
+     */
     public Integer getStatus() {
         return status;
     }
 
+    /**
+     * @param status
+     */
     public void setStatus(Integer status) {
         this.status = status;
     }
 
-    @Basic
-    @Column(name = "content")
+    /**
+     * @return content
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * @param content
+     */
     public void setContent(String content) {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "image_url")
+    /**
+     * @return image_url
+     */
     public String getImageUrl() {
         return imageUrl;
     }
 
+    /**
+     * @param imageUrl
+     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    @Basic
-    @Column(name = "publish_date")
-    public Timestamp getPublishDate() {
+    /**
+     * @return publish_date
+     */
+    public Date getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(Timestamp publishDate) {
+    /**
+     * @param publishDate
+     */
+    public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
 
-    @Basic
-    @Column(name = "tags")
+    /**
+     * @return tags
+     */
     public String getTags() {
         return tags;
     }
 
+    /**
+     * @param tags
+     */
     public void setTags(String tags) {
         this.tags = tags;
     }

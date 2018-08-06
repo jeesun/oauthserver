@@ -1,74 +1,94 @@
 package com.simon.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * @author simon
- * @create 2018-07-25 22:17
- **/
-
-@EqualsAndHashCode
-@ToString
 @Entity
 @Table(name = "qr_code")
 public class QrCode implements Serializable {
-    private static final long serialVersionUID = -3433674612562240900L;
-    private long id;
+    private static final long serialVersionUID = 893695741308186957L;
+    @Id
+    @GeneratedValue(generator = "sequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
+    private Long id;
+
+    @Column(name = "is_ok")
     private Boolean isOk;
+
     private String sid;
+
     private String token;
+
     private String username;
 
-    @Id
-    @Column(name = "id")
-    public long getId() {
+    /**
+     * @return id
+     */
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    /**
+     * @param id
+     */
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "is_ok")
-    public Boolean getOk() {
+    /**
+     * @return is_ok
+     */
+    public Boolean getIsOk() {
         return isOk;
     }
 
-    public void setOk(Boolean ok) {
-        isOk = ok;
+    /**
+     * @param isOk
+     */
+    public void setIsOk(Boolean isOk) {
+        this.isOk = isOk;
     }
 
-    @Basic
-    @Column(name = "sid")
+    /**
+     * @return sid
+     */
     public String getSid() {
         return sid;
     }
 
+    /**
+     * @param sid
+     */
     public void setSid(String sid) {
         this.sid = sid;
     }
 
-    @Basic
-    @Column(name = "token")
+    /**
+     * @return token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @param token
+     */
     public void setToken(String token) {
         this.token = token;
     }
 
-    @Basic
-    @Column(name = "username")
+    /**
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }

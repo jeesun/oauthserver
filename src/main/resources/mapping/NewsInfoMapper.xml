@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.NewsInfoMapper">
   <resultMap id="BaseResultMap" type="com.simon.model.NewsInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
@@ -11,7 +14,4 @@
     <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
     <result column="tags" jdbcType="VARCHAR" property="tags" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, title, user_id, status, content, image_url, publish_date, tags
-  </sql>
 </mapper>
