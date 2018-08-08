@@ -85,4 +85,14 @@ public class NewsTagServiceImpl implements NewsTagService {
     public int insertSelective(NewsTag newsTag){
         return newsTagMapper.insertSelective(newsTag);
     }
+
+    @Override
+    public int updateByPrimaryKey(NewsTag newsTag) {
+        return newsTagMapper.updateByPrimaryKey(newsTag);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(NewsTag newsTag) {
+        return newsTagMapper.updateByPrimaryKeySelective(newsTag);
+    }
 }

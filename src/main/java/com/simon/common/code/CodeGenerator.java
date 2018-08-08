@@ -31,13 +31,17 @@ public class CodeGenerator {
     private static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".common.mapper.MyMapper";//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
 
     /*数据库配置*/
-    private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8";//数据库url
+    /*private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8";//数据库url
     private static final String JDBC_USERNAME = "postgres";
     private static final String JDBC_PASSWORD = "19961120";
-    private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";
+    private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";*/
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf-8&useSSL=false";//数据库url
+    private static final String JDBC_USERNAME = "root";
+    private static final String JDBC_PASSWORD = "19941017";
+    private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
+    protected static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
 
     private static final String JAVA_PATH = "/src/test/java"; //java文件路径
     private static final String RESOURCES_PATH = "/src/test/resources";//资源文件路径
@@ -47,21 +51,21 @@ public class CodeGenerator {
     private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);//生成的Service实现存放路径
     private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);//生成的Controller存放路径
 
-    private static final String AUTHOR = "SimonSun";//@author
-    private static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
+    protected static final String AUTHOR = "SimonSun";//@author
+    protected static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
 
     /*main函数入口,放入表名运行即可生成代码*/
     public static void main(String[] args) {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        /*genCodeByCustomModelName("news_info","NewsInfo");
+//        genCodeByCustomModelName("news_info","NewsInfo");
         genCodeByCustomModelName("users", "OauthUser");
-        genCodeByCustomModelName("veri_code", "VeriCode");
-        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
-        genCodeByCustomModelName("qr_code", "QrCode");
-        genCodeByCustomModelName("log_login", "LogLogin");
-        genCodeByCustomModelName("news_tag", "NewsTag");*/
+//        genCodeByCustomModelName("veri_code", "VeriCode");
+//        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
+//        genCodeByCustomModelName("qr_code", "QrCode");
+        //genCodeByCustomModelName("log_login", "LogLogin");
+//        genCodeByCustomModelName("news_tag", "NewsTag");
 
     }
 
@@ -84,8 +88,8 @@ public class CodeGenerator {
      */
     private static void genCodeByCustomModelName(String tableName, String modelName) {
         genModelAndMapper(tableName, modelName);
-        genRepository(tableName, modelName);
-		genService(tableName, modelName);
+        //genRepository(tableName, modelName);
+		//genService(tableName, modelName);
 		//genController(tableName, modelName);
 
     }
@@ -110,6 +114,7 @@ public class CodeGenerator {
         pluginConfiguration.addProperty("mappers", MAPPER_INTERFACE_REFERENCE);
         context.addPluginConfiguration(pluginConfiguration);
 
+        //该代码不能满足要求
         JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = new JavaModelGeneratorConfiguration();
         javaModelGeneratorConfiguration.setTargetProject(PROJECT_PATH + JAVA_PATH);
         javaModelGeneratorConfiguration.setTargetPackage(MODEL_PACKAGE);
@@ -128,8 +133,11 @@ public class CodeGenerator {
 
         TableConfiguration tableConfiguration = new TableConfiguration(context);
         tableConfiguration.setTableName(tableName);
-        if (StringUtils.isNotEmpty(modelName))tableConfiguration.setDomainObjectName(modelName);
+        if (StringUtils.isNotEmpty(modelName)){
+            tableConfiguration.setDomainObjectName(modelName);
+        }
         tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
+
         context.addTableConfiguration(tableConfiguration);
 
         List<String> warnings;
@@ -151,10 +159,21 @@ public class CodeGenerator {
         if (generator.getGeneratedJavaFiles().isEmpty() || generator.getGeneratedXmlFiles().isEmpty()) {
             throw new RuntimeException("生成Model和Mapper失败：" + warnings);
         }
-        if (StringUtils.isEmpty(modelName)) modelName = tableNameConvertUpperCamel(tableName);
+        if (StringUtils.isEmpty(modelName)){
+            modelName = tableNameConvertUpperCamel(tableName);
+        }
         System.out.println(modelName + ".java 生成成功");
         System.out.println(modelName + "Mapper.java 生成成功");
         System.out.println(modelName + "Mapper.xml 生成成功");
+
+        FreeMarkerGeneratorUtil.generatorMvcCode(
+                JDBC_DIVER_CLASS_NAME,
+                JDBC_URL,
+                JDBC_USERNAME,
+                JDBC_PASSWORD,
+                tableName,
+                modelName,
+                MODEL_PACKAGE);
     }
 
     private static void genRepository(String tableName, String modelName) {

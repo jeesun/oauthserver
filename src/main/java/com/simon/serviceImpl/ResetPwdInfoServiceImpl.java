@@ -85,4 +85,14 @@ public class ResetPwdInfoServiceImpl implements ResetPwdInfoService {
     public int insertSelective(ResetPwdInfo resetPwdInfo){
         return resetPwdInfoMapper.insertSelective(resetPwdInfo);
     }
+
+    @Override
+    public int updateByPrimaryKey(ResetPwdInfo resetPwdInfo) {
+        return resetPwdInfoMapper.updateByPrimaryKey(resetPwdInfo);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(ResetPwdInfo resetPwdInfo) {
+        return resetPwdInfoMapper.updateByPrimaryKeySelective(resetPwdInfo);
+    }
 }
