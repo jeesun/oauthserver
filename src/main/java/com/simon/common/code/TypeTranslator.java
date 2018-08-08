@@ -37,6 +37,9 @@ public class TypeTranslator {
             }
         }
         if(dataType.contains("BIGINT")){
+            if(dataType.contains("UNSIGNED")){
+                return "BigInteger";
+            }
             return "Long";
         }
         if(dataType.equals("FLOAT")){
