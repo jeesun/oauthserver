@@ -86,4 +86,14 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     public int insertSelective(${modelNameUpperCamel} ${modelNameLowerCamel}){
         return ${modelNameLowerCamel}Mapper.insertSelective(${modelNameLowerCamel});
     }
+
+    @Override
+    public int updateByPrimaryKey(${modelNameUpperCamel} ${modelNameLowerCamel}){
+        return ${modelNameLowerCamel}Mapper.updateByPrimaryKey(${modelNameLowerCamel});
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(){
+        return ${modelNameLowerCamel}Mapper.updateByPrimaryKeySelective(${modelNameLowerCamel});
+    }
 }

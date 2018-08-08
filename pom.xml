@@ -226,6 +226,12 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.27-incubating</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-core</artifactId>
+			<version>4.1.5</version>
+		</dependency>
+
 		<!-- MyBatis end -->
 
 		<!-- ali dayu start -->

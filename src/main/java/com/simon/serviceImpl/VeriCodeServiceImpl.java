@@ -89,6 +89,16 @@ public class VeriCodeServiceImpl implements VeriCodeService {
     }
 
     @Override
+    public int updateByPrimaryKey(VeriCode veriCode) {
+        return veriCodeMapper.updateByPrimaryKey(veriCode);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(VeriCode veriCode) {
+        return veriCodeMapper.updateByPrimaryKeySelective(veriCode);
+    }
+
+    @Override
     public VeriCode findByPhone(String phone) {
         return veriCodeRepository.findByPhone(phone);
     }

@@ -85,4 +85,14 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     public int insertSelective(NewsInfo newsInfo){
         return newsInfoMapper.insertSelective(newsInfo);
     }
+
+    @Override
+    public int updateByPrimaryKey(NewsInfo newsInfo) {
+        return newsInfoMapper.updateByPrimaryKey(newsInfo);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(NewsInfo newsInfo) {
+        return newsInfoMapper.updateByPrimaryKeySelective(newsInfo);
+    }
 }

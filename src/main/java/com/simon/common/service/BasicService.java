@@ -25,4 +25,6 @@ public interface BasicService<T> {
     int insertList(List<T> list);
     int insert(T model);
     int insertSelective(T model);
+    int updateByPrimaryKey(T model);
+    int updateByPrimaryKeySelective(T model);
 }
