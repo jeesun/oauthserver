@@ -42,7 +42,7 @@ create table if NOT EXISTS oauth_code (
 );
 
 CREATE TABLE if NOT EXISTS users (
-  id int(8) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   username varchar(255) NOT NULL,
   password varchar(255) NOT NULL,
   enabled tinyint(1) NOT NULL,
@@ -58,13 +58,13 @@ CREATE TABLE if NOT EXISTS users (
 );
 
 CREATE TABLE if NOT EXISTS authorities (
-user_id int(8) NOT NULL,
+user_id BIGINT NOT NULL,
 authority VARCHAR(50) NOT NULL
 );
 
 -- 登录日志
 CREATE TABLE IF NOT EXISTS log_login (
-id int(8) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 create_time datetime(0),
 ip varchar(255),
 username varchar(255)
@@ -72,16 +72,16 @@ username varchar(255)
 
 -- 重置密码
 CREATE TABLE IF NOT EXISTS reset_pwd_info (
-id int(8) AUTO_INCREMENT NOT NULL primary key,
+id BIGINT AUTO_INCREMENT NOT NULL primary key,
 expires_in timestamp(6),
 secret_key varchar(255),
-user_id int(8),
+user_id bigint,
 valid bool NOT NULL
 );
 
 -- 验证码
 CREATE TABLE IF NOT EXISTS veri_code (
-id int(8) AUTO_INCREMENT NOT null primary key,
+id BIGINT AUTO_INCREMENT NOT null primary key,
 code int(4),
 create_time int(8),
 expires int(4),
@@ -90,7 +90,7 @@ phone varchar(255)
 
 -- 二维码（用于扫码登录）
 CREATE TABLE IF NOT EXISTS qr_code (
-id int(8) AUTO_INCREMENT not null primary key,
+id BIGINT AUTO_INCREMENT not null primary key,
 is_ok bool,
 sid varchar(255),
 token varchar(255),
@@ -99,9 +99,9 @@ username varchar(255)
 
 -- 新闻
 CREATE TABLE IF NOT EXISTS news_info (
-id int(8) AUTO_INCREMENT not null primary key,
+id BIGINT AUTO_INCREMENT not null primary key,
 title varchar(255),
-user_id int(8),
+user_id bigint,
 status int(4),
 content text,
 image_url varchar(255),
@@ -111,9 +111,9 @@ tags varchar(255)
 
 -- 新闻标签
 CREATE TABLE IF NOT EXISTS news_tag (
-id int(8) AUTO_INCREMENT not null primary key,
-news_info_id int(8),
-tag_id int(8)
+id BIGINT AUTO_INCREMENT not null primary key,
+news_info_id bigint,
+tag_id bigint
 );
 
 -- 两列唯一索引
