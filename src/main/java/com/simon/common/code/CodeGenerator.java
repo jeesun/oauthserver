@@ -18,41 +18,75 @@ import java.util.*;
  */
 public class CodeGenerator {
 
-    private static final String BASE_PACKAGE = "com.simon";//项目基础包名称，根据自己的项目修改
+    private static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
 
     /*生成文件地址配置*/
-    private static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";//生成的Model类所在包
-    private static final String MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";//生成的Mapper所在包
-    private static final String REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";//生成Repository所在包
-    private static final String SERVICE_PACKAGE = BASE_PACKAGE + ".service";//生成的Service所在包
-    private static final String SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".serviceImpl";//生成的ServiceImpl所在包
-    private static final String CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";//生成的Controller所在包
+    private static String MODEL_PACKAGE;//生成的Model类所在包
+    private static String MAPPER_PACKAGE;//生成的Mapper所在包
+    private static String REPOSITORY_PACKAGE;//生成Repository所在包
+    private static String SERVICE_PACKAGE;//生成的Service所在包
+    private static String SERVICE_IMPL_PACKAGE;//生成的ServiceImpl所在包
+    private static String CONTROLLER_PACKAGE;//生成的Controller所在包
 
-    private static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".common.mapper.MyMapper";//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
+    private static String MAPPER_INTERFACE_REFERENCE;//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
 
     /*数据库配置*/
     /*private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8";//数据库url
     private static final String JDBC_USERNAME = "postgres";
     private static final String JDBC_PASSWORD = "19961120";
     private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";*/
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf-8&useSSL=false";//数据库url
-    private static final String JDBC_USERNAME = "root";
-    private static final String JDBC_PASSWORD = "19941017";
-    private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
+    private static String JDBC_URL;//数据库url
+    private static String JDBC_USERNAME;
+    private static String JDBC_PASSWORD;
+    private static String JDBC_DIVER_CLASS_NAME;
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
     protected static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
 
-    private static final String JAVA_PATH = "/src/test/java"; //java文件路径
-    private static final String RESOURCES_PATH = "/src/test/resources";//资源文件路径
+    private static String JAVA_PATH;//java文件路径
+    private static String RESOURCES_PATH;//资源文件路径
 
-    private static final String PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
-    private static final String PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);//生成的Service存放路径
-    private static final String PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);//生成的Service实现存放路径
-    private static final String PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);//生成的Controller存放路径
+    private static String PACKAGE_PATH_REPOSITORY;
+    private static String PACKAGE_PATH_SERVICE;//生成的Service存放路径
+    private static String PACKAGE_PATH_SERVICE_IMPL;//生成的Service实现存放路径
+    private static String PACKAGE_PATH_CONTROLLER;//生成的Controller存放路径
 
-    protected static final String AUTHOR = "SimonSun";//@author
+    protected static String AUTHOR;//@author
     protected static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
+
+    static {
+        Properties prop = new Properties();
+        try {
+            prop.load(CodeGenerator.class.getResourceAsStream("/code-gen.properties"));
+            JDBC_URL = prop.getProperty("jdbc_url");
+            JDBC_USERNAME = prop.getProperty("jdbc_username");
+            JDBC_PASSWORD = prop.getProperty("jdbc_password");
+            JDBC_DIVER_CLASS_NAME = prop.getProperty("jdbc_driver_class_name");
+            AUTHOR = prop.getProperty("author");
+            JAVA_PATH = prop.getProperty("java_path");
+            RESOURCES_PATH = prop.getProperty("resources_path");
+            BASE_PACKAGE = prop.getProperty("base_package");
+
+            MODEL_PACKAGE = BASE_PACKAGE + ".model";
+            MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
+            REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
+            SERVICE_PACKAGE = BASE_PACKAGE + ".service";
+            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".serviceImpl";
+            CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
+            MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper_interface_reference");
+
+            PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
+            PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);
+            PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);
+            PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public CodeGenerator(){
+
+    }
 
     /*main函数入口,放入表名运行即可生成代码*/
     public static void main(String[] args) {

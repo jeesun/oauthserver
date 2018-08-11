@@ -47,6 +47,11 @@ public class EntityDataModel implements Serializable {
     private String tableName;
 
     /**
+     * 表标注
+     */
+    private String tableComment;
+
+    /**
      * 字段集合
      */
     private List<Column> columns;

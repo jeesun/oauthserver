@@ -6,8 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Properties;
 
 public class UtilTests {
     @Test
@@ -49,6 +51,27 @@ public class UtilTests {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void strIndexTest(){
+        String tableComment = "用户表";
+        System.out.println(tableComment.lastIndexOf("表"));
+        System.out.println(tableComment.length());
+    }
+
+    @Test
+    public void propertiesReadTest(){
+        Properties prop = new Properties();
+        try {
+            prop.load(UtilTests.class.getResourceAsStream("/test.properties"));
+            for (Object key : prop.keySet()) {
+                System.out.println(key + "=" + prop.get(key));
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

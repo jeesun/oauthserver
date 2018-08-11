@@ -91,9 +91,36 @@ public class FreeMarkerGeneratorUtil {
 
     private static EntityDataModel getEntityModel(Connection con, String tableName, String basePackage, String modelName)
             throws Exception {
+        EntityDataModel dataModel = new EntityDataModel();
+
+        String sql = "";
+        PreparedStatement ps;
+        ResultSet rs;
+
+        //查询表标注
+        if(getDataBaseType(con) == 1){
+            sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "' AND TABLE_NAME='" + tableName + "'";
+        }else if(getDataBaseType(con) == 2){
+            sql = "select obj_description('public." + tableName + "'::regclass)";
+        }else{
+            throw new Exception("暂不支持其他数据库");
+        }
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()){
+            String tableComment = rs.getString("TABLE_COMMENT");
+            if(StringUtils.isEmpty(tableComment)){
+                tableComment = tableName;
+            }else{
+                if(tableComment.lastIndexOf("表") == (tableComment.length() - 1)){
+                    tableComment = tableComment.substring(0, tableComment.length() - 1);
+                }
+            }
+            dataModel.setTableComment(tableComment);
+        }
+
 
         //查询表属性,格式化生成实体所需属性
-        String sql = "";
         if(getDataBaseType(con) == 1){
             //log.info(con.getCatalog());
             sql = "SELECT table_name, column_name, column_comment, column_type, data_type, column_default, is_nullable "
@@ -104,8 +131,8 @@ public class FreeMarkerGeneratorUtil {
         }
 
 
-        PreparedStatement ps = con.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
 
         List<Column> columns = new ArrayList<>();
         while (rs.next()) {
@@ -148,9 +175,11 @@ public class FreeMarkerGeneratorUtil {
                 }
             }else{
                 if(isNullable.equalsIgnoreCase("NO")){
-                    annotation = "@Column(name = \"" + name + "\", nullable = false)";
+                    annotation = "@ApiModelProperty(value = \"" + comment + "\")\n" +
+                            "    @Column(name = \"" + name + "\", nullable = false)";
                 }else{
-                    annotation = "@Column(name = \"" + name + "\")";
+                    annotation = "@ApiModelProperty(value = \"" + comment + "\")\n" +
+                            "    @Column(name = \"" + name + "\")";
                 }
             }
 
@@ -160,7 +189,7 @@ public class FreeMarkerGeneratorUtil {
             col.setComment(comment);
             columns.add(col);
         }
-        EntityDataModel dataModel = new EntityDataModel();
+
         dataModel.setEntityPackage(basePackage);
         if (StringUtils.isNotEmpty(modelName)) {
             dataModel.setEntityName(modelName);
