@@ -27,7 +27,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 5. 集成swagger2，并配置非全局、无需重复输入的header参数（token），访问[http://localhost:8182/swagger-ui.html](http://localhost:8182/swagger-ui.html)，全局Authorize的值为"Bearer "+"access_token"，注意"Bearer"和"access_token"之间有一个空格；
 6. 集成Redis缓存，默认使用Ehcache缓存，若要切换成Redis缓存，请查看`application.yml`缓存配置注释；
 7. 集成阿里大鱼（需要安装阿里大鱼jar，安装方法：运行src/main/resources/jars/install.bat）；
-8. 代码生成器，运行`com/simon/common/code/CodeGenerator.java`的main方法进行代码生成，代码生成位置默认是当前项目的test文件夹。可生成Model、Mapper、Repository、Service、ServiceImpl、Controller。~~需要注意的是，生成的Model需要手动添加`@Entity`注解，生成的Mapper需要手动添加`@Repository`注解。~~
+8. 代码生成器，运行`com/simon/common/code/CodeGenerator.java`的main方法进行代码生成，代码生成器的配置在`code-gen.properties`。可生成Model、Mapper、Repository、Service、ServiceImpl、Controller。~~需要注意的是，生成的Model需要手动添加`@Entity`注解，生成的Mapper需要手动添加`@Repository`注解。~~
 
 
 请下载与Spring Boot对应版本的oauthserver：
@@ -51,8 +51,11 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 2. oauthserver v1.2.0添加了阿里大鱼的发送验证码功能，需要阿里大鱼的jar，安装方法：运行src/main/resources/jars/install.bat。
 
 ## 更新日志
+### v1.2.4.alpha(2018-08-11)
+- 代码生成器配置文件`code-gen.properties`；
+- 修复mysql建表语句bug。
 
-### v1.2.3(2018-08-05)(当前版本)
+### v1.2.3(2018-08-05)
 - 内置代码生成器；
 - 移动config目录到common目录下；
 - 缓存UserDetails到Ehcache，若`spring.cache.type=redis`，则自动缓存UserDetails到Redis；
