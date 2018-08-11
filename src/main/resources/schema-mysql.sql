@@ -117,13 +117,16 @@ tag_id bigint
 );
 
 -- 两列唯一索引
-CREATE UNIQUE INDEX IF NOT EXISTS ix_auth_username ON authorities (user_id, authority);
+set @x := (select count(*) from information_schema.statistics where table_name = 'authorities' and index_name = 'ix_auth_username' and table_schema = database());
+set @sql := if( @x > 0, 'select ''Index exists.''', 'CREATE UNIQUE INDEX ix_auth_username ON authorities(user_id, authority)');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
 
 -- 添加外键
 ALTER TABLE authorities ADD FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- 密码经过了加密，是secret
---INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', '$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, 'false');
+-- INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', '$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, 'false');
 
 -- 密码经过了加密，全都是1234567890c
 INSERT INTO users (id, username, password, enabled, email, phone) VALUES (1, 'jeesun', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', true, 'simon.sun.dev@hotmail.com', '18362102427');
