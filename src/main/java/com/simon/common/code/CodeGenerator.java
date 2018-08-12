@@ -122,10 +122,9 @@ public class CodeGenerator {
      */
     private static void genCodeByCustomModelName(String tableName, String modelName) {
         genModelAndMapper(tableName, modelName);
-        //genRepository(tableName, modelName);
-		//genService(tableName, modelName);
+        genRepository(tableName, modelName);
+		genService(tableName, modelName);
 		//genController(tableName, modelName);
-
     }
 
 
