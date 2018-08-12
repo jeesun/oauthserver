@@ -5,6 +5,8 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
     password: ENC(BZUIhx1tIC75T4JTYROwbsPIRuhrPQMx) #明文19941017
+    druid:
+      validation-query: SELECT 1
 
 #pagehelper分页插件
 pagehelper:

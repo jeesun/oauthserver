@@ -1,20 +1,20 @@
 spring:
   datasource:
-    # PostgreSQL连接信息
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
-    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
-    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
+    # Oracle连接信息
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: thymelte #明文thymelte
+    password: thymelte123456 #明文thymelte123456
     druid:
-      validation-query: SELECT 1
+      validation-query: select 1 from dual
 
 #pagehelper分页插件
 pagehelper:
-    reasonable: true
-    params: count=countSql
-    # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
-    helper-dialect: postgresql
-    support-methods-arguments: true
+  reasonable: true
+  params: count=countSql
+  # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
+  helper-dialect: oracle
+  support-methods-arguments: true
 
 mybatis-plus:
   # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
@@ -36,7 +36,7 @@ mybatis-plus:
     #数据库大写下划线转换
     #capital-mode: true
     # Sequence序列接口实现类配置
-    key-generator: com.baomidou.mybatisplus.incrementer.PostgreKeyGenerator
+    key-generator: com.baomidou.mybatisplus.incrementer.OracleKeyGenerator
     #逻辑删除配置（下面3个配置）
     logic-delete-value: 1
     logic-not-delete-value: 0

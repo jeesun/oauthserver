@@ -31,10 +31,6 @@ public class CodeGenerator {
     private static String MAPPER_INTERFACE_REFERENCE;//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
 
     /*数据库配置*/
-    /*private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/thymeltetest?useUnicode=true&amp;characterEncoding=UTF-8";//数据库url
-    private static final String JDBC_USERNAME = "postgres";
-    private static final String JDBC_PASSWORD = "19961120";
-    private static final String JDBC_DIVER_CLASS_NAME = "org.postgresql.Driver";*/
     private static String JDBC_URL;//数据库url
     private static String JDBC_USERNAME;
     private static String JDBC_PASSWORD;
