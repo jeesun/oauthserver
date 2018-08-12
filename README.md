@@ -2,9 +2,9 @@
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
 <a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.14-990066.svg"></a>
-<img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL-brightgreen.svg">
+<img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL%7COracle-brightgreen.svg">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
-<img src="https://img.shields.io/badge/release-1.2.0-brightgreen.svg">
+<img src="https://img.shields.io/badge/release-1.2.4-brightgreen.svg">
 
 </p>
 
@@ -17,6 +17,7 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 支持的关系型数据库：
 - PostgreSQL
 - MySQL
+- Oracle
 
 已实现的功能：
 1. token保存到关系型数据库；
@@ -53,7 +54,8 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 ## 更新日志
 ### v1.2.4.alpha(2018-08-11)
 - 代码生成器配置文件`code-gen.properties`；
-- 修复mysql建表语句bug。
+- 修复mysql建表语句bug；
+- 添加对Oracle的支持。
 
 ### v1.2.3(2018-08-05)
 - 内置代码生成器；
@@ -80,11 +82,15 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 请执行`src/main/resources/schema-pg.sql`，完成数据表的创建和测试数据的导入。
 - MySQL  
 请执行`src/main/resources/schema-mysql.sql`，完成数据表的创建和测试数据的导入。
+- Oracle  
+请执行`src/main/resources/schema-oracle.sql`，完成数据表的创建和测试数据的导入。
 ### 2. 修改数据库连接信息
 - PostgreSQL  
 连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=pg`。
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=mysql`。  
+- Oracle  
+连接信息在`application-oracle.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=oracle`。  
 数据库连接信息的配置项username和password可以经过jasypt加密，也可以直接填明文。若要使用jasypt加密，加密密钥由`jasypt.encryptor.password`配置，你可以使用test目录下的UtilTests工具得到加密字符串。
 ### 3. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
