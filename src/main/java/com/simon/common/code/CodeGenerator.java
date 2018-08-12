@@ -51,11 +51,14 @@ public class CodeGenerator {
     private static String PACKAGE_PATH_SERVICE_IMPL;//生成的Service实现存放路径
     private static String PACKAGE_PATH_CONTROLLER;//生成的Controller存放路径
 
+    private static String GEN_MODULES;//要生成的模块
+
     protected static String AUTHOR;//@author
     protected static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
 
+    private static Properties prop;
     static {
-        Properties prop = new Properties();
+        prop = new Properties();
         try {
             prop.load(CodeGenerator.class.getResourceAsStream("/code-gen.properties"));
             JDBC_URL = prop.getProperty("jdbc_url");
@@ -79,6 +82,8 @@ public class CodeGenerator {
             PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);
             PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);
             PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);
+
+            GEN_MODULES = prop.getProperty("gen_modules");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,11 +126,25 @@ public class CodeGenerator {
      * @param modelName 自定义的 Model 名称
      */
     private static void genCodeByCustomModelName(String tableName, String modelName) {
-        genModelAndMapper(tableName, modelName);
-        //genRepository(tableName, modelName);
-		//genService(tableName, modelName);
-		//genController(tableName, modelName);
-
+        if(StringUtils.isEmpty(GEN_MODULES)){
+            genModelAndMapper(tableName, modelName);
+            genRepository(tableName, modelName);
+            genService(tableName, modelName);
+            //genController(tableName, modelName);
+        }else{
+            if(GEN_MODULES.toLowerCase().contains("modelandmapper")){
+                genModelAndMapper(tableName, modelName);
+            }
+            if(GEN_MODULES.toLowerCase().contains("repository")){
+                genRepository(tableName, modelName);
+            }
+            if(GEN_MODULES.toLowerCase().contains("service")){
+                genService(tableName, modelName);
+            }
+            if(GEN_MODULES.toLowerCase().contains("controller")){
+                genController(tableName, modelName);
+            }
+        }
     }
 
 
