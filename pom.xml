@@ -284,6 +284,14 @@
 			<artifactId>bootstrap</artifactId>
 			<version>4.1.2</version>
 		</dependency>
+
+		<!-- 七牛云 start -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.2.0, 7.2.99]</version>
+		</dependency>
+		<!-- 七牛云 end -->
 	</dependencies>
 
 	<dependencyManagement>
