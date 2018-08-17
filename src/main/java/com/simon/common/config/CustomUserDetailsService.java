@@ -40,7 +40,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"));
 
-        authorityRowMapper = (rs,i) -> new Authority(rs.getLong(1), rs.getString(2));
+        authorityRowMapper = (rs,i) -> {
+            Authority authority = new Authority();
+            authority.setUserId(rs.getLong(1));
+            authority.setAuthority(rs.getString(2));
+            return authority;
+        };
     }
 
     @Override
