@@ -36,11 +36,11 @@ public class CodeGenerator {
     private static String JDBC_PASSWORD;
     private static String JDBC_DIVER_CLASS_NAME;
 
-    private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    protected static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
+    static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
+    static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
 
-    private static String JAVA_PATH;//java文件路径
-    private static String RESOURCES_PATH;//资源文件路径
+    static String JAVA_PATH;//java文件路径
+    static String RESOURCES_PATH;//资源文件路径
 
     private static String PACKAGE_PATH_REPOSITORY;
     private static String PACKAGE_PATH_SERVICE;//生成的Service存放路径
@@ -49,8 +49,8 @@ public class CodeGenerator {
 
     private static String GEN_MODULES;//要生成的模块
 
-    protected static String AUTHOR;//@author
-    protected static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
+    static String AUTHOR;//@author
+    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
 
     private static Properties prop;
     static {
@@ -94,14 +94,15 @@ public class CodeGenerator {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-//        genCodeByCustomModelName("news_info","NewsInfo");
+        /*genCodeByCustomModelName("authorities", "Authority");
+        genCodeByCustomModelName("news_info","NewsInfo");
         genCodeByCustomModelName("users", "OauthUser");
-//        genCodeByCustomModelName("veri_code", "VeriCode");
-//        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
-//        genCodeByCustomModelName("qr_code", "QrCode");
-        //genCodeByCustomModelName("log_login", "LogLogin");
-//        genCodeByCustomModelName("news_tag", "NewsTag");
-
+        genCodeByCustomModelName("veri_code", "VeriCode");
+        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
+        genCodeByCustomModelName("qr_code", "QrCode");
+        genCodeByCustomModelName("log_login", "LogLogin");
+        genCodeByCustomModelName("news_tag", "NewsTag");*/
+        genCodeByCustomModelName("news_tag", "NewsTag");
     }
 
     /**

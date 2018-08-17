@@ -49,12 +49,6 @@ public class FreeMarkerGeneratorUtil {
             return;
         }
 
-        //获取当前项目路径
-        String path = FreeMarkerGeneratorUtil.class.getResource("/").getPath();
-        path = StrUtil.sub(path, 1, path.indexOf("/target"));
-
-        //log.info("当前项目路径为：{}", path);
-        String parentProjectPath = StrUtil.sub(path, 0, path.lastIndexOf("/"));
         //获取模板路径
         String templatePath = CodeGenerator.TEMPLATE_FILE_PATH;
         //log.info("当前模板路径为：{}", templatePath);
@@ -63,17 +57,17 @@ public class FreeMarkerGeneratorUtil {
 
             String entityDir = null;
             //根据实体包名创建目录
-            File[] ls = FileUtil.ls(parentProjectPath);
+            File[] ls = FileUtil.ls(CodeGenerator.PROJECT_PATH);
             for (File f: ls) {
                 String currModule = f.toString();
                 boolean matches = currModule.matches("(.*?pojo.*?)|(.*?domain.*?)|(.*?entity.*?)");
                 if (f.isDirectory()&&matches){
-                    entityDir = f.toString()+ "/src/test/java/" + basePackage.replace(".", "/");
+                    entityDir = f.toString()+ CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/");
                     break;
                 }
             }
             if (StrUtil.isBlank(entityDir)){
-                entityDir = path + "/src/test/java/" + basePackage.replace(".", "/");
+                entityDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/");
             }
             if (!FileUtil.exist(entityDir)) {
                 FileUtil.mkdir(entityDir);
@@ -101,7 +95,7 @@ public class FreeMarkerGeneratorUtil {
         if(getDataBaseType(con) == 1){
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "' AND TABLE_NAME='" + tableName + "'";
         }else if(getDataBaseType(con) == 2){
-            sql = "select obj_description('public." + tableName + "'::regclass)";
+            sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C WHERE relname = '" + tableName + "'";
         }else{
             throw new Exception("暂不支持其他数据库");
         }
@@ -128,6 +122,8 @@ public class FreeMarkerGeneratorUtil {
         }else if(getDataBaseType(con) == 2){
             log.info(con.getCatalog());
             sql = "SELECT delta.table_name, delta.column_name, alb.column_comment, alb.column_type, delta.data_type, delta.column_default, delta.is_nullable FROM information_schema.COLUMNS AS delta, ( SELECT C .relname AS table_name, A.attname AS column_name, col_description ( A.attrelid, A.attnum ) AS column_comment, format_type ( A.atttypid, A.atttypmod ) AS column_type, A.attnotnull AS NOTNULL FROM pg_class AS C, pg_attribute AS A WHERE C.relname = '" + tableName + "' AND A.attrelid = C.oid AND A.attnum > 0 ) AS alb WHERE table_schema = 'public' AND delta.TABLE_NAME = '" + tableName + "' AND delta.COLUMN_NAME = alb.column_name";
+        }else{
+            throw new Exception("暂不支持其他数据库");
         }
 
 
@@ -160,10 +156,12 @@ public class FreeMarkerGeneratorUtil {
             if ("id".equals(name)) {
                 if (propertyType.equalsIgnoreCase("Long")) {
                     annotation = "@Id\n" +
+                            "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
                             "    @GenericGenerator(name = \"sequenceId\", strategy = \"com.simon.common.utils.snowflake.SequenceId\")";
                 }else if(propertyType.equalsIgnoreCase("String")){
                     annotation = "@Id\n" +
+                            "    @KeySql(genId = UUIdGenId.class)\n" +
                             "    @GeneratedValue(generator = \"uuid\")\n" +
                             "    @GenericGenerator(name = \"uuid\", strategy = \"com.simon.common.utils.UuidGenerator\")";
                 }else if(propertyType.equalsIgnoreCase("Integer")){

@@ -1,225 +1,81 @@
 package com.simon.model;
 
+import com.simon.common.utils.SnowflakeGenId;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+* @author SimonSun
+* @create 2018-08-17 23:33:01
+**/
+@ApiModel(description = "OauthUser")
+@Data
 @Entity
-@Table(name = "users")
-public class OauthUser implements Serializable {
-    private static final long serialVersionUID = 7928736608744438474L;
+@Table(name="users")
+public class OauthUser implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @KeySql(genId = SnowflakeGenId.class)
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @ApiModelProperty(value = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
+    @ApiModelProperty(value = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @ApiModelProperty(value = "enabled")
+    @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
+    @ApiModelProperty(value = "email")
+    @Column(name = "email")
     private String email;
 
+    @ApiModelProperty(value = "phone")
+    @Column(name = "phone")
     private String phone;
 
+    @ApiModelProperty(value = "enable")
+    @Column(name = "enable")
+    private Boolean enable;
+
+    @ApiModelProperty(value = "address")
+    @Column(name = "address")
     private String address;
 
+    @ApiModelProperty(value = "age")
+    @Column(name = "age")
     private Integer age;
 
+    @ApiModelProperty(value = "birth")
+    @Column(name = "birth")
     private String birth;
 
+    @ApiModelProperty(value = "head_photo")
     @Column(name = "head_photo")
     private String headPhoto;
 
+    @ApiModelProperty(value = "person_brief")
     @Column(name = "person_brief")
     private String personBrief;
 
+    @ApiModelProperty(value = "sex")
+    @Column(name = "sex")
     private Boolean sex;
 
+    @ApiModelProperty(value = "visit_card")
     @Column(name = "visit_card")
     private String visitCard;
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @param username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * @return password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * @return enabled
-     */
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    /**
-     * @param enabled
-     */
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    /**
-     * @return email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @return phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * @return address
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    /**
-     * @return age
-     */
-    public Integer getAge() {
-        return age;
-    }
-
-    /**
-     * @param age
-     */
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    /**
-     * @return birth
-     */
-    public String getBirth() {
-        return birth;
-    }
-
-    /**
-     * @param birth
-     */
-    public void setBirth(String birth) {
-        this.birth = birth;
-    }
-
-    /**
-     * @return head_photo
-     */
-    public String getHeadPhoto() {
-        return headPhoto;
-    }
-
-    /**
-     * @param headPhoto
-     */
-    public void setHeadPhoto(String headPhoto) {
-        this.headPhoto = headPhoto;
-    }
-
-    /**
-     * @return person_brief
-     */
-    public String getPersonBrief() {
-        return personBrief;
-    }
-
-    /**
-     * @param personBrief
-     */
-    public void setPersonBrief(String personBrief) {
-        this.personBrief = personBrief;
-    }
-
-    /**
-     * @return sex
-     */
-    public Boolean getSex() {
-        return sex;
-    }
-
-    /**
-     * @param sex
-     */
-    public void setSex(Boolean sex) {
-        this.sex = sex;
-    }
-
-    /**
-     * @return visit_card
-     */
-    public String getVisitCard() {
-        return visitCard;
-    }
-
-    /**
-     * @param visitCard
-     */
-    public void setVisitCard(String visitCard) {
-        this.visitCard = visitCard;
-    }
 }

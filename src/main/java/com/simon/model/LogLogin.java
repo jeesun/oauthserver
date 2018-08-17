@@ -1,89 +1,42 @@
 package com.simon.model;
 
+import com.simon.common.utils.SnowflakeGenId;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+* @author SimonSun
+* @create 2018-08-17 23:33:01
+**/
+@ApiModel(description = "LogLogin")
+@Data
 @Entity
-@Table(name = "log_login")
-public class LogLogin implements Serializable {
-    private static final long serialVersionUID = -1797278390731325076L;
+@Table(name="log_login")
+public class LogLogin implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     @Id
+    @KeySql(genId = SnowflakeGenId.class)
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @ApiModelProperty(value = "create_time")
     @Column(name = "create_time")
     private Date createTime;
 
+    @ApiModelProperty(value = "ip")
+    @Column(name = "ip")
     private String ip;
 
+    @ApiModelProperty(value = "username")
+    @Column(name = "username")
     private String username;
-
-    public LogLogin() {
-    }
-
-    public LogLogin(Date createTime, String ip, String username) {
-        this.createTime = createTime;
-        this.ip = ip;
-        this.username = username;
-    }
-
-    /**
-     * @return id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return create_time
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * @param createTime
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * @return ip
-     */
-    public String getIp() {
-        return ip;
-    }
-
-    /**
-     * @param ip
-     */
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    /**
-     * @return username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @param username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

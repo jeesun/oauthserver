@@ -1,8 +1,11 @@
 package ${entityPackage};
 
+import com.simon.common.utils.UUIdGenId;
+import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.GenericGenerator;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import lombok.Data;
 import javax.persistence.*;

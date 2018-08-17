@@ -1,5 +1,7 @@
 package com.simon;
 
+import com.simon.mapper.LogLoginMapper;
+import com.simon.model.LogLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +14,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -20,6 +24,9 @@ public class OauthserverApplicationTests {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private LogLoginMapper logLoginMapper;
 
 	@Test
 	public void contextLoads() {
@@ -90,5 +97,15 @@ public class OauthserverApplicationTests {
 		//}
 		//System.out.println();
 
+	}
+
+	@Test
+	public void logLoginMapperTest(){
+		LogLogin logLogin = new LogLogin();
+		logLogin.setIp("127.0.0.1");
+		logLogin.setCreateTime(new Date());
+		logLogin.setUsername("simon");
+		logLoginMapper.insert(logLogin);
+		System.out.println(logLogin.getId());
 	}
 }
