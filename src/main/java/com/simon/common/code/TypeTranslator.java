@@ -26,7 +26,10 @@ public class TypeTranslator {
                 return "Integer";
             }
         }
-        if(dataType.equals("SMALLINT") || dataType.equals("MEDIUMINT") || dataType.equals("YEAR") || dataType.equals("INT")){
+        if(dataType.equals("SMALLINT")){
+            return "Short";
+        }
+        if(dataType.equals("MEDIUMINT") || dataType.equals("YEAR") || dataType.equals("INT")){
             return "Integer";
         }
         if(dataType.contains("INTEGER")){
@@ -75,8 +78,10 @@ public class TypeTranslator {
                 return "Byte[]";
             }
         }
-
-        if(dataType.equals("INTEGER") || dataType.equals("SMALLINT") || dataType.equals("SERIAL")){
+        if(dataType.equals("SMALLINT")){
+            return "Short";
+        }
+        if(dataType.equals("INTEGER") || dataType.equals("SERIAL")){
             return "Integer";
         }
         if(dataType.equals("BIGINT") || dataType.equals("BIGSERIAL")){

@@ -275,21 +275,44 @@
 			<version>1.10</version>
 		</dependency>
 
+		<!-- webjars start -->
 		<dependency>
-			<groupId>org.webjars</groupId>
+			<groupId>org.webjars.bower</groupId>
 			<artifactId>jquery</artifactId>
-			<version>3.3.1</version>
+			<version>3.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>popper.js</artifactId>
-			<version>1.14.3</version>
+			<version>1.12.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
-			<version>4.1.2</version>
+			<version>4.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>bootstrap-material-design</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>bootstrap-material-design</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>mdbootstrap-bootstrap-material-design</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>fontawesome</artifactId>
+			<version>4.7.0</version>
+		</dependency>
+		<!-- webjars end -->
 
 		<!-- 七牛云 start -->
 		<dependency>

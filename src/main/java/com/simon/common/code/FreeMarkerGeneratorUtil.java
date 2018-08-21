@@ -153,7 +153,7 @@ public class FreeMarkerGeneratorUtil {
             }
 
             String annotation = null;
-            if ("id".equals(name)) {
+            if ("id".equalsIgnoreCase(name)) {
                 if (propertyType.equalsIgnoreCase("Long")) {
                     annotation = "@Id\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
