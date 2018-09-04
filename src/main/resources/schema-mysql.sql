@@ -42,25 +42,31 @@ create table if NOT EXISTS oauth_code (
 );
 
 CREATE TABLE if NOT EXISTS users (
-  id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  username varchar(255) NOT NULL,
-  password varchar(255) NOT NULL,
-  enabled tinyint(1) NOT NULL,
-  phone varchar(255) DEFAULT NULL UNIQUE,
-  email varchar(255) DEFAULT NULL UNIQUE,
-  address varchar(255),
-  age int(4),
-  birth varchar(255),
-  head_photo varchar(255),
-  person_brief varchar(255),
-  sex tinyint(1),
-  visit_card varchar(255)
+   id                   bigint(20) not null auto_increment comment 'id',
+   username             varchar(255) not null comment '用户名',
+   password             varchar(255) not null comment '密码',
+   enabled              tinyint(1) not null comment '有效',
+   phone                varchar(255) comment '手机号',
+   email                varchar(255) comment '邮箱',
+   address              varchar(255) comment '地址',
+   age                  int(4) comment '年龄',
+   birth                varchar(255) comment '生日',
+   head_photo           varchar(255) comment '头像',
+   person_brief         varchar(255) comment '个人简介',
+   sex                  tinyint(1) comment '性别',
+   visit_card           varchar(255) comment '邀请码',
+   primary key (id),
+   key email (email),
+   key phone (phone)
 );
+alter table users comment '用户表';
 
 CREATE TABLE if NOT EXISTS authorities (
-user_id BIGINT NOT NULL,
-authority VARCHAR(50) NOT NULL
+   user_id              bigint(20) not null comment '用户id',
+   authority            varchar(50) not null comment '权限',
+   key ix_auth_username (user_id, authority)
 );
+alter table authorities comment '权限表';
 
 -- 登录日志
 CREATE TABLE IF NOT EXISTS log_login (
