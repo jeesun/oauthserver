@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class CodeGenerator {
 
-    private static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
+    static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
 
     /*生成文件地址配置*/
     private static String MODEL_PACKAGE;//生成的Model类所在包

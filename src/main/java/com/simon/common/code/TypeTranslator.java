@@ -110,4 +110,9 @@ public class TypeTranslator {
         }
         return "String";
     }
+
+    public static String translateOracle(String columnType, String dataType){
+
+        return "String";
+    }
 }
