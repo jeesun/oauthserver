@@ -9,9 +9,12 @@
 
     <appender name="rollingAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.dir}/${log.file.name}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.dir}/${log.file.name}-%d{yyyy-MM-dd}.log</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.dir}/${log.file.name}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--日志文件保留天数-->
             <maxHistory>30</maxHistory>
+            <maxFileSize>1MB</maxFileSize>
+            <totalSizeCap>10MB</totalSizeCap>
         </rollingPolicy>
         <encoder><!-- 必须指定，否则不会往文件输出内容 -->
             <pattern>${log.pattern}</pattern>
