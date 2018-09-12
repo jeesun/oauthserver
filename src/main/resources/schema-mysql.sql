@@ -121,7 +121,7 @@ id BIGINT AUTO_INCREMENT NOT null primary key,
    update_by            bigint(20) comment '更新人id',
    update_date          datetime comment '更新时间',
 code int(4),
-create_time int(8),
+create_time bigint(20),
 expires int(4),
 phone varchar(255)
 );

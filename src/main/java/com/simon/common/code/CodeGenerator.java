@@ -50,7 +50,7 @@ public class CodeGenerator {
     private static String GEN_MODULES;//要生成的模块
 
     static String AUTHOR;//@author
-    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
+    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     private static Properties prop;
     static {
@@ -94,15 +94,14 @@ public class CodeGenerator {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        /*genCodeByCustomModelName("authorities", "Authority");
-        genCodeByCustomModelName("news_info","NewsInfo");
-        genCodeByCustomModelName("users", "OauthUser");
-        genCodeByCustomModelName("veri_code", "VeriCode");
-        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
-        genCodeByCustomModelName("qr_code", "QrCode");
-        genCodeByCustomModelName("log_login", "LogLogin");
-        genCodeByCustomModelName("news_tag", "NewsTag");*/
-        genCodeByCustomModelName("news_tag", "NewsTag");
+        //genCodeByCustomModelName("t_authorities", "Authority");
+        genCodeByCustomModelName("t_news_info","NewsInfo");
+        genCodeByCustomModelName("t_users", "OauthUser");
+        genCodeByCustomModelName("t_veri_code", "VeriCode");
+        genCodeByCustomModelName("t_reset_pwd_info", "ResetPwdInfo");
+        genCodeByCustomModelName("t_qr_code", "QrCode");
+        genCodeByCustomModelName("t_log_login", "LogLogin");
+        genCodeByCustomModelName("t_news_tag", "NewsTag");
     }
 
     /**
