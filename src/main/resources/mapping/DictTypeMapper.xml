@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.boya.mapper.DictTypeMapper">
-  <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />
-  <resultMap id="BaseResultMap" type="com.boya.model.DictType">
+<mapper namespace="com.simon.mapper.DictTypeMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.DictType">
     <!--
       WARNING - @mbg.generated
     -->
@@ -16,6 +15,7 @@
     <result column="type_group_id" jdbcType="BIGINT" property="typeGroupId" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
   </resultMap>
+  <cache eviction="FIFO" flushInterval="60000" readOnly="true" size="512" />
 
   <select id="getByGroupCode" parameterType="String" resultMap="BaseResultMap" useCache="true">
     SELECT

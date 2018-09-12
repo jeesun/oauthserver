@@ -15,7 +15,7 @@ import java.util.Date;
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(description = "VeriCode")
+@ApiModel(value = "t_veri_code")
 @Data
 @Entity
 @Table(name="t_veri_code")

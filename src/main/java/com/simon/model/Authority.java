@@ -1,33 +1,55 @@
 package com.simon.model;
 
+import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * @author SimonSun
-* @create 2018-08-17 23:33:01
+* @create 2018-09-12
 **/
-@ApiModel(description = "Authority")
+@ApiModel(value = "权限")
 @Data
 @Entity
-@Table(name="authorities")
-public class Authority implements GrantedAuthority, Serializable {
+@Table(name="t_authorities")
+public class Authority implements GrantedAuthority, Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    @ApiModelProperty(value = "user_id")
+    @KeySql(genId = SnowflakeGenId.class)
+    @GeneratedValue(generator = "sequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
+    private Long id;
+
+    @ApiModelProperty(value = "创建人id")
+    @Column(name = "create_by")
+    private Long createBy;
+
+    @ApiModelProperty(value = "创建时间")
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @ApiModelProperty(value = "更新人id")
+    @Column(name = "update_by")
+    private Long updateBy;
+
+    @ApiModelProperty(value = "更新时间")
+    @Column(name = "update_date")
+    private Date updateDate;
+
+    @ApiModelProperty(value = "用户id")
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @ApiModelProperty(value = "authority")
+    @ApiModelProperty(value = "权限")
     @Column(name = "authority", nullable = false)
     private String authority;
 }

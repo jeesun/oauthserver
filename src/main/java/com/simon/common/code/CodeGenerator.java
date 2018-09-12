@@ -94,14 +94,16 @@ public class CodeGenerator {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        //genCodeByCustomModelName("t_authorities", "Authority");
-        genCodeByCustomModelName("t_news_info","NewsInfo");
-        genCodeByCustomModelName("t_users", "OauthUser");
-        genCodeByCustomModelName("t_veri_code", "VeriCode");
-        genCodeByCustomModelName("t_reset_pwd_info", "ResetPwdInfo");
-        genCodeByCustomModelName("t_qr_code", "QrCode");
-        genCodeByCustomModelName("t_log_login", "LogLogin");
-        genCodeByCustomModelName("t_news_tag", "NewsTag");
+        genCodeByCustomModelName("t_authorities", "Authority");
+        genCodeByCustomModelName("t_dict_type", "DictType");
+        genCodeByCustomModelName("t_dict_type_group", "DictTypeGroup");
+//        genCodeByCustomModelName("t_news_info","NewsInfo");
+//        genCodeByCustomModelName("t_users", "OauthUser");
+//        genCodeByCustomModelName("t_veri_code", "VeriCode");
+//        genCodeByCustomModelName("t_reset_pwd_info", "ResetPwdInfo");
+//        genCodeByCustomModelName("t_qr_code", "QrCode");
+//        genCodeByCustomModelName("t_log_login", "LogLogin");
+//        genCodeByCustomModelName("t_news_tag", "NewsTag");
     }
 
     /**

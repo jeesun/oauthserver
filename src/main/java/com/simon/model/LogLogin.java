@@ -15,7 +15,7 @@ import java.util.Date;
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(description = "LogLogin")
+@ApiModel(value = "t_log_login")
 @Data
 @Entity
 @Table(name="t_log_login")

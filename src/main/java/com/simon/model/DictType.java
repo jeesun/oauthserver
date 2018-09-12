@@ -13,9 +13,9 @@ import java.util.Date;
 
 /**
 * @author SimonSun
-* @date 2018-09-06 10:03:50
+* @create 2018-09-12
 **/
-@ApiModel(description = "DictType")
+@ApiModel(value = "字典")
 @Data
 @Entity
 @Table(name="t_dict_type")
@@ -25,7 +25,7 @@ public class DictType implements Serializable{
     @Id
     @KeySql(genId = SnowflakeGenId.class)
     @GeneratedValue(generator = "sequenceId")
-    @GenericGenerator(name = "sequenceId", strategy = "com.boya.common.utils.snowflake.SequenceId")
+    @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
     @ApiModelProperty(value = "创建人id")

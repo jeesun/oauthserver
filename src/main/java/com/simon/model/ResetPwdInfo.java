@@ -1,23 +1,21 @@
 package com.simon.model;
 
-import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.math.BigDecimal;
 
 /**
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(description = "ResetPwdInfo")
+@ApiModel(value = "t_reset_pwd_info")
 @Data
 @Entity
 @Table(name="t_reset_pwd_info")

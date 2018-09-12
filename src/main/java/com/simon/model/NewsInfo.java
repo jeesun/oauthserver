@@ -15,7 +15,7 @@ import java.util.Date;
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(description = "NewsInfo")
+@ApiModel(value = "t_news_info")
 @Data
 @Entity
 @Table(name="t_news_info")
@@ -57,7 +57,7 @@ public class NewsInfo implements Serializable{
     private Integer status;
 
     @ApiModelProperty(value = "content")
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @ApiModelProperty(value = "image_url")

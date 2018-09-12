@@ -1,21 +1,23 @@
 package com.simon.model;
 
+import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.math.BigDecimal;
 
 /**
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(description = "NewsTag")
+@ApiModel(value = "t_news_tag")
 @Data
 @Entity
 @Table(name="t_news_tag")

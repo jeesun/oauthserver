@@ -106,7 +106,7 @@ public class FreeMarkerGeneratorUtil {
             if(StringUtils.isEmpty(tableComment)){
                 tableComment = tableName;
             }else{
-                if(tableComment.lastIndexOf("表") == (tableComment.length() - 1)){
+                if(tableComment.contains("表")&&tableComment.lastIndexOf("表") == (tableComment.length() - 1)){
                     tableComment = tableComment.substring(0, tableComment.length() - 1);
                 }
             }
