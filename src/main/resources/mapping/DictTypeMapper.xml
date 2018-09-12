@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boya.mapper.DictTypeMapper">
+  <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" />
+  <resultMap id="BaseResultMap" type="com.boya.model.DictType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type_group_id" jdbcType="BIGINT" property="typeGroupId" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+  </resultMap>
+
+  <select id="getByGroupCode" parameterType="String" resultMap="BaseResultMap" useCache="true">
+    SELECT
+        *
+    FROM
+        t_dict_type
+    WHERE
+        type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
+  </select>
+</mapper>

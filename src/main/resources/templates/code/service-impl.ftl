@@ -93,7 +93,7 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     }
 
     @Override
-    public int updateByPrimaryKeySelective(){
+    public int updateByPrimaryKeySelective(${modelNameUpperCamel} ${modelNameLowerCamel}){
         return ${modelNameLowerCamel}Mapper.updateByPrimaryKeySelective(${modelNameLowerCamel});
     }
 }

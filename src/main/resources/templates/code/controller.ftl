@@ -1,5 +1,6 @@
 package ${basePackage}.controller;
 
+import ${basePackage}.common.controller.BaseController;
 import ${basePackage}.model.${modelNameUpperCamel};
 import ${basePackage}.service.${modelNameUpperCamel}Service;
 import ${basePackage}.repository.${modelNameUpperCamel}Repository;
@@ -29,9 +30,9 @@ import java.util.Locale;
 @Api(value = "xx", description = "xx")
 @RestController
 @RequestMapping("${baseRequestMapping}")
-public class ${modelNameUpperCamel}Controller {
+public class ${modelNameUpperCamel}Controller extends BaseController{
 
     @Autowired
-    private ${modelNameUpperCamel}Service services;
+    private ${modelNameUpperCamel}Service ${modelNameLowerCamel}Service;
 
 }

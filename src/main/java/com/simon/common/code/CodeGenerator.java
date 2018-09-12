@@ -70,7 +70,7 @@ public class CodeGenerator {
             MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
             REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
             SERVICE_PACKAGE = BASE_PACKAGE + ".service";
-            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".serviceImpl";
+            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".service.impl";
             CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
             MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper_interface_reference");
 

@@ -1,6 +1,6 @@
 -- PostgreSQL
 CREATE TABLE IF NOT EXISTS oauth_client_details (
-  client_id VARCHAR(256) PRIMARY KEY,
+  client_id VARCHAR(36) PRIMARY KEY,
   resource_ids VARCHAR(256),
   client_secret VARCHAR(256),
   scope VARCHAR(256),
@@ -14,25 +14,25 @@ CREATE TABLE IF NOT EXISTS oauth_client_details (
 );
 
 CREATE TABLE IF NOT EXISTS oauth_client_token (
-  token_id VARCHAR(256),
+  token_id VARCHAR(36),
   token bytea,
-  authentication_id VARCHAR(256),
+  authentication_id VARCHAR(36),
   user_name VARCHAR(256),
-  client_id VARCHAR(256)
+  client_id VARCHAR(36)
 );
 
 CREATE TABLE IF NOT EXISTS oauth_access_token (
-  token_id VARCHAR(256),
+  token_id VARCHAR(36),
   token bytea,
-  authentication_id VARCHAR(256),
+  authentication_id VARCHAR(36),
   user_name VARCHAR(256),
-  client_id VARCHAR(256),
+  client_id VARCHAR(36),
   authentication bytea,
   refresh_token VARCHAR(256)
 );
 
 CREATE TABLE IF NOT EXISTS oauth_refresh_token (
-  token_id VARCHAR(256),
+  token_id VARCHAR(36),
   token bytea,
   authentication bytea
 );
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS oauth_code (
 );
 
 CREATE TABLE IF NOT EXISTS oauth_approvals (
-  userId VARCHAR(256),
-  clientId VARCHAR(256),
+  userId VARCHAR(36),
+  clientId VARCHAR(36),
   scope VARCHAR(256),
   status VARCHAR(10),
   expiresAt TIMESTAMP,
@@ -126,6 +126,42 @@ news_info_id bigint,
 tag_id bigint
 );
 
+/*==============================================================*/
+/* Table: t_dict_type                                           */
+/*==============================================================*/
+create table if NOT EXISTS t_dict_type
+(
+   id                   bigint(20) not null auto_increment comment 'id',
+   create_by            bigint(20) comment '创建人id',
+   create_date          datetime comment '创建时间',
+   update_by            bigint(20) comment '更新人id',
+   update_date          datetime comment '更新时间',
+   type_code            national varchar(255) not null comment '字典编码',
+   type_name            national varchar(255) not null comment '字典编码名称',
+   type_group_id        bigint(20) not null comment '字典组id',
+   order_num            int(4) comment '排序',
+   primary key (id)
+);
+
+alter table t_dict_type comment '字典';
+
+/*==============================================================*/
+/* Table: t_dict_type_group                                     */
+/*==============================================================*/
+create table if NOT EXISTS t_dict_type_group
+(
+   id                   bigint(20) not null auto_increment comment 'id',
+   create_by            bigint(20) comment '创建人id',
+   create_date          datetime comment '创建时间',
+   update_by            bigint(20) comment '更新人id',
+   update_date          datetime comment '更新时间',
+   type_group_code      national varchar(255) not null comment '字典组编码',
+   type_group_name      national varchar(255) not null comment '字典组名称',
+   primary key (id)
+);
+
+alter table t_dict_type_group comment '字典组';
+
 -- 自增序列
 CREATE SEQUENCE if NOT EXISTS users_id_seq;
 ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq');
@@ -147,6 +183,8 @@ CREATE UNIQUE INDEX if NOT EXISTS ix_auth_username ON authorities (user_id, auth
 
 -- 添加外键
 ALTER TABLE authorities ADD FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+alter table t_dict_type add constraint fk_type_group_id foreign key (type_group_id)
+      references t_dict_type_group (id) on delete restrict on update restrict;
 
 -- 密码经过了加密，是secret
 -- INSERT INTO oauth_client_details VALUES ('clientIdPassword', 'oauth2-resource', '$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6', 'read,write,trust', 'password,authorization_code,refresh_token', null, 'ROLE_ADMIN,ROLE_USER', 7200, 5184000, null, 'false');
