@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ import java.util.Locale;
 @Api("测试")
 @RestController
 @RequestMapping("/api/helloWorlds")
-public class HelloWorldController {
+public class HelloWorldController extends BaseController {
     @Autowired
     private MessageSource messageSource;
 

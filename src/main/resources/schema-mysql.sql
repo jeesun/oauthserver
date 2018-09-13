@@ -60,7 +60,7 @@ create table if NOT EXISTS t_users
    album_id             bigint(20) comment '播放列表id',
    address              national varchar(255) comment '地址',
    age                  int(4) comment '年龄',
-   birth                national varchar(255) comment '生日',
+   birth                date comment '生日',
    head_photo           national varchar(255) comment '头像',
    person_brief         national varchar(255) comment '个人简介',
    sex                  tinyint(1) comment '性别',
@@ -222,7 +222,7 @@ INSERT INTO t_users (id, username, password, enabled, email, phone) VALUES (1, '
 INSERT INTO t_users (id, username, password, enabled, email, phone) VALUES (2, 'user2711', '$2a$11$BUiKPp8.pcym7sxXYPvZeOjl0BOoVl3PZT.1Wfb3kmIgooO/GfQ4G', true, '18860902711@163.com', '18860902711');
 INSERT INTO t_users (id, username, password, enabled, email, phone) VALUES (3, 'user6745', '$2a$11$a7XDbu2RvLjZdr4kCvqh2u7gwVXhwxdauIzbX3ZizbBU.HeV8BOky', true, null, '18550046745');
 
-INSERT INTO t_authorities VALUES (1, 'ROLE_ADMIN');
-INSERT INTO t_authorities VALUES (1, 'ROLE_USER');
-INSERT INTO t_authorities VALUES (2, 'ROLE_USER');
-INSERT INTO t_authorities VALUES (3, 'ROLE_USER');
+INSERT INTO t_authorities(user_id,authority) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO t_authorities(user_id,authority) VALUES (1, 'ROLE_USER');
+INSERT INTO t_authorities(user_id,authority) VALUES (2, 'ROLE_USER');
+INSERT INTO t_authorities(user_id,authority) VALUES (3, 'ROLE_USER');

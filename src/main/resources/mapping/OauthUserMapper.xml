@@ -19,7 +19,7 @@
     <result column="album_id" jdbcType="BIGINT" property="albumId" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="age" jdbcType="INTEGER" property="age" />
-    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="birth" jdbcType="DATE" property="birth" />
     <result column="head_photo" jdbcType="VARCHAR" property="headPhoto" />
     <result column="person_brief" jdbcType="VARCHAR" property="personBrief" />
     <result column="sex" jdbcType="BIT" property="sex" />

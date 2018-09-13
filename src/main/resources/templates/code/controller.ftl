@@ -27,7 +27,7 @@ import java.util.Locale;
 **/
 
 @Slf4j
-@Api(value = "xx", description = "xx")
+@Api(value = "xx", description = "xx", tags = "xxApi")
 @RestController
 @RequestMapping("${baseRequestMapping}")
 public class ${modelNameUpperCamel}Controller extends BaseController{

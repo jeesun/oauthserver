@@ -82,7 +82,7 @@ public class OauthUser implements Serializable{
 
     @ApiModelProperty(value = "生日")
     @Column(name = "birth")
-    private String birth;
+    private Date birth;
 
     @ApiModelProperty(value = "头像")
     @Column(name = "head_photo")

@@ -52,6 +52,13 @@ Oauth2 Client通常是要被保护的资源，例如app接口。配套的Oauth2 
 2. oauthserver v1.2.0添加了阿里大鱼的发送验证码功能，需要阿里大鱼的jar，安装方法：运行src/main/resources/jars/install.bat。
 
 ## 更新日志
+### v.1.2.4.beta2(2018-09-13)
+- 默认使用MySQL数据库连接配置，更新MySQL连接配置以支持utf8mb4编码；
+- 新增BaseController，解决接口的时间类型传输问题；
+- 默认开启mybatis二级缓存；
+- 新增字典表t_dict_type和t_dict_type_group，新增字典工具类DictUtil；
+- 更新MySQL建表语句。
+
 ### v1.2.4.beta(2018-08-18)
 - 代码生成器bug修复；
 - 重新生成实体类。

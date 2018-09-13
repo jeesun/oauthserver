@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.model.NewsInfo;
 import com.simon.service.NewsInfoService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/newsInfos")
-public class NewsInfoController {
+public class NewsInfoController extends BaseController {
     @Autowired
     private NewsInfoService newsInfoService;
 

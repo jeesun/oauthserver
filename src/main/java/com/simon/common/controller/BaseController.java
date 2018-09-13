@@ -22,7 +22,7 @@ public class BaseController {
      */
     @InitBinder
     protected void initDateBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setLenient(false);
         //第二个参数是控制是否支持传入的值是空，这个值很关键，如果指定为false，那么如果前台没有传值的话就会报错
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
@@ -34,7 +34,7 @@ public class BaseController {
      */
     @InitBinder
     protected void initTimeBinder(WebDataBinder binder){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         dateFormat.setLenient(false);
         //第二个参数是控制是否支持传入的值是空，这个值很关键，如果指定为false，那么如果前台没有传值的话就会报错
         binder.registerCustomEditor(Time.class, new CustomDateEditor(dateFormat, true));
