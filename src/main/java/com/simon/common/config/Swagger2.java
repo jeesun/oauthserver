@@ -12,7 +12,9 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,7 +64,9 @@ public class Swagger2 {
                 .paths(PathSelectors.regex("^(?!oauth).*$"))
                 .build()
                 .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts());
+                .securityContexts(securityContexts())
+                .directModelSubstitute(Date.class, String.class)
+                .directModelSubstitute(Time.class, String.class);
     }
 
     private ApiInfo apiInfo() {

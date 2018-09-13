@@ -2,25 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.OauthUserMapper">
   <resultMap id="BaseResultMap" type="com.simon.model.OauthUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="enabled" jdbcType="BIT" property="enabled" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="age" jdbcType="VARCHAR" property="age" />
-    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="ssoid" jdbcType="VARCHAR" property="ssoid" />
+    <result column="album_id" jdbcType="BIGINT" property="albumId" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="headPhoto" jdbcType="VARCHAR" property="head_photo" />
-    <result column="personBrief" jdbcType="VARCHAR" property="person_brief" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="head_photo" jdbcType="VARCHAR" property="headPhoto" />
+    <result column="person_brief" jdbcType="VARCHAR" property="personBrief" />
     <result column="sex" jdbcType="BIT" property="sex" />
-    <result column="visitCard" jdbcType="VARCHAR" property="visit_card" />
+    <result column="visit_card" jdbcType="VARCHAR" property="visitCard" />
+    <result column="login_type" jdbcType="INTEGER" property="loginType" />
+    <result column="login_status" jdbcType="VARCHAR" property="loginStatus" />
+    <result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
   </resultMap>
   <sql id="Base_Column_List">
     id, username, password, enabled, email, phone, enable
   </sql>
 
   <update id="updatePwdByPhone">
-    update users set password=#{password} where phone=#{phone}
+    update t_users set password=#{password} where phone=#{phone}
   </update>
 </mapper>

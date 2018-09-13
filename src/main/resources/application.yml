@@ -5,7 +5,7 @@ security:
     enabled: false
 spring:
   profiles:
-    active: pg #pg, mysql, oracle。默认使用PostgreSQL数据库连接配置。
+    active: mysql #pg, mysql, oracle。默认使用MySQL数据库连接配置。
   thymeleaf:
     prefix: classpath:/templates/ #默认值
     suffix: .html
@@ -64,7 +64,7 @@ spring:
     cache-names: userDetailsCache,oauthUserCache
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
   jackson:
     serialization: true
@@ -121,5 +121,10 @@ management:
 
 # mybatis配置
 mybatis:
-  mapper-locations: classpath:/mapping/*Mapper.xml
+  check-config-location: false
   type-aliases-package: com.simon.model
+  configuration:
+    map-underscore-to-camel-case: true
+    # 二级缓存的总开关
+    cache-enabled: true
+  mapper-locations: classpath:mapping/*.xml

@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 * @author ${AUTHOR}
 * @create ${CREATE}
 **/
-@ApiModel(description = "${entityName}")
+@ApiModel(value = "${tableComment}")
 @Data
 @Entity
 @Table(name="${tableName}")

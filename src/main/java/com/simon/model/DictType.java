@@ -15,11 +15,11 @@ import java.util.Date;
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(value = "t_veri_code")
+@ApiModel(value = "字典")
 @Data
 @Entity
-@Table(name="t_veri_code")
-public class VeriCode implements Serializable{
+@Table(name="t_dict_type")
+public class DictType implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -44,19 +44,19 @@ public class VeriCode implements Serializable{
     @Column(name = "update_date")
     private Date updateDate;
 
-    @ApiModelProperty(value = "code")
-    @Column(name = "code")
-    private Integer code;
+    @ApiModelProperty(value = "字典编码")
+    @Column(name = "type_code", nullable = false)
+    private String typeCode;
 
-    @ApiModelProperty(value = "create_time")
-    @Column(name = "create_time")
-    private Long createTime;
+    @ApiModelProperty(value = "字典编码名称")
+    @Column(name = "type_name", nullable = false)
+    private String typeName;
 
-    @ApiModelProperty(value = "expires")
-    @Column(name = "expires")
-    private Integer expires;
+    @ApiModelProperty(value = "字典组id")
+    @Column(name = "type_group_id", nullable = false)
+    private Long typeGroupId;
 
-    @ApiModelProperty(value = "phone")
-    @Column(name = "phone")
-    private String phone;
+    @ApiModelProperty(value = "排序")
+    @Column(name = "order_num")
+    private Integer orderNum;
 }

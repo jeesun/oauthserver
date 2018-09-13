@@ -9,15 +9,16 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * @author SimonSun
-* @create 2018-08-17 23:33:01
+* @create 2018-09-12
 **/
-@ApiModel(description = "QrCode")
+@ApiModel(value = "t_qr_code")
 @Data
 @Entity
-@Table(name="qr_code")
+@Table(name="t_qr_code")
 public class QrCode implements Serializable{
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +27,22 @@ public class QrCode implements Serializable{
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
+
+    @ApiModelProperty(value = "创建人id")
+    @Column(name = "create_by")
+    private Long createBy;
+
+    @ApiModelProperty(value = "创建时间")
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @ApiModelProperty(value = "更新人id")
+    @Column(name = "update_by")
+    private Long updateBy;
+
+    @ApiModelProperty(value = "更新时间")
+    @Column(name = "update_date")
+    private Date updateDate;
 
     @ApiModelProperty(value = "is_ok")
     @Column(name = "is_ok")

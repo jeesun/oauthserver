@@ -6,12 +6,16 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
     <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
     <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
 </mapper>

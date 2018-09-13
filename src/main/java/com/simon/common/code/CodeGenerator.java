@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class CodeGenerator {
 
-    private static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
+    static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
 
     /*生成文件地址配置*/
     private static String MODEL_PACKAGE;//生成的Model类所在包
@@ -50,7 +50,7 @@ public class CodeGenerator {
     private static String GEN_MODULES;//要生成的模块
 
     static String AUTHOR;//@author
-    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());//@date
+    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
 
     private static Properties prop;
     static {
@@ -70,7 +70,7 @@ public class CodeGenerator {
             MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
             REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
             SERVICE_PACKAGE = BASE_PACKAGE + ".service";
-            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".serviceImpl";
+            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".service.impl";
             CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
             MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper_interface_reference");
 
@@ -94,15 +94,16 @@ public class CodeGenerator {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        /*genCodeByCustomModelName("authorities", "Authority");
-        genCodeByCustomModelName("news_info","NewsInfo");
-        genCodeByCustomModelName("users", "OauthUser");
-        genCodeByCustomModelName("veri_code", "VeriCode");
-        genCodeByCustomModelName("reset_pwd_info", "ResetPwdInfo");
-        genCodeByCustomModelName("qr_code", "QrCode");
-        genCodeByCustomModelName("log_login", "LogLogin");
-        genCodeByCustomModelName("news_tag", "NewsTag");*/
-        genCodeByCustomModelName("news_tag", "NewsTag");
+        genCodeByCustomModelName("t_authorities", "Authority");
+        genCodeByCustomModelName("t_dict_type", "DictType");
+        genCodeByCustomModelName("t_dict_type_group", "DictTypeGroup");
+//        genCodeByCustomModelName("t_news_info","NewsInfo");
+//        genCodeByCustomModelName("t_users", "OauthUser");
+//        genCodeByCustomModelName("t_veri_code", "VeriCode");
+//        genCodeByCustomModelName("t_reset_pwd_info", "ResetPwdInfo");
+//        genCodeByCustomModelName("t_qr_code", "QrCode");
+//        genCodeByCustomModelName("t_log_login", "LogLogin");
+//        genCodeByCustomModelName("t_news_tag", "NewsTag");
     }
 
     /**

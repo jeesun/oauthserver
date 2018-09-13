@@ -13,12 +13,12 @@ import java.util.Date;
 
 /**
 * @author SimonSun
-* @create 2018-08-17 23:33:01
+* @create 2018-09-12
 **/
-@ApiModel(description = "LogLogin")
+@ApiModel(value = "t_log_login")
 @Data
 @Entity
-@Table(name="log_login")
+@Table(name="t_log_login")
 public class LogLogin implements Serializable{
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +27,22 @@ public class LogLogin implements Serializable{
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
+
+    @ApiModelProperty(value = "创建人id")
+    @Column(name = "create_by")
+    private Long createBy;
+
+    @ApiModelProperty(value = "创建时间")
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @ApiModelProperty(value = "更新人id")
+    @Column(name = "update_by")
+    private Long updateBy;
+
+    @ApiModelProperty(value = "更新时间")
+    @Column(name = "update_date")
+    private Date updateDate;
 
     @ApiModelProperty(value = "create_time")
     @Column(name = "create_time")

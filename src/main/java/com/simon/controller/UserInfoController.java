@@ -1,8 +1,9 @@
 package com.simon.controller;
 
-import com.simon.common.utils.ImageUtil;
+import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.exception.UserNotValidException;
+import com.simon.common.utils.ImageUtil;
 import com.simon.model.OauthUser;
 import com.simon.service.OauthUserService;
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ import java.util.Locale;
 @Api(value="用户信息", description = "用户信息")
 @RestController
 @RequestMapping("/api/userInfos")
-public class UserInfoController {
+public class UserInfoController extends BaseController {
     @Autowired
     private MessageSource messageSource;
 

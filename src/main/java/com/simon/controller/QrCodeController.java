@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.repository.QrCodeRepository;
 import io.swagger.annotations.Api;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "二维码", description = "网页端扫码登录")
 @RestController
 @RequestMapping("/api/qrCodes")
-public class QrCodeController {
+public class QrCodeController extends BaseController {
     @Autowired
     private QrCodeRepository qrCodeRepository;
     /**

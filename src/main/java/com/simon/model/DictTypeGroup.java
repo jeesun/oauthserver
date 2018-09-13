@@ -1,25 +1,27 @@
 package com.simon.model;
 
+import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.math.BigDecimal;
 
 /**
 * @author SimonSun
 * @create 2018-09-12
 **/
-@ApiModel(value = "t_veri_code")
+@ApiModel(value = "字典组")
 @Data
 @Entity
-@Table(name="t_veri_code")
-public class VeriCode implements Serializable{
+@Table(name="t_dict_type_group")
+public class DictTypeGroup implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -44,19 +46,11 @@ public class VeriCode implements Serializable{
     @Column(name = "update_date")
     private Date updateDate;
 
-    @ApiModelProperty(value = "code")
-    @Column(name = "code")
-    private Integer code;
+    @ApiModelProperty(value = "字典组编码")
+    @Column(name = "type_group_code", nullable = false)
+    private String typeGroupCode;
 
-    @ApiModelProperty(value = "create_time")
-    @Column(name = "create_time")
-    private Long createTime;
-
-    @ApiModelProperty(value = "expires")
-    @Column(name = "expires")
-    private Integer expires;
-
-    @ApiModelProperty(value = "phone")
-    @Column(name = "phone")
-    private String phone;
+    @ApiModelProperty(value = "字典组名称")
+    @Column(name = "type_group_name", nullable = false)
+    private String typeGroupName;
 }

@@ -106,7 +106,7 @@ public class FreeMarkerGeneratorUtil {
             if(StringUtils.isEmpty(tableComment)){
                 tableComment = tableName;
             }else{
-                if(tableComment.lastIndexOf("表") == (tableComment.length() - 1)){
+                if(tableComment.contains("表")&&tableComment.lastIndexOf("表") == (tableComment.length() - 1)){
                     tableComment = tableComment.substring(0, tableComment.length() - 1);
                 }
             }
@@ -158,12 +158,12 @@ public class FreeMarkerGeneratorUtil {
                     annotation = "@Id\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
-                            "    @GenericGenerator(name = \"sequenceId\", strategy = \"com.simon.common.utils.snowflake.SequenceId\")";
+                            "    @GenericGenerator(name = \"sequenceId\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.snowflake.SequenceId\")";
                 }else if(propertyType.equalsIgnoreCase("String")){
                     annotation = "@Id\n" +
                             "    @KeySql(genId = UUIdGenId.class)\n" +
                             "    @GeneratedValue(generator = \"uuid\")\n" +
-                            "    @GenericGenerator(name = \"uuid\", strategy = \"com.simon.common.utils.UuidGenerator\")";
+                            "    @GenericGenerator(name = \"uuid\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.UuidGenerator\")";
                 }else if(propertyType.equalsIgnoreCase("Integer")){
                     annotation = "@Id\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";

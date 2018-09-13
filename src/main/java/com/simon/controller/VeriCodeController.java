@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.model.VeriCode;
 import com.simon.repository.VeriCodeRepository;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "验证码", description = "验证码")
 @RestController
 @RequestMapping("/api/veriCodes")
-public class VeriCodeController {
+public class VeriCodeController extends BaseController {
     private static Logger logger = Logger.getLogger(VeriCodeController.class);
 
     @Autowired

@@ -35,8 +35,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public CustomUserDetailsService() {
         super();
-        sqlLoadUser = "select id,username,password,enabled,phone,email from users where username=? OR phone=? OR email=?";
-        sqlLoadAuthorities = "select user_id,authority from authorities where user_id = ?";
+        sqlLoadUser = "select id,username,password,enabled,phone,email from t_users where username=? OR phone=? OR email=?";
+        sqlLoadAuthorities = "select user_id,authority from t_authorities where user_id = ?";
 
         myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"));
 
