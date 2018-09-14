@@ -14,6 +14,7 @@ import java.util.Date;
 import java.math.BigDecimal;
 
 /**
+* ${tableComment}
 * @author ${AUTHOR}
 * @date ${CREATE}
 **/
