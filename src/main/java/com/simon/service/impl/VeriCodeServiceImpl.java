@@ -1,4 +1,4 @@
-package com.simon.serviceImpl;
+package com.simon.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
