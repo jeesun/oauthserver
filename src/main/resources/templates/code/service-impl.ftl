@@ -19,10 +19,10 @@ import java.util.List;
 
 /**
 * @author ${AUTHOR}
-* @create ${CREATE}
+* @date ${CREATE}
 **/
 @Service
-@Transactional
+@Transactional(rollbackFor = {Exception.class})
 public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}Service {
     @Autowired
     private ${modelNameUpperCamel}Mapper ${modelNameLowerCamel}Mapper;

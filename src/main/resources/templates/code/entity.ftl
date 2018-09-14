@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 
 /**
 * @author ${AUTHOR}
-* @create ${CREATE}
+* @date ${CREATE}
 **/
 @ApiModel(value = "${tableComment}")
 @Data

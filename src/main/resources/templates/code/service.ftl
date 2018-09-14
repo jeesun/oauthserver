@@ -4,7 +4,7 @@ import ${basePackage}.common.service.BasicService;
 
 /**
 * @author ${AUTHOR}
-* @create ${CREATE}
+* @date ${CREATE}
 **/
 public interface ${modelNameUpperCamel}Service extends BasicService<${modelNameUpperCamel}> {
 
