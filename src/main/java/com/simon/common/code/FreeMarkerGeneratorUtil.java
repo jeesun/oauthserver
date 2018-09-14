@@ -96,6 +96,8 @@ public class FreeMarkerGeneratorUtil {
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "' AND TABLE_NAME='" + tableName + "'";
         }else if(getDataBaseType(con) == 2){
             sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C WHERE relname = '" + tableName + "'";
+        }else if(getDataBaseType(con) == 3){
+            sql = "select TABLE_NAME,COMMENTS from all_tab_comments WHERE table_name='" + tableName.toUpperCase() + "'";
         }else{
             throw new Exception("暂不支持其他数据库");
         }
@@ -122,6 +124,21 @@ public class FreeMarkerGeneratorUtil {
         }else if(getDataBaseType(con) == 2){
             log.info(con.getCatalog());
             sql = "SELECT delta.table_name, delta.column_name, alb.column_comment, alb.column_type, delta.data_type, delta.column_default, delta.is_nullable FROM information_schema.COLUMNS AS delta, ( SELECT C .relname AS table_name, A.attname AS column_name, col_description ( A.attrelid, A.attnum ) AS column_comment, format_type ( A.atttypid, A.atttypmod ) AS column_type, A.attnotnull AS NOTNULL FROM pg_class AS C, pg_attribute AS A WHERE C.relname = '" + tableName + "' AND A.attrelid = C.oid AND A.attnum > 0 ) AS alb WHERE table_schema = 'public' AND delta.TABLE_NAME = '" + tableName + "' AND delta.COLUMN_NAME = alb.column_name";
+        }else if(getDataBaseType(con) == 3){
+            log.info(con.getCatalog());
+            sql = "SELECT\n" +
+                    "atc.table_name,\n" +
+                    "atc.column_name,\n" +
+                    "acc.COMMENTS AS column_comment,\n" +
+                    "atc.data_length AS column_type,\n" +
+                    "atc.data_type AS data_type,\n" +
+                    "atc.data_default AS column_default,\n" +
+                    "atc.NULLABLE AS is_nullable \n" +
+                    "FROM\n" +
+                    "all_tab_columns atc\n" +
+                    "FULL JOIN ( SELECT column_name, COMMENTS FROM all_col_comments WHERE Table_Name = 'USERS' ) acc ON atc.column_name = acc.column_name \n" +
+                    "WHERE\n" +
+                    "atc.table_name = '" + tableName.toUpperCase() + "'";
         }else{
             throw new Exception("暂不支持其他数据库");
         }
@@ -148,6 +165,8 @@ public class FreeMarkerGeneratorUtil {
                 propertyType = TypeTranslator.translateMySQL(columnType, dataType);
             }else if(getDataBaseType(con) == 2){
                 propertyType = TypeTranslator.translatePostgreSQL(columnType, dataType);
+            }else if(getDataBaseType(con) == 3){
+                propertyType = TypeTranslator.translateOracle(columnType, dataType);
             }else{
                 throw new Exception("暂不支持其他数据库");
             }
@@ -222,12 +241,14 @@ public class FreeMarkerGeneratorUtil {
 
     public static int getDataBaseType(Connection connection) throws SQLException {
         String driverName = connection.getMetaData().getDriverName().toLowerCase();
-        //log.info(driverName);
+        log.info(driverName);
         //通过driverName是否包含关键字判断
         if (driverName.contains("mysql")) {
             return 1;
         } else if (driverName.contains("postgresql")) {
             return 2;
+        }else if(driverName.contains("oracle")){
+            return 3;
         }
         return -1;
     }

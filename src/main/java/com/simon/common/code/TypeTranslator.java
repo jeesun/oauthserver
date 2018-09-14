@@ -40,6 +40,12 @@ public class TypeTranslator {
     private static String REAL = "REAL";
     private static String BYTEA = "BYTEA";
 
+    private static String LONG = "LONG";
+    private static String VARCHAR2 = "VARCHAR2";
+    private static String NUMBER = "NUMBER";
+    private static String RAW = "RAW";
+    private static String LONGRAW = "LONGRAW";
+
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries%2Fmysql-data-types.html%23
      * @param columnType 列类型
@@ -106,7 +112,7 @@ public class TypeTranslator {
         if(dataType.contains(BINARY) || BLOB.equals(dataType)){
             return "Byte[]";
         }
-        return "String";
+        return "Object";
     }
 
     /**
@@ -156,11 +162,56 @@ public class TypeTranslator {
         if(BYTEA.equals(dataType)){
             return "Byte[]";
         }
-        return "String";
+        return "Object";
     }
 
+    /**
+     * Oracle数据类型转java类型
+     * @param columnType DATA_LENGTH
+     * @param dataType DATA_TYPE
+     * @return
+     */
     public static String translateOracle(String columnType, String dataType){
-
-        return "String";
+        Integer dataLength = Integer.parseInt(columnType);
+        dataType = dataType.toUpperCase();
+        if(CHAR.equals(dataType) || VARCHAR2.equals(dataType) || LONG.equals(dataType)){
+            if (1 == dataLength){
+                return "Boolean";
+            }else{
+                return "String";
+            }
+        }
+        if(RAW.equals(dataType) || LONGRAW.equals(dataType)){
+            return "Byte[]";
+        }
+        if(DATE.equals(dataType)){
+            return "Date";
+        }
+        if (dataType.contains(TIMESTAMP)){
+            return "Timestamp";
+        }
+        if(NUMBER.equals(dataType)){
+            if (1 == dataLength){
+                return "Boolean";
+            }
+            if (2 ==dataLength){
+                return "Byte";
+            }
+            if (3 <= dataLength && dataLength <= 4){
+                return "Short";
+            }
+            if(5 <= dataLength && dataLength <= 9){
+                return "Integer";
+            }
+            if(10 <= dataLength && dataLength <= 18){
+                return "Long";
+            }else{
+                return "BigDecimal";
+            }
+        }
+        if(BLOB.equals(dataType)){
+            return "Object";
+        }
+        return "Object";
     }
 }
