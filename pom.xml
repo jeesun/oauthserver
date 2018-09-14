@@ -25,6 +25,8 @@
 		<docker.registry>127.0.0.1:5000</docker.registry>
 		<swagger2.version>2.9.2</swagger2.version>
 		<spring-cloud.version>Edgware.SR4</spring-cloud.version>
+
+		<base.package>com.simon</base.package>
 	</properties>
 
 	<dependencies>
@@ -349,6 +351,18 @@
 	</dependencyManagement>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

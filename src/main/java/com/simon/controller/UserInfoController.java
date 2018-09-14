@@ -57,6 +57,12 @@ public class UserInfoController extends BaseController {
         return ResultMsg.success(200, "", oauthUserService.findByUsername(principal.getName()));
     }
 
+    @ApiOperation(value = "获取个人信息test")
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public ResultMsg getUserInfo(@RequestParam String username){
+        return ResultMsg.success(200, "", oauthUserService.findByUsername(username));
+    }
+
     @ApiOperation(value = "注册", notes = "注册成功返回appUser对象，包含自动生成的username", httpMethod = "POST")
     @RequestMapping(value = "/registerWithVeriCode",method = RequestMethod.POST)
     public ResultMsg post(@RequestParam(required = false) Integer code, @RequestParam String phone, @RequestParam String password) {

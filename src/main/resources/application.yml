@@ -122,7 +122,7 @@ management:
 # mybatis配置
 mybatis:
   check-config-location: false
-  type-aliases-package: com.simon.model
+  type-aliases-package: ${base.package}.model
   configuration:
     map-underscore-to-camel-case: true
     # 二级缓存的总开关
