@@ -6,7 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 /**
- * Created by simon on 2017/2/24.
+ * 自定义UserDetails
+ * @author simon
+ * @date 2017/2/24
  */
 public class UserEntity implements UserDetails{
     private static final long serialVersionUID = 2834517421924891212L;
