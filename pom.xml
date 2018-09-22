@@ -26,7 +26,7 @@
 		<swagger2.version>2.9.2</swagger2.version>
 		<spring-cloud.version>Edgware.SR4</spring-cloud.version>
 
-		<base.package>com.simon</base.package><!-- 基础包名 -->
+		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
 
 	<dependencies>

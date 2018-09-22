@@ -1,10 +1,5 @@
 package com.simon.common.code;
 
-/**
- * @author simon
- * @create 2018-08-07 21:10
- **/
-
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import freemarker.template.Configuration;
@@ -22,9 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 代码生成工具类
- * Created by wangqichang on 2018/5/30.
- */
+ * 代码生成器工具类
+ * @author simon
+ * @create 2018-08-07 21:10
+ **/
 @Slf4j
 public class FreeMarkerGeneratorUtil {
 
@@ -85,6 +81,7 @@ public class FreeMarkerGeneratorUtil {
 
     private static EntityDataModel getEntityModel(Connection con, String tableName, String basePackage, String modelName)
             throws Exception {
+        int dbType = getDataBaseType(con);
         EntityDataModel dataModel = new EntityDataModel();
 
         String sql = "";
@@ -92,11 +89,11 @@ public class FreeMarkerGeneratorUtil {
         ResultSet rs;
 
         //查询表标注
-        if(getDataBaseType(con) == 1){
+        if(dbType == DbType.MYSQL){
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "' AND TABLE_NAME='" + tableName + "'";
-        }else if(getDataBaseType(con) == 2){
+        }else if(dbType == DbType.POSTGRESQL){
             sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C WHERE relname = '" + tableName + "'";
-        }else if(getDataBaseType(con) == 3){
+        }else if(dbType == DbType.ORACLE){
             sql = "select TABLE_NAME,COMMENTS from all_tab_comments WHERE table_name='" + tableName.toUpperCase() + "'";
         }else{
             throw new Exception("暂不支持其他数据库");
@@ -117,14 +114,14 @@ public class FreeMarkerGeneratorUtil {
 
 
         //查询表属性,格式化生成实体所需属性
-        if(getDataBaseType(con) == 1){
+        if(dbType == DbType.MYSQL){
             //log.info(con.getCatalog());
             sql = "SELECT table_name, column_name, column_comment, column_type, data_type, column_default, is_nullable "
                     + "FROM INFORMATION_SCHEMA.COLUMNS " + "WHERE table_name = '" + tableName + "' AND table_schema = '" + con.getCatalog() + "'";
-        }else if(getDataBaseType(con) == 2){
+        }else if(dbType == DbType.POSTGRESQL){
             log.info(con.getCatalog());
             sql = "SELECT delta.table_name, delta.column_name, alb.column_comment, alb.column_type, delta.data_type, delta.column_default, delta.is_nullable FROM information_schema.COLUMNS AS delta, ( SELECT C .relname AS table_name, A.attname AS column_name, col_description ( A.attrelid, A.attnum ) AS column_comment, format_type ( A.atttypid, A.atttypmod ) AS column_type, A.attnotnull AS NOTNULL FROM pg_class AS C, pg_attribute AS A WHERE C.relname = '" + tableName + "' AND A.attrelid = C.oid AND A.attnum > 0 ) AS alb WHERE table_schema = 'public' AND delta.TABLE_NAME = '" + tableName + "' AND delta.COLUMN_NAME = alb.column_name";
-        }else if(getDataBaseType(con) == 3){
+        }else if(dbType == DbType.ORACLE){
             log.info(con.getCatalog());
             sql = "SELECT\n" +
                     "atc.table_name,\n" +
@@ -161,11 +158,11 @@ public class FreeMarkerGeneratorUtil {
             }
 
             String propertyType = null;
-            if(getDataBaseType(con) == 1){
+            if(dbType == DbType.MYSQL){
                 propertyType = TypeTranslator.translateMySQL(columnType, dataType);
-            }else if(getDataBaseType(con) == 2){
+            }else if(dbType == DbType.POSTGRESQL){
                 propertyType = TypeTranslator.translatePostgreSQL(columnType, dataType);
-            }else if(getDataBaseType(con) == 3){
+            }else if(dbType == DbType.ORACLE){
                 propertyType = TypeTranslator.translateOracle(columnType, dataType);
             }else{
                 throw new Exception("暂不支持其他数据库");
@@ -173,17 +170,17 @@ public class FreeMarkerGeneratorUtil {
 
             String annotation = null;
             if ("id".equalsIgnoreCase(name)) {
-                if (propertyType.equalsIgnoreCase("Long")) {
+                if ("Long".equalsIgnoreCase(propertyType)) {
                     annotation = "@Id\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
                             "    @GenericGenerator(name = \"sequenceId\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.snowflake.SequenceId\")";
-                }else if(propertyType.equalsIgnoreCase("String")){
+                }else if("String".equalsIgnoreCase(propertyType)){
                     annotation = "@Id\n" +
                             "    @KeySql(genId = UUIdGenId.class)\n" +
                             "    @GeneratedValue(generator = \"uuid\")\n" +
                             "    @GenericGenerator(name = \"uuid\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.UuidGenerator\")";
-                }else if(propertyType.equalsIgnoreCase("Integer")){
+                }else if("Integer".equalsIgnoreCase(propertyType)){
                     annotation = "@Id\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }else{
@@ -191,7 +188,7 @@ public class FreeMarkerGeneratorUtil {
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }
             }else{
-                if(isNullable.equalsIgnoreCase("NO")){
+                if("NO".equalsIgnoreCase(isNullable)){
                     annotation = "@ApiModelProperty(value = \"" + comment + "\")\n" +
                             "    @Column(name = \"" + name + "\", nullable = false)";
                 }else{
