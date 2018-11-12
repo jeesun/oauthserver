@@ -8,6 +8,7 @@ import com.simon.mapper.NewsInfoMapper;
 import com.simon.model.NewsInfo;
 import com.simon.repository.NewsInfoRepository;
 import com.simon.service.NewsInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +22,18 @@ import java.util.List;
 * @create 2018-08-06 20:56:26
 **/
 @Service
-@Transactional
+@Transactional(rollbackFor = {Exception.class})
 public class NewsInfoServiceImpl implements NewsInfoService {
     @Autowired
     private NewsInfoMapper newsInfoMapper;
 
     @Autowired
     private NewsInfoRepository newsInfoRepository;
+
+    @Override
+    public long count() {
+        return newsInfoRepository.count();
+    }
 
     @Override
     public NewsInfo save(NewsInfo newsInfo){
@@ -40,8 +46,16 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     }
 
     @Override
-    public PageInfo<NewsInfo> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<NewsInfo> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<NewsInfo> list = newsInfoMapper.selectAll();
         return new PageInfo<>(list);
     }

@@ -15,42 +15,121 @@ import java.util.*;
 
 /**
  * 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。
+ * @author simon
+ * @date 2018/09/22
  */
 public class CodeGenerator {
 
-    static String BASE_PACKAGE;//项目基础包名称，根据自己的项目修改
+    /**
+     * 项目基础包名称，根据自己的项目修改
+     */
+    static String BASE_PACKAGE;
 
     /*生成文件地址配置*/
-    private static String MODEL_PACKAGE;//生成的Model类所在包
-    private static String MAPPER_PACKAGE;//生成的Mapper所在包
-    private static String REPOSITORY_PACKAGE;//生成Repository所在包
-    private static String SERVICE_PACKAGE;//生成的Service所在包
-    private static String SERVICE_IMPL_PACKAGE;//生成的ServiceImpl所在包
-    private static String CONTROLLER_PACKAGE;//生成的Controller所在包
+    /**
+     * 生成的Model类所在包
+     */
+    private static String MODEL_PACKAGE;
 
-    private static String MAPPER_INTERFACE_REFERENCE;//Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
+    /**
+     * 生成的Mapper所在包
+     */
+    private static String MAPPER_PACKAGE;
+
+    /**
+     * 生成Repository所在包
+     */
+    private static String REPOSITORY_PACKAGE;
+
+    /**
+     * 生成的Service所在包
+     */
+    private static String SERVICE_PACKAGE;
+
+    /**
+     * 生成的ServiceImpl所在包
+     */
+    private static String SERVICE_IMPL_PACKAGE;
+
+    /**
+     * 生成的Controller所在包
+     */
+    private static String CONTROLLER_PACKAGE;
+
+    /**
+     * Mapper插件基础接口的完全限定名(第二步提到的核心继承接口Mapper)
+     */
+    private static String MAPPER_INTERFACE_REFERENCE;
 
     /*数据库配置*/
-    private static String JDBC_URL;//数据库url
-    private static String JDBC_USERNAME;
-    private static String JDBC_PASSWORD;
-    private static String JDBC_DIVER_CLASS_NAME;
+    /**
+     * 数据库url
+     */
+    public static String JDBC_URL;
+    public static String JDBC_USERNAME;
+    public static String JDBC_PASSWORD;
+    public static String JDBC_DIVER_CLASS_NAME;
 
-    static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";//模板位置
+    /**
+     * 项目在硬盘上的基础路径
+     */
+    static final String PROJECT_PATH = System.getProperty("user.dir");
 
-    static String JAVA_PATH;//java文件路径
-    static String RESOURCES_PATH;//资源文件路径
+    /**
+     * 模板位置
+     */
+    static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";
+
+    /**
+     * java文件路径
+     */
+    static String JAVA_PATH;
+
+    /**
+     * 资源文件路径
+     */
+    static String RESOURCES_PATH;
 
     private static String PACKAGE_PATH_REPOSITORY;
-    private static String PACKAGE_PATH_SERVICE;//生成的Service存放路径
-    private static String PACKAGE_PATH_SERVICE_IMPL;//生成的Service实现存放路径
-    private static String PACKAGE_PATH_CONTROLLER;//生成的Controller存放路径
 
-    private static String GEN_MODULES;//要生成的模块
+    /**
+     * 生成的Service存放路径
+     */
+    private static String PACKAGE_PATH_SERVICE;
 
-    static String AUTHOR;//@author
-    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());//@date
+    /**
+     * 生成的Service实现存放路径
+     */
+    private static String PACKAGE_PATH_SERVICE_IMPL;
+
+    /**
+     * 生成的Controller存放路径
+     */
+    private static String PACKAGE_PATH_CONTROLLER;
+
+    /**
+     * 要生成的模块
+     */
+    private static String GEN_MODULES;
+
+    /**
+     * @author
+     */
+    static String AUTHOR;
+
+    /**
+     * @date
+     */
+    static final String CREATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+    /**
+     * 可选的要生成的代码部分
+     */
+    private static String MODULE_MODEL_AND_MAPPER = "modelandmapper";
+    private static String MODULE_REPOSITORY = "repository";
+    private static String MODULE_SERVICE = "service";
+    private static String MODULE_CONTROLLER = "controller";
+    private static String MODULE_CONTROLLER_AND_PAGE = "controllerandpage";
 
     private static Properties prop;
     static {
@@ -89,14 +168,18 @@ public class CodeGenerator {
 
     }
 
-    /*main函数入口,放入表名运行即可生成代码*/
+    /**
+     * main函数入口,放入表名运行即可生成代码
+     * @param args
+     */
     public static void main(String[] args) {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        genCodeByCustomModelName("t_authorities", "Authority");
-        genCodeByCustomModelName("t_dict_type", "DictType");
-        genCodeByCustomModelName("t_dict_type_group", "DictTypeGroup");
+        //genCodeByCustomModelName("t_authorities", "Authority");
+        //genCodeByCustomModelName("t_side_menu", "SideMenu");
+        //genCodeByCustomModelName("t_side_menu", "SideMenu");
+        //genCodeByCustomModelName("t_dict_type_group", "DictTypeGroup");
 //        genCodeByCustomModelName("t_news_info","NewsInfo");
 //        genCodeByCustomModelName("t_users", "OauthUser");
 //        genCodeByCustomModelName("t_veri_code", "VeriCode");
@@ -117,32 +200,45 @@ public class CodeGenerator {
         }
     }
 
+    public static void genCodeByCustomModelName(String tableName, String modelName, String genModules) {
+        if (StringUtils.isEmpty(genModules)){
+            genModules = GEN_MODULES;
+        }
+
+        if(StringUtils.isEmpty(genModules)){
+            genModelAndMapper(tableName, modelName);
+            genRepository(tableName, modelName);
+            genService(tableName, modelName);
+            //genController(tableName, modelName);
+        }else{
+            String[] modules = genModules.toLowerCase().split(",");
+
+            if(Arrays.asList(modules).contains(MODULE_MODEL_AND_MAPPER)){
+                genModelAndMapper(tableName, modelName);
+            }
+            if(Arrays.asList(modules).contains(MODULE_REPOSITORY)){
+                genRepository(tableName, modelName);
+            }
+            if(Arrays.asList(modules).contains(MODULE_SERVICE)){
+                genService(tableName, modelName);
+            }
+            if(Arrays.asList(modules).contains(MODULE_CONTROLLER)){
+                genController(tableName, modelName);
+            }
+            if(Arrays.asList(modules).contains(MODULE_CONTROLLER_AND_PAGE)){
+                genControllerAndPage(tableName, modelName);
+            }
+        }
+    }
+
     /**
      * 通过数据表名称，和自定义的 Model 名称生成代码
      * 如输入表名称 "t_user_detail" 和自定义的 Model 名称 "User" 将生成 User、UserMapper、UserService ...
      * @param tableName 数据表名称
      * @param modelName 自定义的 Model 名称
      */
-    private static void genCodeByCustomModelName(String tableName, String modelName) {
-        if(StringUtils.isEmpty(GEN_MODULES)){
-            genModelAndMapper(tableName, modelName);
-            genRepository(tableName, modelName);
-            genService(tableName, modelName);
-            //genController(tableName, modelName);
-        }else{
-            if(GEN_MODULES.toLowerCase().contains("modelandmapper")){
-                genModelAndMapper(tableName, modelName);
-            }
-            if(GEN_MODULES.toLowerCase().contains("repository")){
-                genRepository(tableName, modelName);
-            }
-            if(GEN_MODULES.toLowerCase().contains("service")){
-                genService(tableName, modelName);
-            }
-            if(GEN_MODULES.toLowerCase().contains("controller")){
-                genController(tableName, modelName);
-            }
-        }
+    public static void genCodeByCustomModelName(String tableName, String modelName) {
+        genCodeByCustomModelName(tableName, modelName, null);
     }
 
 
@@ -173,7 +269,7 @@ public class CodeGenerator {
 
         SqlMapGeneratorConfiguration sqlMapGeneratorConfiguration = new SqlMapGeneratorConfiguration();
         sqlMapGeneratorConfiguration.setTargetProject(PROJECT_PATH + RESOURCES_PATH);
-        sqlMapGeneratorConfiguration.setTargetPackage("Mapping");
+        sqlMapGeneratorConfiguration.setTargetPackage("mapping");
         context.setSqlMapGeneratorConfiguration(sqlMapGeneratorConfiguration);
 
         JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = new JavaClientGeneratorConfiguration();
@@ -311,6 +407,17 @@ public class CodeGenerator {
 
     }
 
+    private static void genControllerAndPage(String tableName, String modelName){
+        PageGeneratorUtil.generatorPage(
+                JDBC_DIVER_CLASS_NAME,
+                JDBC_URL,
+                JDBC_USERNAME,
+                JDBC_PASSWORD,
+                tableName,
+                modelName,
+                CONTROLLER_PACKAGE);
+    }
+
     private static freemarker.template.Configuration getConfiguration() throws IOException {
         freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_23);
         cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_FILE_PATH));
@@ -319,7 +426,7 @@ public class CodeGenerator {
         return cfg;
     }
 
-    private static String tableNameConvertLowerCamel(String tableName) {
+    public static String tableNameConvertLowerCamel(String tableName) {
         return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, tableName.toLowerCase());
     }
 
@@ -329,7 +436,8 @@ public class CodeGenerator {
     }
 
     private static String tableNameConvertMappingPath(String tableName) {
-        tableName = tableName.toLowerCase();//兼容使用大写的表名
+        //兼容使用大写的表名
+        tableName = tableName.toLowerCase();
         return "/" + (tableName.contains("_") ? tableName.replaceAll("_", "/") : tableName);
     }
 

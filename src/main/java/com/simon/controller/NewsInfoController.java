@@ -21,7 +21,7 @@ public class NewsInfoController extends BaseController {
 
     @GetMapping("")
     public ResultMsg getAll(@RequestParam int pageNo){
-        return ResultMsg.success(200, "", newsInfoService.findAll(pageNo));
+        return ResultMsg.success(200, "", newsInfoService.findAll(pageNo, 10, null));
     }
 
     @PostMapping("")

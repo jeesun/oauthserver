@@ -54,7 +54,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //logoutSuccessUrl如果设为/login，那么退出后，
+        //会重新自动创建session，触发OnLineCountListener的sessionCreated方法，造成在线人数不准。
         http
+                .headers().frameOptions().sameOrigin()
+                .httpStrictTransportSecurity().disable()
+                .and()
                 .csrf().disable()
                 .formLogin().loginPage("/login").permitAll()
                 .and()
@@ -72,7 +77,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .and()
                 .authorizeRequests()
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
+                .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**", "/fonts/**", "/json/**", "/fileUpload/**")
+                .permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs")
+                .permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin().permitAll()

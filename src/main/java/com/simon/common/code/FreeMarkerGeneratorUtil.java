@@ -15,22 +15,25 @@ import java.io.Writer;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 代码生成器工具类
  * @author simon
- * @create 2018-08-07 21:10
+ * @date 2018-08-07
  **/
 @Slf4j
 public class FreeMarkerGeneratorUtil {
 
     /**
      * 仅生成dao层
-     *
      * @param driver
      * @param url
      * @param user
      * @param pwd
+     * @param tableName
+     * @param modelName
+     * @param basePackage
      */
     public static void generatorMvcCode(String driver, String url, String user, String pwd, String tableName,
                                         String modelName, String basePackage) {
@@ -69,7 +72,7 @@ public class FreeMarkerGeneratorUtil {
                 FileUtil.mkdir(entityDir);
                 log.info("创建目录：{} 成功！ ",entityDir);
             }
-            EntityDataModel entityModel = getEntityModel(con, tableName, basePackage, modelName);
+            EntityDataModel entityModel = getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
             //生成每个表实体
             generateCode(entityModel, templatePath, "entity.ftl", entityDir);
 
@@ -79,6 +82,15 @@ public class FreeMarkerGeneratorUtil {
 
     }
 
+    /**
+     *
+     * @param con
+     * @param tableName
+     * @param basePackage
+     * @param modelName
+     * @return
+     * @throws Exception
+     */
     private static EntityDataModel getEntityModel(Connection con, String tableName, String basePackage, String modelName)
             throws Exception {
         int dbType = getDataBaseType(con);
@@ -168,32 +180,57 @@ public class FreeMarkerGeneratorUtil {
                 throw new Exception("暂不支持其他数据库");
             }
 
-            String annotation = null;
+            String annotation = "";
             if ("id".equalsIgnoreCase(name)) {
                 if ("Long".equalsIgnoreCase(propertyType)) {
                     annotation = "@Id\n" +
+                            "    @Column(name = \"id\")\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
                             "    @GenericGenerator(name = \"sequenceId\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.snowflake.SequenceId\")";
                 }else if("String".equalsIgnoreCase(propertyType)){
                     annotation = "@Id\n" +
+                            "    @Column(name = \"id\")\n" +
                             "    @KeySql(genId = UUIdGenId.class)\n" +
                             "    @GeneratedValue(generator = \"uuid\")\n" +
                             "    @GenericGenerator(name = \"uuid\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.UuidGenerator\")";
                 }else if("Integer".equalsIgnoreCase(propertyType)){
                     annotation = "@Id\n" +
+                            "    @Column(name = \"id\")\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }else{
                     annotation = "@Id\n" +
+                            "    @Column(name = \"id\")\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }
             }else{
-                if("NO".equalsIgnoreCase(isNullable)){
-                    annotation = "@ApiModelProperty(value = \"" + comment + "\")\n" +
-                            "    @Column(name = \"" + name + "\", nullable = false)";
+                if("Date".equalsIgnoreCase(propertyType)){
+                    annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n";
+                }
+
+                annotation += "@ApiModelProperty(value = \"" + comment + "\")\n";
+
+                String charPattern = "char\\(\\d+\\)";
+                if(Pattern.matches(charPattern, columnType)){
+                    //MySQL char(4)
+                    if("NO".equalsIgnoreCase(isNullable)){
+                        annotation += "    @Column(name = \"" + name + "\", nullable = false, columnDefinition =\"" + columnType + "\")";
+                    }else{
+                        annotation += "    @Column(name = \"" + name + "\", columnDefinition =\"" + columnType + "\")";
+                    }
+                }else if("text".equalsIgnoreCase(columnType)){
+                    //MySQL text
+                    if("No".equalsIgnoreCase(isNullable)){
+                        annotation += "    @Column(name = \"" + name + "\", nullable = false, columnDefinition = \"TEXT\")";
+                    }else{
+                        annotation += "    @Column(name = \"" + name + "\", columnDefinition = \"TEXT\")";
+                    }
                 }else{
-                    annotation = "@ApiModelProperty(value = \"" + comment + "\")\n" +
-                            "    @Column(name = \"" + name + "\")";
+                    if("NO".equalsIgnoreCase(isNullable)){
+                        annotation += "    @Column(name = \"" + name + "\", nullable = false)";
+                    }else{
+                        annotation += "    @Column(name = \"" + name + "\")";
+                    }
                 }
             }
 
@@ -204,7 +241,8 @@ public class FreeMarkerGeneratorUtil {
             columns.add(col);
         }
 
-        dataModel.setEntityPackage(basePackage);
+        dataModel.setBasePackage(basePackage);
+        //dataModel.setEntityPackage(basePackage);
         if (StringUtils.isNotEmpty(modelName)) {
             dataModel.setEntityName(modelName);
         } else {
@@ -215,6 +253,15 @@ public class FreeMarkerGeneratorUtil {
         return dataModel;
     }
 
+    /**
+     *
+     * @param dataModel
+     * @param templatePath
+     * @param templateName
+     * @param outDir
+     * @throws IOException
+     * @throws TemplateException
+     */
     private static void generateCode(EntityDataModel dataModel, String templatePath, String templateName, String outDir)
             throws IOException, TemplateException {
 
@@ -225,7 +272,7 @@ public class FreeMarkerGeneratorUtil {
             FileUtil.del(file);
         }
         //获取模板对象
-        Configuration conf = new Configuration();
+        Configuration conf = new Configuration(freemarker.template.Configuration.VERSION_2_3_23);
         File temp = new File(templatePath);
         conf.setDirectoryForTemplateLoading(temp);
         Template template = conf.getTemplate(templateName);
@@ -236,6 +283,12 @@ public class FreeMarkerGeneratorUtil {
         log.info("代码生成成功，文件位置：{}",file);
     }
 
+    /**
+     *
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public static int getDataBaseType(Connection connection) throws SQLException {
         String driverName = connection.getMetaData().getDriverName().toLowerCase();
         log.info(driverName);

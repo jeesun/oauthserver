@@ -8,6 +8,7 @@ import com.simon.mapper.DictTypeMapper;
 import com.simon.model.DictType;
 import com.simon.repository.DictTypeRepository;
 import com.simon.service.DictTypeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,11 @@ public class DictTypeServiceImpl implements DictTypeService {
     private DictTypeRepository dictTypeRepository;
 
     @Override
+    public long count() {
+        return dictTypeRepository.count();
+    }
+
+    @Override
     public DictType save(DictType dictType){
         return dictTypeRepository.save(dictType);
     }
@@ -40,8 +46,16 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
-    public PageInfo<DictType> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<DictType> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<DictType> list = dictTypeMapper.selectAll();
         return new PageInfo<>(list);
     }

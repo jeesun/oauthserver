@@ -1,5 +1,8 @@
 package com.simon.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.simon.common.config.AppConfig;
 import com.simon.common.exception.CodeInvalidException;
 import com.simon.common.exception.PhoneRegisteredException;
 import com.simon.common.exception.UserNotValidException;
@@ -12,11 +15,17 @@ import com.simon.repository.VeriCodeRepository;
 import com.simon.service.OauthUserService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户
@@ -26,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 @Slf4j
 @Service
+@Transactional(rollbackFor = {Exception.class})
 public class OauthUserServiceImpl implements OauthUserService {
     @Autowired
     private OauthUserMapper oauthUserMapper;
@@ -117,11 +127,85 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
+    public long count() {
+        return oauthUserRepository.count();
+    }
+
+    @Override
     public OauthUser save(OauthUser oauthUser) {
         return oauthUserRepository.save(oauthUser);
     }
 
-    @Transactional
+    @Override
+    public List<OauthUser> save(List<OauthUser> modelList) {
+        return oauthUserRepository.save(modelList);
+    }
+
+    @Override
+    public PageInfo<OauthUser> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        List<OauthUser> list = oauthUserMapper.selectAll();
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public Page<OauthUser> findAll(Pageable pageable) {
+        return oauthUserRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<OauthUser> findAll() {
+        return oauthUserRepository.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        oauthUserRepository.delete(id);
+    }
+
+    @Override
+    public int deleteByIds(String ids) {
+        return oauthUserMapper.deleteByIds(ids);
+    }
+
+    @Override
+    public OauthUser findById(Long id) {
+        return oauthUserRepository.findById(id);
+    }
+
+    @Override
+    public int insertList(List<OauthUser> list) {
+        return oauthUserMapper.insertList(list);
+    }
+
+    @Override
+    public int insert(OauthUser model) {
+        return oauthUserMapper.insert(model);
+    }
+
+    @Override
+    public int insertSelective(OauthUser model) {
+        return oauthUserMapper.insertSelective(model);
+    }
+
+    @Override
+    public int updateByPrimaryKey(OauthUser model) {
+        return oauthUserMapper.updateByPrimaryKey(model);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(OauthUser model) {
+        return oauthUserMapper.updateByPrimaryKeySelective(model);
+    }
+
     @Override
     public int update(String username, String newUsername, String newPhone, String newEmail) {
         var oauthUser = oauthUserRepository.findByUsername(username);
@@ -139,5 +223,18 @@ public class OauthUserServiceImpl implements OauthUserService {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public PageInfo<OauthUser> getList(Map<String, Object> params, Integer limit, Integer offset, String orderBy) {
+        orderBy = orderBy.trim();
+        if (org.springframework.util.StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(offset/limit + 1, limit);
+        }else{
+            PageHelper.startPage(offset/limit + 1, limit, orderBy);
+        }
+
+        List<OauthUser> list = oauthUserMapper.findByMap(params);
+        return new PageInfo<>(list);
     }
 }

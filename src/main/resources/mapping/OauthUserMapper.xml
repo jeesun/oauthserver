@@ -15,8 +15,6 @@
     <result column="enabled" jdbcType="BIT" property="enabled" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="ssoid" jdbcType="VARCHAR" property="ssoid" />
-    <result column="album_id" jdbcType="BIGINT" property="albumId" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="age" jdbcType="INTEGER" property="age" />
     <result column="birth" jdbcType="DATE" property="birth" />
@@ -35,4 +33,19 @@
   <update id="updatePwdByPhone">
     update t_users set password=#{password} where phone=#{phone}
   </update>
+
+  <select id="findByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM t_users
+    <where>
+      <if test="map.username != null and map.username != ''">
+        username LIKE CONCAT('%', #{map.username}, '%')
+      </if>
+      <if test="map.phone != null and map.phone != ''">
+        AND phone LIKE CONCAT('%', #{map.phone}, '%')
+      </if>
+      <if test="map.email != null and map.email != ''">
+        AND email LIKE CONCAT('%', #{map.email}, '%')
+      </if>
+    </where>
+  </select>
 </mapper>

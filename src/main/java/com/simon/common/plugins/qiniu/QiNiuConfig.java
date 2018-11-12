@@ -15,35 +15,62 @@ import java.util.Properties;
 @Slf4j
 @Data
 public class QiNiuConfig {
-    private String accessKey;
-    private String secretKey;
-    private String bucket;
-    private Zone zone;
-    private String domainOfBucket;
-    private long expireInSeconds;
+    private String privateAccessKey;
+    private String privateSecretKey;
+    private String privateBucket;
+    private Zone privateZone;
+    private String privateDomainOfBucket;
+    private long privateExpireInSeconds;
+
+    private String publicAccessKey;
+    private String publicSecretKey;
+    private String publicBucket;
+    private Zone publicZone;
+    private String publicDomainOfBucket;
+    private long publicExpireInSeconds;
 
     private static QiNiuConfig instance = new QiNiuConfig();
 
     private QiNiuConfig(){
         Properties prop = new Properties();
         try {
-            prop.load(QiNiuConfig.class.getResourceAsStream("/qiniu.properties"));
-            accessKey = prop.getProperty("qiniu.access-key");
-            secretKey = prop.getProperty("qiniu.secret-key");
-            bucket = prop.getProperty("qiniu.bucket");
-            domainOfBucket = prop.getProperty("qiniu.domain-of-bucket");
-            expireInSeconds = Long.parseLong(prop.getProperty("qiniu.expire-in-seconds"));
-            String zoneName = prop.getProperty("qiniu.zone");
+            prop.load(QiNiuConfig.class.getResourceAsStream("/application.properties"));
+            privateAccessKey = prop.getProperty("qiniu.private.access-key");
+            privateSecretKey = prop.getProperty("qiniu.private.secret-key");
+            privateBucket = prop.getProperty("qiniu.private.bucket");
+            privateDomainOfBucket = prop.getProperty("qiniu.private.domain-of-bucket");
+            privateExpireInSeconds = Long.parseLong(prop.getProperty("qiniu.private.expire-in-seconds"));
+            String zoneName = prop.getProperty("qiniu.private.zone");
             if(zoneName.equals("zone0")){
-                zone = Zone.zone0();
+                privateZone = Zone.zone0();
             }else if(zoneName.equals("zone1")){
-                zone = Zone.zone1();
+                privateZone = Zone.zone1();
             }else if(zoneName.equals("zone2")){
-                zone = Zone.zone2();
+                privateZone = Zone.zone2();
             }else if(zoneName.equals("zoneNa0")){
-                zone = Zone.zoneNa0();
+                privateZone = Zone.zoneNa0();
             }else if(zoneName.equals("zoneAs0")){
-                zone = Zone.zoneAs0();
+                privateZone = Zone.zoneAs0();
+            }else{
+                throw new Exception("Zone对象配置错误！");
+            }
+
+            publicAccessKey = prop.getProperty("qiniu.public.access-key");
+            publicSecretKey = prop.getProperty("qiniu.public.secret-key");
+            publicBucket = prop.getProperty("qiniu.public.bucket");
+            publicDomainOfBucket = prop.getProperty("qiniu.public.domain-of-bucket");
+            publicExpireInSeconds = Long.parseLong(prop.getProperty("qiniu.public.expire-in-seconds"));
+            String publicZoneName = prop.getProperty("qiniu.public.zone");
+            if(publicZoneName.equals("zone0")){
+                publicZone = Zone.zone0();
+            }else if(publicZoneName.equals("zone1")){
+                publicZone = Zone.zone1();
+            }else if(publicZoneName.equals("zone2")){
+                publicZone = Zone.zone2();
+            }else if(publicZoneName.equals("zoneNa0")){
+                publicZone = Zone.zoneNa0();
+            }else if(publicZoneName.equals("zoneAs0")){
+                publicZone = Zone.zoneAs0();
             }else{
                 throw new Exception("Zone对象配置错误！");
             }
@@ -56,6 +83,6 @@ public class QiNiuConfig {
         return instance;
     }
     public static void main(String[] args) {
-        System.out.println(QiNiuConfig.getInstance().getAccessKey());
+        System.out.println(QiNiuConfig.getInstance().getPrivateAccessKey());
     }
 }

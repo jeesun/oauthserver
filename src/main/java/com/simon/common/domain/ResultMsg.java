@@ -3,6 +3,7 @@ package com.simon.common.domain;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 @ApiModel(description = "标准返回格式")
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ResultMsg<T> implements Serializable {
     private static final long serialVersionUID = -452209559974344268L;
 
@@ -40,20 +42,35 @@ public class ResultMsg<T> implements Serializable {
         this.data = data;
     }
 
+    public static ResultMsg success(){
+        return new ResultMsg(200, "");
+    }
+
     public static ResultMsg success(Integer code, String message){
         return new ResultMsg<>(code, message);
+    }
+
+    public static <T> ResultMsg<T> success(T data){
+        return new ResultMsg<>(200, "", data);
     }
 
     public static <T> ResultMsg<T> success(Integer code, String message, T data){
         return new ResultMsg<>(code, message, data);
     }
 
-
-    public static <T> ResultMsg fail(Integer code, String message, T data){
+    public static <T> ResultMsg<T> fail(Integer code, String message, T data){
         return new ResultMsg<>(code, message, data);
     }
 
-    public static <T> ResultMsg fail(Integer code, String message){
+    public static <T> ResultMsg<T> fail(Integer code, String message){
         return new ResultMsg<>(code, message, null);
+    }
+
+    public static ResultMsg resultCode(ResultCode resultCode){
+        return new ResultMsg(resultCode.getCode(), resultCode.getMsg());
+    }
+
+    public static <T> ResultMsg<T> resultCode(ResultCode resultCode, T data){
+        return new ResultMsg<>(resultCode.getCode(), resultCode.getMsg(), data);
     }
 }

@@ -35,6 +35,7 @@ public class TokenErrorController extends BasicErrorController {
     }
 
     @RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Override
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         Map<String, Object> body = getErrorAttributes(request,
                 isIncludeStackTrace(request, MediaType.ALL));

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:t="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 2 | Starter</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--<meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">-->
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+    <!-- Font Awesome -->
+    <link th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- Ionicons -->
+    <link th:href="@{/webjars/ionicons/2.0.1/css/ionicons.min.css}" rel="stylesheet">
+    <!-- Select2 -->
+    <link rel="stylesheet" th:href="@{/webjars/select2/4.0.5/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/select2-bootstrap-theme/0.1.0-beta.10/dist/select2-bootstrap.min.css}">
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.12.1/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/jquery-treegrid/0.3.0/css/jquery.treegrid.css}">
+    <!-- toastr 2.1.3 -->
+    <link rel="stylesheet" th:href="@{/webjars/toastr/2.1.3/toastr.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-sweetalert/1.0.1/dist/sweetalert.css}">
+    <link rel="stylesheet" th:href="@{/css/user-manage.css}">
+    <!--[if lt IE 9]>
+    <script src="/webjars/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="/webjars/respond/1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+<div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <small>数据表信息</small>
+    </section>
+    <!-- Main content -->
+    <section class="content container-fluid">
+        <!-- http://issues.wenzhixin.net.cn/bootstrap-table/options/custom-toolbar.html -->
+        <form id="form-search" name="form-search" class="form-inline" role="form">
+            <!--<div class="form-group">
+                <span>Offset: </span>
+                <input name="offset" class="form-control w70" type="number" value="0">
+            </div>
+            <div class="form-group">
+                <span>Limit: </span>
+                <input name="limit" class="form-control w70" type="number" value="5">
+            </div>-->
+            <div class="form-group">
+                <span>表名</span>
+                <input class="form-control" type="text" id="search_table_name" name="tableName" placeholder="表名">
+            </div>
+            <div class="form-group">
+                <span>表标注</span>
+                <input class="form-control" type="text" id="search_table_comment" name="tableComment" placeholder="表标注">
+            </div>
+            <button id="btn_search" type="button" class="btn btn-default" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i> 查询</button>
+            <button id="btn_reset" type="button" class="btn btn-default" onclick="searchReset()"><i class="fa fa-refresh" aria-hidden="true"></i> 重置</button>
+        </form>
+        <form  name="form-search" class="form-inline" role="form">
+            <!--<div class="form-group">
+                <span>Offset: </span>
+                <input name="offset" class="form-control w70" type="number" value="0">
+            </div>
+            <div class="form-group">
+                <span>Limit: </span>
+                <input name="limit" class="form-control w70" type="number" value="5">
+            </div>-->
+            <div class="form-group">
+                <span>表名</span>
+                <input class="form-control" type="text" name="tableName" placeholder="表名">
+            </div>
+            <div class="form-group">
+                <span>表标注</span>
+                <input class="form-control" type="text"  name="tableComment" placeholder="表标注">
+            </div>
+            <button type="button" class="btn btn-default" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i> 查询</button>
+            <button type="button" class="btn btn-default" onclick="searchReset()"><i class="fa fa-refresh" aria-hidden="true"></i> 重置</button>
+        </form>
+        <div th:replace="components/toolbar :: toolbar"></div>
+        <table id="table"></table>
+
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="generateCodeModal" role="dialog" aria-labelledby="generateCodeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="generateCodeModalLabel">
+                            代码生成
+                        </h4>
+                    </div>
+                    <form class="form-horizontal" method="post" role="form" id="form_generate_code" name="form_generate_code">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">表名</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="tableName" placeholder="表名" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">实体类名</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="entityName" placeholder="实体类名">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">要生成的代码</label>
+                                <div class="col-sm-9">
+                                    <label>
+                                        <input type="checkbox" name="genModules" value="modelAndMapper">modelAndMapper
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="genModules" value="repository">repository
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="genModules" value="service">service
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="genModules" value="controller">controller
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" name="genModules" value="controllerAndPage">controllerAndPage
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="generateCode()">
+                                提交更改
+                            </button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- ./wrapper -->
+<!-- jQuery 3 -->
+<script th:src="@{/webjars/jquery/3.3.1/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<!-- Select2 -->
+<script th:src="@{/webjars/select2/4.0.5/js/select2.full.min.js}"></script>
+<script th:src="@{/webjars/bootstrap-sweetalert/1.0.1/dist/sweetalert.min.js}"></script>
+<!--<script th:src="@{/webjars/sweetalert2/7.26.29/dist/sweetalert2.all.min.js}"></script>-->
+<!-- Bootstrap Table 1.12.1 -->
+<script th:src="@{/webjars/bootstrap-table/1.12.1/dist/bootstrap-table.min.js}"></script>
+<script th:src="@{/webjars/bootstrap-table/1.12.1/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/webjars/bootstrap-table/1.12.1/dist/extensions/treegrid/bootstrap-table-treegrid.min.js}"></script>
+<script th:src="@{/webjars/bootstrap-table/1.12.1/dist/extensions/resizable/bootstrap-table-resizable.js}"></script>
+
+<!-- jquery treegrid 0.3.0 -->
+<script th:src="@{/plug-in/colResizable.jquery.plugin/colResizable-1.5.source.js}"></script>
+<script th:src="@{/webjars/jquery-treegrid/0.3.0/js/jquery.treegrid.min.js}"></script>
+<script th:src="@{/webjars/jquery-treegrid/0.3.0/js/jquery.treegrid.bootstrap3.js}"></script>
+
+<!-- tableExport -->
+<script th:src="@{/webjars/bootstrap-table/1.12.1/dist/extensions/export/bootstrap-table-export.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/FileSaver/FileSaver.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/js-xlsx/xlsx.core.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/jsPDF/jspdf.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/pdfmake/pdfmake.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/pdfmake/vfs_fonts.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/libs/html2canvas/html2canvas.min.js}"></script>
+<script th:src="@{/plug-in/tableExport.jquery.plugin/tableExport.js}"></script>
+
+<script th:src="@{/webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
+
+<!-- toastr 2.1.3 -->
+<script th:src="@{/webjars/toastr/2.1.3/toastr.min.js}"></script>
+
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/table.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script>
+    var $table = $('#table');
+    $(function () {
+        initTable('table', {
+            url: 'tables/data',
+            columns:[{
+                field: 'state',
+                checkbox: true
+            },{
+                field: 'tableName',
+                title: '表名'
+            },{
+                field: 'tableComment',
+                title: '表标注'
+            },{
+                field: 'entityName',
+                title: '实体名',
+            },{
+                field: 'tableName',
+                title: '操作',
+                formatter: function (value, row, index, field) {
+                    return '<button type="button" class="btn btn-primary btn-xs" onclick="launchGenerateCode(\'' + row.tableName + '\', \'' + row.entityName + '\')">代码生成</button>';
+                }
+            }],
+            sidePagination: 'client',
+            queryParams: function (params) {
+                params['driver'] = 'com.mysql.jdbc.Driver';
+                params['url'] = 'jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false';
+                params['user'] = 'root';
+                params['pwd'] = '19941017';
+                params['tableName'] = $('#search_table_name').val();
+                params['tableComment'] = $('#search_table_comment').val();
+                return params;
+            }
+        });
+    });
+
+    function search() {
+        console.log('search');
+        $table.bootstrapTable('refresh', {silent: false});
+    }
+
+    function searchReset() {
+        console.log('searchReset');
+        document.getElementById("form-search").reset();
+        $('#form-search .select2').val(null).trigger('change');
+    }
+
+    function launchGenerateCode(tableName, entityName) {
+        $('#generateCodeModal input[name="tableName"]').val(tableName);
+        $('#generateCodeModal input[name="entityName"]').val(entityName);
+        $('#generateCodeModal').modal('show');//手动开启
+
+    }
+
+    function generateCode() {
+        let tableName = $('#generateCodeModal input[name="tableName"]').val();
+        let entityName = $('#generateCodeModal input[name="entityName"]').val();
+        let genModules = $("#generateCodeModal input[name='genModules']:checked");
+        let checkBoxValue = "";
+        genModules.each(function(){
+            checkBoxValue += $(this).val()+",";
+        });
+        checkBoxValue = checkBoxValue.substring(0,checkBoxValue.length-1);
+        console.log(checkBoxValue);
+        $.getJSON('tables/generate?tableName=' + tableName + '&entityName=' + entityName + '&genModules=' + checkBoxValue, function (data) {
+            console.log(data);
+            if(data.code == 200){
+                swal({
+                    title: '提示信息',
+                    text: '代码生成成功！',
+                    confirmButtonText: "确定"
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>

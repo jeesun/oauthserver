@@ -39,6 +39,7 @@ public class TypeTranslator {
     private static String BOOL = "BOOL";
     private static String REAL = "REAL";
     private static String BYTEA = "BYTEA";
+    private static String LONGTEXT = "LONGTEXT";
 
     private static String LONG = "LONG";
     private static String VARCHAR2 = "VARCHAR2";
@@ -106,7 +107,7 @@ public class TypeTranslator {
         if(TIME.equals(dataType)){
             return "Time";
         }
-        if(dataType.contains(CHAR) || TEXT.equals(dataType)){
+        if(dataType.contains(CHAR) || TEXT.equals(dataType) || LONGTEXT.equals(dataType)){
             return "String";
         }
         if(dataType.contains(BINARY) || BLOB.equals(dataType)){

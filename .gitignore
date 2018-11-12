@@ -1,6 +1,7 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
 logs/
+fileUpload/
 
 ### STS ###
 .apt_generated

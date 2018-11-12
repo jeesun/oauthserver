@@ -1,17 +1,19 @@
 package com.simon.model;
 
-import com.simon.common.utils.UUIdGenId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
 * @author SimonSun
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 **/
 @ApiModel(value = "字典组")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_dict_type_group")
 public class DictTypeGroup implements Serializable{
@@ -34,6 +37,7 @@ public class DictTypeGroup implements Serializable{
     @Column(name = "create_by")
     private Long createBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
     private Date createDate;
@@ -42,6 +46,7 @@ public class DictTypeGroup implements Serializable{
     @Column(name = "update_by")
     private Long updateBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private Date updateDate;
@@ -53,4 +58,8 @@ public class DictTypeGroup implements Serializable{
     @ApiModelProperty(value = "字典组名称")
     @Column(name = "type_group_name", nullable = false)
     private String typeGroupName;
+
+    @ApiModelProperty(value = "字典列表")
+    @Transient
+    private List<DictType> dictTypes;
 }

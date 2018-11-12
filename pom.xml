@@ -5,7 +5,7 @@
 
 	<groupId>com.simon</groupId>
 	<artifactId>oauthserver</artifactId>
-	<version>1.2.4.beta2</version>
+	<version>1.2.5.beta1</version>
 	<packaging>jar</packaging>
 
 	<name>oauthserver</name>
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.14.RELEASE</version>
+		<version>1.5.17.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -25,6 +25,8 @@
 		<docker.registry>127.0.0.1:5000</docker.registry>
 		<swagger2.version>2.9.2</swagger2.version>
 		<spring-cloud.version>Edgware.SR4</spring-cloud.version>
+		<thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
+		<thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -102,7 +104,17 @@
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
-			<version>2.1.2.RELEASE</version>
+			<version>3.0.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-java8time</artifactId>
+			<version>3.0.1.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-rest -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
 		<!--启用不严格检查html-->
 		<dependency>
@@ -215,7 +227,7 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.5</version>
+            <version>1.2.9</version>
         </dependency>
 		<!-- mybatis-plus插件 -->
 		<dependency>
@@ -276,12 +288,28 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>
+		<!-- logback输出日志到数据库 start -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+		<!-- logback输出日志到数据库 end -->
 
 		<!-- webjars start -->
 		<dependency>
-			<groupId>org.webjars.bower</groupId>
+			<groupId>org.webjars</groupId>
+			<artifactId>adminlte</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>jquery.scrollbar</artifactId>
+			<version>0.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
 			<artifactId>jquery</artifactId>
-			<version>3.2.1</version>
+			<version>3.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
@@ -291,6 +319,34 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
+			<version>3.3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>5.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>js-cookie</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<!-- bootstrap 3 material design start -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap-material-design</artifactId>
+			<version>0.5.10</version>
+		</dependency>
+		<!-- bootstrap 3 material design end -->
+		<!-- bootstrap 4 material design start -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>bootstrap-material-design</artifactId>
 			<version>4.1.1</version>
 		</dependency>
 		<dependency>
@@ -298,23 +354,175 @@
 			<artifactId>bootstrap-material-design</artifactId>
 			<version>4.1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.webjars.bower</groupId>
-			<artifactId>bootstrap-material-design</artifactId>
-			<version>4.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>mdbootstrap-bootstrap-material-design</artifactId>
-			<version>4.5.3</version>
-		</dependency>
-
+		<!-- bootstrap 4 material design end -->
 		<dependency>
 			<groupId>org.webjars.bower</groupId>
 			<artifactId>fontawesome</artifactId>
 			<version>4.7.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>ionicons</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>html5shiv</artifactId>
+			<version>3.7.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>respond</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+
+		<!--<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>bootstrap-table</artifactId>
+			<version>1.11.1</version>
+		</dependency>-->
+
+		<!--<dependency>
+			<groupId>org.webjars.bowergithub.wenzhixin</groupId>
+			<artifactId>bootstrap-table</artifactId>
+			<version>1.12.1</version>
+		</dependency>-->
+
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>bootstrap-table</artifactId>
+			<version>1.12.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>moment</artifactId>
+			<version>2.21.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>jquery-treegrid</artifactId>
+			<version>0.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>jquery-validation</artifactId>
+			<version>1.18.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>jquery-file-upload</artifactId>
+			<version>9.18.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>qrcodejs</artifactId>
+			<version>1c78ccd</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery-cookie</artifactId>
+			<version>1.4.1-1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>excanvas</artifactId>
+			<version>3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>echarts</artifactId>
+			<version>4.0.4</version>
+		</dependency>
+
+		<!-- toastr is a Javascript library for non-blocking notifications. -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>toastr</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+
+		<!-- A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES -->
+		<!-- ZERO DEPENDENCIES -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>sweetalert2</artifactId>
+			<version>7.26.29</version>
+		</dependency>
+
+		<!-- https://lipis.github.io/bootstrap-sweetalert/ -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>bootstrap-sweetalert</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>select2</artifactId>
+			<version>4.0.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>bootstrap-select</artifactId>
+			<version>1.13.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>codemirror</artifactId>
+			<version>5.40.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>select2-bootstrap-theme</artifactId>
+			<version>0.1.0-beta.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>select2-bootstrap-css</artifactId>
+			<version>1.4.6</version>
+		</dependency>
+
+		<!--<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>metisMenu</artifactId>
+			<version>2.7.8</version>
+		</dependency>-->
+
+		<!-- 自定义的jar start -->
+		<dependency>
+			<groupId>org.webjars.bower</groupId>
+			<artifactId>FroalaWysiwygEditor</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>easyui</artifactId>
+			<version>1.6.7</version>
+		</dependency>
+		<!-- 自定义的jar end -->
 		<!-- webjars end -->
+
+		<!-- 自定义jar start -->
+		<dependency>
+			<groupId>com.github.jeesun.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-db</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<!-- 自定义jar end -->
 
 		<!-- 七牛云 start -->
 		<dependency>
@@ -328,6 +536,12 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.23</version>
 		</dependency>
 
 	</dependencies>
@@ -352,9 +566,36 @@
 
 	<build>
 		<resources>
+			<!--<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>-->
+			<!-- 解决yml配置文件无法使用@..@占位符引用Maven项目的属性 -->
 			<resource>
 				<directory>${project.basedir}/src/main/resources</directory>
 				<filtering>true</filtering>
+				<!-- 在maven的filter解析font文件时，它破坏了font文件的二进制文件格式，导致浏览器解析出错。 -->
+				<!-- font文件不需要filter -->
+				<excludes>
+					<exclude>static/font/**</exclude>
+					<exclude>**/*.woff</exclude>
+					<exclude>**/*.woff2</exclude>
+					<exclude>**/*.ttf</exclude>
+					<exclude>**/*.eot</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+				<!-- 在maven的filter解析font文件时，它破坏了font文件的二进制文件格式，导致浏览器解析出错。 -->
+				<!-- font文件不需要filter -->
+				<includes>
+					<include>static/font/**</include>
+					<include>**/*.woff</include>
+					<include>**/*.woff2</include>
+					<include>**/*.ttf</include>
+					<include>**/*.eot</include>
+				</includes>
 			</resource>
 		</resources>
 		<testResources>
@@ -368,6 +609,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+					<!-- 配置devtools -->
                     <fork>true</fork>
                 </configuration>
 			</plugin>

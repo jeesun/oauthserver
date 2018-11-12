@@ -1,5 +1,6 @@
-package ${entityPackage};
+package ${basePackage}.model;
 
+import ${basePackage}.common.config.AppConfig;
 import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,8 +20,9 @@ import java.math.BigDecimal;
 * @author ${AUTHOR}
 * @date ${CREATE}
 **/
-@ApiModel(value = "${tableComment}")
+@ApiModel(description = "${tableComment}")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="${tableName}")
 public class ${entityName} implements Serializable{

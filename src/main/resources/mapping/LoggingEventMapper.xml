@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.LoggingEventMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.LoggingEvent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="event_id" jdbcType="BIGINT" property="eventId" />
+    <result column="timestmp" jdbcType="BIGINT" property="timestmp" />
+    <result column="logger_name" jdbcType="VARCHAR" property="loggerName" />
+    <result column="level_string" jdbcType="VARCHAR" property="levelString" />
+    <result column="thread_name" jdbcType="VARCHAR" property="threadName" />
+    <result column="reference_flag" jdbcType="SMALLINT" property="referenceFlag" />
+    <result column="arg0" jdbcType="VARCHAR" property="arg0" />
+    <result column="arg1" jdbcType="VARCHAR" property="arg1" />
+    <result column="arg2" jdbcType="VARCHAR" property="arg2" />
+    <result column="arg3" jdbcType="VARCHAR" property="arg3" />
+    <result column="caller_filename" jdbcType="VARCHAR" property="callerFilename" />
+    <result column="caller_class" jdbcType="VARCHAR" property="callerClass" />
+    <result column="caller_method" jdbcType="VARCHAR" property="callerMethod" />
+    <result column="caller_line" jdbcType="CHAR" property="callerLine" />
+    <result column="formatted_message" jdbcType="LONGVARCHAR" property="formattedMessage" />
+  </resultMap>
+
+  <select id="getList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM logging_event
+  </select>
+</mapper>

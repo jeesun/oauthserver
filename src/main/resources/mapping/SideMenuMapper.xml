@@ -10,11 +10,80 @@
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_by" jdbcType="BIGINT" property="updateBy" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
-    <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
-    <result column="menu_authority" jdbcType="VARCHAR" property="menuAuthority" />
-    <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
-    <result column="menu_group_id" jdbcType="BIGINT" property="menuGroupId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
   </resultMap>
+
+  <resultMap id="SuperMap" type="com.simon.model.SideMenu" extends="BaseResultMap">
+    <!-- 分步查询 -->
+    <association property="subSideMenus" javaType="java.util.List" column="id" select="com.simon.mapper.SideMenuMapper.selectByPid" />
+  </resultMap>
+
+  <select id="selectByPid" parameterType="Long" resultMap="BaseResultMap">
+    SELECT * FROM t_side_menu WHERE pid=#{pid} ORDER BY order_num ASC
+  </select>
+
+  <select id="selectByPids" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM t_side_menu WHERE pid IN (#{pids})
+  </select>
+  
+  <select id="selectByPidArray" parameterType="Long[]" resultMap="BaseResultMap">
+    SELECT *
+    FROM t_side_menu tsm
+    WHERE tsm.pid IN
+    <foreach collection="pids" item="pid" index="index" open="(" close=")" separator=",">
+      #{pid}
+    </foreach>
+  </select>
+
+  <select id="selectByPidList" parameterType="List" resultMap="BaseResultMap">
+    SELECT *
+    FROM t_side_menu tsm
+    WHERE tsm.pid IN
+    <foreach collection="pidList" item="pid" index="index" open="(" close=")" separator=",">
+      #{pid}
+    </foreach>
+  </select>
+
+  <select id="selectLevel1" resultMap="SuperMap">
+    SELECT
+        *
+    FROM
+        t_side_menu
+    WHERE
+        ( pid IS NULL OR pid = 0 )
+        <if test="map.authority != null and map.authority != ''">
+          AND authority=#{map.authority}
+        </if>
+        <if test="map.name != null and map.name != ''">
+          AND name LIKE CONCAT('%', #{map.name}, '%')
+        </if>
+    ORDER BY
+        order_num ASC
+  </select>
+
+  <select id="selectTreeGrid" resultMap="SuperMap">
+    SELECT
+    *
+    FROM
+    t_side_menu
+    WHERE
+    ( pid IS NULL OR pid = 0 )
+    ORDER BY
+    order_num ASC
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    SELECT
+        *
+    FROM
+        t_side_menu
+    ORDER BY
+        id ASC,
+        order_num ASC
+  </select>
 </mapper>

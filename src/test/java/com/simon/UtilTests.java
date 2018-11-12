@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class UtilTests {
     @Test
@@ -74,5 +75,11 @@ public class UtilTests {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testMatch(){
+        String pattern = "char\\(\\d+\\)";
+        System.out.println(Pattern.matches(pattern, "char(4)"));
     }
 }

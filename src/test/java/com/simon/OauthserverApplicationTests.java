@@ -1,5 +1,6 @@
 package com.simon;
 
+import com.alibaba.fastjson.JSON;
 import com.simon.mapper.LogLoginMapper;
 import com.simon.model.LogLogin;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class OauthserverApplicationTests {
 
 	@Autowired
 	private LogLoginMapper logLoginMapper;
+
 
 	@Test
 	public void contextLoads() {

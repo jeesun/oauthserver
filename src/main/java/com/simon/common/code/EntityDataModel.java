@@ -1,10 +1,5 @@
 package com.simon.common.code;
 
-/**
- * @author simon
- * @create 2018-08-07 21:14
- **/
-
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,13 +7,30 @@ import java.util.List;
 
 /**
  * 模板生成属性
- * Created by wangqichang on 2018/5/30.
+ * @author simon
+ * @date 2018-08-07
  */
 @Data
 public class EntityDataModel implements Serializable {
     private static final long serialVersionUID = 32546422336594242L;
+
     /**
-     * base package
+     * 实体类名首字母大写
+     */
+    private String modelNameLowerCamel;
+
+    /**
+     * 实体类名小写下划线
+     */
+    private String modelNameUpperCamel;
+
+    /**
+     * 基础包名，在pom.xml中配置
+     */
+    private String basePackage;
+
+    /**
+     * 实体类包名
      */
     private String entityPackage;
     /**

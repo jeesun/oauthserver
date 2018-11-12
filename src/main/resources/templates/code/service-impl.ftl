@@ -1,5 +1,5 @@
 
-package ${basePackage}.serviceImpl;
+package ${basePackage}.service.impl;
 
 import ${basePackage}.mapper.${modelNameUpperCamel}Mapper;
 import ${basePackage}.model.${modelNameUpperCamel};
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,6 +32,11 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     private ${modelNameUpperCamel}Repository ${modelNameLowerCamel}Repository;
 
     @Override
+    public long count() {
+        return ${modelNameLowerCamel}Repository.count();
+    }
+
+    @Override
     public ${modelNameUpperCamel} save(${modelNameUpperCamel} ${modelNameLowerCamel}){
         return ${modelNameLowerCamel}Repository.save(${modelNameLowerCamel});
     }
@@ -41,8 +47,16 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     }
 
     @Override
-    public PageInfo<${modelNameUpperCamel}> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<${modelNameUpperCamel}> findAll(Integer pageNo, Integer pageSize, String orderBy){
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.selectAll();
         return new PageInfo<>(list);
     }

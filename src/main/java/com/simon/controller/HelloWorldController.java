@@ -17,6 +17,9 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -88,4 +91,15 @@ public class HelloWorldController extends BaseController {
         return ResultMsg.success(200, "", authentication.getPrincipal());
     }
 
+    @ApiOperation(value = "测试返回格式化日期")
+    @GetMapping("/date")
+    public ResultMsg date(){
+        return ResultMsg.success(new Date());
+    }
+
+    @ApiOperation(value = "测试返回格式化日期2")
+    @GetMapping("/time")
+    public ResultMsg time(){
+        return ResultMsg.success(Time.valueOf(LocalTime.now()));
+    }
 }

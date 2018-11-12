@@ -4,16 +4,20 @@ package com.simon.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
+import com.simon.dto.DictTypeDto;
 import com.simon.mapper.DictTypeGroupMapper;
+import com.simon.model.DictType;
 import com.simon.model.DictTypeGroup;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.service.DictTypeGroupService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +34,11 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     private DictTypeGroupRepository dictTypeGroupRepository;
 
     @Override
+    public long count() {
+        return dictTypeGroupRepository.count();
+    }
+
+    @Override
     public DictTypeGroup save(DictTypeGroup dictTypeGroup){
         return dictTypeGroupRepository.save(dictTypeGroup);
     }
@@ -40,8 +49,17 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
-    public PageInfo<DictTypeGroup> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<DictTypeGroup> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+
         List<DictTypeGroup> list = dictTypeGroupMapper.selectAll();
         return new PageInfo<>(list);
     }
@@ -94,5 +112,43 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     @Override
     public int updateByPrimaryKeySelective(DictTypeGroup dictTypeGroup){
         return dictTypeGroupMapper.updateByPrimaryKeySelective(dictTypeGroup);
+    }
+
+    @Override
+    public List<DictTypeDto> getDtos(Integer limit, Integer offset) {
+        List<DictTypeDto> dtoList = new ArrayList<>();
+        /*List<DictTypeGroup> groups = dictTypeGroupRepository.findAll(new PageRequest((offset/limit - 1), limit, Sort.Direction.DESC, "id")).getContent();*/
+        PageHelper.startPage(offset / limit + 1, limit);
+        List<DictTypeGroup> list = dictTypeGroupMapper.getAll();
+        PageInfo<DictTypeGroup> pageInfo = new PageInfo<>(list);
+        List<DictTypeGroup> resultList = pageInfo.getList();
+        for(int i = 0; i < resultList.size(); i++){
+            DictTypeGroup dictTypeGroup = resultList.get(i);
+            DictTypeDto dto = new DictTypeDto();
+            dto.setId(String.valueOf(dictTypeGroup.getId()));
+            dto.setName(dictTypeGroup.getTypeGroupName());
+            dto.setCode(dictTypeGroup.getTypeGroupCode());
+            //一级菜单
+            dto.setType(1);
+            dtoList.add(dto);
+
+            List<DictType> dictTypes = dictTypeGroup.getDictTypes();
+            if (null != dictTypes && dictTypes.size() > 0){
+                for(int j = 0; j < dictTypes.size(); j++){
+                    DictType dictType = dictTypes.get(j);
+                    DictTypeDto subDto = new DictTypeDto();
+                    subDto.setId(String.valueOf(dictTypeGroup.getId()) + "-" + String.valueOf(dictType.getId()));
+                    subDto.setName(dictType.getTypeName());
+                    subDto.setCode(dictType.getTypeCode());
+                    subDto.setOrderNum(dictType.getOrderNum());
+                    subDto.setPid(String.valueOf(dictTypeGroup.getId()));
+                    //二级菜单
+                    subDto.setType(2);
+
+                    dtoList.add(subDto);
+                }
+            }
+        }
+        return dtoList;
     }
 }

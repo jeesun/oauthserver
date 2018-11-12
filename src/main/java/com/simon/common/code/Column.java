@@ -2,18 +2,21 @@ package com.simon.common.code;
 
 /**
  * @author simon
- * @create 2018-08-07 21:14
+ * @create 2018-08-07
  **/
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 /**
  * 代码生成列实体
- * Created by wangqichang on 2018/5/30.
+ * @author simon
+ * @date  2018-08-07
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class Column implements Serializable{
     private static final long serialVersionUID = 8051725962502921942L;
     /**

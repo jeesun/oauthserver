@@ -20,6 +20,12 @@ public class DictUtil {
     private static ApplicationContext applicationContext = SpringUtils.getApplicationContext();
     private static DictTypeService dictTypeService = applicationContext.getBean(DictTypeService.class);
 
+    /**
+     * 字典查询
+     * @param groupCode 字典组编码
+     * @param typeCode 字典编码（多个逗号拼接）
+     * @return 字典编码名称（多个逗号拼接）
+     */
     public static String getTypeName(String groupCode, String typeCode){
         var types = dictTypeService.getTypeByGroupCode(groupCode);
         if(null == types || types.size() <= 0){
@@ -52,8 +58,8 @@ public class DictUtil {
 
     /**
      * 获取字典组编码对应的字典列表
-     * @param groupCode
-     * @return
+     * @param groupCode 字典组编码
+     * @return 字典编码名称（多个逗号拼接）
      */
     public static List<DictType> getTypeNames(String groupCode){
         return dictTypeService.getTypeByGroupCode(groupCode);

@@ -1,25 +1,28 @@
 package com.simon.model;
 
-import com.simon.common.utils.UUIdGenId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
 * 侧边菜单
 * @author SimonSun
-* @date 2018-09-26
+* @date 2018-10-02
 **/
 @ApiModel(value = "侧边菜单")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_side_menu")
 public class SideMenu implements Serializable{
@@ -36,6 +39,7 @@ public class SideMenu implements Serializable{
     @Column(name = "create_by")
     private Long createBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
     private Date createDate;
@@ -44,31 +48,40 @@ public class SideMenu implements Serializable{
     @Column(name = "update_by")
     private Long updateBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private Date updateDate;
 
     @ApiModelProperty(value = "菜单名称")
-    @Column(name = "menu_name")
-    private String menuName;
+    @Column(name = "name")
+    private String name;
 
     @ApiModelProperty(value = "菜单地址")
-    @Column(name = "menu_url")
-    private String menuUrl;
+    @Column(name = "url")
+    private String url;
 
     @ApiModelProperty(value = "菜单权限")
-    @Column(name = "menu_authority")
-    private String menuAuthority;
+    @Column(name = "authority")
+    private String authority;
 
     @ApiModelProperty(value = "菜单图标")
-    @Column(name = "menu_icon")
-    private String menuIcon;
+    @Column(name = "icon")
+    private String icon;
 
     @ApiModelProperty(value = "菜单组id")
-    @Column(name = "menu_group_id")
-    private Long menuGroupId;
+    @Column(name = "pid")
+    private Long pid;
 
     @ApiModelProperty(value = "排序")
     @Column(name = "order_num")
     private Integer orderNum;
+
+    @ApiModelProperty(value = "菜单类型")
+    @Transient
+    private Integer menuType;
+
+    @ApiModelProperty(value = "子菜单列表")
+    @Transient
+    private List<SideMenu> subSideMenus;
 }

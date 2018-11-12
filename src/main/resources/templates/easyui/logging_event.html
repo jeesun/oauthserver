@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>日志管理</title>
+    <script th:src="@{/js/easyui/base_loading.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/superBlue.css}" id="themeCss"/>
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/material/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/demo/demo.css}">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/demo/sidemenu/sidemenu_style.css}">
+
+    <link rel="stylesheet" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload.css}">
+    <link rel="stylesheet" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload-ui.css}">
+
+    <link rel="stylesheet" th:href="@{/plug-in/buttons.jquery.plugin/buttons.css}">
+
+    <link rel="stylesheet" th:href="@{/css/easyui/common.css}">
+</head>
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        <a href="javascript:void(0)" class="button button-rounded button-small button-caution" onclick="emptyLogs()">清空日志</a>
+    </div>
+</div>
+<table id="tt" data-options="url:'/api/loggingEvents/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'eventId', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <!--<th data-options="field:'eventId',width:80,sortable:true,align:'center'">事件id</th>-->
+        <th data-options="field:'timestmp',width:160,sortable:true,align:'center',formatter:formatDate">时间</th>
+        <th data-options="field:'levelString',width:120,sortable:true,align:'center',formatter:formatLevel">日志等级</th>
+        <!--<th data-options="field:'loggerName',width:120,sortable:true,align:'center'">日志名称</th>-->
+        <th data-options="field:'formattedMessage',width:540,sortable:true,align:'center'">格式化信息</th>
+        <!--<th data-options="field:'callerFilename',width:200,sortable:true,align:'center'">调用文件名称</th>-->
+        <th data-options="field:'callerClass',width:360,sortable:true,align:'center'">调用类</th>
+        <th data-options="field:'callerMethod',width:120,sortable:true,align:'center'">调用方法</th>
+        <th data-options="field:'callerLine',width:80,sortable:true,align:'center'">调用行号</th>
+    </tr>
+    </thead>
+</table>
+
+<script type="text/javascript" th:src="@{/webjars/easyui/1.6.7/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/easyui/1.6.7/jquery.easyui.min.js}"></script>
+<script type="text/javascript" charset="utf-8" th:src="@{/webjars/easyui/1.6.7/themes/super/super.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/easyui/1.6.7/locale/easyui-lang-zh_CN.js}"></script>
+<script th:src="@{/js/easyui/common.js}"></script>
+<script>
+    function formatLevel(val, row){
+        if("WARN" == val.toUpperCase()){
+            return '<a href="javascript:void(0)" class="button  button-pill button-highlight button-tiny">' + val + '</a>';
+        }else if("ERROR" == val.toUpperCase()){
+            return '<a href="javascript:void(0)" class="button  button-pill button-caution button-tiny">' + val + '</a>';
+        }else{
+            return '<a href="javascript:void(0)" class="button  button-pill button-tiny">' + val + '</a>';
+        }
+    }
+
+    function emptyLogs(){
+        /*$.messager.confirm('提示信息', '你确定清空日志吗？', function(r){
+            if (r){
+                emptyRequest("/api/loggingEvents");
+            }
+        });*/
+        $.messager.confirm({
+            title: '提示信息',
+            msg: '你确定清空日志吗？',
+            fn: function (r) {
+                if (r){
+                    emptyRequest("/api/loggingEvents");
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

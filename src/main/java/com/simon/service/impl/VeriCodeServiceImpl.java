@@ -8,6 +8,7 @@ import com.simon.model.VeriCode;
 import com.simon.repository.VeriCodeRepository;
 import com.simon.service.VeriCodeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,11 @@ public class VeriCodeServiceImpl implements VeriCodeService {
     private VeriCodeRepository veriCodeRepository;
 
     @Override
+    public long count() {
+        return veriCodeRepository.count();
+    }
+
+    @Override
     public VeriCode save(VeriCode veriCode){
         return veriCodeRepository.save(veriCode);
     }
@@ -42,8 +48,16 @@ public class VeriCodeServiceImpl implements VeriCodeService {
     }
 
     @Override
-    public PageInfo<VeriCode> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<VeriCode> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<VeriCode> list = veriCodeMapper.selectAll();
         return new PageInfo<>(list);
     }

@@ -13,4 +13,13 @@
     <result column="type_group_code" jdbcType="VARCHAR" property="typeGroupCode" />
     <result column="type_group_name" jdbcType="VARCHAR" property="typeGroupName" />
   </resultMap>
+
+  <resultMap id="SuperMap" type="com.simon.model.DictTypeGroup" extends="BaseResultMap">
+    <!-- 分步查询 -->
+    <association property="dictTypes" javaType="java.util.List" column="type_group_code" select="com.simon.mapper.DictTypeMapper.getByGroupCode" />
+  </resultMap>
+  
+  <select id="getAll" resultMap="SuperMap">
+    SELECT * FROM t_dict_type_group
+  </select>
 </mapper>

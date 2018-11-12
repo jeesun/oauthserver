@@ -8,6 +8,7 @@ import com.simon.mapper.ResetPwdInfoMapper;
 import com.simon.model.ResetPwdInfo;
 import com.simon.repository.ResetPwdInfoRepository;
 import com.simon.service.ResetPwdInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +22,18 @@ import java.util.List;
 * @create 2018-08-06 20:56:26
 **/
 @Service
-@Transactional
+@Transactional(rollbackFor = {Exception.class})
 public class ResetPwdInfoServiceImpl implements ResetPwdInfoService {
     @Autowired
     private ResetPwdInfoMapper resetPwdInfoMapper;
 
     @Autowired
     private ResetPwdInfoRepository resetPwdInfoRepository;
+
+    @Override
+    public long count() {
+        return resetPwdInfoRepository.count();
+    }
 
     @Override
     public ResetPwdInfo save(ResetPwdInfo resetPwdInfo){
@@ -40,8 +46,16 @@ public class ResetPwdInfoServiceImpl implements ResetPwdInfoService {
     }
 
     @Override
-    public PageInfo<ResetPwdInfo> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<ResetPwdInfo> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<ResetPwdInfo> list = resetPwdInfoMapper.selectAll();
         return new PageInfo<>(list);
     }

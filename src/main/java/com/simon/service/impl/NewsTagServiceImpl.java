@@ -8,6 +8,7 @@ import com.simon.mapper.NewsTagMapper;
 import com.simon.model.NewsTag;
 import com.simon.repository.NewsTagRepository;
 import com.simon.service.NewsTagService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +22,18 @@ import java.util.List;
 * @create 2018-08-06 20:56:26
 **/
 @Service
-@Transactional
+@Transactional(rollbackFor = {Exception.class})
 public class NewsTagServiceImpl implements NewsTagService {
     @Autowired
     private NewsTagMapper newsTagMapper;
 
     @Autowired
     private NewsTagRepository newsTagRepository;
+
+    @Override
+    public long count() {
+        return newsTagRepository.count();
+    }
 
     @Override
     public NewsTag save(NewsTag newsTag){
@@ -40,8 +46,16 @@ public class NewsTagServiceImpl implements NewsTagService {
     }
 
     @Override
-    public PageInfo<NewsTag> findAll(int pageNo){
-        PageHelper.startPage(pageNo, AppConfig.DEFAULT_PAGE_SIZE);
+    public PageInfo<NewsTag> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
         List<NewsTag> list = newsTagMapper.selectAll();
         return new PageInfo<>(list);
     }

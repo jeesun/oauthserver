@@ -1,9 +1,12 @@
 package com.simon.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -17,6 +20,7 @@ import java.util.Date;
 **/
 @ApiModel(value = "用户")
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_users")
 public class OauthUser implements Serializable{
@@ -32,6 +36,7 @@ public class OauthUser implements Serializable{
     @Column(name = "create_by")
     private Long createBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
     private Date createDate;
@@ -40,11 +45,12 @@ public class OauthUser implements Serializable{
     @Column(name = "update_by")
     private Long updateBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private Date updateDate;
 
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "用户名(昵称)")
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -64,14 +70,6 @@ public class OauthUser implements Serializable{
     @Column(name = "email")
     private String email;
 
-    @ApiModelProperty(value = "oppo账号ssoid")
-    @Column(name = "ssoid")
-    private String ssoid;
-
-    @ApiModelProperty(value = "播放列表id")
-    @Column(name = "album_id")
-    private Long albumId;
-
     @ApiModelProperty(value = "地址")
     @Column(name = "address")
     private String address;
@@ -80,6 +78,7 @@ public class OauthUser implements Serializable{
     @Column(name = "age")
     private Integer age;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "生日")
     @Column(name = "birth")
     private Date birth;
@@ -92,7 +91,7 @@ public class OauthUser implements Serializable{
     @Column(name = "person_brief")
     private String personBrief;
 
-    @ApiModelProperty(value = "性别")
+    @ApiModelProperty(value = "性别[0:女,1:男]")
     @Column(name = "sex")
     private Boolean sex;
 
@@ -108,6 +107,7 @@ public class OauthUser implements Serializable{
     @Column(name = "login_status")
     private String loginStatus;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "登录时间")
     @Column(name = "login_date")
     private Date loginDate;

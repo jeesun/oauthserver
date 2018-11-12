@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SideMenu Style - jQuery EasyUI Demo</title>
+    <script th:src="@{/js/easyui/base_loading.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/superBlue.css}" id="themeCss"/>
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.6/themes/material/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.6/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.6/themes/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.6/demo/demo.css}">-->
+    <!--<link rel="stylesheet" th:href="@{/webjars/easyui/1.6.7/themes/material/easyui.css}">
+    <link rel="stylesheet" th:href="@{/webjars/easyui/1.6.7/themes/icon.css}">
+    <link rel="stylesheet" th:href="@{/webjars/easyui/1.6.7/themes/color.css}">-->
+    <link rel="stylesheet" th:href="@{/plug-in/buttons.jquery.plugin/buttons.css}">
+</head>
+<body>
+<div id="tb">
+    表名: <input class="easyui-textbox" style="width: 160px" id="tableName" name="tableName" data-options="required:false">
+    表标注: <input class="easyui-textbox" style="width: 160px" id="tableComment" name="tableComment" data-options="required:false">
+    <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()">查询</a>
+    <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()">重置</a>
+</div>
+<table id="tt" class="easyui-datagrid" data-options="url: 'tables/data', method:'get',fit:true,rownumbers:true,pagination:true,pageSize:10,toolbar:'#tb',idField:'tableName', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th field="tableName" width="160">表名</th>
+        <th field="tableComment" width="160">表标注</th>
+        <th field="entityName" width="160">实体名</th>
+        <th data-options="field:'operation',width:160,formatter:formatGen">操作</th>
+    </tr>
+    </thead>
+</table>
+
+<div id="generateCodeModal" class="easyui-window" title="代码生成" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:320px;padding:10px;">
+    <form id="ff" method="post">
+        <div style="margin-bottom:20px">
+            <input id="gen_code_table_name" class="easyui-textbox" name="tableName" style="width:100%" data-options="label:'表名:',required:true,readonly:true">
+        </div>
+        <div style="margin-bottom:20px">
+            <input id="gen_code_entity_name" class="easyui-textbox" name="entityName" style="width:100%" data-options="label:'实体类名:',required:true">
+        </div>
+        <div style="margin-bottom:20px">
+            <label>要生成的代码:</label>
+            <label>
+                <input type="checkbox" name="genModules" value="modelAndMapper">modelAndMapper
+            </label>
+            <label>
+                <input type="checkbox" name="genModules" value="repository">repository
+            </label>
+            <label>
+                <input type="checkbox" name="genModules" value="service">service
+            </label>
+            <label>
+                <input type="checkbox" name="genModules" value="controller">controller
+            </label>
+            <label>
+                <input type="checkbox" name="genModules" value="controllerAndPage">controllerAndPage
+            </label>
+        </div>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="generateCode()">生成</a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()">取消</a>
+        </div>
+    </form>
+</div>
+<script th:src="@{/webjars/easyui/1.6.7/jquery.min.js}"></script>
+<script th:src="@{/webjars/easyui/1.6.7/jquery.easyui.min.js}"></script>
+<script th:src="@{/webjars/easyui/1.6.7/themes/super/super.js}"></script>
+<script th:src="@{/webjars/easyui/1.6.7/locale/easyui-lang-zh_CN.js}"></script>
+<!--<script th:src="@{/js/easyui/common.js}"></script>-->
+<script>
+
+    function doSearch() {
+        $('#tt').datagrid('load', {
+            tableName: $('#tableName').val(),
+            tableComment: $('#tableComment').val()
+        });
+    }
+
+    function doSearchReset(){
+        $('#tableName').textbox('setValue', '');
+        $('#tableComment').textbox('setValue', '');
+        $('#tt').datagrid('load', {
+            tableName: $('#tableName').val(),
+            tableComment: $('#tableComment').val()
+        });
+    }
+
+    function formatGen(val,row){
+        return '<a href="javascript:void(0)" class="button button-rounded button-small button-primary button-pill" onclick="openGenerateCodeModal(\''
+                + row.tableName + '\',\''
+                + row.entityName
+            + '\')">代码生成</a>';
+    }
+
+    function openGenerateCodeModal(tableName, entityName) {
+        console.log(tableName + ',' + entityName);
+        $('#gen_code_table_name').textbox('setValue', tableName);
+        $('#gen_code_entity_name').textbox('setValue', entityName);
+        $('#generateCodeModal').window('open');
+    }
+
+    function submitForm(){
+        $('#ff').form('submit');
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+        $('#generateCodeModal').window('close');
+    }
+
+    function generateCode() {
+        let tableName = $('#generateCodeModal input[name="tableName"]').val();
+        let entityName = $('#generateCodeModal input[name="entityName"]').val();
+        let genModules = $("#generateCodeModal input[name='genModules']:checked");
+        let checkBoxValue = "";
+        genModules.each(function(){
+            checkBoxValue += $(this).val()+",";
+        });
+        checkBoxValue = checkBoxValue.substring(0,checkBoxValue.length-1);
+        console.log(checkBoxValue);
+        $.ajax({
+            type: 'GET',
+            url: 'tables/generate?tableName=' + tableName + '&entityName=' + entityName + '&genModules=' + checkBoxValue,
+            dataType: 'json',
+            beforeSend: function () {
+                $.messager.progress({
+                   title: '提示信息',
+                    msg: '代码生成中，请稍候......'
+                });
+            },
+            complete: function () {
+                $.messager.progress('close');
+            },
+            success: function (data) {
+                console.log(data);
+                if(data.code == 200){
+                    $.messager.show({
+                        title:'提示信息',
+                        msg:'代码生成成功！',
+                        timeout:5000,
+                        showType:'slide'
+                    });
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
