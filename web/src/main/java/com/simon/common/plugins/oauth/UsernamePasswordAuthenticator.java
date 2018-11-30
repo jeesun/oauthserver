@@ -1,22 +1,32 @@
-package com.simon.common.config;
+package com.simon.common.plugins.oauth;
 
+import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.plugins.oauth.IntegrationAuthentication;
-import com.simon.common.plugins.oauth.IntegrationAuthenticationContext;
-import com.simon.common.plugins.oauth.IntegrationAuthenticator;
+import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
+
+/**
+ * @author simon
+ * @date 2018-11-30
+ **/
 
 @Slf4j
 @Component
-public class CustomUserDetailsService implements UserDetailsService {
-
-    /*@Autowired
+@Primary
+public class UsernamePasswordAuthenticator extends AbstractPreparableIntegrationAuthenticator {
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -29,7 +39,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final RowMapper<UserEntity> myUserDetailsRowMapper;
     private final RowMapper<Authority> authorityRowMapper;
 
-    public CustomUserDetailsService(){
+    private final static String PASSWORD_AUTH_TYPE = "password";
+
+    public UsernamePasswordAuthenticator(){
         sqlLoadUser = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where username=? OR phone=? OR email=?";
         sqlLoadAuthorities = "select user_id,authority from t_authorities where user_id = ?";
 
@@ -44,54 +56,28 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        log.info("loadUserByUsername");
+    public UserEntity authenticate(IntegrationAuthentication integrationAuthentication) {
+        log.info("password authenticate");
         try{
-            UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, s, s, s);
+            UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, integrationAuthentication.getUsername(), integrationAuthentication.getUsername(), integrationAuthentication.getUsername());
             log.info("查询得到用户：{}", userFromQuery);
             List<Authority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getId());
             log.info("得到其权限：{}", authorities);
 
             return new UserEntity(userFromQuery.getId(), userFromQuery.getUsername(), userFromQuery.getPassword(), userFromQuery.isEnabled(), userFromQuery.getPhone(), userFromQuery.getEmail(), userFromQuery.getAddress(), userFromQuery.getBirth(), userFromQuery.getAge(), userFromQuery.getHeadPhoto(), userFromQuery.getPersonBrief(), userFromQuery.getSex(), authorities);
         }catch (EmptyResultDataAccessException e){
-            log.info("查询结果集为空：{}", s);
+            log.info("查询结果集为空：{}", integrationAuthentication.getUsername());
             throw new InvalidGrantException(messageSource.getMessage("usernameNotFound", null, locale));
         }
-    }*/
-
-    private List<IntegrationAuthenticator> authenticators;
-
-    @Autowired(required = false)
-    public void setIntegrationAuthenticators(List<IntegrationAuthenticator> authenticators) {
-        this.authenticators = authenticators;
     }
 
     @Override
-    public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
-        IntegrationAuthentication integrationAuthentication = IntegrationAuthenticationContext.get();
-        //判断是否是集成登录
-        if (integrationAuthentication == null) {
-            integrationAuthentication = new IntegrationAuthentication();
-        }
-        integrationAuthentication.setUsername(username);
-        UserEntity userEntity = this.authenticate(integrationAuthentication);
-
-        if(userEntity == null){
-            throw new UsernameNotFoundException("用户名或密码错误");
-        }
-
-        return userEntity;
-
+    public void prepare(IntegrationAuthentication integrationAuthentication) {
+        log.info("password prepare");
     }
 
-    private UserEntity authenticate(IntegrationAuthentication integrationAuthentication) {
-        if (this.authenticators != null) {
-            for (IntegrationAuthenticator authenticator : authenticators) {
-                if (authenticator.support(integrationAuthentication)) {
-                    return authenticator.authenticate(integrationAuthentication);
-                }
-            }
-        }
-        return null;
+    @Override
+    public boolean support(IntegrationAuthentication integrationAuthentication) {
+        return StringUtils.isEmpty(integrationAuthentication.getAuthType());
     }
 }

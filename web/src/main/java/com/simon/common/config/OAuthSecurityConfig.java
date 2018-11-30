@@ -1,5 +1,6 @@
 package com.simon.common.config;
 
+import com.simon.common.plugins.oauth.IntegrationAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,9 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private RedisConnectionFactory connectionFactory;
 
+    @Autowired
+    private IntegrationAuthenticationFilter integrationAuthenticationFilter;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
@@ -99,7 +103,8 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
                 //client password加密即oauth_client_details表的client_secret字段
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder())
+        .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);
     }
 
     @Bean
