@@ -14,12 +14,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Locale;
 
 @Slf4j
-//@Component
+@Component
 public class CustomLoginAuthProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userDetailsService;
