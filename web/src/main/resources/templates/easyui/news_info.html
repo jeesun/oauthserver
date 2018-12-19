@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('新闻管理', 'easyui,upload,froala_editor,ueditor')">
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_type"  style="width:160px" allow-empty="true"></t:dict>
+        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
+        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+    </div>
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        <div class="button-group">
+            <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
+            <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
+            <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
+        </div>
+    </div>
+</div>
+<table id="tt" data-options="url:'/api/newsInfos/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="field:'id',width:200,sortable:true,align:'center'">新闻id</th>
+        <th data-options="field:'title',width:200,sortable:true,align:'center'">标题</th>
+        <th data-options="field:'imageUrl',width:200,sortable:true,align:'center', formatter:formatPic">缩略图</th>
+        <th data-options="field:'publishDate',width:200,sortable:true,align:'center'">发布时间</th>
+        <th data-options="field:'content',width:200,sortable:true,align:'center',formatter:formatContent">新闻内容</th>
+    </tr>
+    </thead>
+</table>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
+<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false" style="width:60%;height:480px;padding:10px;">
+    <form id="form_add">
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_title" name="title" data-options="label:'标题:', required:true">
+        </div>
+        <div>
+            <label style="width: 80px;float:left;">缩略图:</label>
+            <div th:replace="components/toolbar :: file-upload (idVal='add_imageUrl',nameVal='imageUrl')" style="width:94%;float:left;"></div>
+            <div style="clear:both"></div>
+        </div>
+        <div>
+            <!--<label for="add_content">新闻内容</label><textarea id="add_content" name="content"></textarea>-->
+            <label style="width: 80px;float:left;">新闻内容:</label>
+            <div id="add_editor" type="text/plain" class="easyui-fluid" style="height:500px;float:left;"></div>
+            <div style="clear:both"></div>
+        </div>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+
+<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:10px;">
+    <form id="form_edit">
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_id" name="id" data-options="label:'id:', readonly:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_title" name="title" data-options="label:'标题:', required:true">
+        </div>
+        <div th:replace="components/toolbar :: file-upload (idVal='edit_imageUrl',nameVal='imageUrl')"></div>
+        <div>
+            <!--<label for="edit_content">新闻内容</label><textarea id="edit_content" name="content"></textarea>-->
+            <div id="edit_editor" type="text/plain" style="width:100%;height:500px;"></div>
+        </div>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+<div id="window_content" class="easyui-window" title="新闻内容" data-options="modal:true,closed:true,collapsible:false" style="width:720px;height:480px;padding:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui,upload,froala_editor,ueditor')"></div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $(function () {
+        //初始化froala editor
+        //initEditor();
+
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        var addEditor = UE.getEditor('add_editor');
+        var editEditor = UE.getEditor('edit_editor');
+        //$('#add_editor').css('width', '94%');
+    });
+
+    function doSearch() {
+        $('#tt').treegrid('load', {
+            newsType: $('#search_newsType').val()
+        });
+    }
+
+    function doSearchReset() {
+        $('#search_newsType').combobox('select', '');
+        doSearch();
+    }
+
+    function doAdd() {
+        //初始化图片上传按钮
+        initFileUpload('#add_imageUrl', 'imageUrl');
+        ueditorAdapter('#addModal');
+        $('#addModal').window('open');
+    }
+
+    function doEdit() {
+        //获取选中的第一行数据
+        //var row = $('#tt').datagrid('getSelected');
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(rows.length == 1){
+            let row = rows[0];
+            console.log(row);
+            $('#edit_id').textbox('setValue', row.id);
+            $('#edit_title').textbox('setValue', row.title);
+            //初始化图片上传按钮
+            initFileUpload('#edit_imageUrl', 'imageUrl');
+            //显示预览图片
+            imgPreview('#edit_imageUrl', 'imageUrl', row.imageUrl);
+            //$('#edit_content').froalaEditor('html.set', row.content);
+            ueditorAdapter('#editModal');
+            UE.getEditor('edit_editor').setContent(row.content);
+            $('#editModal').window('open');
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function doDelete() {
+        deleteRequest('/api/newsInfos/ids/');
+    }
+
+    function add() {
+        doRequest({
+            formId: '#form_add',
+            url: '/api/newsInfos',
+            type: 'POST',
+            extraData: {
+                content: UE.getEditor('add_editor').getContent()
+            }
+        });
+    }
+
+    function edit() {
+        doRequest({
+            formId: '#form_edit',
+            url: '/api/newsInfos',
+            type: 'PATCH',
+            extraData: {
+                content: UE.getEditor('edit_editor').getContent()
+            }
+        });
+    }
+
+    function clearForm() {
+        $('#form_add').form('clear');
+        $('#addModal').window('close');
+
+        $('#form_edit').form('clear');
+        $('#editModal').window('close');
+    }
+
+    function formatIcon(val, row){
+        return '<i class="' + val + '" aria-hidden="true"></i>';
+    }
+
+    function formatPic(val, row) {
+        if(!val){
+            return '';
+        }
+        return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + val + '" alt="头像" width="30px">';
+    }
+
+    function formatContent(val, row) {
+        console.log(row.id.toString());
+        return "<a href=\"javascript:void(0)\" class=\"button button-rounded button-small button-primary\" onclick='showContent(\""  + row.id.toString() + "\")'>查看</a>";
+    }
+
+    function showContent(val) {
+        let rows = $('#tt').datagrid('getSelections');
+        $('#window_content').html(rows[0].content);
+        $('#window_content').window('open');
+    }
+/*]]>*/
+</script>
+</body>
+</html>

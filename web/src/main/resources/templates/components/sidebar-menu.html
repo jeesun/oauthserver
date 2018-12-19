@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Sidebar Menu -->
+<ul th:fragment="sidebar-menu" class="sidebar-menu" data-widget="tree">
+    <!--<li class="header">HEADER</li>-->
+    <!-- Optionally, you can add icons to the links -->
+    <!--<li id="tab_first"><a><i class="fa fa-link"></i> <span>主页</span></a></li>
+    <li id="news_info"><a><i class="fa fa-link"></i> <span>新闻管理</span></a></li>-->
+    <!--<li class="treeview" th:each="menuGroup : ${menuGroups}">
+        <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/third">Link in level 2</a></li>
+            <li><a href="/forth">Link in level 2</a></li>
+        </ul>
+    </li>-->
+    <li class="treeview" th:each="sideMenu : ${sideMenus}">
+        <a href="#"><i th:class="${sideMenu.icon}"></i> <span th:text="${sideMenu.name}"></span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+        </a>
+        <ul class="treeview-menu">
+            <li th:each="subSideMenu : ${sideMenu.subSideMenus}">
+                <!--<span th:if="${(sideMenu.menuAuthority != null) and (sideMenu.menuAuthority != '')}">
+                    <span sec:authorize-expr="hasAuthority('${sideMenu.menuAuthority}')">
+                        <a href="#">
+                            <i th:class="${sideMenu.menuIcon}"></i>
+                            <span th:text="${sideMenu.menuName}"></span>
+                            <span th:text="${menuGroup.menuGroupAuthority}"></span>
+                        </a>
+                    </span>
+                </span>
+                <span th:if="${(sideMenu.menuAuthority == null) or (sideMenu.menuAuthority == '')}">
+                    <a href="#">
+                        <i th:class="${sideMenu.menuIcon}"></i>
+                        <span th:text="${sideMenu.menuName}"></span>
+                        <span th:text="${menuGroup.menuGroupAuthority}"></span>
+                    </a>
+                </span>-->
+                <a href="javascript:void(0);" th:onclick="|changeTab(${subSideMenu.id}, '${subSideMenu.name}', '${subSideMenu.url}')|">
+                    <i th:class="${subSideMenu.icon}"></i>
+                    <span th:text="${subSideMenu.name}"></span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <!--<li id="user_manage" sec:authorize-expr="hasRole('ADMIN')"><a><i class="fa fa-user"></i> <span>用户管理</span></a></li>-->
+</ul>
+<!-- /.sidebar-menu -->
+</body>
+</html>

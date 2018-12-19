@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.AccountBindMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.AccountBind">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="account_type" jdbcType="INTEGER" property="accountType" />
+    <result column="account_no" jdbcType="VARCHAR" property="accountNo" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="is_bind" jdbcType="BIT" property="isBind" />
+    <result column="overdue_time" jdbcType="TIMESTAMP" property="overdueTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+</mapper>

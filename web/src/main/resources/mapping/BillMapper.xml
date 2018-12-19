@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.BillMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.Bill">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="bill_type" jdbcType="VARCHAR" property="billType" />
+    <result column="bill_status" jdbcType="VARCHAR" property="billStatus" />
+    <result column="bill_desc" jdbcType="VARCHAR" property="billDesc" />
+    <result column="receiving_address" jdbcType="VARCHAR" property="receivingAddress" />
+    <result column="logistics_info" jdbcType="VARCHAR" property="logisticsInfo" />
+    <result column="logistics_no" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="logistics_status" jdbcType="VARCHAR" property="logisticsStatus" />
+    <result column="bill_date" jdbcType="TIMESTAMP" property="billDate" />
+    <result column="total_amount" jdbcType="DOUBLE" property="totalAmount" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="out_trade_no" jdbcType="VARCHAR" property="outTradeNo" />
+    <result column="to_member_name" jdbcType="VARCHAR" property="toMemberName" />
+    <result column="to_member_id" jdbcType="VARCHAR" property="toMemberId" />
+    <result column="payment_type" jdbcType="VARCHAR" property="paymentType" />
+    <result column="payment_account_no" jdbcType="VARCHAR" property="paymentAccountNo" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="integral_reward" jdbcType="INTEGER" property="integralReward" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="bill_context" jdbcType="LONGVARCHAR" property="billContext" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+  </resultMap>
+
+  <update id="updateBillStatusByOutTradeNo">
+    UPDATE t_bill set bill_status=#{billStatus} WHERE out_trade_no=#{outTradeNo}
+  </update>
+
+    <select id="getDtoList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT tb.*,tu.username FROM t_bill tb LEFT JOIN t_users tu ON tb.user_id=tu.id
+        <where>
+          <if test="map.billType != null and map.billType != ''">
+            tb.bill_type=#{map.billType}
+          </if>
+          <if test="map.billStatus != null and map.billStatus != ''">
+            AND tb.bill_status=#{map.billStatus}
+          </if>
+          <if test="map.userId != null">
+            AND tb.user_id=#{map.userId}
+          </if>
+          <if test="map.username != null and map.username != ''">
+            AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+          </if>
+        </where>
+    </select>
+</mapper>

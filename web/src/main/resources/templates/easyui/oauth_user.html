@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('用户管理','easyui,upload')">
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        用户名: <input class="easyui-textbox" style="width: 160px" id="search_username" name="name" data-options="required:false">
+        手机号: <input class="easyui-textbox" style="width: 160px" id="search_phone" name="name" data-options="required:false">
+        邮箱: <input class="easyui-textbox" style="width: 160px" id="search_email" name="name" data-options="required:false">
+        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
+        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+    </div>
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        <div class="button-group">
+            <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
+            <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
+            <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
+        </div>
+    </div>
+</div>
+<table id="tt" data-options="url:'/api/oauthUsers/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="field:'id',width:140,sortable:true,align:'center'">用户id</th>
+        <th data-options="field:'username',width:120,sortable:true,align:'center'">用户名(昵称)</th>
+        <th data-options="field:'sex',width:80,sortable:true,formatter:formatSex,align:'center'">性别</th>
+        <th data-options="field:'enabled',width:80,sortable:true,formatter:formatEnabled,align:'center'">有效</th>
+        <th data-options="field:'phone',width:120,sortable:true,align:'center'">手机号</th>
+        <th data-options="field:'email',width:220,sortable:true,align:'center'">邮箱</th>
+        <th data-options="field:'address',width:200,sortable:true,align:'center'">地址</th>
+        <th data-options="field:'age',width:80,sortable:true,align:'center'">年龄</th>
+        <th data-options="field:'birth',width:160,sortable:true,align:'center'">生日</th>
+        <th data-options="field:'headPhoto',width:200,sortable:true,align:'center',formatter:formatPic">头像</th>
+        <th data-options="field:'personBrief',width:200,sortable:true,align:'center'">个人简介</th>
+        <th data-options="field:'visitCard',width:200,sortable:true,align:'center'">邀请码</th>
+        <th data-options="field:'loginType',width:200,sortable:true,align:'center'">登录方式</th>
+        <th data-options="field:'loginStatus',width:200,sortable:true,align:'center'">登录状态</th>
+        <th data-options="field:'loginDate',width:200,sortable:true,align:'center'">登录时间</th>
+    </tr>
+    </thead>
+</table>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
+<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:30px 60px;">
+    <form id="form_add">
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_username" name="username" data-options="label:'用户名:', required:true, validType:'username'">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_password" name="password" data-options="label:'密码:', required:true">
+        </div>
+        <div>
+            <select class="easyui-combobox" style="width: 100%" id="add_sex" name="sex" data-options="label:'性别:', required:true">
+                <option value="true">男</option>
+                <option value="false">女</option>
+            </select>
+        </div>
+        <div>
+            <select class="easyui-combobox" style="width: 100%" id="add_enabled" name="enabled" data-options="label:'有效:', required:true">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_phone" name="phone" data-options="label:'手机号:', required:false, validType:'mobile'">
+        </div>
+        <div>
+            <input class="easyui-validatebox easyui-textbox" style="width: 100%" id="add_email" name="email" data-options="label:'邮箱:', required:false, validType:'email'">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_address" name="address" data-options="label:'地址:', required:false">
+        </div>
+        <div>
+            <input class="easyui-numberbox" style="width: 100%" id="add_age" name="age" data-options="label:'年龄:', required:false, min:1, max:200, precision:0">
+        </div>
+        <div>
+            <input class="easyui-datebox" style="width:100%;" id="add_birth" name="birth" data-options="label:'生日:'">
+        </div>
+        <div th:replace="components/toolbar :: file-upload (idVal='add_head_photo',nameVal='headPhoto')"></div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
+        </div>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:30px 60px;">
+    <form id="form_edit">
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_id" name="id" data-options="label:'用户id:', readonly:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_username" name="username" data-options="label:'用户名:', required:true, validType:'username'">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_password" name="password" data-options="label:'密码:', required:true">
+        </div>
+        <div>
+            <select class="easyui-combobox" style="width: 100%" id="edit_sex" name="sex" data-options="label:'性别:', required:true">
+                <option value="true">男</option>
+                <option value="false">女</option>
+            </select>
+        </div>
+        <div>
+            <select class="easyui-combobox" style="width: 100%" id="edit_enabled" name="enabled" data-options="label:'有效:', required:true">
+                <option value="true">是</option>
+                <option value="false">否</option>
+            </select>
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_phone" name="phone" data-options="label:'手机号:', required:false, validType:'mobile'">
+        </div>
+        <div>
+            <input class="easyui-validatebox easyui-textbox" style="width: 100%" id="edit_email" name="email" data-options="label:'邮箱:', required:false,validType:'email'">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_address" name="address" data-options="label:'地址:', required:false">
+        </div>
+        <div>
+            <input class="easyui-numberbox" style="width: 100%" id="edit_age" name="age" data-options="label:'年龄:', required:false, min:1, max:200, precision:0">
+        </div>
+        <div>
+            <input class="easyui-datebox" style="width:100%;" id="edit_birth" name="birth" data-options="label:'生日:'">
+        </div>
+        <div th:replace="components/toolbar :: file-upload (idVal='edit_head_photo',nameVal='headPhoto')"></div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
+        </div>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+<div th:replace="components/easyui/easyui-list :: js('easyui,upload')"></div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    function formatPic(val, row) {
+        if(!val){
+            return '';
+        }
+        return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + val + '" alt="头像" width="30px">';
+    }
+
+    function doAdd() {
+        $('#form_add').form('clear');
+        //重新渲染
+        //$(".easyui-linkbutton").linkbutton();
+        //$(".easyui-numberbox").numberbox();
+        initFileUpload('#add_head_photo', 'headPhoto');
+        $('#addModal').window('open');
+    }
+
+    function add() {
+        doRequest({
+            formId: '#form_add',
+            url: '/api/oauthUsers',
+            type: 'POST'
+        });
+    }
+
+    function doEdit() {
+        //获取选中的第一行数据
+        //var row = $('#tt').datagrid('getSelected');
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(rows.length == 1){
+            let row = rows[0];
+            //重新渲染
+            //$(".easyui-linkbutton").linkbutton();
+            //$(".easyui-numberbox").numberbox();
+            //初始化图片上传按钮
+            initFileUpload('#edit_head_photo', 'headPhoto');
+            $('#edit_id').textbox('setValue', row.id);
+            $('#edit_username').textbox('setValue', row.username);
+            $('#edit_password').textbox('setValue', row.password);
+            $('#edit_sex').combobox('select', row.sex);
+            $('#edit_enabled').combobox('select', row.enabled);
+            $('#edit_phone').textbox('setValue', row.phone);
+            $('#edit_email').textbox('setValue', row.email);
+            $('#edit_address').textbox('setValue', row.address);
+            $('#edit_age').numberbox('setValue', row.age);
+            $('#edit_birth').datebox('setValue', row.birth);
+            $('#edit_person_brief').textbox('setValue', row.personBrief);
+            //显示预览图片
+            imgPreview('#edit_head_photo', 'headPhoto', row.headPhoto);
+
+            $('#editModal').window('open');
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function edit() {
+        doRequest({
+            formId: '#form_edit',
+            url: '/api/oauthUsers',
+            type: 'PATCH'
+        });
+    }
+
+    function clearForm() {
+        $('#form_add').form('clear');
+        $('#addModal').window('close');
+
+        $('#form_edit').form('clear');
+        $('#editModal').window('close');
+    }
+
+    function formatSex(val, row){
+        if (val == true){
+            return '男';
+        }else{
+            return '女';
+        }
+    }
+
+    function formatEnabled(val, row) {
+        if (val == true){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
+
+    function doDelete() {
+        deleteRequest('/api/oauthUsers/ids/');
+    }
+
+    function doSearch() {
+        $('#tt').treegrid('load', {
+            username: $('#search_username').val(),
+            phone: $('#search_phone').val(),
+            email: $('#search_email').val()
+        });
+    }
+
+    function doSearchReset() {
+        $('#search_username').textbox('setValue', '');
+        $('#search_phone').textbox('setValue', '');
+        $('#search_email').textbox('setValue', '');
+        doSearch();
+    }
+/*]]>*/
+</script>
+</body>
+</html>

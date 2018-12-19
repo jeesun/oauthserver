@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="toolbar">
+    <div id="toolbar" class="btn-group">
+        <button id="plus" type="button" class="btn btn-info" onclick="addObject()">
+            <i class="fa fa-plus-square-o" aria-hidden="true"></i> 新增
+        </button>
+        <button id="edit" type="button" class="btn btn-primary" onclick="updateObject()">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 修改
+        </button>
+        <button id="minus" type="button" class="btn btn-danger" onclick="delObjects()">
+            <i class="fa fa-minus-square-o" aria-hidden="true"></i> 删除
+        </button>
+    </div>
+</div>
+<div th:fragment="file-upload (idVal,nameVal)">
+    <div th:id="${idVal} + '-wrapper'" style="margin-bottom: 20px">
+        <label th:for="${idVal}" class="easyui-linkbutton">更换头像</label>
+        <input th:id="${idVal}" type="file" name="file" multiple style="display:none">
+        <span class="proportion"></span>
+        <!-- 上传进度条及状态： -->
+        <span class="progress" style="width: 100px">
+                <span class="progress-bar" role="progressbar" style="width: 0%;"></span>
+                <span class="upstatus" style="margin-top:10px;"></span>
+            </span>
+        <!-- 预览框： -->
+        <span class="preview" style="margin-top:20px;"></span>
+    </div>
+</div>
+</body>
+</html>

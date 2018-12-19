@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/easyui/easyui-list :: head('数据表管理', 'easyui')">
+<body>
+<div style="margin-left: 20px">
+    <div style="margin-bottom: 10px">
+        <input class="easyui-textbox" style="width: 360px" id="tableName" name="tableName" th:value="${tableName}" data-options="label:'表名:', required:true">
+    </div>
+    <div style="margin-bottom: 10px">
+        <input class="easyui-textbox" style="width: 360px" id="entityName" name="entityName" th:value="${entityName}" data-options="label:'实体名:', required:true">
+    </div>
+    <div style="margin-bottom: 10px">
+        <input class="easyui-textbox" style="width: 360px" id="tableComment" name="tableComment" th:value="${tableComment}" data-options="label:'表标注:', required:true">
+    </div>
+</div>
+<div id="tb">
+
+</div>
+<table id="tt" data-options="animate: true,rownumbers: true,pagination: false,toolbar: '#tb',idField: 'name', singleSelect: true, nowrap: false" style="width:100%">
+    <thead>
+    <tr>
+        <th data-options="width:100,sortable:true,align:'center',field:'name'">字段名</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'type'">字段类型</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'comment'">字段注释</th>
+        <th data-options="width:200,sortable:true,align:'center',field:'easyuiType',
+            editor:{
+                type:'combobox',
+                options:{
+                    valueField:'typeCode',
+                    textField:'typeName',
+                    data: easyuiComponents,
+                    required:true
+                }
+            }">输入类型</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'extraInfo',
+            editor:{
+                type:'textbox'
+            }">补充信息</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'allowSearch',
+            editor:{
+                type:'checkbox',
+                options:{on:'true',off:'false'}
+            }
+            ">是否支持搜索</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'hidden',
+            editor:{
+                type:'checkbox',
+                options:{on:'true',off:'false'}
+            }
+            ">是否隐藏</th>
+        <th data-options="width:100,sortable:true,align:'center',field:'allowInput',
+            editor:{
+                type:'checkbox',
+                options:{on:'true',off:'false'}
+            }
+            ">是否允许输入</th>
+    </tr>
+    </thead>
+</table>
+<div style="text-align:center;">
+    <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="genCode()" th:text="#{ok}"></a>
+    <a href="javascript:void(0)" class="button button-rounded button-small" onclick="cancelGenCode()" th:text="#{cancel}"></a>
+</div>
+
+<div th:replace="components/easyui/easyui-list :: js('easyui,layer')"></div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var easyuiComponents = [[${easyuiComponents}]];
+    console.log(easyuiComponents);
+
+$.extend($.fn.datagrid.methods, {
+    editCell: function (jq, param) {
+        return jq.each(function () {
+            var opts = $(this).datagrid('options');
+            var fields = $(this).datagrid('getColumnFields', true).concat($(this).datagrid('getColumnFields'));
+            for (var i = 0; i < fields.length; i++) {
+                var col = $(this).datagrid('getColumnOption', fields[i]);
+                col.editor1 = col.editor;
+                if (fields[i] != param.field) {
+                    col.editor = null;
+                }
+            }
+            $(this).datagrid('beginEdit', param.index);
+            var ed = $(this).datagrid('getEditor', param);
+            if (ed) {
+                if ($(ed.target).hasClass('textbox-f')) {
+                    $(ed.target).textbox('textbox').focus();
+                } else {
+                    $(ed.target).focus();
+                }
+            }
+            for (var i = 0; i < fields.length; i++) {
+                var col = $(this).datagrid('getColumnOption', fields[i]);
+                col.editor = col.editor1;
+            }
+        });
+    },
+    enableCellEditing: function (jq) {
+        return jq.each(function () {
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            opts.oldOnClickCell = opts.onClickCell;
+            opts.onClickCell = function (index, field) {
+                if (opts.editIndex != undefined) {
+                    if (dg.datagrid('validateRow', opts.editIndex)) {
+                        dg.datagrid('endEdit', opts.editIndex);
+                        opts.editIndex = undefined;
+                    } else {
+                        return;
+                    }
+                }
+                dg.datagrid('selectRow', index).datagrid('editCell', {
+                    index: index,
+                    field: field
+                });
+                opts.editIndex = index;
+                opts.oldOnClickCell.call(this, index, field);
+            }
+        });
+    }
+});
+
+
+$(function(){
+    var data = [[${tableEntity.columns}]];
+    var dg = $('#tt').datagrid({
+        data: data
+    });
+    dg.datagrid('enableCellEditing');
+});
+
+function genCode() {
+    //这段代码是获取当前页的所有行。
+    let rows = $("#tt").datagrid("getRows");
+    //console.log(rows[0].easyuiType + ',' + rows[0].extraInfo + ',' + rows[0].allowSearch);
+    console.log(JSON.stringify(rows[0]));
+
+    let jsonData = {};
+    jsonData['tableName'] = $('#tableName').val();
+    jsonData['tableComment'] = $('#tableComment').val();
+    jsonData['entityName'] = $('#entityName').val();
+    jsonData['columns'] = JSON.stringify(rows);
+
+    $.ajax({
+        url: '/tables/genCode',
+        type: 'GET',
+        data: {
+            tableName: jsonData['tableName'],
+            tableComment: jsonData['tableComment'],
+            entityName: jsonData['entityName'],
+            columns: jsonData['columns']
+        },
+        contentType: "application/json;charset=UTF-8",
+        beforeSend: function(){
+            $.messager.progress({
+                title: '提示信息',
+                msg: '请稍候......'
+            });
+        },
+        complete: function(){
+            $.messager.progress('close');
+        },
+        success:function (data) {
+            console.log(data);
+            if(data.code == 200){
+                $.messager.show({
+                    title:'提示信息',
+                    msg:'操作成功！',
+                    timeout:3000,
+                    showType:'slide'
+                });
+            }
+        }
+    });
+}
+
+function cancelGenCode() {
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
+}
+/*]]>*/
+</script>
+</body>
+</html>
