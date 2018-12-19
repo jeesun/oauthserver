@@ -108,16 +108,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .and()
-                .csrf().ignoringAntMatchers("/druid/*")
+                .csrf().ignoringAntMatchers("/druid/*", "/register", "/users/register", "/users/forgetPwd", "/fileUploads/**", "/api/fileUploads/**", "/api/aliPays/**", "/api/wxPays/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**").permitAll()
                 .antMatchers("/login", "/logout", "/register", "/register_result", "/forget_password", "/reset_password", "/users/sendEmail", "/users/resetPassword", "/users/forgetPwd","/users/check", "/users/resetPwd", "/users/test", "/users/checkExists").permitAll()
                 .antMatchers("/just_test", "/upload", "/users/uuid/**", "/users/loopCheck/**", "/users/register", "/hello").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .rememberMe()
-                .and().csrf().ignoringAntMatchers("/register", "/users/register", "/users/forgetPwd", "/fileUploads/**", "/api/fileUploads/**", "/api/aliPays/**", "/api/wxPays/**");
+                .rememberMe();
 
         //只允许一个用户登录,如果同一个账户两次登录,那么第一个账户将被踢下线,跳转到登录页面
         http

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('字典管理', 'easyui')">
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        名称: <input class="easyui-textbox" style="width: 160px" id="search_name" name="name" data-options="required:false">
+        编码: <input class="easyui-textbox" style="width: 160px" id="search_code" name="code" data-options="required:false">
+
+        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
+        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+    </div>
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        <div class="button-group">
+            <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
+            <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
+            <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
+        </div>
+    </div>
+</div>
+<table id="tt" data-options="url:'dictTypeGroups/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="field:'name',width:200,sortable:true">名称</th>
+        <th data-options="field:'code',width:200,sortable:true,align:'center'">编码</th>
+        <th data-options="field:'orderNum',width:200,sortable:true,align:'center'">排序</th>
+    </tr>
+    </thead>
+</table>
+<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:10px;">
+    <form id="form_add">
+        <div>
+            <select class="easyui-combobox" id="add_type" name="type" style="width:100%" data-options="label:'字典类型:', required:true, validType:'selectValid[\'&nbsp;&nbsp;\']'">
+                <option value="">&nbsp;&nbsp;</option>
+                <option value="1">父字典</option>
+                <option value="2">子字典</option>
+            </select>
+        </div>
+        <div>
+            <t:select id="add_pid" name="pid" order="desc" query="t_dict_type_group,type_group_name,id" class="easyui-combobox" style="width:100%" data-options="label:'父字典:'" cacheable="false"></t:select>
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_name" name="name" data-options="label:'字典名称:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_code" name="code" data-options="label:'字典编码:', required:true, validType:{remote:['/dictTypeGroups/checkCode', 'typeGroupCode']}">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="add_orderNum" name="orderNum" data-options="label:'排序:', required:false, min:0">
+        </div>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+
+<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:10px;">
+    <form id="form_edit">
+        <div>
+            <input class="easyui-numberbox" style="width: 100%" id="edit_id" name="id" data-options="label:'id:', required:true, min:0">
+        </div>
+        <div>
+            <select class="easyui-combobox" id="edit_type" name="type" style="width:100%" data-options="label:'字典类型:', required:true">
+                <option value="1">父字典</option>
+                <option value="2">子字典</option>
+            </select>
+        </div>
+        <div>
+            <t:select id="edit_pid" name="pid" order="desc" query="t_dict_type_group,type_group_name,id" class="easyui-combobox" style="width:100%" data-options="label:'父字典:'" cacheable="false"></t:select>
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_name" name="name" data-options="label:'字典名称:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_code" name="code" data-options="label:'字典编码:', required:true">
+        </div>
+        <div>
+            <input class="easyui-numberbox" style="width: 100%" id="edit_orderNum" name="orderNum" data-options="label:'排序:', required:true, min:0">
+        </div>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+        </div>
+    </form>
+</div>
+<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
+<script>
+    $(function () {
+
+        /*$('#edit_type').combobox({
+            onChange: function (newValue, oldValue) {
+                if('1' == newValue){
+                    $('#edit_pid').combobox({
+                        disabled: true
+                    });
+                    $('#edit_orderNum').numberbox({
+                        disabled: true
+                    });
+                }else{
+                    $('#edit_pid').combobox({
+                        disabled: false
+                    });
+                    $('#edit_orderNum').numberbox({
+                        disabled: false
+                    });
+                }
+            }
+        });*/
+
+        /*let editType = $('#edit_type').val();
+        if('1' == editType){
+            $('#edit_pid').combobox({
+                disabled: true
+            });
+            $('#edit_orderNum').numberbox({
+                disabled: true
+            });
+        }else{
+            $('#edit_pid').combobox({
+                disabled: false
+            });
+            $('#edit_orderNum').numberbox({
+                disabled: false
+            });
+        }*/
+    });
+
+    function doAdd() {
+        /*let addType = $('#add_type').val();
+        if('1' == addType){
+            $('#add_pid').combobox({
+                readonly: true
+            });
+            $('#add_orderNum').numberbox({
+                readonly: true
+            });
+        }else{
+            $('#add_pid').combobox({
+                readonly: false
+            });
+            $('#add_orderNum').numberbox({
+                readonly: false
+            });
+        }*/
+
+        //$('#add_orderNum').numberbox('setValue', '1');
+
+        $('#addModal').window('open');
+
+        $('#add_type').combobox({
+            onChange: function (newValue, oldValue) {
+                console.log('onChange');
+                if('1' == newValue){
+                    $('#add_pid').combobox('disable');
+                    //$('#add_orderNum').numberbox('readonly', true);
+                }else{
+                    $('#add_pid').combobox('enable');
+                    //$('#add_orderNum').numberbox('readonly', false);
+                }
+            }
+        });
+    }
+
+    function doEdit() {
+        //获取选中的第一行数据
+        //var row = $('#tt').datagrid('getSelected');
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(rows.length == 1){
+            let row = rows[0];
+            console.log(row);
+            if(0 == row.pid){
+                $('#edit_id').combobox('readonly', false);
+                $('#edit_id').numberbox('setValue', '' + row.id);
+                $('#edit_id').combobox('readonly', true);
+                $('#edit_pid').combobox('setValue', '' + row.pid);
+                $('#edit_pid').combobox('readonly', true);
+                $('#edit_name').textbox('setValue', row.name);
+                $('#edit_code').textbox('setValue', row.code);
+                $('#edit_orderNum').numberbox('setValue', 0);
+                $('#edit_orderNum').numberbox('readonly', true);
+                $('#edit_type').combobox('setValue', '1');
+                $('#edit_type').combobox('readonly', true);
+            }else{
+                $('#edit_id').combobox('readonly', false);
+                $('#edit_id').numberbox('setValue', '' + row.id);
+                $('#edit_id').numberbox('readonly', true);
+                $('#edit_pid').combobox('setValue', '' + row.pid);
+                $('#edit_pid').combobox('readonly', true);
+                $('#edit_name').textbox('setValue', row.name);
+                $('#edit_code').textbox('setValue', row.code);
+                $('#edit_orderNum').numberbox('setValue', '' + row.orderNum);
+                $('#edit_orderNum').numberbox('readonly', false);
+                $('#edit_type').combobox('setValue', '2');
+                $('#edit_type').combobox('readonly', true);
+            }
+            $('#editModal').window('open');
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function doDelete() {
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(1 == rows.length){
+            let row = rows[0];
+            console.log(row);
+            if(0 == row.pid){
+                deleteRequest('/dictTypeGroups/type/1/id');
+            }else{
+                deleteRequest('/dictTypeGroups/type/2/id');
+            }
+
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function add() {
+        doRequest({
+            formId: '#form_add',
+            url: '/dictTypeGroups',
+            type: 'POST'
+        });
+    }
+
+    function edit() {
+        doRequest({
+            formId: '#form_edit',
+            url: '/dictTypeGroups',
+            type: 'PATCH'
+        });
+    }
+
+    function clearForm() {
+        $('#form_add').form('clear');
+        $('#addModal').window('close');
+
+        $('#form_edit').form('clear');
+        $('#editModal').window('close');
+    }
+
+    function formatIcon(val, row){
+        return '<i class="' + val + '" aria-hidden="true"></i>';
+    }
+
+    function doSearch() {
+        $('#tt').treegrid('load', {
+            name: $('#search_name').val(),
+            code: $('#search_code').val()
+        });
+    }
+
+    function doSearchReset() {
+        $('#search_name').textbox('setValue', '');
+        $('#search_code').textbox('setValue', '');
+        doSearch();
+    }
+</script>
+</body>
+</html>

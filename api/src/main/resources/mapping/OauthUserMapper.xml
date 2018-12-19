@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.OauthUserMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.OauthUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="head_photo" jdbcType="VARCHAR" property="headPhoto" />
+    <result column="person_brief" jdbcType="VARCHAR" property="personBrief" />
+    <result column="sex" jdbcType="BIT" property="sex" />
+    <result column="visit_card" jdbcType="VARCHAR" property="visitCard" />
+    <result column="login_type" jdbcType="INTEGER" property="loginType" />
+    <result column="login_status" jdbcType="VARCHAR" property="loginStatus" />
+    <result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
+  </resultMap>
+
+  <resultMap id="StatisticDtoMap" type="com.simon.dto.StatisticDto">
+    <result column="classify" jdbcType="VARCHAR" property="classify" />
+    <result column="statistic" jdbcType="BIGINT" property="value" />
+    <result column="classify_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, password, enabled, email, phone, enable
+  </sql>
+
+  <update id="updatePwdByPhone">
+    update t_users set password=#{password} where phone=#{phone}
+  </update>
+
+  <select id="findByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM t_users
+    <where>
+      <if test="map.username != null and map.username != ''">
+        username LIKE CONCAT('%', #{map.username}, '%')
+      </if>
+      <if test="map.phone != null and map.phone != ''">
+        AND phone LIKE CONCAT('%', #{map.phone}, '%')
+      </if>
+      <if test="map.email != null and map.email != ''">
+        AND email LIKE CONCAT('%', #{map.email}, '%')
+      </if>
+    </where>
+  </select>
+
+  <select id="sexRatio" resultMap="StatisticDtoMap">
+    SELECT
+        tu.sex AS classify,
+        count( tu.id ) AS statistic,
+        tdt.type_name AS classify_name
+    FROM
+        t_users tu
+        LEFT JOIN t_dict_type tdt ON tu.sex = tdt.type_code
+        AND tdt.type_group_code = 'sex'
+    WHERE
+        tu.sex IS NOT NULL
+    GROUP BY
+        tu.sex
+  </select>
+</mapper>

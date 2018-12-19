@@ -38,4 +38,29 @@ public class Column implements Serializable{
      * 属性注释
      */
     private String comment;
+
+    /**
+     * 允许搜索
+     */
+    private Boolean allowSearch = false;
+
+    /**
+     * EasyUI类型
+     */
+    private String easyuiType = "easyui-text";
+
+    /**
+     * 是否隐藏
+     */
+    private Boolean hidden = false;
+
+    /**
+     * 补充信息
+     */
+    private String extraInfo;
+
+    /**
+     * 允许输入
+     */
+    private Boolean allowInput = true;
 }

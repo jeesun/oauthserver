@@ -1,0 +1,5 @@
+# bootstrap由父ApplicationContext加载，比application优先加载
+# bootstrap里面的属性不能被覆盖
+spring:
+  application:
+    name: auth

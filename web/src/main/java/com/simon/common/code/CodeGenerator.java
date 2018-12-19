@@ -23,7 +23,7 @@ public class CodeGenerator {
     /**
      * 项目基础包名称，根据自己的项目修改
      */
-    static String BASE_PACKAGE;
+    public static String BASE_PACKAGE;
 
     /*生成文件地址配置*/
     /**
@@ -73,7 +73,7 @@ public class CodeGenerator {
     /**
      * 项目在硬盘上的基础路径
      */
-    static final String PROJECT_PATH = System.getProperty("user.dir");
+    static final String PROJECT_PATH = System.getProperty("user.dir") + "/web";
 
     /**
      * 模板位置
@@ -200,7 +200,11 @@ public class CodeGenerator {
         }
     }
 
-    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules) {
+    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules, String author, EntityDataModel entityDataModel) {
+        if(StringUtils.isNotEmpty(author)){
+            AUTHOR = author;
+        }
+
         if (StringUtils.isEmpty(genModules)){
             genModules = GEN_MODULES;
         }
@@ -226,9 +230,21 @@ public class CodeGenerator {
                 genController(tableName, modelName, idType);
             }
             if(Arrays.asList(modules).contains(MODULE_CONTROLLER_AND_PAGE)){
-                genControllerAndPage(tableName, modelName, idType);
+                if (null == entityDataModel){
+                    genControllerAndPage(tableName, modelName, idType);
+                }else{
+                    genControllerAndPage(tableName, modelName, idType, entityDataModel);
+                }
             }
         }
+    }
+
+    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules, String author) {
+        genCodeByCustomModelName(tableName, modelName, idType, genModules, author, null);
+    }
+
+    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules) {
+        genCodeByCustomModelName(tableName, modelName, idType, genModules, null);
     }
 
     /**
@@ -419,6 +435,17 @@ public class CodeGenerator {
                 tableName,
                 modelName,
                 CONTROLLER_PACKAGE);
+    }
+
+    private static void genControllerAndPage(String tableName, String modelName, String idType, EntityDataModel entityDataModel){
+        PageGeneratorUtil.generatorPage(
+                JDBC_DIVER_CLASS_NAME,
+                JDBC_URL,
+                JDBC_USERNAME,
+                JDBC_PASSWORD,
+                tableName,
+                modelName,
+                CONTROLLER_PACKAGE, entityDataModel);
     }
 
     private static freemarker.template.Configuration getConfiguration() throws IOException {

@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    tomcat:
+      init-s-q-l: SET NAMES utf8mb4
+# MySQL连接信息
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/thymelte?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
+    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
+    password: ENC(BZUIhx1tIC75T4JTYROwbsPIRuhrPQMx) #明文19941017
+    druid:
+      validation-query: SELECT 1
+      connection-init-sqls: SET NAMES utf8mb4
+
+#pagehelper分页插件
+pagehelper:
+    #禁用reasonable分页参数合理化，页码小于1或者大于最大页码返回空数据
+    reasonable: false
+    params: count=countSql
+    # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
+    helper-dialect: mysql
+    support-methods-arguments: true

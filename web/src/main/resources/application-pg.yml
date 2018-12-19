@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # PostgreSQL连接信息
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
+    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
+    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
+    druid:
+      validation-query: SELECT 1
+
+#pagehelper分页插件
+pagehelper:
+    #禁用reasonable分页参数合理化，页码小于1或者大于最大页码返回空数据
+    reasonable: false
+    params: count=countSql
+    # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
+    helper-dialect: postgresql
+    support-methods-arguments: true
