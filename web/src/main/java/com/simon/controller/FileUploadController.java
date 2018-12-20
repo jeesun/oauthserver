@@ -107,7 +107,7 @@ public class FileUploadController extends BaseController {
         fileInfo.setCode(200);
         fileInfo.setState("SUCCESS");
         fileInfo.setOriginal(files.get(0).getOriginalFilename());
-        fileInfo.setUrl("http://pjiiukt1g.bkt.clouddn.com/" + ROOT + "/" + files.get(0).getOriginalFilename());
+        fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + files.get(0).getOriginalFilename());
         fileInfo.setTitle(files.get(0).getOriginalFilename());
         return fileInfo;
     }
