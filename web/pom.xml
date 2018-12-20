@@ -265,10 +265,12 @@
         </dependency>
         <!-- 七牛云 end -->
 
-        <dependency>
+        <!-- 不推荐使用apache的beanutils，性能不好。 -->
+        <!-- 参考http://www.cnblogs.com/kaka/archive/2013/03/06/2945514.html -->
+        <!--<dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.yaml</groupId>
