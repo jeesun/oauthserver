@@ -17,7 +17,7 @@ import java.util.Date;
 /**
 * quartz任务
 * @author SimonSun
-* @date 2018-12-21
+* @date 2018-12-22
 **/
 @ApiModel(description = "quartz任务")
 @Data

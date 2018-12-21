@@ -6,7 +6,6 @@ import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
 import com.simon.mapper.AccountBindMapper;
 import com.simon.model.AccountBind;
-import com.simon.model.NewsInfo;
 import com.simon.repository.AccountBindRepository;
 import com.simon.service.AccountBindService;
 import org.apache.commons.lang3.StringUtils;

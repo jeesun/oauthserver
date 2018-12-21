@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author ${AUTHOR}
@@ -112,5 +113,20 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
     @Override
     public int updateByPrimaryKeySelective(${modelNameUpperCamel} ${modelNameLowerCamel}){
         return ${modelNameLowerCamel}Mapper.updateByPrimaryKeySelective(${modelNameLowerCamel});
+    }
+
+    @Override
+    public PageInfo<${modelNameUpperCamel}> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.getList(params);
+        return new PageInfo<>(list);
     }
 }

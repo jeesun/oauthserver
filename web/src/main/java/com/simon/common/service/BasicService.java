@@ -112,5 +112,13 @@ public interface BasicService<T, ID> {
      */
     int updateByPrimaryKeySelective(T model);
 
+    /**
+     * 通用查询
+     * @param params 参数
+     * @param pageNo 页码
+     * @param pageSize 每页条数
+     * @param orderBy 排序
+     * @return 分页数据
+     */
     PageInfo<T> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy);
 }

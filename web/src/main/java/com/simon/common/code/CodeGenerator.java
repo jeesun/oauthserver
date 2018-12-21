@@ -90,6 +90,14 @@ public class CodeGenerator {
      */
     static String RESOURCES_PATH;
 
+    /**
+     * 生成的mapper存放路径
+     */
+    private static String PACKAGE_PATH_MAPPER;
+
+    /**
+     * 生成的JPA Repository存放路径
+     */
     private static String PACKAGE_PATH_REPOSITORY;
 
     /**
@@ -153,6 +161,7 @@ public class CodeGenerator {
             CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
             MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper_interface_reference");
 
+            PACKAGE_PATH_MAPPER = packageConvertPath(MAPPER_PACKAGE);
             PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
             PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);
             PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);
@@ -337,6 +346,40 @@ public class CodeGenerator {
                 tableName,
                 modelName,
                 MODEL_PACKAGE);
+
+        reGenMapper(tableName, modelName, idType);
+    }
+
+    /**
+     * 使用模板重新生成mapper.java
+     * @param tableName
+     * @param modelName
+     * @param idType
+     */
+    private static void reGenMapper(String tableName, String modelName, String idType) {
+        try {
+            freemarker.template.Configuration cfg = getConfiguration();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("AUTHOR", AUTHOR);
+            data.put("CREATE", CREATE);
+            String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
+            data.put("modelNameUpperCamel", modelNameUpperCamel);
+            data.put("modelNameLowerCamel", modelNameConvertLowerCamel(modelNameUpperCamel));
+            data.put("basePackage", BASE_PACKAGE);
+            data.put("idType", idType);
+
+            File file = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_MAPPER + modelNameUpperCamel + "Mapper.java");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            cfg.getTemplate("mapper.ftl").process(data,
+                    new FileWriter(file));
+            System.out.println(modelNameUpperCamel + "Mapper.java 重新生成成功");
+
+        } catch (Exception e) {
+            throw new RuntimeException("生成Mapper失败", e);
+        }
     }
 
     private static void genRepository(String tableName, String modelName, String idType) {
