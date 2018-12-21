@@ -156,10 +156,9 @@ public class TableController extends BaseController {
             @RequestParam String tableName,
             @RequestParam String entityName,
             @RequestParam String tableComment,
-            @ApiParam(value = "表id列类型", required = false, example = "Long") @RequestParam(required = false, defaultValue = "Long") String idType,
-            @RequestParam(required = false, defaultValue = "controllerAndPage") String genModules,
+            @RequestParam String idType,
+            @RequestParam String genModules,
             @RequestParam String columns){
-        log.info(columns);
         List<Column> columnList = JSON.parseArray(columns, Column.class);
         EntityDataModel entityDataModel = new EntityDataModel();
         entityDataModel.setBasePackage(CodeGenerator.BASE_PACKAGE);
@@ -172,7 +171,6 @@ public class TableController extends BaseController {
         entityDataModel.setModelNameUpperCamel(entityName);
         entityDataModel.setModelNameLowerCamel(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityDataModel.getEntityName()));
         CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules, null, entityDataModel);
-        log.info(JSON.toJSONString(columnList));
         return ResultMsg.success();
     }
 }

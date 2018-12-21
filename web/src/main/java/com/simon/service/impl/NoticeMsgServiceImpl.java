@@ -8,6 +8,7 @@ import com.simon.repository.NoticeMsgRepository;
 import com.simon.common.config.AppConfig;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.var;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -109,5 +111,20 @@ public class NoticeMsgServiceImpl implements NoticeMsgService {
     @Override
     public int updateByPrimaryKeySelective(NoticeMsg noticeMsg){
         return noticeMsgMapper.updateByPrimaryKeySelective(noticeMsg);
+    }
+
+    @Override
+    public PageInfo<NoticeMsg> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        var list = noticeMsgMapper.getList(params);
+        return new PageInfo<>(list);
     }
 }

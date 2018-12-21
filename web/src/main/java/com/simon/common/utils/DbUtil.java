@@ -330,7 +330,11 @@ public class DbUtil {
                     annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n";
                 }
 
-                annotation += "    @ApiModelProperty(value = \"" + comment + "\")\n";
+                if(!"".equals(annotation)){
+                    annotation += "    ";
+                }
+
+                annotation += "@ApiModelProperty(value = \"" + comment + "\")\n";
 
                 String charPattern = "char\\(\\d+\\)";
                 if(Pattern.matches(charPattern, columnType)){

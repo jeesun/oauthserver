@@ -14,4 +14,6 @@ public interface OauthUserMapper extends MyMapper<OauthUser> {
     List<OauthUser> findByMap(@Param("map") Map<String, Object> map);
 
     List<StatisticDto> sexRatio();
+
+    List<OauthUser> getList(@Param("map") Map<String, Object> map);
 }

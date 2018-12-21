@@ -12,4 +12,6 @@ public interface DictTypeGroupMapper extends MyMapper<DictTypeGroup> {
     List<DictTypeGroup> getAll();
 
     List<EasyUiTreeGridDto> getTreeGridDtos(@Param("map") Map<String, Object> map);
+
+    List<DictTypeGroup> getList(@Param("map") Map<String, Object> map);
 }

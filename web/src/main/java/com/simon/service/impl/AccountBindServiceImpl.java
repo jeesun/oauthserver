@@ -1,22 +1,23 @@
 
 package com.simon.service.impl;
 
-import com.simon.mapper.AccountBindMapper;
-import com.simon.model.AccountBind;
-import com.simon.service.AccountBindService;
-import com.simon.repository.AccountBindRepository;
-import com.simon.common.config.AppConfig;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.simon.common.config.AppConfig;
+import com.simon.mapper.AccountBindMapper;
+import com.simon.model.AccountBind;
+import com.simon.model.NewsInfo;
+import com.simon.repository.AccountBindRepository;
+import com.simon.service.AccountBindService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -109,5 +110,20 @@ public class AccountBindServiceImpl implements AccountBindService {
     @Override
     public int updateByPrimaryKeySelective(AccountBind accountBind){
         return accountBindMapper.updateByPrimaryKeySelective(accountBind);
+    }
+
+    @Override
+    public PageInfo<AccountBind> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        List<AccountBind> list = accountBindMapper.getList(params);
+        return new PageInfo<>(list);
     }
 }

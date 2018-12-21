@@ -6,6 +6,7 @@ import com.simon.model.DictType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author simon
@@ -19,4 +20,6 @@ public interface DictTypeMapper extends MyMapper<DictType> {
     List<DictType> getByGroupCode(@Param("groupCode") String groupCode);
 
     List<EasyUiTreeGridDto> getTreeGridDtos(@Param("groupCode") String groupCode);
+
+    List<DictType> getList(@Param("map") Map<String, Object> map);
 }

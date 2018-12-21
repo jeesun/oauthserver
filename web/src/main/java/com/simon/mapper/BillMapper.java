@@ -11,4 +11,6 @@ public interface BillMapper extends MyMapper<Bill> {
     int updateBillStatusByOutTradeNo(String billStatus, String outTradeNo);
 
     List<Bill> getDtoList(@Param("map") Map<String, Object> params);
+
+    List<Bill> getList(@Param("map") Map<String, Object> map);
 }

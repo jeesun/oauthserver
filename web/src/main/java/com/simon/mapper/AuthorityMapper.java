@@ -22,4 +22,6 @@ public interface AuthorityMapper extends MyMapper<Authority> {
      * @return 影响记录行数
      */
     int deleteByUserIds(@Param("userIds") String userIds);
+
+    List<Authority> getList(@Param("map") Map<String, Object> map);
 }

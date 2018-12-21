@@ -8,6 +8,7 @@ import com.simon.mapper.NewsTagMapper;
 import com.simon.model.NewsTag;
 import com.simon.repository.NewsTagRepository;
 import com.simon.service.NewsTagService;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -108,5 +110,20 @@ public class NewsTagServiceImpl implements NewsTagService {
     @Override
     public int updateByPrimaryKeySelective(NewsTag newsTag) {
         return newsTagMapper.updateByPrimaryKeySelective(newsTag);
+    }
+
+    @Override
+    public PageInfo<NewsTag> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        var list = newsTagMapper.getList(params);
+        return new PageInfo<>(list);
     }
 }
