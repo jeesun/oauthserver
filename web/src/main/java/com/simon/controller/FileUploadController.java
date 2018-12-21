@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
+import com.simon.common.exception.BusinessException;
 import com.simon.common.plugins.qiniu.QiNiuUtil;
 import com.simon.common.utils.FileUploadUtil;
 import com.simon.dto.ueditor.FileInfo;
@@ -40,7 +41,9 @@ public class FileUploadController extends BaseController {
     private final ResourceLoader resourceLoader;
 
     private final String ROOT = AppConfig.FILE_UPLOAD_DIR;
-    private final String fileUploadType = AppConfig.FILE_UPLOAD_TYPE;
+
+    @Value("${file.upload.type}")
+    private String fileUploadType;
 
     @Value("${server.port}")
     private String serverPort;
@@ -102,26 +105,30 @@ public class FileUploadController extends BaseController {
     @RequestMapping(value = "/ueditor/upload/file")
     public FileInfo uploadFile(HttpServletRequest request){
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-        QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).uploadCommonsMultipartFile(files.get(0), ROOT + "/" + files.get(0).getOriginalFilename(), true);
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setCode(200);
-        fileInfo.setState("SUCCESS");
-        fileInfo.setOriginal(files.get(0).getOriginalFilename());
-        fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + files.get(0).getOriginalFilename());
-        fileInfo.setTitle(files.get(0).getOriginalFilename());
-        return fileInfo;
+        if (null == files || files.size() <= 0){
+            throw new BusinessException("缺少文件");
+        }
+        if(AppConfig.FILE_UPLOAD_TYPE_QINIU.equals(fileUploadType)){
+            QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).uploadCommonsMultipartFile(files.get(0), ROOT + "/" + files.get(0).getOriginalFilename(), true);
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setCode(200);
+            fileInfo.setState("SUCCESS");
+            fileInfo.setOriginal(files.get(0).getOriginalFilename());
+            fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + files.get(0).getOriginalFilename());
+            fileInfo.setTitle(files.get(0).getOriginalFilename());
+            return fileInfo;
+        }else{
+            String[] savedFiles = FileUploadUtil.saveFiles(files.toArray(new MultipartFile[files.size()]));
+            if(null == savedFiles || savedFiles.length <= 0){
+                throw new BusinessException("存储文件失败");
+            }
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setCode(200);
+            fileInfo.setState("SUCCESS");
+            fileInfo.setOriginal(files.get(0).getOriginalFilename());
+            fileInfo.setUrl("http://localhost:" + serverPort + savedFiles[0]);
+            fileInfo.setTitle(files.get(0).getOriginalFilename());
+            return fileInfo;
+        }
     }
-
-    /*@ApiOperation(value = "文件下载")
-    @GetMapping("/fileUpload/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        Resource file = resourceLoader.getResource("file:" + Paths.get(ROOT, filename));
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }*/
-
-    /*@ApiOperation(value = "文件获取")
-    @GetMapping("/fileUpload/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename){
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/octet-stream").body(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
-    }*/
 }
