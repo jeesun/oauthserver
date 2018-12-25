@@ -25,6 +25,7 @@
     <modules>
         <module>web</module>
 		<module>api</module>
+		<module>common</module>
     </modules>
 
 	<properties>
@@ -382,6 +383,11 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>20.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>2.3.0</version>
 			</dependency>
 			<!--<dependency>
 				<groupId>com.simon</groupId>

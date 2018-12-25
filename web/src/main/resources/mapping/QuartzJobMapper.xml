@@ -20,4 +20,8 @@
     <result column="spring_bean" jdbcType="VARCHAR" property="springBean" />
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
   </resultMap>
+
+  <select id="getList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from t_s_quartz_job
+  </select>
 </mapper>

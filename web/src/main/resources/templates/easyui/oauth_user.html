@@ -189,6 +189,8 @@
             imgPreview('#edit_head_photo', 'headPhoto', row.headPhoto);
 
             $('#editModal').window('open');
+
+            $.parser.parse($('#edit_age').parent());
         }else{
             $.messager.alert('提示信息','请选择一条数据！','error');
         }

@@ -464,7 +464,7 @@ $.extend($.fn.validatebox.defaults.rules, {
     //select即选择框的验证
     selectValid:{
         validator:function(value,param){
-            console.log('selectValid' + value + '-' + param[0]);
+            //console.log('selectValid' + value + '-' + param[0]);
             if(value == param[0]){
                 return false;
             }else{

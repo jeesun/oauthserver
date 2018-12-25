@@ -209,6 +209,8 @@
             $('#edit_icon').textbox('setValue', row.icon);
             $('#edit_orderNum').numberbox('setValue', '' + row.orderNum);
             $('#editModal').window('open');
+
+            $.parser.parse($('#edit_orderNum').parent());
         }else{
             $.messager.alert('提示信息','请选择一条数据！','error');
         }

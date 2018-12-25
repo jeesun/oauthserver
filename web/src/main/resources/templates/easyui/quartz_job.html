@@ -12,6 +12,9 @@
             <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
             <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
             <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton info" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton error" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>-->
         </div>
     </div>
 </div>
@@ -33,27 +36,13 @@
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'jobStatus'">任务状态</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'springBean'">spring_bean</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'jobName'">任务名</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'operation',formatter:formatJobAction">操作</th>
     </tr>
     </thead>
 </table>
 <div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
 <div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false" style="width:60%;height:480px;padding:10px;">
     <form id="form_add">
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_id" name="id" data-options="label:'id:', required:true">
-        </div>
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_createBy" name="createBy" data-options="label:'创建人id:', required:true">
-        </div>
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_createDate" name="createDate" data-options="label:'创建时间:', required:true">
-        </div>
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_updateBy" name="updateBy" data-options="label:'更新人id:', required:true">
-        </div>
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_updateDate" name="updateDate" data-options="label:'更新时间:', required:true">
-        </div>
         <div>
             <input class="easyui-textbox" style="width: 100%" id="add_cronExpression" name="cronExpression" data-options="label:'cron表达式:', required:true">
         </div>
@@ -200,6 +189,13 @@
         let rows = $('#tt').datagrid('getSelections');
         $('#window_content').html(rows[0].content);
         $('#window_content').window('open');
+    }
+
+    function formatJobAction(val, row) {
+        return '<button class="button button-circle button-tiny button-action"><i class="fa fa-play" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-tiny button-highlight"><i class="fa fa-stop" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-tiny button-royal"><i class="fa fa-pencil" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-tiny button-caution"><i class="fa fa-trash" aria-hidden="true"></i></button>';
     }
     /*]]>*/
 </script>
