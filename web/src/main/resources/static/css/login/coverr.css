@@ -4,6 +4,12 @@
 * Date: 2018/06/09
 * Time: 3:14
 **/
+/**
+*
+* User: simon
+* Date: 2018/06/09
+* Time: 3:14
+**/
 .homepage-hero-module {
     border-right: none;
     border-left: none;
@@ -24,7 +30,6 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background: #000;
 }
 .video-container .poster img {
     width: 100%;
@@ -34,7 +39,6 @@
 .video-container .filter {
     z-index: 100;
     position: absolute;
-    background: rgba(0, 0, 0, 0.4);
     width: 100%;
 }
 .video-container video {

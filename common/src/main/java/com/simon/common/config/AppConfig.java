@@ -50,6 +50,8 @@ public class AppConfig {
     public static String FILE_UPLOAD_TYPE_LOCAL = "local";
     public static String FILE_UPLOAD_TYPE_QINIU = "qiniu";
 
+    public static String SMS_TEMPLATE = "【thymelte】您的验证码是:%s，在5分钟内有效。如非本人操作请忽略本短信。";
+
     public static String SERVER_PORT;
     static {
         Properties prop = new Properties();

@@ -2,6 +2,7 @@ package com.simon.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SmsUtil;
 import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,8 @@ public class SmsServiceImpl implements SmsService {
     @Value("${sms.password}")
     private String password;
 
-    @Value("${sms.identity-code-msg-template}")
-    private String identityCodeMsgTemplate;
+    //@Value("${sms.identity-code-msg-template}")
+    private String identityCodeMsgTemplate = AppConfig.SMS_TEMPLATE;
 
     @Autowired
     private org.springframework.cache.CacheManager cacheManager;
@@ -84,6 +85,9 @@ public class SmsServiceImpl implements SmsService {
                 //cache.evict(mobile);//删除
             }
         }
+
+        //删除缓存
+        cache.evict(mobile);
 
         return result;
     }
