@@ -36,8 +36,8 @@
             <t:dict class="easyui-combobox" id="add_authority" name="authority" dict-name="role_type" style="width:100%" data-options="label:'权限:', multiple:true"></t:dict>
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -51,15 +51,15 @@
             <t:dict class="easyui-combobox" id="edit_authority" name="authority" dict-name="role_type" style="width:100%" data-options="label:'权限:', multiple:true"></t:dict>
         </div>
         <div style="text-align:center;">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
 <div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
 <script>
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
             userId: $('#search_userId').val(),
             username: $('#search_username').val(),
             authority: $('#search_authority').val()

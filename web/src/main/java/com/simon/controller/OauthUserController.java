@@ -79,7 +79,6 @@ public class OauthUserController extends BaseController {
     @PostMapping(value = "")
     @ResponseBody
     public ResultMsg add(@RequestBody OauthUser body){
-        body.setPassword(passwordEncoder.encode(body.getPassword()));
         oauthUserService.save(body);
         return ResultMsg.success();
     }

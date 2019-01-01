@@ -5,8 +5,8 @@
 <div id="tb">
     表名: <input class="easyui-textbox" style="width: 160px" id="tableName" name="tableName" data-options="required:false">
     表标注: <input class="easyui-textbox" style="width: 160px" id="tableComment" name="tableComment" data-options="required:false">
-    <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}">查询</a>
-    <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
 </div>
 <table id="tt" data-options="url: 'tables/data', method:'get',fit:true,rownumbers:true,pagination:true,pageSize:10,toolbar:'#tb',idField:'tableName', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
     <thead>
@@ -53,8 +53,8 @@
             </label>
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="generateCode()">生成</a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="generateCode()">生成</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -62,6 +62,7 @@
 <script>
 
     function doSearch() {
+        console.log("doSearch");
         $('#tt').datagrid('load', {
             tableName: $('#tableName').val(),
             tableComment: $('#tableComment').val()

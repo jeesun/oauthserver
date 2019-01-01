@@ -1,83 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <title>日志管理</title>
-    <script th:src="@{/js/easyui/base_loading.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/css/font-awesome.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/super/superBlue.css}" id="themeCss"/>
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/material/easyui.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/icon.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/themes/color.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/demo/demo.css}">-->
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/easyui/1.6.7/demo/sidemenu/sidemenu_style.css}">
-
-    <link rel="stylesheet" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload.css}">
-    <link rel="stylesheet" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload-ui.css}">
-
-    <link rel="stylesheet" th:href="@{/plug-in/buttons.jquery.plugin/buttons.css}">
-
-    <link rel="stylesheet" th:href="@{/css/easyui/common.css}">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DataGrid Pagination - jQuery EasyUI Demo</title>
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
 </head>
 <body>
-<div id="tb">
-    <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        <span>日志等级: </span>
-        <select class="easyui-combobox" id="search_levelString" name="levelString" style="width:160px">
-            <option value="">&nbsp;&nbsp;</option>
-            <option value="WARN">WARN</option>
-            <option value="ERROR">ERROR</option>
-        </select>
-
-        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
-        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
-    </div>
-    <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        <a href="javascript:void(0)" class="button button-rounded button-small button-caution" onclick="emptyLogs()" th:text="#{emptyLogs}"></a>
-    </div>
+<h2>DataGrid Pagination Demo</h2>
+<div style="margin-bottom:10px">
+    <p>Click the page bar to change page number or page size.</p>
 </div>
-<table id="tt" data-options="url:'/api/loggingEvents/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+<p>
+    Pagination on
+    <select id="p-pos" onchange="changeP()">
+        <option>bottom</option>
+        <option>top</option>
+        <option>both</option>
+    </select>
+    Style
+    <select id="p-style" onchange="changeP()">
+        <option>manual</option>
+        <option>links</option>
+    </select>
+</p>
+
+<table id="tt" class="easyui-datagrid" style="width:700px;height:250px"
+       url="/api/demos"
+       title="Load Data" iconCls="icon-save"
+       rownumbers="true" pagination="true" data-options="method:'get'">
     <thead>
     <tr>
-        <th data-options="field:'ck',checkbox:true"></th>
-        <th data-options="field:'id',width:80,sortable:true,align:'center'">id</th>
-        <th data-options="field:'timestmp',width:160,sortable:true,align:'center',formatter:formatDate">时间</th>
-        <th data-options="field:'levelString',width:120,sortable:true,align:'center',formatter:formatLevel">日志等级</th>
-        <th data-options="field:'callerClass',width:200,sortable:true,align:'center'">调用类</th>
-        <th data-options="field:'callerMethod',width:120,sortable:true,align:'center'">调用方法</th>
-        <th data-options="field:'callerLine',width:80,sortable:true,align:'center'">调用行号</th>
+        <th field="itemid" width="80">Item ID</th>
     </tr>
     </thead>
 </table>
-<div id="dd">Dialog Content.</div>
-<script type="text/javascript" th:src="@{/webjars/easyui/1.6.7/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/webjars/easyui/1.6.7/jquery.easyui.min.js}"></script>
-<script type="text/javascript" charset="utf-8" th:src="@{/webjars/easyui/1.6.7/themes/super/super.js}"></script>
-<script th:if="__${#locale}__ eq 'zh_CN'" th:src="@{/webjars/easyui/1.6.7/locale/easyui-lang-zh_CN.js}"></script>
-<script src="/js/plugins/layer/layer.min.js"></script>
-<script th:src="@{/js/easyui/common.js}"></script>
-<script>
-
-    function doSearch() {
-        layer.open({
-            type: 2,
-            title: '个人中心',
-            shadeClose: true,
-            shade: false,
-            maxmin: true, //开启最大化最小化按钮
-            area: ['893px', '600px'],
-            content: '/api/newsInfos?easyui-list'
+<script type="text/javascript">
+    function changeP(){
+        var dg = $('#tt');
+        dg.datagrid('loadData',[]);
+        dg.datagrid({pagePosition:$('#p-pos').val()});
+        dg.datagrid('getPager').pagination({
+            layout:['list','sep','first','prev','sep',$('#p-style').val(),'sep','next','last','sep','refresh','info']
         });
-    }
-
-    function doSearchReset() {
-        $('#search_levelString').combobox('select', '');
-        doSearch();
     }
 </script>
 </body>

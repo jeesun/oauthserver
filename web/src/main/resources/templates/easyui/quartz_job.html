@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
-<head th:replace="components/easyui/easyui-list :: head('quartz任务', 'easyui,upload,ueditor')">
+<head th:replace="components/easyui/easyui-list :: head('quartz任务', 'easyui')">
 <body>
 <div id="tb">
     <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        类名: <input class="easyui-textbox" style="width: 160px" id="search_beanName" name="beanName" data-options="required:false">
+        job状态: <t:dict class="easyui-combobox" id="search_jobStatus" name="jobStatus" dict-name="job_status"  style="width:160px" allow-empty="true"></t:dict>
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
     </div>
@@ -18,17 +20,17 @@
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'id'">id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'createBy'">创建人id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'createDate'">创建时间</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'updateBy'">更新人id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'updateDate'">更新时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createUser'">创建人</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createDate'">创建时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateUser'">更新人</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateDate'">更新时间</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'cronExpression'">cron表达式</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'methodName'">任务调用的方法名</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'isConcurrent'">任务是否有状态</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'description'">描述</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'beanName'">任务执行时调用哪个类的方法 包名+类名，完全限定名</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'beanName'">全限定名</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'triggerName'">触发器名称</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'jobStatus'">任务状态</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'jobStatus',formatter:formatJobStatus">任务状态</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'springBean'">spring_bean</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'jobName'">任务名</th>
         <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'operation',formatter:formatJobAction">操作</th>
@@ -51,7 +53,7 @@
             <input class="easyui-textbox" style="width: 100%" id="add_description" name="description" data-options="label:'描述:', required:true">
         </div>
         <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_beanName" name="beanName" data-options="label:'任务执行时调用哪个类的方法 包名+类名，完全限定名:', required:true">
+            <input class="easyui-textbox" style="width: 100%" id="add_beanName" name="beanName" data-options="label:'全限定名:', required:true">
         </div>
         <div>
             <input class="easyui-textbox" style="width: 100%" id="add_triggerName" name="triggerName" data-options="label:'触发器名称:', required:true">
@@ -66,23 +68,49 @@
             <input class="easyui-textbox" style="width: 100%" id="add_jobName" name="jobName" data-options="label:'任务名:', required:true">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
 
 <div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:10px;">
     <form id="form_edit">
-
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_cronExpression" name="cronExpression" data-options="label:'cron表达式:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_methodName" name="methodName" data-options="label:'任务调用的方法名:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_isConcurrent" name="isConcurrent" data-options="label:'任务是否有状态:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_description" name="description" data-options="label:'描述:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_beanName" name="beanName" data-options="label:'全限定名:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_triggerName" name="triggerName" data-options="label:'触发器名称:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_jobStatus" name="jobStatus" data-options="label:'任务状态:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_springBean" name="springBean" data-options="label:'spring_bean:', required:true">
+        </div>
+        <div>
+            <input class="easyui-textbox" style="width: 100%" id="edit_jobName" name="jobName" data-options="label:'任务名:', required:true">
+        </div>
         <div style="text-align:center;">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
 <div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false" style="width:720px;height:480px;padding:10px;"></div>
-<div th:replace="components/easyui/easyui-list :: js('easyui,upload,ueditor')"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
@@ -93,11 +121,15 @@
     });
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
+            beanName: $('#search_beanName').val(),
+            jobStatus: $('#search_jobStatus').val()
         });
     }
 
     function doSearchReset() {
+        $('#search_beanName').textbox('setValue', '');
+        $('#search_jobStatus').combobox('select', '');
         doSearch();
     }
 
@@ -187,10 +219,40 @@
     }
 
     function formatJobAction(val, row) {
-        return '<button class="button button-circle button-tiny button-action"><i class="fa fa-play" aria-hidden="true"></i></button>'
-            + ' <button class="button button-circle button-tiny button-highlight"><i class="fa fa-stop" aria-hidden="true"></i></button>'
-            + ' <button class="button button-circle button-tiny button-royal"><i class="fa fa-pencil" aria-hidden="true"></i></button>'
-            + ' <button class="button button-circle button-tiny button-caution"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+        return '<button class="button button-circle button-small button-action" onclick="jobOn(' + row.id + ')"><i class="fa fa-play" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-small button-highlight" onclick="jobOff(' + row.id + ')"><i class="fa fa-stop" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-small button-royal"><i class="fa fa-pencil" aria-hidden="true"></i></button>'
+            + ' <button class="button button-circle button-small button-caution"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+    }
+
+    function jobOn(id) {
+        commonRequest({
+            url: '/api/quartzJobs/id/' + id + '/jobStatus/1',
+            type: 'POST',
+            extraData: {
+
+            }
+        });
+    }
+
+    function jobOff(id) {
+        commonRequest({
+            url: '/api/quartzJobs/id/' + id + '/jobStatus/0',
+            type: 'POST',
+            extraData: {
+
+            }
+        });
+    }
+
+    function formatJobStatus(val, row) {
+        if(val == 0){
+            return '<a href="javascript:void(0)" class="button button-caution button-pill button-small">已暂停</a>';
+        }else if(val == 1){
+            return '<a href="javascript:void(0)" class="button button-action button-pill button-small">运行中</a>';
+        }else{
+            return '';
+        }
     }
     /*]]>*/
 </script>

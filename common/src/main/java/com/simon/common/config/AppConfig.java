@@ -52,6 +52,10 @@ public class AppConfig {
 
     public static String SMS_TEMPLATE = "【thymelte】您的验证码是:%s，在5分钟内有效。如非本人操作请忽略本短信。";
 
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_SU = "ROLE_SU";
+
     public static String SERVER_PORT;
     static {
         Properties prop = new Properties();

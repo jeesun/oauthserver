@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
@@ -26,12 +25,16 @@ public class QuartzManage {
         Class<?> clazz = Class.forName(job.getBeanName());
         Job jobEntity = (Job)clazz.newInstance();
         //通过实体类和任务名创建 JobDetail
-        JobDetail jobDetail = newJob(jobEntity.getClass())
-                .withIdentity(job.getJobName()).build();
+        JobDetail jobDetail = JobBuilder.newJob(jobEntity.getClass())
+                .withDescription(job.getDescription())
+                .withIdentity(job.getJobName())
+                .build();
         //通过触发器名和cron 表达式创建 Trigger
         Trigger cronTrigger = newTrigger()
                 .withIdentity(job.getTriggerName())
+                //一旦加入scheduler，立即生效
                 .startNow()
+                //使用cron表达式触发器
                 .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExpression()))
                 .build();
         //执行定时任务

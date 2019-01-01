@@ -2,6 +2,8 @@ package com.simon.common.plugins.oauth;
 
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
+import com.simon.common.exception.BusinessException;
+import com.simon.common.utils.ValidUtil;
 import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +36,9 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
 
     private Locale locale = AppConfig.getLocale();
 
-    private final String sqlLoadUser;
+    private final String sqlLoadUserByPhone;
+    private final String sqlLoadUserByEmail;
+    private final String sqlLoadUserByName;
     private final String sqlLoadAuthorities;
     private final RowMapper<UserEntity> myUserDetailsRowMapper;
     private final RowMapper<Authority> authorityRowMapper;
@@ -42,7 +46,9 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
     private final static String PASSWORD_AUTH_TYPE = "password";
 
     public UsernamePasswordAuthenticator(){
-        sqlLoadUser = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where username=? OR phone=? OR email=?";
+        sqlLoadUserByPhone = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where phone=?";
+        sqlLoadUserByEmail = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where email=?";
+        sqlLoadUserByName = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where username=?";
         sqlLoadAuthorities = "select user_id,authority from t_authorities where user_id = ?";
 
         myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"),rs.getString("address"), rs.getDate("birth"), rs.getInt("age"), rs.getString("head_photo"), rs.getString("person_brief"), rs.getBoolean("sex"));
@@ -59,7 +65,16 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
     public UserEntity authenticate(IntegrationAuthentication integrationAuthentication) {
         log.info("password authenticate");
         try{
-            UserEntity userFromQuery = jdbcTemplate.queryForObject(sqlLoadUser, myUserDetailsRowMapper, integrationAuthentication.getUsername(), integrationAuthentication.getUsername(), integrationAuthentication.getUsername());
+            UserEntity userFromQuery = null;
+            if(ValidUtil.isEmail(integrationAuthentication.getUsername())){
+                userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByEmail, myUserDetailsRowMapper, integrationAuthentication.getUsername());
+            }else if(ValidUtil.isMobile(integrationAuthentication.getUsername())){
+                userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByPhone, myUserDetailsRowMapper, integrationAuthentication.getUsername());
+            }else{
+                //userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByName, myUserDetailsRowMapper, integrationAuthentication.getUsername());
+                throw new BusinessException("不支持的登录方式");
+            }
+
             log.info("查询得到用户：{}", userFromQuery);
             List<Authority> authorities = jdbcTemplate.query(sqlLoadAuthorities, authorityRowMapper, userFromQuery.getId());
             log.info("得到其权限：{}", authorities);

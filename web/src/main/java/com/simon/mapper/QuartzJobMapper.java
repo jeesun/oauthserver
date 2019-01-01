@@ -19,4 +19,6 @@ public interface QuartzJobMapper extends MyMapper<QuartzJob> {
      * @return 查询结果
      */
     List<QuartzJob> getList(@Param("map") Map<String, Object> map);
+
+    int updateJobStatus(@Param("jobStatus") int jobStatus);
 }

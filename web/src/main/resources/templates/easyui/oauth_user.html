@@ -79,8 +79,8 @@
             <input class="easyui-textbox" style="width: 100%" id="add_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -127,8 +127,8 @@
             <input class="easyui-textbox" style="width: 100%" id="edit_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -231,7 +231,7 @@
     }
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
             username: $('#search_username').val(),
             phone: $('#search_phone').val(),
             email: $('#search_email').val()

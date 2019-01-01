@@ -21,7 +21,31 @@
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
   </resultMap>
 
-  <select id="getList" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select * from t_s_quartz_job
+  <resultMap id="SuperMap" type="com.simon.model.QuartzJob" extends="BaseResultMap">
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+
+  <select id="getList" parameterType="java.util.Map" resultMap="SuperMap">
+      SELECT
+      qj.*,
+      tu1.username AS create_user,
+      tu2.username AS update_user
+      FROM
+      t_s_quartz_job qj
+      LEFT JOIN t_users tu1 ON qj.create_by = tu1.id
+      LEFT JOIN t_users tu2 ON qj.update_by = tu2.id
+    <where>
+      <if test="map.beanName != null and map.beanName != ''">
+        qj.bean_name like CONCAT('%', #{map.beanName}, '%')
+      </if>
+      <if test="map.jobStatus != null">
+        qj.job_status=#{map.jobStatus}
+      </if>
+    </where>
   </select>
+
+  <update id="updateJobStatus">
+    update t_s_quartz_job set job_status=#{jobStatus}
+  </update>
 </mapper>

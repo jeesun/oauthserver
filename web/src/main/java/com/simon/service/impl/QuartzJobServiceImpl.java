@@ -1,23 +1,24 @@
 
 package com.simon.service.impl;
 
-import com.simon.mapper.QuartzJobMapper;
-import com.simon.model.QuartzJob;
-import com.simon.service.QuartzJobService;
-import com.simon.repository.QuartzJobRepository;
-import com.simon.common.config.AppConfig;
-import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.simon.common.config.AppConfig;
+import com.simon.common.plugins.quartz.QuartzManage;
+import com.simon.mapper.QuartzJobMapper;
+import com.simon.model.QuartzJob;
+import com.simon.repository.QuartzJobRepository;
+import com.simon.service.QuartzJobService;
+import lombok.extern.slf4j.Slf4j;
+import lombok.var;
+import org.apache.commons.lang3.StringUtils;
+import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class QuartzJobServiceImpl implements QuartzJobService {
 
     @Autowired
     private QuartzJobRepository quartzJobRepository;
+
+    @Autowired
+    private QuartzManage quartzManage;
 
     @Override
     public long count() {
@@ -128,5 +132,14 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         }
         var list = quartzJobMapper.getList(params);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public void runJobsOnStart() throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
+        List<QuartzJob> quartzJobs = quartzJobMapper.selectAll();
+        for(QuartzJob quartzJob : quartzJobs){
+            quartzManage.addJob(quartzJob);
+        }
+        quartzJobMapper.updateJobStatus(1);
     }
 }

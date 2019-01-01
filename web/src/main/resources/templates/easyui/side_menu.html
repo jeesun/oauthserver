@@ -15,7 +15,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
     </div>
 </div>
-<table id="tt" data-options="url:'sideMenus/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
+<table id="table_tg" data-options="url:'sideMenus/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
     <thead>
         <tr>
             <th data-options="field:'ck',checkbox:true"></th>
@@ -52,8 +52,8 @@
             <input class="easyui-textbox" style="width: 100%" id="add_orderNum" name="orderNum" data-options="label:'排序:', required:false, min:0">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -85,8 +85,8 @@
             <input class="easyui-numberbox" style="width: 100%" id="edit_orderNum" name="orderNum" data-options="label:'排序:', required:false, min:0">
         </div>
         <div style="text-align:center;">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -135,7 +135,7 @@
     });
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#table_tg').treegrid('load', {
             name: $('#search_name').val(),
             authority: $('#search_authority').val()
         });
@@ -193,7 +193,7 @@
         //获取选中的第一行数据
         //var row = $('#tt').datagrid('getSelected');
         //获取选中的所有行数据
-        let rows = $('#tt').datagrid('getSelections');
+        let rows = $('#table_tg').treegrid('getSelections');
         if(rows.length == 1){
             let row = rows[0];
             console.log(row);

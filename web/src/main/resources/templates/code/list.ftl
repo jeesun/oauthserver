@@ -103,7 +103,7 @@
     });
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
 <#list columns as column>
     <#if column.allowSearch>
         <#switch column.easyuiType>

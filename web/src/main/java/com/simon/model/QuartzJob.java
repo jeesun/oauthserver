@@ -87,4 +87,12 @@ public class QuartzJob implements Serializable{
     @ApiModelProperty(value = "任务名")
     @Column(name = "job_name")
     private String jobName;
+
+    @ApiModelProperty(value = "创建人名称")
+    @Transient
+    private String createUser;
+
+    @ApiModelProperty(value = "更新人名称")
+    @Transient
+    private String updateUser;
 }

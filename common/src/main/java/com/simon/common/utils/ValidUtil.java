@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @date 2018-12-07
  **/
 
-public class AccountValidatorUtil {
+public class ValidUtil {
     /**
      * 正则表达式：验证用户名
      */

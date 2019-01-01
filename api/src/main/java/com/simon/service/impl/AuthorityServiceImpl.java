@@ -116,6 +116,11 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public PageInfo<Authority> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
+    }
+
+    @Override
     public PageInfo<AuthorityDto> getDtoList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
         if (null == pageSize){
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
