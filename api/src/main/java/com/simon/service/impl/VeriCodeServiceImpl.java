@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 验证码
@@ -110,6 +111,11 @@ public class VeriCodeServiceImpl implements VeriCodeService {
     @Override
     public int updateByPrimaryKeySelective(VeriCode veriCode) {
         return veriCodeMapper.updateByPrimaryKeySelective(veriCode);
+    }
+
+    @Override
+    public PageInfo<VeriCode> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 
     @Override

@@ -71,7 +71,7 @@ public class ${entityName}Controller extends BaseController{
     @PostMapping
     @ResponseBody
     public ResultMsg add(@RequestBody ${entityName} body){
-        ${entityName?uncap_first}Service.save(body);
+        ${entityName?uncap_first}Service.insertSelective(body);
         return ResultMsg.success();
     }
 

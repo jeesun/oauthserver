@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -109,5 +110,10 @@ public class NoticeMsgServiceImpl implements NoticeMsgService {
     @Override
     public int updateByPrimaryKeySelective(NoticeMsg noticeMsg){
         return noticeMsgMapper.updateByPrimaryKeySelective(noticeMsg);
+    }
+
+    @Override
+    public PageInfo<NoticeMsg> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 }

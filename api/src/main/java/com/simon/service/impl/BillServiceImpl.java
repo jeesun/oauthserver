@@ -118,6 +118,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public PageInfo<Bill> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
+    }
+
+    @Override
     public Bill createBill(BillRequest billRequest) {
         Bill bill = new Bill();
         BeanUtils.copyPropertiesIgnoreNull(billRequest, bill);

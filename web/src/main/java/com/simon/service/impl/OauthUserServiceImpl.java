@@ -8,11 +8,11 @@ import com.simon.common.exception.CodeInvalidException;
 import com.simon.common.exception.PhoneRegisteredException;
 import com.simon.common.exception.UserExistsException;
 import com.simon.common.exception.UserNotValidException;
-import com.simon.common.utils.AccountValidatorUtil;
+import com.simon.common.utils.ValidUtil;
 import com.simon.common.utils.BeanUtils;
-import com.simon.common.utils.RandomUtil;
 import com.simon.common.utils.UsernameUtil;
 import com.simon.dto.StatisticDto;
+import com.simon.mapper.AuthorityMapper;
 import com.simon.mapper.OauthUserMapper;
 import com.simon.model.Authority;
 import com.simon.model.OauthUser;
@@ -22,7 +22,6 @@ import com.simon.repository.VeriCodeRepository;
 import com.simon.service.OauthUserService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -34,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +58,9 @@ public class OauthUserServiceImpl implements OauthUserService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private AuthorityMapper authorityMapper;
 
     @Autowired
     private CacheManager cacheManager;
@@ -137,7 +140,27 @@ public class OauthUserServiceImpl implements OauthUserService {
 
     @Override
     public OauthUser save(OauthUser oauthUser) {
-        return oauthUserRepository.save(oauthUser);
+        oauthUser.setPassword(passwordEncoder.encode(oauthUser.getPassword()));
+        oauthUserMapper.insertSelective(oauthUser);
+
+        if(StringUtils.isEmpty(oauthUser.getAuthorities())){
+            Authority authority = new Authority();
+            authority.setUserId(oauthUser.getId());
+            authority.setAuthority(AppConfig.ROLE_USER);
+            authorityMapper.insertSelective(authority);
+        }else{
+            String[] authorities = oauthUser.getAuthorities().split(",");
+            List<Authority> authorityList = new ArrayList<>();
+            for(int i = 0; i < authorities.length; i++){
+                Authority authority = new Authority();
+                authority.setUserId(oauthUser.getId());
+                authority.setAuthority(authorities[i]);
+                authorityList.add(authority);
+            }
+            authorityMapper.insertList(authorityList);
+        }
+
+        return oauthUser;
     }
 
     @Override
@@ -201,13 +224,32 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public int insert(OauthUser model) {
-        return oauthUserMapper.insert(model);
+    public int insert(OauthUser oauthUser) {
+        return insertSelective(oauthUser);
     }
 
     @Override
-    public int insertSelective(OauthUser model) {
-        return oauthUserMapper.insertSelective(model);
+    public int insertSelective(OauthUser oauthUser) {
+        oauthUser.setPassword(passwordEncoder.encode(oauthUser.getPassword()));
+        int result = oauthUserMapper.insertSelective(oauthUser);
+
+        if(StringUtils.isEmpty(oauthUser.getAuthorities())){
+            Authority authority = new Authority();
+            authority.setUserId(oauthUser.getId());
+            authority.setAuthority(AppConfig.ROLE_USER);
+            authorityMapper.insertSelective(authority);
+        }else{
+            String[] authorities = oauthUser.getAuthorities().split(",");
+            List<Authority> authorityList = new ArrayList<>();
+            for(int i = 0; i < authorities.length; i++){
+                Authority authority = new Authority();
+                authority.setUserId(oauthUser.getId());
+                authority.setAuthority(authorities[i]);
+                authorityList.add(authority);
+            }
+            authorityMapper.insertList(authorityList);
+        }
+        return result;
     }
 
     //@CachePut(key="#model.username", cacheNames = {"oauthUserCache"})
@@ -313,10 +355,10 @@ public class OauthUserServiceImpl implements OauthUserService {
 
     @Override
     public OauthUser registerByAccountAndPwd(String account, String password) {
-        if(AccountValidatorUtil.isMobile(account)){
+        if(ValidUtil.isMobile(account)){
             //account是手机号
 
-        }else if(AccountValidatorUtil.isEmail(account)){
+        }else if(ValidUtil.isEmail(account)){
             //account是邮箱
         }else{
 

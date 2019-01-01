@@ -39,4 +39,6 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
     List<SideMenu> selectTreeGrid();
 
     List<SideMenu> findAll();
+
+    List<SideMenu> getList(@Param("map") Map<String, Object> map);
 }

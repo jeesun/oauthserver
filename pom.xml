@@ -25,6 +25,7 @@
     <modules>
         <module>web</module>
 		<module>api</module>
+		<module>common</module>
     </modules>
 
 	<properties>
@@ -284,7 +285,7 @@
 			<dependency>
 				<groupId>tk.mybatis</groupId>
 				<artifactId>mapper-generator</artifactId>
-				<version>1.1.1</version>
+				<version>1.1.2</version>
 			</dependency>
 
 			<dependency>
@@ -344,11 +345,12 @@
 			</dependency>
 			<!-- 七牛云 end -->
 
-			<dependency>
-				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils</artifactId>
-				<version>1.9.3</version>
-			</dependency>
+			<!-- 不推荐使用apache的beanutils，性能不好。 -->
+			<!-- 参考http://www.cnblogs.com/kaka/archive/2013/03/06/2945514.html -->
+			<!--<dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+            </dependency>-->
 
 			<dependency>
 				<groupId>org.yaml</groupId>
@@ -382,11 +384,26 @@
 				<artifactId>guava</artifactId>
 				<version>20.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>2.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jobs</artifactId>
+				<version>2.3.0</version>
+			</dependency>
 			<!--<dependency>
 				<groupId>com.simon</groupId>
 				<artifactId>web</artifactId>
 				<version>0.0.1</version>
 			</dependency>-->
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>3.12.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

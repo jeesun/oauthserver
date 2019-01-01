@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -108,5 +109,10 @@ public class NewsTagServiceImpl implements NewsTagService {
     @Override
     public int updateByPrimaryKeySelective(NewsTag newsTag) {
         return newsTagMapper.updateByPrimaryKeySelective(newsTag);
+    }
+
+    @Override
+    public PageInfo<NewsTag> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 }

@@ -12,6 +12,30 @@
     <div style="margin-bottom: 10px">
         <input class="easyui-textbox" style="width: 360px" id="tableComment" name="tableComment" th:value="${tableComment}" data-options="label:'表标注:', required:true">
     </div>
+    <div style="margin-bottom: 10px">
+        <select id="idType" class="easyui-combobox" name="idType" style="width: 360px" data-options="label:'id列类型:', required:true">
+            <option value="Long">Long</option>
+            <option value="String">String</option>
+        </select>
+    </div>
+    <div style="margin-bottom: 10px">
+        <label style="width: 80px;">要生成的代码:</label>
+        <label>
+            <input type="checkbox" name="genModules" value="modelAndMapper" checked="checked">modelAndMapper
+        </label>
+        <label>
+            <input type="checkbox" name="genModules" value="repository" checked="checked">repository
+        </label>
+        <label>
+            <input type="checkbox" name="genModules" value="service" checked="checked">service
+        </label>
+        <label>
+            <input type="checkbox" name="genModules" value="controller">controller
+        </label>
+        <label>
+            <input type="checkbox" name="genModules" value="controllerAndPage" checked="checked">controllerAndPage
+        </label>
+    </div>
 </div>
 <div id="tb">
 
@@ -133,14 +157,22 @@ function genCode() {
     //这段代码是获取当前页的所有行。
     let rows = $("#tt").datagrid("getRows");
     //console.log(rows[0].easyuiType + ',' + rows[0].extraInfo + ',' + rows[0].allowSearch);
-    console.log(JSON.stringify(rows[0]));
+    //console.log(JSON.stringify(rows[0]));
 
     let jsonData = {};
     jsonData['tableName'] = $('#tableName').val();
     jsonData['tableComment'] = $('#tableComment').val();
     jsonData['entityName'] = $('#entityName').val();
+    jsonData['idType'] = $('#idType').val();
+    let genModules = $("input[name='genModules']:checked");
+    let checkBoxValue = "";
+    genModules.each(function(){
+        checkBoxValue += $(this).val()+",";
+    });
+    checkBoxValue = checkBoxValue.substring(0,checkBoxValue.length-1);
+    jsonData['genModules'] = checkBoxValue;
     jsonData['columns'] = JSON.stringify(rows);
-
+    console.log('checkBoxValue=' + checkBoxValue);
     $.ajax({
         url: '/tables/genCode',
         type: 'GET',
@@ -148,7 +180,9 @@ function genCode() {
             tableName: jsonData['tableName'],
             tableComment: jsonData['tableComment'],
             entityName: jsonData['entityName'],
-            columns: jsonData['columns']
+            columns: jsonData['columns'],
+            idType: jsonData['idType'],
+            genModules: jsonData['genModules']
         },
         contentType: "application/json;charset=UTF-8",
         beforeSend: function(){

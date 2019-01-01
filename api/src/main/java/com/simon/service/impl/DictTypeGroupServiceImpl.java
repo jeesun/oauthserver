@@ -119,6 +119,11 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
+    public PageInfo<DictTypeGroup> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
+    }
+
+    @Override
     public List<DictTypeDto> getDtos(Integer limit, Integer offset) {
         List<DictTypeDto> dtoList = new ArrayList<>();
         /*List<DictTypeGroup> groups = dictTypeGroupRepository.findAll(new PageRequest((offset/limit - 1), limit, Sort.Direction.DESC, "id")).getContent();*/

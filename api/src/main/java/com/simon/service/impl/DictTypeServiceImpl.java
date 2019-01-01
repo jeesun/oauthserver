@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -115,6 +116,11 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public int updateByPrimaryKeySelective(DictType dictType){
         return dictTypeMapper.updateByPrimaryKeySelective(dictType);
+    }
+
+    @Override
+    public PageInfo<DictType> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 
     @Override

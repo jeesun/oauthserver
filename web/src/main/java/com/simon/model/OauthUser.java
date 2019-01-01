@@ -114,4 +114,8 @@ public class OauthUser implements Serializable{
     @ApiModelProperty(value = "登录时间")
     @Column(name = "login_date")
     private Date loginDate;
+
+    @ApiModelProperty(value = "角色")
+    @Transient
+    private String authorities;
 }

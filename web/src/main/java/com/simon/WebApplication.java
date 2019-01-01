@@ -1,9 +1,11 @@
 package com.simon;
 
+import com.simon.service.QuartzJobService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import tk.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
 
@@ -11,6 +13,8 @@ import java.util.TimeZone;
 @MapperScan("com.simon.mapper")
 //@EnableDiscoveryClient
 public class WebApplication implements CommandLineRunner {
+	@Autowired
+	private QuartzJobService quartzJobService;
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
@@ -20,6 +24,6 @@ public class WebApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-
+		quartzJobService.runJobsOnStart();
     }
 }

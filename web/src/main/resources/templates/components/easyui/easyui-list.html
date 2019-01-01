@@ -9,8 +9,10 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title th:text="${title}"></title>
     <script th:src="@{/js/easyui/base_loading.js}"></script>
-    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.6.10/themes/super/css/font-awesome.min.css}">
-    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.6.10/themes/super/superBlue.css}" id="themeCss"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/material/easyui.css}">
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/icon.css}"/>
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/color.css}"/>
 
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload.css}">
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload-ui.css}">
@@ -35,10 +37,9 @@
 </head>
 <body>
 <div th:fragment="js (modules)">
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/jquery.min.js}"></script>
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/jquery.easyui.min.js}"></script>
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/themes/super/super.js}"></script>
-    <script th:if="__${#locale}__ eq 'zh_CN'" th:src="@{/webjars/easyui/1.6.10/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.7.0/jquery.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.7.0/jquery.easyui.min.js}"></script>
+    <script th:if="__${#locale}__ eq 'zh_CN'" th:src="@{/webjars/easyui/1.7.0/locale/easyui-lang-zh_CN.js}"></script>
 
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/webjars/jquery-file-upload/9.18.0/js/vendor/jquery.ui.widget.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/webjars/jquery-file-upload/9.18.0/js/jquery.iframe-transport.js}"></script>

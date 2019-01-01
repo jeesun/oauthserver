@@ -18,15 +18,13 @@
         </#switch>
         </#if>
     </#list>
-        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="${r'#{search}'}"></a>
-        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="${r'#{reset}'}"></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="${r'#{search}'}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="${r'#{reset}'}"></span></a>
     </div>
-    <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        <div class="button-group">
-            <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="${r'#{add}'}"></span></button>
-            <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="${r'#{edit}'}"></span></button>
-            <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="${r'#{delete}'}"></span></button>
-        </div>
+    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="${r'#{add}'}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="${r'#{edit}'}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="${r'#{delete}'}"></span></a>
     </div>
 </div>
 <table id="tt" data-options="url:'/api/${entityName?uncap_first}s/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
@@ -105,7 +103,7 @@
     });
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
 <#list columns as column>
     <#if column.allowSearch>
         <#switch column.easyuiType>

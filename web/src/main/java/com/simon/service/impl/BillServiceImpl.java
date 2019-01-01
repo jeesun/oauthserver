@@ -118,6 +118,21 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public PageInfo<Bill> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        List<Bill> list = billMapper.getList(params);
+        return new PageInfo<>(list);
+    }
+
+    @Override
     public Bill createBill(BillRequest billRequest) {
         Bill bill = new Bill();
         BeanUtils.copyPropertiesIgnoreNull(billRequest, bill);

@@ -7,15 +7,13 @@
         用户名: <input class="easyui-textbox" style="width: 160px" id="search_username" name="name" data-options="required:false">
         手机号: <input class="easyui-textbox" style="width: 160px" id="search_phone" name="name" data-options="required:false">
         邮箱: <input class="easyui-textbox" style="width: 160px" id="search_email" name="name" data-options="required:false">
-        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
-        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
     </div>
-    <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        <div class="button-group">
-            <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
-            <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
-            <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
-        </div>
+    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
     </div>
 </div>
 <table id="tt" data-options="url:'/api/oauthUsers/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
@@ -81,8 +79,8 @@
             <input class="easyui-textbox" style="width: 100%" id="add_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -129,8 +127,8 @@
             <input class="easyui-textbox" style="width: 100%" id="edit_person_brief" name="personBrief" data-options="label:'个人简介:', required:false">
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -189,6 +187,8 @@
             imgPreview('#edit_head_photo', 'headPhoto', row.headPhoto);
 
             $('#editModal').window('open');
+
+            $.parser.parse($('#edit_age').parent());
         }else{
             $.messager.alert('提示信息','请选择一条数据！','error');
         }
@@ -231,7 +231,7 @@
     }
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
             username: $('#search_username').val(),
             phone: $('#search_phone').val(),
             email: $('#search_email').val()

@@ -14,5 +14,4 @@ import java.util.Map;
 public interface SideMenuService extends BasicService<SideMenu, Long> {
     PageInfo<SideMenu> getAll(Map<String, Object> params, Integer limit, Integer offset);
     List<SideMenu> getAll();
-    PageInfo<SideMenu> getList(Map<String, Object> params, Integer limit, Integer offset, String orderBy);
 }

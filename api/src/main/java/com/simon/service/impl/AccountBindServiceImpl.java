@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -109,5 +110,10 @@ public class AccountBindServiceImpl implements AccountBindService {
     @Override
     public int updateByPrimaryKeySelective(AccountBind accountBind){
         return accountBindMapper.updateByPrimaryKeySelective(accountBind);
+    }
+
+    @Override
+    public PageInfo<AccountBind> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 }

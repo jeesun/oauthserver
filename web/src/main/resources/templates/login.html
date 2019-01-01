@@ -1,52 +1,150 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap-material-design/4.1.1/dist/css/bootstrap-material-design.min.css}">
-    <title th:text="#{login}"></title>
-    <style>
-        body, html {
-            height: 100%;
-            background-color: #F1F3F4;
-        }
-
-        body {
-            display: flex;
-            align-items: center;
-        }
-
-        form {
-            background-color: white;
-            padding: 6px;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <!--[if lt IE 9]>
+    <script src="/thymelte/webjars/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="/thymelte/webjars/respond/1.4.2/dest/respond.min.js"></script>
+    <script src="/thymelte/webjars/excanvas/3/excanvas.js"></script>
+    <script src="/thymelte/webjars/excanvas/3/excanvas.compiled.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/login/coverr.css}">
+    <link rel="stylesheet" th:href="@{/css/login/login.css}">
 </head>
 <body>
-<div class="container h-100">
-    <div class="row align-items-center h-100">
-        <form th:action="@{login}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
-            <h1 class="text-center" th:text="#{signIn}"></h1>
-            <div class="form-group">
-                <label for="username"></label>
-                <input type="text" class="form-control" id="username" name="username" th:placeholder="#{username}">
+<div class="homepage-hero-module">
+    <div class="video-container">
+        <div class="filter"></div>
+        <!--<video autoplay muted loop class="fillWidth">
+            <source th:src="@{video/Concrete_Jungle.mp4}" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+            <source th:src="@{video/Concrete_Jungle.webm}" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+        </video>-->
+        <div class="poster">
+            <img th:src="@{img/bg_login.jpg}" alt="加载中">
+        </div>
+        <!-- 登录框 -->
+        <section id="register_form" class="outer-wrapper">
+            <div class="inner-wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-4" style="background-color: white;height: 500px;">
+                            <!--  th:if="${(param.qrcode != null) and (param.qrcode[0] == 'true')}" -->
+                            <div id="form-qrcode" class="form-signin" style="height: 500px;display: none">
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3 text-center">
+                                        <h2 >扫码登录</h2>
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        <img class="switchMode" th:src="@{/img/pc-40x40.png}">
+                                    </div>
+                                </div>
+                                <div id="refreshQrCode" class="hint warn">
+                                    二维码已失效，请点击<a style="color: #00BDFF;">刷新</a>
+                                </div>
+                                <div id="jumpHint" class="hint success">
+                                    登录成功，正在跳转...
+                                </div>
+                                <div class="text-center">
+                                    <div id="qrcode"></div>
+                                </div>
+                            </div>
+                            <div id="form-normal" class="form-signin" style="height: 500px;display: inline">
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3 text-center">
+                                        <h2 >欢迎登录</h2>
+                                    </div>
+                                    <div class="col-sm-3 text-right">
+                                        <img class="switchMode" th:src="@{/img/qrcode-40x40.png}">
+                                    </div>
+                                </div>
+                                <div class="hint warn" th:if="${(param.result != null) and (param.result[0] == 'disabled')}">
+                                    您已被封号
+                                </div>
+                                <div class="hint warn" th:if="${(param.result != null) and (param.result[0] == 'error')}">
+                                    用户名或者密码错误
+                                </div>
+                                <div class="hint warn" th:if="${param.logout}">
+                                    您已退出登录
+                                </div>
+                                <div class="hint warn" th:if="${(param.result != null) and (param.result[0] == 'loginAnotherLocation')}">
+                                    您已在其他地点登录
+                                </div>
+                                <div>
+                                    <form th:action="@{login}" method="post" id="loginForm" class="custom_form">
+                                        <div class="form-group">
+                                            <label for="username">账号</label>
+                                            <input type="text" id="username" name="username" class="form-control" placeholder="用户名、手机号或者邮箱"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">密码</label>
+                                            <input type="password" id="password" name="password" class="form-control" placeholder="密码"/>
+                                        </div>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <div class="form-group row">
+                                            <div class="col-sm-8">
+                                                <input type="text" id="input_vericode" name="input_vericode" class="form-control" style="width: 100%" placeholder="验证码"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <canvas class="codeimg" id="codeimg">
+                                                    你的浏览器不支持canvas。
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox row">
+                                            <div class="col-sm-8">
+                                                <label>
+                                                    <input type="checkbox">记住密码
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="text-right">
+                                                    <a th:href="@{users/forgetPwd}">忘记密码？</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_control">
+                                            <button class="btn btn-primary" type="submit" style="width: 100%">登录</button>
+                                        </div>
+                                        <div class="text-center" style="margin-top: 10px">
+                                            还没有账号？点击<a th:href="@{/register}">注册</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password"></label>
-                <input type="password" class="form-control" id="password" name="password" th:placeholder="#{password}">
-            </div>
-            <button type="submit" name="submit" class="btn btn-raised btn-primary col-12" th:text="#{login}"></button>
-        </form>
+        </section>
     </div>
 </div>
-<script th:src="@{/webjars/jquery/3.3.1/dist/jquery.slim.min.js}"></script>
-<script th:src="@{/webjars/popper.js/1.12.5/dist/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap-material-design/4.1.1/dist/js/bootstrap-material-design.min.js}"></script>
+
+<!-- jQuery 3 -->
+<script th:src="@{/webjars/jquery/3.3.1/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/jquery-validation/1.18.0/dist/jquery.validate.min.js}"></script>
+<script th:src="@{/webjars/jquery-validation/1.18.0/src/localization/messages_zh.js}"></script>
+<script th:src="@{/webjars/jquery-cookie/1.4.1-1/jquery.cookie.js}"></script>
+<script th:src="@{/webjars/qrcodejs/1c78ccd/qrcode.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/login/vcode.js}"></script>
+<script th:src="@{/js/login/login-form.js}"></script>
+<script th:src="@{/js/login/login-qrcode.js}"></script>
+<script th:src="@{/js/login/login.js}"></script>
+<script th:src="@{/js/login/coverr.js}"></script>
 <script>
-    $(document).ready(function () {
-        $('body').bootstrapMaterialDesign();
-    });
+    var theme = $.cookie('theme');
+    if(!theme || null == theme){
+        changeTheme('skin-blue');
+    }
 </script>
 </body>
 </html>

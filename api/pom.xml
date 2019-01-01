@@ -56,7 +56,6 @@
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>1.18</version>
         </dependency>
 
         <dependency>
@@ -92,12 +91,10 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity4</artifactId>
-            <version>3.0.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-java8time</artifactId>
-            <version>3.0.2.RELEASE</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-rest -->
         <dependency>
@@ -108,7 +105,6 @@
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.22</version>
         </dependency>
 
         <!-- Spring Boot 热部署 start -->
@@ -123,12 +119,10 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger2.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger2.version}</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>com.github.xiaoymin</groupId>-->
@@ -160,7 +154,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -175,23 +168,19 @@
         <dependency>
             <groupId>ojdbc14</groupId>
             <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.3.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
         </dependency>
 
         <dependency>
@@ -203,24 +192,20 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-maven-plugin</artifactId>
-            <version>1.3.7</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
-            <version>1.3.7</version>
         </dependency>
 
         <!-- 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.10</version>
         </dependency>
         <!-- 通用Mapper插件 -->
         <dependency>
@@ -235,7 +220,6 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.27-incubating</version>
         </dependency>
 
         <!-- MyBatis end -->
@@ -244,40 +228,33 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dayu</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dayu-source</artifactId>
-            <version>1.0</version>
         </dependency>
         <!-- ali dayu end -->
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
         </dependency>
         <!-- logback输出日志到数据库 start -->
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
-            <version>1.6</version>
         </dependency>
         <!-- logback输出日志到数据库 end -->
 
@@ -285,33 +262,30 @@
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
-            <version>[7.2.0, 7.2.99]</version>
         </dependency>
         <!-- 七牛云 end -->
 
-        <dependency>
+        <!-- 不推荐使用apache的beanutils，性能不好。 -->
+        <!-- 参考http://www.cnblogs.com/kaka/archive/2013/03/06/2945514.html -->
+        <!--<dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.3</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.23</version>
         </dependency>
 
         <!-- 支付宝支付 -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>3.3.4.ALL</version>
         </dependency>
         <!-- 微信支付 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
-            <version>${weixin-java-pay.version}</version>
         </dependency>
 
         <!--<dependency>
@@ -325,7 +299,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version>
         </dependency>
 
         <!-- 自定义的jar start -->
@@ -344,6 +317,12 @@
             <version>0.0.1</version>
         </dependency>
         <!-- 自定义jar end -->
+
+        <dependency>
+            <groupId>com.simon</groupId>
+            <artifactId>common</artifactId>
+            <version>1.3.0</version>
+        </dependency>
     </dependencies>
 
     <build>

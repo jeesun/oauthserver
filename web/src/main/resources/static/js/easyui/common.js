@@ -18,8 +18,8 @@ $(function(){
     setTokenInHeader();
 
     //只用一种初始化方法来声明easyUI组件以避免重复的提交请求，即删除html中的class声明(class="easyui-datagrid")
-    $('#tt').treegrid({
-        onBeforeLoad: function (row, param) {
+    $('#tt').datagrid({
+        onBeforeLoad: function (param) {
             let pageNo = param.page;
             delete param.page;
             param.pageNo = pageNo;
@@ -35,6 +35,29 @@ $(function(){
             param.orderBy = orderBy;
         },
         onLoadSuccess: function (data) {
+            //重新渲染
+            $(".easyui-linkbutton").linkbutton();
+            $(".easyui-numberbox").numberbox();
+        }
+    });
+
+    $('#table_tg').treegrid({
+        onBeforeLoad: function (row, param) {
+            let pageNo = param.page;
+            delete param.page;
+            param.pageNo = pageNo;
+            let pageSize = param.rows;
+            delete param.rows;
+            param.pageSize = pageSize;
+            let sort = param.sort;
+            delete param.sort;
+            let order = param.order;
+            delete param.order;
+            let orderBy = ((!sort) ? "" : sort) + " " + ((!order) ? "" : order);
+            orderBy = orderBy.trim();
+            param.orderBy = orderBy;
+        },
+        onLoadSuccess: function (row, data) {
             //重新渲染
             $(".easyui-linkbutton").linkbutton();
             $(".easyui-numberbox").numberbox();
@@ -174,6 +197,37 @@ function formatDate(val, row){
     return new Date(parseInt(val)).format('yyyy-MM-dd hh:mm:ss');
 }
 
+function commonRequest(options) {
+    $.ajax({
+        url: options.url,
+        type: options.type,
+        data: JSON.stringify(options.extraData),
+        contentType: "application/json;charset=UTF-8",
+        beforeSend: function(){
+            $.messager.progress({
+                title: '提示信息',
+                msg: '请稍候......'
+            });
+        },
+        complete: function(){
+            $.messager.progress('close');
+        },
+        success:function (data) {
+            console.log(data);
+            if(data.code == 200){
+                $('#tt').datagrid('reload');
+                $('#table_tg').treegrid('reload');
+                $.messager.show({
+                    title:'提示信息',
+                    msg:'操作成功！',
+                    timeout:3000,
+                    showType:'slide'
+                });
+            }
+        }
+    });
+}
+
 function doRequest(options) {
     if($(options.formId).form('validate')){
         let requestData = $(options.formId).serializeArray();
@@ -213,7 +267,8 @@ function doRequest(options) {
 
                     $('#addModal').window('close');
                     $('#editModal').window('close');
-                    $('#tt').treegrid('reload');
+                    $('#tt').datagrid('reload');
+                    $('#table_tg').treegrid('reload');
                     $.messager.show({
                         title:'提示信息',
                         msg:'操作成功！',
@@ -250,7 +305,8 @@ function emptyRequest(url) {
             if(data.code == 200){
                 $('#addModal').window('close');
                 $('#editModal').window('close');
-                $('#tt').treegrid('reload');
+                $('#tt').datagrid('reload');
+                $('#table_tg').treegrid('reload');
                 $.messager.show({
                     title:'提示信息',
                     msg:'操作成功！',
@@ -295,6 +351,7 @@ function deleteRequest(urlPrefix){
                             $('#addModal').window('close');
                             $('#editModal').window('close');
                             $('#tt').treegrid('reload');
+                            $('#table_tg').treegrid('reload');
                             $.messager.show({
                                 title:'提示信息',
                                 msg:'操作成功！',
@@ -342,6 +399,7 @@ function deleteRequestByUserId(urlPrefix){
                             $('#addModal').window('close');
                             $('#editModal').window('close');
                             $('#tt').treegrid('reload');
+                            $('#table_tg').treegrid('reload');
                             $.messager.show({
                                 title:'提示信息',
                                 msg:'操作成功！',
@@ -464,7 +522,7 @@ $.extend($.fn.validatebox.defaults.rules, {
     //select即选择框的验证
     selectValid:{
         validator:function(value,param){
-            console.log('selectValid' + value + '-' + param[0]);
+            //console.log('selectValid' + value + '-' + param[0]);
             if(value == param[0]){
                 return false;
             }else{

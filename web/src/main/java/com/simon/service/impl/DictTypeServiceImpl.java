@@ -11,6 +11,7 @@ import com.simon.model.DictTypeGroup;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.repository.DictTypeRepository;
 import com.simon.service.DictTypeService;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -115,6 +117,21 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public int updateByPrimaryKeySelective(DictType dictType){
         return dictTypeMapper.updateByPrimaryKeySelective(dictType);
+    }
+
+    @Override
+    public PageInfo<DictType> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
+        }
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        var list = dictTypeMapper.getList(params);
+        return new PageInfo<>(list);
     }
 
     @Override

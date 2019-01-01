@@ -5,15 +5,20 @@
 <div id="tb">
     <div class="datagrid-toolbar" style="padding-bottom: 6px">
         新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_type"  style="width:160px" allow-empty="true"></t:dict>
-        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}"></a>
-        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
     </div>
-    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+    <!--<div class="datagrid-toolbar" style="padding-bottom: 6px">
         <div class="button-group">
             <button type="button" class="button button-rounded button-small button-primary" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></button>
             <button type="button" class="button button-rounded button-small button-action" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></button>
             <button type="button" class="button button-rounded button-small button-caution" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></button>
         </div>
+    </div>-->
+    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
     </div>
 </div>
 <table id="tt" data-options="url:'/api/newsInfos/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
@@ -46,8 +51,8 @@
             <div style="clear:both"></div>
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -66,8 +71,8 @@
             <div id="edit_editor" type="text/plain" style="width:100%;height:500px;"></div>
         </div>
         <div style="text-align:center;">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
@@ -87,7 +92,7 @@
     });
 
     function doSearch() {
-        $('#tt').treegrid('load', {
+        $('#tt').datagrid('load', {
             newsType: $('#search_newsType').val()
         });
     }

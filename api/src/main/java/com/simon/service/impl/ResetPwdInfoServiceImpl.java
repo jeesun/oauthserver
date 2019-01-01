@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author SimonSun
@@ -108,5 +109,10 @@ public class ResetPwdInfoServiceImpl implements ResetPwdInfoService {
     @Override
     public int updateByPrimaryKeySelective(ResetPwdInfo resetPwdInfo) {
         return resetPwdInfoMapper.updateByPrimaryKeySelective(resetPwdInfo);
+    }
+
+    @Override
+    public PageInfo<ResetPwdInfo> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        return null;
     }
 }
