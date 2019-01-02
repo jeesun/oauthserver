@@ -1,5 +1,7 @@
 package com.simon.service;
 
+import com.taobao.api.ApiException;
+
 /**
  * 短信服务
  *
@@ -8,7 +10,7 @@ package com.simon.service;
  **/
 
 public interface SmsService {
-    boolean sendIdentifyCode(String mobile);
+    boolean sendIdentifyCode(String mobile) throws ApiException;
 
     boolean checkCode(String mobile,String code);
 }

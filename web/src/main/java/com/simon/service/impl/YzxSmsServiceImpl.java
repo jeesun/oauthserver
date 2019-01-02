@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 短信服务
+ * 云之讯短信服务
  *
  * @author simon
  * @date 2018-12-03
  **/
 
 @Slf4j
-@Service
+@Service(value = "yzxSmsServiceImpl")
 @Transactional(rollbackFor = {Exception.class})
-public class SmsServiceImpl implements SmsService {
+public class YzxSmsServiceImpl implements SmsService {
 
     private static final long EXPIRE_SECONDS = 300 * 1000;
 
@@ -58,10 +58,9 @@ public class SmsServiceImpl implements SmsService {
                         if ("0".equals(responseCode)) {
                             log.info("发送成功");
                             ret = true;
-                            //写入redis缓存
+                            //写入缓存
                             var cache = cacheManager.getCache("smsCache");
                             cache.put(mobile, code);
-
                         }
                     }
                 }
@@ -72,10 +71,11 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public boolean checkCode(String mobile, String code) {
+        log.info("checkCode");
         var cache = cacheManager.getCache("smsCache");
         var ele = cache.get(mobile);
         String output = (ele == null ? null : ele.get().toString());
-        log.info(mobile + "," + output);
+        log.info("从缓存中读到" + mobile + "," + output);
 
         var result = false;
 
