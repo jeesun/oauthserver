@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,7 @@ public class OauthUserController extends BaseController {
     private OauthUserService oauthUserService;
 
     @Autowired
+    @Qualifier(value = "yzxSmsServiceImpl")
     private SmsService smsService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
