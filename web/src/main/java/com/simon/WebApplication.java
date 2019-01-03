@@ -24,6 +24,7 @@ public class WebApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-		quartzJobService.runJobsOnStart();
+		//项目启动时启动定时任务
+		//quartzJobService.runJobsOnStart();
     }
 }

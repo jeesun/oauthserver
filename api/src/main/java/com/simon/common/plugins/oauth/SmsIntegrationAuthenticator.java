@@ -5,6 +5,7 @@ import com.simon.service.OauthUserService;
 import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +25,7 @@ public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAu
     private OauthUserService oauthUserService;
 
     @Autowired
+    @Qualifier(value = "yzxSmsServiceImpl")
     private SmsService smsService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
