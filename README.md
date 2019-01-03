@@ -62,7 +62,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 [oauth接口调用示例](tutorial/api.md)
 
 ## 管理端页面
-测试账号：用户名jeesun，密码1234567890c
+测试账号：手机号18800000000，密码1234567890c
 ### 管理端页面样式1
 访问地址：[http://localhost:8182/index/index_v1](http://localhost:8182/index/index_v1)
 ![index_v1](tutorial/screenshots/indev_v1.jpg)
