@@ -8,9 +8,9 @@ UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
 UE.Editor.prototype.getActionUrl = function(action) {
     /* 按config中的xxxActionName返回对应的接口地址 */
     if (action == 'uploadimage' || action == 'uploadscrawl') {
-        return 'http://a.b.com/upload.php';
+        return 'http://localhost:8182/fileUploads/ueditor/upload/file';
     } else if (action == 'uploadvideo') {
-        return 'http://a.b.com/video.php';
+        return 'http://localhost:8182/fileUploads/ueditor/upload/file';
     } else {
         return this._bkGetActionUrl.call(this, action);
     }
@@ -41,6 +41,9 @@ window.UEDITOR_CONFIG['imageUploadService'] = function(context, editor) {
          * @returns 上传参数对象
          */
         setFormData: function(object, data, headers) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
             return data;
         },
         /**
@@ -60,6 +63,7 @@ window.UEDITOR_CONFIG['imageUploadService'] = function(context, editor) {
          */
         getResponseSuccess: function(res) {
             return res.code == 200;
+            //return res.state == 'SUCCESS';
         },
         /* 指定上传接口返回的response中图片路径的字段，默认为 url
          * 如果图片路径字段不是res的属性，可以写成 对象.属性 的方式，例如：data.url
@@ -112,9 +116,10 @@ window.UEDITOR_CONFIG['videoUploadService'] = function(context, editor) {
          */
         getResponseSuccess: function(res) {
             return res.code == 200;
+            //return res.state == 'SUCCESS';
         },
         /* 指定上传接口返回的response中视频路径的字段，默认为 url
-         * 如果视频路径字段不是res的属性，可以写成 对象.属性 的方式，例如：data.url 
+         * 如果视频路径字段不是res的属性，可以写成 对象.属性 的方式，例如：data.url
          * */
         videoSrcField: 'url'
     }
@@ -162,7 +167,7 @@ window.UEDITOR_CONFIG['scrawlUploadService'] = function(context, editor) {
                 /* 上传接口返回的response成功状态条件 (比如: res.code == 200) */
                 res.responseSuccess = res.code == 200;
 
-                /* 指定上传接口返回的response中涂鸦图片路径的字段，默认为 url 
+                /* 指定上传接口返回的response中涂鸦图片路径的字段，默认为 url
                  * 如果涂鸦图片路径字段不是res的属性，可以写成 对象.属性 的方式，例如：data.url
                  */
                 res.scrawlSrcField = 'url';
