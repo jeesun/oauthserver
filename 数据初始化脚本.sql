@@ -11,7 +11,7 @@
  Target Server Version : 50709
  File Encoding         : 65001
 
- Date: 01/01/2019 21:18:21
+ Date: 03/01/2019 11:52:12
 */
 
 SET NAMES utf8mb4;
@@ -38,7 +38,7 @@ CREATE TABLE `logging_event`  (
   `caller_line` char(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `event_id` bigint(20) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`event_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 8062 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 8137 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for logging_event_exception
@@ -406,17 +406,18 @@ CREATE TABLE `t_news_info`  (
   `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `news_type` int(4) NULL DEFAULT NULL COMMENT '新闻类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 99132665180979201 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '新闻' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 111993828751179777 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '新闻' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_news_info
 -- ----------------------------
 INSERT INTO `t_news_info` VALUES (1, 1, '2018-11-15 21:58:04', 1, '2018-11-15 21:58:07', '被库克批评之后，扎克伯格下令FB高管都用安卓手机', 1, 1, '<p>大苏打<img src=\"http://pjiiukt1g.bkt.clouddn.com/fileUpload/gangtiexia.jpg\" alt=\"gangtiexia.jpg\"/></p>', '/fileUpload/6026febf5dc24c5a9ffdeefa9c727364.jpeg', '2018-11-15 22:08:18', NULL, 0);
 INSERT INTO `t_news_info` VALUES (94611785297952768, NULL, '2018-11-16 00:08:52', NULL, '2018-11-16 00:08:49', '标题测试', NULL, NULL, '<p>的撒大苏打</p>', NULL, '2018-11-16 00:08:59', NULL, 0);
-INSERT INTO `t_news_info` VALUES (94775027517358080, NULL, NULL, NULL, NULL, '图片上传测试', NULL, NULL, '<p><img src=\"/fileUpload/timg (1).jpg\" style=\"width: 600px;\" class=\"fr-fic fr-dib\"></p>', NULL, NULL, NULL, 0);
+INSERT INTO `t_news_info` VALUES (94775027517358080, NULL, NULL, NULL, NULL, '图片上传测试', NULL, NULL, '<p><img src=\"/fileUpload/timg (1).jpg\" class=\"fr-fic fr-dib\"/><img src=\"http://localhost:8182/fileUpload/26891736.jpeg\" alt=\"26891736.jpeg\" width=\"499\" height=\"348\"/></p>', NULL, NULL, NULL, 0);
 INSERT INTO `t_news_info` VALUES (94776970356719616, NULL, NULL, NULL, NULL, '再次测试图片上传', NULL, NULL, '<p><img src=\"http://localhost:8182/fileUpload/f498e01633b5b704ebfe0385f52bad20.jpg\" alt=\"f498e01633b5b704ebfe0385f52bad20.jpg\" width=\"317\" height=\"185\"/></p>', NULL, NULL, NULL, 0);
-INSERT INTO `t_news_info` VALUES (99132408858673152, NULL, NULL, NULL, NULL, '测试图文混排', NULL, NULL, '<p>测试图文混排</p><p><img src=\"/fileUpload/gangtiexia.jpg\" style=\"width: 600px;\" class=\"fr-fic fr-dib\" data-class=\"image-thumb\"></p>', NULL, NULL, NULL, 1);
-INSERT INTO `t_news_info` VALUES (99132665180979200, NULL, NULL, NULL, NULL, '新图文混排', NULL, NULL, '<p style=\"text-align: center;\"><strong><em><u><s><span style=\"font-size: 18px;\">测试图文混排</span></s></u></em></strong></p><p><img src=\"/fileUpload/gangtiexia.jpg\" style=\"width: 600px;\" class=\"fr-fic fr-dib\" data-class=\"image-thumb\"></p>', NULL, NULL, NULL, 1);
+INSERT INTO `t_news_info` VALUES (99132408858673152, NULL, NULL, NULL, NULL, '测试图文混排', NULL, NULL, '<p>测试图文混排</p><p><br/></p>', NULL, NULL, NULL, 1);
+INSERT INTO `t_news_info` VALUES (99132665180979200, NULL, NULL, NULL, NULL, '新图文混排', NULL, NULL, '<p style=\"text-align: center;\"><strong><em><span style=\"text-decoration:underline;\"><span style=\"text-decoration:line-through;\"><span style=\"font-size: 18px;\">测试图文混排</span></span></span></em></strong></p><p><img src=\"http://localhost:8182/fileUpload/26891736.jpeg\" alt=\"26891736.jpeg\"/></p>', NULL, NULL, NULL, 1);
+INSERT INTO `t_news_info` VALUES (111993828751179776, NULL, NULL, NULL, NULL, '测试layer', NULL, NULL, '<p>111</p>', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_news_tag
@@ -498,7 +499,7 @@ CREATE TABLE `t_s_quartz_job`  (
   `method_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务调用的方法名',
   `is_concurrent` int(4) NULL DEFAULT NULL COMMENT '任务是否有状态',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `bean_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '全限定名',
+  `bean_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务执行时调用哪个类的方法 包名+类名，完全限定名',
   `trigger_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '触发器名称',
   `job_status` int(4) NULL DEFAULT NULL COMMENT '任务状态',
   `spring_bean` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -509,7 +510,7 @@ CREATE TABLE `t_s_quartz_job`  (
 -- ----------------------------
 -- Records of t_s_quartz_job
 -- ----------------------------
-INSERT INTO `t_s_quartz_job` VALUES (1, 1, '2018-12-21 22:21:26', 1000000000, '2019-01-01 21:08:28', '*/5 * * * * ?', 'execute', 0, '测试', 'com.simon.task.SampleTask', 'org.quartz.CronTrigger', 0, NULL, 'com.simon.task.SampleTask');
+INSERT INTO `t_s_quartz_job` VALUES (1, 1, '2018-12-21 22:21:26', 1000000000, '2019-01-02 22:19:29', '*/5 * * * * ?', 'execute', 0, '测试', 'com.simon.task.SampleTask', 'org.quartz.CronTrigger', 0, NULL, 'com.simon.task.SampleTask');
 
 -- ----------------------------
 -- Table structure for t_side_menu
@@ -587,12 +588,12 @@ CREATE TABLE `t_users`  (
 -- ----------------------------
 -- Records of t_users
 -- ----------------------------
-INSERT INTO `t_users` VALUES (1000000000, NULL, NULL, NULL, NULL, 'jeesun', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', 1, '+86', '18362102427', 'simon.sun.dev@hotmail.com', NULL, NULL, '江苏省苏州市', 18, '2018-07-04', '/fileUpload/1491809301512510.jpg', '巨蟹宅', 1, NULL, NULL, NULL, NULL);
-INSERT INTO `t_users` VALUES (1000000001, NULL, NULL, NULL, NULL, 'user2711', '$2a$11$BUiKPp8.pcym7sxXYPvZeOjl0BOoVl3PZT.1Wfb3kmIgooO/GfQ4G', 1, '+86', '18860902711', '18860902711@163.com', NULL, NULL, NULL, NULL, '2018-01-30', NULL, NULL, 0, NULL, NULL, NULL, '2018-10-27 02:56:23');
-INSERT INTO `t_users` VALUES (1000000002, NULL, NULL, NULL, NULL, 'user6745', '$2a$11$a7XDbu2RvLjZdr4kCvqh2u7gwVXhwxdauIzbX3ZizbBU.HeV8BOky', 1, '+86', '18550046745', '', NULL, NULL, NULL, NULL, '2009-09-14', NULL, NULL, 0, NULL, NULL, NULL, '2018-10-27 03:38:24');
-INSERT INTO `t_users` VALUES (1000000003, NULL, NULL, NULL, NULL, 'simon', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', 1, '+86', '18362102421', '', NULL, NULL, NULL, NULL, NULL, '/fileUpload/微信图片_20181016142155.png', NULL, 0, NULL, NULL, NULL, NULL);
-INSERT INTO `t_users` VALUES (1000000004, NULL, NULL, NULL, NULL, 'sss', '$2a$11$rTQdNRld6Cc02vK9btH6tupdQW7aqbfcNlaD8ioigbADeHJWEcLM6', 1, '+86', '18362202422', '', NULL, NULL, NULL, NULL, NULL, NULL, '', 1, NULL, NULL, NULL, NULL);
-INSERT INTO `t_users` VALUES (1000000005, NULL, NULL, NULL, NULL, 'admin', '$2a$11$7pwrZUA2nOx8jWr6P1H3f.eEsmUnFmzZOs1jVxEEQSXa3HForbGKS', 1, '+86', '18362102622', '', NULL, NULL, '', NULL, NULL, NULL, '', 1, NULL, NULL, NULL, NULL);
+INSERT INTO `t_users` VALUES (1000000000, NULL, NULL, NULL, NULL, 'jeesun', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', 1, '+86', '18800000000', '18800000000@163.com', NULL, NULL, '江苏省苏州市', 18, '2018-07-04', '/fileUpload/1491809301512510.jpg', '巨蟹宅', 1, NULL, NULL, NULL, NULL);
+INSERT INTO `t_users` VALUES (1000000001, NULL, NULL, NULL, NULL, 'user2711', '$2a$11$BUiKPp8.pcym7sxXYPvZeOjl0BOoVl3PZT.1Wfb3kmIgooO/GfQ4G', 1, '+86', '18800000001', '18800000001@163.com', NULL, NULL, NULL, NULL, '2018-01-30', NULL, NULL, 0, NULL, NULL, NULL, '2018-10-27 02:56:23');
+INSERT INTO `t_users` VALUES (1000000002, NULL, NULL, NULL, NULL, 'user6745', '$2a$11$a7XDbu2RvLjZdr4kCvqh2u7gwVXhwxdauIzbX3ZizbBU.HeV8BOky', 1, '+86', '18800000002', '18800000002@163.com', NULL, NULL, NULL, NULL, '2009-09-14', NULL, NULL, 0, NULL, NULL, NULL, '2018-10-27 03:38:24');
+INSERT INTO `t_users` VALUES (1000000003, NULL, NULL, NULL, NULL, 'simon', '$2a$11$t4akVchfgOv00XxB/ZKLlOmweUoL/Aed4CiJqQjaiRLZpBU3AWfxu', 1, '+86', '18800000003', '18800000003@163.com', NULL, NULL, NULL, NULL, NULL, '/fileUpload/微信图片_20181016142155.png', NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `t_users` VALUES (1000000004, NULL, NULL, NULL, NULL, 'sss', '$2a$11$rTQdNRld6Cc02vK9btH6tupdQW7aqbfcNlaD8ioigbADeHJWEcLM6', 1, '+86', '18800000004', '18800000004@163.com', NULL, NULL, NULL, NULL, NULL, NULL, '', 1, NULL, NULL, NULL, NULL);
+INSERT INTO `t_users` VALUES (1000000005, NULL, NULL, NULL, NULL, 'admin', '$2a$11$7pwrZUA2nOx8jWr6P1H3f.eEsmUnFmzZOs1jVxEEQSXa3HForbGKS', 1, '+86', '18800000005', '18800000005@163.com', NULL, NULL, '', NULL, NULL, NULL, '', 1, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_veri_code
