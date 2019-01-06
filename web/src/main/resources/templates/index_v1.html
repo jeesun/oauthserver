@@ -11,13 +11,40 @@
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
-    <link th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet">
-    <!-- toastr 2.1.3 -->
-    <link rel="stylesheet" th:href="@{/webjars/toastr/2.1.3/toastr.min.css}">
-    <link href="/css/animate.css" rel="stylesheet">
+    <!-- toastr 2.1.4-7 -->
+    <link rel="stylesheet" th:href="@{/plug-in/toastr/2.1.4-7/toastr.min.css}">
     <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <style>
+        #toast-container > .toast {
+            background-image: none !important;
+        }
+
+        #toast-container > .toast:before {
+            position: fixed;
+            font-family: FontAwesome;
+            font-size: 24px;
+            line-height: 18px;
+            float: left;
+            color: #FFF;
+            padding-right: 0.5em;
+            margin: auto 0.5em auto -1.5em;
+        }
+        #toast-container > .toast-warning:before {
+            content: "\f071";
+        }
+        #toast-container > .toast-error:before {
+            content: "\f12a";
+        }
+        #toast-container > .toast-info:before {
+            content: "\f129";
+        }
+        #toast-container > .toast-success:before {
+            content: "\f00c";
+        }
+    </style>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg"
       style="overflow: hidden">
@@ -176,7 +203,7 @@
                     src="" th:src="@{/easyui/home.html}" frameborder="0" data-id="index_v1.html"
                     seamless></iframe>
         </div>
-        <div class="footer">
+        <div class="footer" style="display: none;visibility: hidden">
             <div class="pull-right">OauthServer使用Oauth2保护你的资源。</div>
         </div>
     </div>
@@ -284,10 +311,14 @@
 
         </div>
     </div>
+    <!--Open Window Begin-->
+    <div id="openWindow"></div>
+    <!--Open Window End-->
 </div>
 <!-- 全局js -->
 <script src="/js/jquery.min.js?v=2.1.4"></script>
-<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="/js/plugins/layer/layer.min.js"></script>
@@ -296,10 +327,31 @@
 <script type="text/javascript" src="/js/contabs.js"></script>
 <!-- 第三方插件 -->
 <script src="/js/plugins/pace/pace.min.js"></script>
-<!-- Toastr script -->
-<!-- toastr 2.1.3 -->
-<script th:src="@{/webjars/toastr/2.1.3/toastr.min.js}"></script>
+
+<!-- toastr 2.1.4-7 -->
+<script th:src="@{/plug-in/toastr/2.1.4-7/toastr.min.js}"></script>
 <script>
+    $(function () {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "rtl": false,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": 300,
+            "hideDuration": 1000,
+            "timeOut": 2000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    });
+
     function showUserConfig() {
         //iframe窗
 
@@ -312,6 +364,22 @@
             area: ['893px', '600px'],
             content: '/api/oauthUsers/personalCenter'
         });
+    }
+
+    function showWindow(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            shadeClose: true,
+            shade: 0.6,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['893px', '600px'],
+            content: options.content
+        });
+    }
+
+    function toastInfo(options) {
+        toastr[options.type](options.content, options.title);
     }
 </script>
 </body>

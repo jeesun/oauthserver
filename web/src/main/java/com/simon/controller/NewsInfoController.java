@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,7 +35,8 @@ public class NewsInfoController extends BaseController {
     @ApiIgnore
     @GetMapping(params = "easyui-list")
     public String getEasyUIList(){
-        return "easyui/news_info";
+        return "easyui/newsInfo/list";
+        //return "easyui/news_info";
     }
 
     @ApiIgnore
@@ -73,5 +75,16 @@ public class NewsInfoController extends BaseController {
     public ResultMsg delete(@PathVariable String ids){
         newsInfoService.deleteByIds(ids);
         return ResultMsg.success();
+    }
+
+    @GetMapping("add")
+    public String add(){
+        return "easyui/newsInfo/add";
+    }
+
+    @GetMapping("edit")
+    public String edit(@RequestParam Long id, Model model){
+        model.addAttribute("newsInfo", newsInfoService.findById(id));
+        return "easyui/newsInfo/edit";
     }
 }

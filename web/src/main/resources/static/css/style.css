@@ -3366,7 +3366,9 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 140px);
+    /*让标签页撑满，不保留footer高度。footer在每个标签页内部实现。*/
+    height: calc(100% - 105px);
+    /*height: calc(100% - 140px);*/
     overflow: hidden;
 }
 

@@ -17,7 +17,7 @@
         <a href="javascript:void(0)" class="button button-rounded button-small button-caution" onclick="emptyLogs()" th:text="#{emptyLogs}"></a>
     </div>
 </div>
-<table id="tt" data-options="url:'/api/loggingEvents/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'eventId', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+<table id="tt" data-options="url:'/api/loggingEvents/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'eventId', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
     <thead>
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>

@@ -63,6 +63,8 @@ public class IndexController {
         Cookie cookie = new Cookie("theme", "skin-purple");
         response.addCookie(cookie);
 
+        model.addAttribute("theme", "skin-purple");
+
         return "index_iframe";
     }
 

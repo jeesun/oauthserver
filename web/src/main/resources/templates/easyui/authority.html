@@ -17,7 +17,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
     </div>
 </div>
-<table id="tt" data-options="url:'/api/authorities/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'userId', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+<table id="tt" data-options="url:'/api/authorities/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'userId', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
     <thead>
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>

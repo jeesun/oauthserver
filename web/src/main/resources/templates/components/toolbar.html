@@ -23,7 +23,7 @@
 </div>
 <div th:fragment="file-upload (idVal,nameVal)">
     <div th:id="${idVal} + '-wrapper'" style="margin-bottom: 20px">
-        <label th:for="${idVal}" class="easyui-linkbutton">更换头像</label>
+        <label th:for="${idVal}" class="easyui-linkbutton">上传图片</label>
         <input th:id="${idVal}" type="file" name="file" multiple style="display:none">
         <span class="proportion"></span>
         <!-- 上传进度条及状态： -->

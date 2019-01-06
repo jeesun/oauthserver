@@ -38,7 +38,7 @@
     </thead>
 </table>
 <div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
-<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false" style="width:60%;height:480px;padding:10px;">
+<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:60%;height:480px;padding:10px;">
     <form id="form_add">
     <#list columns as column>
     <#switch column.easyuiType>
@@ -82,7 +82,7 @@
     </form>
 </div>
 
-<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false" style="width:640px;height:480px;padding:10px;">
+<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:640px;height:480px;padding:10px;">
     <form id="form_edit">
 
         <div style="text-align:center;">
