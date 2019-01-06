@@ -5,7 +5,7 @@
 
     <groupId>com.simon</groupId>
     <artifactId>web</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.0-1</version>
     <packaging>jar</packaging>
 
     <name>web</name>
@@ -449,14 +449,6 @@
             <version>3.0.0.6</version>
         </dependency>-->
 
-
-        <!-- toastr is a Javascript library for non-blocking notifications. -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>toastr</artifactId>
-            <version>2.1.3</version>
-        </dependency>
-
         <!-- A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES -->
         <!-- ZERO DEPENDENCIES -->
         <dependency>
@@ -497,11 +489,11 @@
         </dependency>
 
         <!-- 自定义的jar start -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>FroalaWysiwygEditor</artifactId>
             <version>2.8.5</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>easyui</artifactId>
@@ -511,6 +503,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>jeesun-adminlte</artifactId>
             <version>2.4.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>tinymce</artifactId>
+            <version>4.9.1</version>
         </dependency>
         <!-- 自定义的jar end -->
         <!-- webjars end -->

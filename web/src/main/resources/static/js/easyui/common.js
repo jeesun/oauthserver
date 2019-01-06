@@ -71,7 +71,7 @@ $(function(){
 
 });
 
-function initEditor() {
+/*function initEditor() {
     let token = $("meta[name='_csrf']").attr("content");
     $('textarea').froalaEditor({
         width: '100%',
@@ -157,7 +157,7 @@ function initEditor() {
     $('textarea').off('froalaEditor.contentChanged');
     //$('textarea').off('froalaEditor.image.uploaded');
     $('textarea').off('froalaEditor.file.uploaded');
-}
+}*/
 
 function getLocalTime(timestamp) {
     return new Date(parseInt(timestamp)).toLocaleString().replace(/:\d{1,2}$/, ' ');
@@ -217,11 +217,16 @@ function commonRequest(options) {
             if(data.code == 200){
                 $('#tt').datagrid('reload');
                 $('#table_tg').treegrid('reload');
-                $.messager.show({
+                /*$.messager.show({
                     title:'提示信息',
                     msg:'操作成功！',
                     timeout:3000,
                     showType:'slide'
+                });*/
+                parent.toastInfo({
+                    type: 'success',
+                    title: '提示信息',
+                    content: '操作成功！'
                 });
             }
         }
@@ -269,12 +274,21 @@ function doRequest(options) {
                     $('#editModal').window('close');
                     $('#tt').datagrid('reload');
                     $('#table_tg').treegrid('reload');
-                    $.messager.show({
+                    /*$.messager.show({
                         title:'提示信息',
                         msg:'操作成功！',
                         timeout:3000,
                         showType:'slide'
+                    });*/
+                    parent.toastInfo({
+                        type: 'success',
+                        title: '提示信息',
+                        content: '操作成功！'
                     });
+                    let index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+
+
                 }
             }
         });
@@ -350,7 +364,7 @@ function deleteRequest(urlPrefix){
                         if(data.code == 200){
                             $('#addModal').window('close');
                             $('#editModal').window('close');
-                            $('#tt').treegrid('reload');
+                            $('#tt').datagrid('reload');
                             $('#table_tg').treegrid('reload');
                             $.messager.show({
                                 title:'提示信息',
