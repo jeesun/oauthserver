@@ -40,9 +40,17 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    2. swagger
    3. druid
    4. 日志管理
+
 ## 更新日志
+### 1.3.0-2（2019-01-20）
+#### web
+1. 升级Spring Boot 1.5.18.RELEASE到1.5.19.RELEASE；
+2. 模板增加MyBatis Provider模板；新增角色管理（权限管理核心）；
+3. 完善权限控制，支持到页面操作按钮；
+4. 使用代码生成器生成“新闻管理”，并不修改一行代码。
+
 ### 1.3.0-1(2019-01-06)
-####web
+#### web
 1. 新闻管理的新增和修改页面使用layer代替easyui-window，以解决neditor图片上传弹框高度太高，造成确定按钮被遮挡的问题；
 2. 修复订单管理页面搜索bug；
 3. 操作结果使用toastr代替easyui messager；
