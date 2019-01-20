@@ -1,14 +1,15 @@
 package com.simon.repository;
 
 import com.simon.model.NewsInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
- * 新闻
- *
- * @author simon
- * @create 2018-08-03 22:32
- **/
-
+* @author SimonSun
+* @date 2019-01-20
+**/
+@Repository
 public interface NewsInfoRepository extends JpaRepository<NewsInfo, Long> {
 }

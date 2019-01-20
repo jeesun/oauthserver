@@ -1,6 +1,7 @@
 package com.simon.common.wrapper;
 
 import com.google.common.base.CaseFormat;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -25,7 +26,7 @@ public class OrderByRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String[] getParameterValues(String name) {
-        if("orderBy".equals(name)){
+        if("orderBy".equals(name) && StringUtils.isNotEmpty(getParameter("orderBy"))){
             return new String[]{CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, getParameter("orderBy"))};
         }
         return super.getParameterValues(name);

@@ -14,7 +14,7 @@ import java.util.List;
  * @author simon
  * @date 2018-11-13
  **/
-@ApiModel(description = "字典")
+@ApiModel(description = "EasyUI TreeGrid节点")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class EasyUiTreeGridDto implements Serializable {

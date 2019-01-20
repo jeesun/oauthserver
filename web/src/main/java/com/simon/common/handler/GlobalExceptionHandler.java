@@ -1,6 +1,7 @@
 package com.simon.common.handler;
 
 import com.simon.common.domain.ResultMsg;
+import com.simon.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -37,6 +38,17 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
         return ResultMsg.fail(response.getStatus(), e.getMessage());
     }
 
+    /*@ExceptionHandler(value = {AccessDeniedException.class})
+    public ModelAndView grantAccessDeniedError(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e){
+        log.error("grantAccessDeniedError");
+        log.error(e.getMessage());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        Map<String,Object> model = new LinkedHashMap<>();
+        model.put("status", HttpStatus.FORBIDDEN.value());
+        model.put("message", e.getMessage());
+        return new ModelAndView("error/403", model);
+    }*/
+
     @ExceptionHandler(value = {BadCredentialsException.class})
     public ResultMsg grantBadCredentialsError(HttpServletRequest request, HttpServletResponse response, BadCredentialsException e){
         log.error("grantBadCredentialsError");
@@ -47,6 +59,13 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
     @ExceptionHandler(value = {OAuth2Exception.class, InvalidGrantException.class})
     public ResultMsg grantOAuth2Error(HttpServletRequest request, HttpServletResponse response, Exception e){
         log.error("grantOAuth2Error");
+        log.error(e.getMessage());
+        return ResultMsg.fail(response.getStatus(), e.getMessage());
+    }
+
+    @ExceptionHandler(value = {BusinessException.class})
+    public ResultMsg grantBusinessError(HttpServletRequest request, HttpServletResponse response, Exception e){
+        log.error("grantBusinessError");
         log.error(e.getMessage());
         return ResultMsg.fail(response.getStatus(), e.getMessage());
     }

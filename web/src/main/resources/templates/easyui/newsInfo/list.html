@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
-<head th:replace="components/easyui/easyui-list :: head('新闻管理', 'easyui')">
+<head th:replace="components/easyui/easyui-list :: head('新闻', 'easyui')">
 <body>
 <div id="tb">
     <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_type"  style="width:160px" allow-empty="true"></t:dict>
+        标题: <input class="easyui-textbox" style="width: 160px" id="search_title" name="title" data-options="required:false">
+        状态: <t:dict class="easyui-combobox" id="search_status" name="status" dict-name="news_status"  style="width:160px" allow-empty="true"></t:dict>
+        新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_status"  style="width:160px" allow-empty="true"></t:dict>
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
     </div>
@@ -14,31 +16,59 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
     </div>
 </div>
-<table id="tt" data-options="url:'/api/newsInfos/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: false, selectOnCheck: true, checkOnSelect: true">
+<table id="tt">
     <thead>
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>
-        <th data-options="field:'id',width:200,sortable:true,align:'center'">新闻id</th>
-        <th data-options="field:'title',width:200,sortable:true,align:'center'">标题</th>
-        <th data-options="field:'imageUrl',width:200,sortable:true,align:'center', formatter:formatPic">缩略图</th>
-        <th data-options="field:'publishDate',width:200,sortable:true,align:'center'">发布时间</th>
-        <th data-options="field:'content',width:200,sortable:true,align:'center',formatter:formatContent">新闻内容</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'id'">id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createBy'">创建人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createDate'">创建时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateBy'">更新人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateDate'">更新时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'title'">标题</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'userId'">用户id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'status',formatter:formatNewsStatus">状态</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'content',formatter:formatContent">新闻内容</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'imageUrl',formatter:formatPic">缩略图</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'publishDate'">发布时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'tags'">标签</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'newsType',formatter:formatNewsStatus">新闻类型</th>
     </tr>
     </thead>
 </table>
 <div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
-<div id="window_content" class="easyui-window" title="新闻内容" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
+<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
 <div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
 <script th:inline="javascript">
     /*<![CDATA[*/
+    $(function () {
+        $('#tt').datagrid({
+            url: '/api/newsInfos/data',
+            method: 'get',
+            idField: 'id',
+            nowrap: false,
+            animate: true,
+            rownumbers: true,
+            fit: true,
+            toolbar: '#tb',
+            pagination: true,
+            singleSelect: false,
+            selectOnCheck: true,
+            checkOnSelect: true
+        });
+    });
 
     function doSearch() {
         $('#tt').datagrid('load', {
-            newsType: $('#search_newsType').val()
+            title: $('#search_title').val(),
+            status: $('#search_status').val(),
+            newsType: $('#search_newsType').val(),
         });
     }
 
     function doSearchReset() {
+        $('#search_title').textbox('setValue', '');
+        $('#search_status').combobox('select', '');
         $('#search_newsType').combobox('select', '');
         doSearch();
     }
@@ -82,6 +112,7 @@
     }
 
     function formatContent(val, row) {
+        console.log(row.id.toString());
         return "<a href=\"javascript:void(0)\" class=\"button button-rounded button-small button-primary\" onclick='showContent(\""  + row.id.toString() + "\")'>查看</a>";
     }
 
@@ -89,6 +120,25 @@
         let rows = $('#tt').datagrid('getSelections');
         $('#window_content').html(rows[0].content);
         $('#window_content').window('open');
+    }
+
+    function formatNewsStatus(value, row) {
+        let newsStatusList = [[${newsStatusList}]];
+        for(let i = 0; i < newsStatusList.length; i++){
+            if(value == newsStatusList[i].typeCode){
+                return newsStatusList[i].typeName;
+            }
+        }
+        return value;
+    }
+    function formatNewsStatus(value, row) {
+        let newsStatusList = [[${newsStatusList}]];
+        for(let i = 0; i < newsStatusList.length; i++){
+            if(value == newsStatusList[i].typeCode){
+                return newsStatusList[i].typeName;
+            }
+        }
+        return value;
     }
     /*]]>*/
 </script>

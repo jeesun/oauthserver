@@ -89,7 +89,7 @@
         $('#gen_code_entity_name').textbox('setValue', entityName);
         $('#gen_code_id_type').combobox('setValue', 'Long');
         $('#generateCodeModal').window('open');*/
-        layer.open({
+        /*layer.open({
             type: 2,
             title: '代码生成',
             shadeClose: true,
@@ -97,6 +97,10 @@
             maxmin: true, //开启最大化最小化按钮
             area: ['640px', '320px'],
             content: 'tables/codeGenerate?tableName=' + tableName + '&entityName=' + entityName + '&tableComment=' + tableComment
+        });*/
+        parent.showWindow({
+            title:'代码生成',
+            content:'/tables/codeGenerate?tableName=' + tableName + '&entityName=' + entityName + '&tableComment=' + tableComment
         });
     }
 

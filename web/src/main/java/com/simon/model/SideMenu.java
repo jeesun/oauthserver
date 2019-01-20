@@ -61,9 +61,9 @@ public class SideMenu implements Serializable{
     @Column(name = "url")
     private String url;
 
-    @ApiModelProperty(value = "菜单权限")
-    @Column(name = "authority")
-    private String authority;
+    @ApiModelProperty(value = "请求方法")
+    @Column(name = "request_method")
+    private String requestMethod;
 
     @ApiModelProperty(value = "菜单图标")
     @Column(name = "icon")
@@ -77,6 +77,22 @@ public class SideMenu implements Serializable{
     @Column(name = "order_num")
     private Integer orderNum;
 
+    @ApiModelProperty(value = "是否显示在菜单列表")
+    @Column(name = "show_in_menu")
+    private Boolean showInMenu;
+
+    @ApiModelProperty(value = "实体类名")
+    @Column(name = "entity_name")
+    private String entityName;
+
+    @ApiModelProperty(value = "备注")
+    @Column(name = "remark")
+    private String remark;
+
+    @ApiModelProperty(value = "关联id")
+    @Column(name = "link_id")
+    private Long linkId;
+
     @ApiModelProperty(value = "菜单类型[1:一级菜单, 2:二级菜单]")
     @Transient
     private Integer menuType;
@@ -84,4 +100,8 @@ public class SideMenu implements Serializable{
     @ApiModelProperty(value = "子菜单列表")
     @Transient
     private List<SideMenu> subSideMenus;
+
+    @ApiModelProperty(value = "菜单权限")
+    @Transient
+    private String authority;
 }

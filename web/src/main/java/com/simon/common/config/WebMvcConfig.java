@@ -29,12 +29,15 @@ import java.util.Locale;
  **/
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+    /*@Autowired
+    private ErrorPageInterceptor errorPageInterceptor;*/
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
         //资源国际化变化拦截
         registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/**");
+        //registry.addInterceptor(errorPageInterceptor);//.addPathPatterns("/action/**", "/mine/**");默认所有
         //registry.addInterceptor(authInterceptor()).addPathPatterns("/**").excludePathPatterns("**/swagger-ui.html");//token登录拦截
         //registry.addInterceptor(authInterceptor());
     }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('新闻管理', 'easyui,upload,ueditor')">
+<body>
+<form id="form_edit">
+    <div>
+        <input class="easyui-textbox" style="width: 100%" id="edit_id" name="id" th:value="${newsInfo.id}" data-options="label:'id:', readonly:true">
+    </div>
+    <div>
+        <input class="easyui-textbox" style="width: 100%" id="edit_title" name="title" th:value="${newsInfo.title}" data-options="label:'标题:', required:true">
+    </div>
+    <div>
+        <label style="width: 80px;float:left;">缩略图:</label>
+        <div th:replace="components/toolbar :: file-upload (idVal='edit_imageUrl',nameVal='imageUrl')" style="width:94%;float:left;"></div>
+        <div style="clear:both"></div>
+    </div>
+
+    <div>
+        <label style="width: 80px;float:left;">新闻内容:</label>
+        <div id="edit_editor" type="text/plain" class="easyui-fluid" style="width:80%;height:500px;float:left;"></div>
+        <div style="clear:both"></div>
+    </div>
+    <div style="text-align:center;">
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="edit()" th:text="#{ok}"></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
+    </div>
+</form>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
+<div id="window_content" class="easyui-window" title="新闻内容" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui,upload,ueditor')"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        var editEditor = UE.getEditor('edit_editor', {
+            autoHeight: false
+        });
+        //初始化图片上传按钮
+        initFileUpload('#edit_imageUrl', 'imageUrl');
+        //显示预览图片
+        imgPreview('#edit_imageUrl', 'imageUrl', [[${newsInfo.imageUrl}]]);
+
+        editEditor.ready(function() {
+            editEditor.setContent([[${newsInfo.content}]]);
+        });
+    });
+
+    function edit() {
+        doRequest({
+            formId: '#form_edit',
+            url: '/api/newsInfos',
+            type: 'PATCH',
+            extraData: {
+                content: UE.getEditor('edit_editor').getContent()
+            }
+        });
+    }
+
+    function clearForm() {
+        $('#form_add').form('clear');
+        $('#addModal').window('close');
+
+        $('#form_edit').form('clear');
+        $('#editModal').window('close');
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

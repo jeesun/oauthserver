@@ -1,27 +1,31 @@
 
 package com.simon.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.simon.common.config.AppConfig;
 import com.simon.mapper.NewsInfoMapper;
 import com.simon.model.NewsInfo;
-import com.simon.repository.NewsInfoRepository;
 import com.simon.service.NewsInfoService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.simon.repository.NewsInfoRepository;
+import com.simon.common.config.AppConfig;
+import lombok.extern.slf4j.Slf4j;
+import lombok.var;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 /**
 * @author SimonSun
-* @create 2018-08-06 20:56:26
+* @date 2019-01-20
 **/
+@Slf4j
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class NewsInfoServiceImpl implements NewsInfoService {
@@ -47,7 +51,7 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     }
 
     @Override
-    public PageInfo<NewsInfo> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+    public PageInfo<NewsInfo> findAll(Integer pageNo, Integer pageSize, String orderBy){
         if (null == pageSize){
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
@@ -102,12 +106,12 @@ public class NewsInfoServiceImpl implements NewsInfoService {
     }
 
     @Override
-    public int updateByPrimaryKey(NewsInfo newsInfo) {
+    public int updateByPrimaryKey(NewsInfo newsInfo){
         return newsInfoMapper.updateByPrimaryKey(newsInfo);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(NewsInfo newsInfo) {
+    public int updateByPrimaryKeySelective(NewsInfo newsInfo){
         return newsInfoMapper.updateByPrimaryKeySelective(newsInfo);
     }
 

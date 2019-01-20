@@ -1,11 +1,10 @@
 package com.simon.service;
-
-import com.simon.common.service.BasicService;
 import com.simon.model.NewsInfo;
+import com.simon.common.service.BasicService;
 
 /**
 * @author SimonSun
-* @create 2018-08-05 18:00:13
+* @date 2019-01-20
 **/
 public interface NewsInfoService extends BasicService<NewsInfo, Long> {
 

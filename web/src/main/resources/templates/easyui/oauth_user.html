@@ -14,6 +14,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doExport()"><i class="fa fa-floppy-o" aria-hidden="true"></i> <span th:text="#{export}"></span></a>
     </div>
 </div>
 <table id="tt" data-options="url:'/api/oauthUsers/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id',treeField:'name', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
@@ -38,7 +39,7 @@
     </tr>
     </thead>
 </table>
-<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
 <div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:640px;height:480px;padding:30px 60px;">
     <form id="form_add">
         <div>
@@ -199,6 +200,11 @@
             $.messager.alert('提示信息','请选择一条数据！','error');
         }
     }
+
+    function doExport() {
+        $('#tt').datagrid('toExcel','dg.xls');
+    }
+
 
     function edit() {
         doRequest({

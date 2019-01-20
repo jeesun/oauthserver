@@ -5,7 +5,7 @@
 
     <groupId>com.simon</groupId>
     <artifactId>web</artifactId>
-    <version>1.3.0-1</version>
+    <version>1.3.0-2</version>
     <packaging>jar</packaging>
 
     <name>web</name>
@@ -97,15 +97,10 @@
             <artifactId>thymeleaf-extras-java8time</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-rest -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
-        <!--启用不严格检查html-->
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- Spring Boot 热部署 start -->
         <dependency>
@@ -124,31 +119,26 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.github.xiaoymin</groupId>-->
-        <!--<artifactId>swagger-bootstrap-ui</artifactId>-->
-        <!--<version>1.8.7</version>-->
-        <!--</dependency>-->
         <!-- swagger依赖end -->
 
         <!--actuator是spring boot提供的对应用系统的自省和监控的集成功能，可以对应用系统进行配置查看、相关功能统计等。-->
         <!--actuator start-->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.webjars</groupId>
             <artifactId>hal-browser</artifactId>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator-docs</artifactId>
-        </dependency>
+        </dependency>-->
         <!--actuator end-->
 
         <dependency>
@@ -300,12 +290,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.baidu.ueditor</groupId>
-            <artifactId>ueditor</artifactId>
-            <version>1.1.2</version>
-        </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -367,12 +351,6 @@
             <artifactId>fontawesome</artifactId>
             <version>4.7.0</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>ionicons</artifactId>
-            <version>2.0.1</version>
-        </dependency>-->
-
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>html5shiv</artifactId>
@@ -385,34 +363,33 @@
             <version>1.4.2</version>
         </dependency>
 
-        <!--<dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>bootstrap-table</artifactId>
-            <version>1.12.1</version>
-        </dependency>-->
-
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>moment</artifactId>
             <version>2.21.0</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>jquery-treegrid</artifactId>
-            <version>0.3.0</version>
-        </dependency>-->
-
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>jquery-validation</artifactId>
             <version>1.18.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>jquery-file-upload</artifactId>
             <version>9.18.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -432,22 +409,11 @@
             <artifactId>excanvas</artifactId>
             <version>3</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>echarts</artifactId>
-            <version>4.1.0</version>
-        </dependency>-->
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>echarts</artifactId>
             <version>4.1.0</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.github.abel533</groupId>
-            <artifactId>ECharts</artifactId>
-            <version>3.0.0.6</version>
-        </dependency>-->
 
         <!-- A BEAUTIFUL, RESPONSIVE, CUSTOMIZABLE, ACCESSIBLE (WAI-ARIA) REPLACEMENT FOR JAVASCRIPT'S POPUP BOXES -->
         <!-- ZERO DEPENDENCIES -->
@@ -489,11 +455,6 @@
         </dependency>
 
         <!-- 自定义的jar start -->
-        <!--<dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>FroalaWysiwygEditor</artifactId>
-            <version>2.8.5</version>
-        </dependency>-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>easyui</artifactId>
