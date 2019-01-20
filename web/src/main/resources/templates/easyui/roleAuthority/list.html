@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:replace="components/easyui/easyui-list :: head('新闻', 'easyui')">
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        <!--标题: <input class="easyui-textbox" style="width: 160px" id="search_title" name="title" data-options="required:false">
+        状态: <input class="easyui-textbox" style="width: 160px" id="search_status" name="status" data-options="required:false">
+        新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_type"  style="width:160px" allow-empty="true"></t:dict>-->
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
+    </div>
+    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
+    </div>
+</div>
+<table id="tt">
+    <thead>
+    <tr>
+        <!--<th data-options="field:'ck',checkbox:true"></th>-->
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'id'">id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createBy'">创建人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createDate'">创建时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateBy'">更新人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateDate'">更新时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeCode'">字典编码</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeName'">字典编码名称</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeGroupId'">字典组id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeGroupCode'">字典组编码</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'orderNum'">排序</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'operation',formatter:formatRoleAuthority">操作</th>
+    </tr>
+    </thead>
+</table>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
+<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $('#tt').datagrid({
+        url: '/api/roleAuthorities/data',
+        method: 'get',
+        idField: 'id',
+        nowrap: false,
+        animate: true,
+        rownumbers: true,
+        fit: true,
+        toolbar: '#tb',
+        pagination: false,
+        singleSelect: true,
+        selectOnCheck: true,
+        checkOnSelect: true
+    });
+
+    function doSearch() {
+        $('#tt').datagrid('load', {
+            title: $('#search_title').val(),
+            status: $('#search_status').val(),
+            newsType: $('#search_newsType').val(),
+        });
+    }
+
+    function doSearchReset() {
+        $('#search_title').textbox('setValue', '');
+        $('#search_status').textbox('setValue', '');
+        $('#search_newsType').combobox('select', '');
+        doSearch();
+    }
+
+    function doAdd() {
+        parent.showWindow({
+            title:'录入',
+            content:'/api/newsInfos/add'
+        });
+    }
+
+    function doEdit() {
+        //获取选中的第一行数据
+        //var row = $('#tt').datagrid('getSelected');
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(rows.length == 1){
+            let row = rows[0];
+            parent.showWindow({
+                title:'编辑',
+                content:'/api/newsInfos/edit?id=' + row.id
+            });
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function doDelete() {
+        deleteRequest('/api/newsInfos/ids/');
+    }
+
+    function formatIcon(val, row){
+        return '<i class="' + val + '" aria-hidden="true"></i>';
+    }
+
+    function formatPic(val, row) {
+        if(!val){
+            return '';
+        }
+        return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + val + '" alt="头像" width="30px">';
+    }
+
+    function formatContent(val, row) {
+        console.log(row.id.toString());
+        return "<a href=\"javascript:void(0)\" class=\"button button-rounded button-small button-primary\" onclick='showContent(\""  + row.id.toString() + "\")'>查看</a>";
+    }
+
+    function showContent(val) {
+        let rows = $('#tt').datagrid('getSelections');
+        $('#window_content').html(rows[0].content);
+        $('#window_content').window('open');
+    }
+
+    function formatNewsType(value, row) {
+        let newsTypeList = [[${newsTypeList}]];
+        for(let i = 0; i < newsTypeList.length; i++){
+            if(value == newsTypeList[i].typeCode){
+                return newsTypeList[i].typeName;
+            }
+        }
+        return value;
+    }
+
+    function formatRoleAuthority(val, row){
+        return "<a href=\"javascript:void(0)\" class=\"button button-rounded button-small button-primary\" onclick='showAuthConfig(\""  + row.typeCode + "\")'>查看</a>";
+
+    }
+
+    function showAuthConfig(typeCode) {
+        parent.showWindow({
+            title:'角色权限配置',
+            content:'/api/roleAuthorities/authConfig?typeCode=' + typeCode
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

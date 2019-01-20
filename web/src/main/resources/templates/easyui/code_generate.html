@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
 <head th:replace="components/easyui/easyui-list :: head('数据表管理', 'easyui')">
 <body>
 <div style="margin-left: 20px">
+    <div style="margin-bottom: 10px">
+        <t:dict class="easyui-combobox" id="allowedRoles" name="allowedRoles" dict-name="role_type"  style="width:360px"  data-options="label:'权限:', multiple:true"></t:dict>
+    </div>
+    <div style="margin-bottom: 10px">
+        <t:select id="pid" name="pid" order="asc" query="t_side_menu,name,id,pid=0" class="easyui-combobox" style="width:360px" data-options="label:'父菜单:'"></t:select>
+    </div>
     <div style="margin-bottom: 10px">
         <input class="easyui-textbox" style="width: 360px" id="tableName" name="tableName" th:value="${tableName}" data-options="label:'表名:', required:true">
     </div>
@@ -46,7 +52,7 @@
         <th data-options="width:100,sortable:true,align:'center',field:'name'">字段名</th>
         <th data-options="width:100,sortable:true,align:'center',field:'type'">字段类型</th>
         <th data-options="width:100,sortable:true,align:'center',field:'comment'">字段注释</th>
-        <th data-options="width:200,sortable:true,align:'center',field:'easyuiType',
+        <th data-options="width:200,sortable:true,align:'center',field:'easyuiType',formatter:formatEasyuiType,
             editor:{
                 type:'combobox',
                 options:{
@@ -81,7 +87,7 @@
     </tr>
     </thead>
 </table>
-<div style="text-align:center;">
+<div style="text-align:center;padding-top: 10px;">
     <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="genCode()" th:text="#{ok}"></a>
     <a href="javascript:void(0)" class="button button-rounded button-small" onclick="cancelGenCode()" th:text="#{cancel}"></a>
 </div>
@@ -90,8 +96,16 @@
 <script th:inline="javascript">
 /*<![CDATA[*/
     var easyuiComponents = [[${easyuiComponents}]];
-    console.log(easyuiComponents);
+    //console.log(easyuiComponents);
+function formatEasyuiType(value, row){
+    for(let i = 0; i < easyuiComponents.length; i++){
+        if(easyuiComponents[i].typeCode == value){
+            return easyuiComponents[i].typeName;
+        }
+    }
+    return row.easyuiType;
 
+}
 $.extend($.fn.datagrid.methods, {
     editCell: function (jq, param) {
         return jq.each(function () {
@@ -151,6 +165,21 @@ $(function(){
         data: data
     });
     dg.datagrid('enableCellEditing');
+
+    for(let i = 0; i < data.length; i++){
+        $('#tt').datagrid('beginEdit', i);
+        let ed = $('#tt').datagrid('getEditor', {index:i,field:'easyuiType'});
+
+        //根据java类型推断输入类型
+        if('Integer' == data[i].type || 'Long' == data[i].type){
+            $(ed.target).combobox('setValue', 'easyui-numberbox');
+        }else if('Date' == data[i].type){
+            $(ed.target).combobox('setValue', 'easyui-datetimebox');
+        }
+
+        $('#tt').datagrid('endEdit', i);
+    }
+
 });
 
 function genCode() {
@@ -160,6 +189,8 @@ function genCode() {
     //console.log(JSON.stringify(rows[0]));
 
     let jsonData = {};
+    jsonData['allowedRoles'] = $('#allowedRoles').val();
+    jsonData['pid'] = $('#pid').val();
     jsonData['tableName'] = $('#tableName').val();
     jsonData['tableComment'] = $('#tableComment').val();
     jsonData['entityName'] = $('#entityName').val();
@@ -177,6 +208,8 @@ function genCode() {
         url: '/tables/genCode',
         type: 'GET',
         data: {
+            allowedRoles: jsonData['allowedRoles'],
+            pid: jsonData['pid'],
             tableName: jsonData['tableName'],
             tableComment: jsonData['tableComment'],
             entityName: jsonData['entityName'],
@@ -195,14 +228,16 @@ function genCode() {
             $.messager.progress('close');
         },
         success:function (data) {
-            console.log(data);
+            //console.log(data);
             if(data.code == 200){
-                $.messager.show({
-                    title:'提示信息',
-                    msg:'操作成功！',
-                    timeout:3000,
-                    showType:'slide'
+                parent.toastInfo({
+                    type: 'success',
+                    title: '提示信息',
+                    content: '操作成功！'
                 });
+
+                let index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             }
         }
     });

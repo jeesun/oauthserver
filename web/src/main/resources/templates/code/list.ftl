@@ -1,11 +1,21 @@
+<#function dashedToCamel(s)>
+    <#return s
+    ?replace('(^_+)|(_+$)', '', 'r')
+    ?replace('\\_+(\\w)?', ' $1', 'r')
+    ?replace('([A-Z])', ' $1', 'r')
+    ?capitalize
+    ?replace(' ' , '')
+    ?uncap_first
+    >
+</#function>
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
-<head th:replace="components/easyui/easyui-list :: head('${tableComment}', 'easyui,upload,ueditor')">
+<head th:replace="components/easyui/easyui-list :: head('${tableComment}', 'easyui')">
 <body>
 <div id="tb">
     <div class="datagrid-toolbar" style="padding-bottom: 6px">
-    <#list columns as column>
-        <#if column.allowSearch>
+<#list columns as column>
+    <#if column.allowSearch>
         <#switch column.easyuiType>
         <#case "easyui-textbox">
         ${column.comment}: <input class="easyui-textbox" style="width: 160px" id="search_${column.name}" name="${column.name}" data-options="required:false">
@@ -13,11 +23,17 @@
         <#case "t:dict">
         ${column.comment}: <t:dict class="easyui-combobox" id="search_${column.name}" name="${column.name}" dict-name="${column.extraInfo}"  style="width:160px" allow-empty="true"></t:dict>
         <#break>
+        <#case "easyui-datetimebox">
+        ${column.comment}: <input class="easyui-datetimebox" style="width: 160px" id="add_${column.name}" name="${column.name}" data-options="required:false">
+        <#break>
+        <#case "easyui-datebox">
+        ${column.comment}: <input class="easyui-datebox" style="width: 160px" id="add_${column.name}" name="${column.name}" data-options="required:false">
+        <#break>
         <#default>
         ${column.comment}: <input class="easyui-textbox" style="width: 160px" id="search_${column.name}" name="${column.name}" data-options="required:false">
         </#switch>
-        </#if>
-    </#list>
+    </#if>
+</#list>
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="${r'#{search}'}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="${r'#{reset}'}"></span></a>
     </div>
@@ -27,79 +43,48 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="${r'#{delete}'}"></span></a>
     </div>
 </div>
-<table id="tt" data-options="url:'/api/${entityName?uncap_first}s/easyui/list',method:'get',animate: true,rownumbers:true,fit:true,toolbar: '#tb', pagination: true,idField:'id', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
+<table id="tt">
     <thead>
     <tr>
         <th data-options="field:'ck',checkbox:true"></th>
-        <#list columns as column>
+    <#list columns as column>
+    <#switch column.easyuiType>
+        <#case "rich_text">
+        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatContent">${(column.comment)}</th>
+        <#break>
+        <#case "image">
+        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatPic">${(column.comment)}</th>
+        <#break>
+        <#case "t:dict">
+        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:format${dashedToCamel(column.extraInfo)?cap_first}">${(column.comment)}</th>
+        <#break>
+        <#default>
         <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}'">${(column.comment)}</th>
-        </#list>
+    </#switch>
+    </#list>
     </tr>
     </thead>
 </table>
-<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
-<div id="addModal" class="easyui-window" title="录入" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:60%;height:480px;padding:10px;">
-    <form id="form_add">
-    <#list columns as column>
-    <#switch column.easyuiType>
-        <#case "easyui-textbox">
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', required:true">
-        </div>
-        <#break>
-        <#case "image">
-        <div>
-            <label style="width: 80px;float:left;">${column.comment}:</label>
-            <div th:replace="components/toolbar :: file-upload (idVal='add_${column.name}',nameVal='${column.name}')" style="width:94%;float:left;"></div>
-            <div style="clear:both"></div>
-        </div>
-        <#break>
-        <#case "rich_text">
-        <label style="width: 80px;float:left;">${column.comment}:</label>
-        <div id="add_editor" type="text/plain" class="easyui-fluid" style="height:500px;float:left;"></div>
-        <div style="clear:both"></div>
-        <#break>
-        <#case "t:select">
-        <div>
-            <t:select id="add_${column.name}" allow-empty="false" name="${column.name}" order="desc" query="${column.extraInfo}" class="easyui-combobox" style="width:100%" data-options="label:'${column.comment}:'"></t:select>
-        </div>
-        <#break>
-        <#case "t:dict">
-        <div>
-            <t:dict class="easyui-combobox" id="add_${column.name}" name="${column.name}" dict-name="${column.extraInfo}" style="width:100%" data-options="label:'${column.comment}:', multiple:true"></t:dict>
-        </div>
-        <#break>
-        <#default>
-        <div>
-            <input class="easyui-textbox" style="width: 100%" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', required:true">
-        </div>
-    </#switch>
-    </#list>
-        <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="add()" th:text="${r'#{ok}'}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="${r'#{cancel}'}"></a>
-        </div>
-    </form>
-</div>
-
-<div id="editModal" class="easyui-window" title="编辑" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:640px;height:480px;padding:10px;">
-    <form id="form_edit">
-
-        <div style="text-align:center;">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="${r'#{ok}'}"></a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="${r'#{cancel}'}"></a>
-        </div>
-    </form>
-</div>
-<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false" style="width:720px;height:480px;padding:10px;"></div>
-<div th:replace="components/easyui/easyui-list :: js('easyui,upload,ueditor')"></div>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
+<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
-        //实例化编辑器
-        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-        var addEditor = UE.getEditor('add_editor');
-        var editEditor = UE.getEditor('edit_editor');
+        $('#tt').datagrid({
+            url: '/api/${entityName?uncap_first}s/data',
+            method: 'get',
+            idField: 'id',
+            nowrap: false,
+            animate: true,
+            rownumbers: true,
+            fit: true,
+            toolbar: '#tb',
+            pagination: true,
+            singleSelect: false,
+            selectOnCheck: true,
+            checkOnSelect: true
+        });
     });
 
     function doSearch() {
@@ -140,15 +125,10 @@
     }
 
     function doAdd() {
-<#list columns as column>
-    <#switch column.easyuiType>
-        <#case "image">
-        //初始化图片上传按钮
-        initFileUpload('#edit_${column.name}', '${column.name}');
-        <#break>
-    </#switch>
-</#list>
-        $('#addModal').window('open');
+        parent.showWindow({
+            title:'录入',
+            content:'/api/${entityName?uncap_first}s/add'
+        });
     }
 
     function doEdit() {
@@ -158,33 +138,10 @@
         let rows = $('#tt').datagrid('getSelections');
         if(rows.length == 1){
             let row = rows[0];
-<#list columns as column>
-    <#switch column.easyuiType>
-        <#case "easyui-textbox">
-            $('#edit_${column.name}').textbox('setValue', row.${column.name});
-        <#break>
-        <#case "easyui-combobox">
-            $('#edit_${column.name}').combobox('setValue', row.${column.name});
-        <#break>
-        <#case "easyui-numberbox">
-            $('#edit_${column.name}').numberbox('setValue', '' + row.${column.name});
-        <#break>
-        <#case "image">
-            //初始化图片上传按钮
-            initFileUpload('#edit_${column.name}', '${column.name}');
-            //显示预览图片
-            imgPreview('#edit_${column.name}', '${column.name}', row.${column.name});
-        <#break>
-        <#case "rich_text">
-            //解决ueditor被easyui-window遮盖问题
-            ueditorAdapter('#editModal');
-            UE.getEditor('edit_editor').setContent(row.${column.name});
-        <#break>
-        <#default>
-            $('#edit_${column.name}').textbox('setValue', row.${column.name});
-    </#switch>
-</#list>
-            $('#editModal').window('open');
+            parent.showWindow({
+                title:'编辑',
+                content:'/api/${entityName?uncap_first}s/edit?id=' + row.id
+            });
         }else{
             $.messager.alert('提示信息','请选择一条数据！','error');
         }
@@ -192,50 +149,6 @@
 
     function doDelete() {
         deleteRequest('/api/${entityName?uncap_first}s/ids/');
-    }
-
-    function add() {
-        doRequest({
-            formId: '#form_add',
-            url: '/api/${entityName?uncap_first}s',
-            type: 'POST',
-            extraData: {
-    <#list columns as column>
-        <#switch column.easyuiType>
-            <#case "rich_text">
-                ${column.name}: UE.getEditor('add_editor').getContent(),
-            <#break>
-            <#default>
-        </#switch>
-    </#list>
-            }
-        });
-    }
-
-    function edit() {
-        doRequest({
-            formId: '#form_edit',
-            url: '/api/${entityName?uncap_first}s',
-            type: 'PATCH',
-            extraData: {
-    <#list columns as column>
-        <#switch column.easyuiType>
-            <#case "rich_text">
-                ${column.name}: UE.getEditor('edit_editor').getContent(),
-                <#break>
-            <#default>
-        </#switch>
-    </#list>
-            }
-        });
-    }
-
-    function clearForm() {
-        $('#form_add').form('clear');
-        $('#addModal').window('close');
-
-        $('#form_edit').form('clear');
-        $('#editModal').window('close');
     }
 
     function formatIcon(val, row){
@@ -259,6 +172,23 @@
         $('#window_content').html(rows[0].content);
         $('#window_content').window('open');
     }
+
+<#list columns as column>
+    <#switch column.easyuiType>
+        <#case "t:dict">
+    function format${dashedToCamel(column.extraInfo)?cap_first}(value, row) {
+        let ${dashedToCamel(column.extraInfo)}List = [[${r'${' + dashedToCamel(column.extraInfo) + 'List}'}]];
+        for(let i = 0; i < ${dashedToCamel(column.extraInfo)}List.length; i++){
+            if(value == ${dashedToCamel(column.extraInfo)}List[i].typeCode){
+                return ${dashedToCamel(column.extraInfo)}List[i].typeName;
+            }
+        }
+        return value;
+    }
+            <#break>
+        <#default>
+    </#switch>
+</#list>
     /*]]>*/
 </script>
 </body>

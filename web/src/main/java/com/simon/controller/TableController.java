@@ -153,9 +153,11 @@ public class TableController extends BaseController {
     @RequestMapping(value = "genCode", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResultMsg genCode(
+            @ApiParam(value = "允许访问的角色，多个逗号隔开", required = true) @RequestParam String allowedRoles,
+            @ApiParam(value = "要生成的页面的父菜单id", required = true) @RequestParam Long pid,
             @RequestParam String tableName,
             @RequestParam String entityName,
-            @RequestParam String tableComment,
+            @ApiParam(value = "表注释", required = true) @RequestParam String tableComment,
             @RequestParam String idType,
             @RequestParam String genModules,
             @RequestParam String columns){

@@ -2,6 +2,7 @@ package com.simon.common.code;
 
 import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
@@ -18,6 +19,7 @@ import java.util.*;
  * @author simon
  * @date 2018/09/22
  */
+@Slf4j
 public class CodeGenerator {
 
     /**
@@ -181,7 +183,7 @@ public class CodeGenerator {
      * main函数入口,放入表名运行即可生成代码
      * @param args
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //genCode("users", "news_info");
 
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
@@ -196,7 +198,7 @@ public class CodeGenerator {
 //        genCodeByCustomModelName("t_qr_code", "QrCode");
 //        genCodeByCustomModelName("t_log_login", "LogLogin");
 //        genCodeByCustomModelName("t_news_tag", "NewsTag");
-    }
+    }*/
 
     /**
      * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。
@@ -334,9 +336,9 @@ public class CodeGenerator {
         if (StringUtils.isEmpty(modelName)){
             modelName = tableNameConvertUpperCamel(tableName);
         }
-        System.out.println(modelName + ".java 生成成功");
-        System.out.println(modelName + "Mapper.java 生成成功");
-        System.out.println(modelName + "Mapper.xml 生成成功");
+        log.info(modelName + ".java 生成成功");
+        log.info(modelName + "Mapper.java 生成成功");
+        log.info(modelName + "Mapper.xml 生成成功");
 
         FreeMarkerGeneratorUtil.generatorMvcCode(
                 JDBC_DIVER_CLASS_NAME,
@@ -375,7 +377,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("mapper.ftl").process(data,
                     new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "Mapper.java 重新生成成功");
+            log.info(modelNameUpperCamel + "Mapper.java 重新生成成功");
 
         } catch (Exception e) {
             throw new RuntimeException("生成Mapper失败", e);
@@ -401,7 +403,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("repository.ftl").process(data,
                     new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "Repository.java 生成成功");
+            log.info(modelNameUpperCamel + "Repository.java 生成成功");
 
         } catch (Exception e) {
             throw new RuntimeException("生成repository失败", e);
@@ -427,7 +429,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("service.ftl").process(data,
                     new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "Service.java 生成成功");
+            log.info(modelNameUpperCamel + "Service.java 生成成功");
 
             File file1 = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
             if (!file1.getParentFile().exists()) {
@@ -435,7 +437,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("service-impl.ftl").process(data,
                     new FileWriter(file1));
-            System.out.println(modelNameUpperCamel + "ServiceImpl.java 生成成功");
+            log.info(modelNameUpperCamel + "ServiceImpl.java 生成成功");
         } catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
         }
@@ -462,7 +464,7 @@ public class CodeGenerator {
             //cfg.getTemplate("controller-restful.ftl").process(data, new FileWriter(file));
             cfg.getTemplate("controller.ftl").process(data, new FileWriter(file));
 
-            System.out.println(modelNameUpperCamel + "Controller.java 生成成功");
+            log.info(modelNameUpperCamel + "Controller.java 生成成功");
         } catch (Exception e) {
             throw new RuntimeException("生成Controller失败", e);
         }

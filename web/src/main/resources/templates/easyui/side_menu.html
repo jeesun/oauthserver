@@ -22,7 +22,7 @@
             <th data-options="field:'name',width:200,sortable:true">菜单名称</th>
             <th data-options="field:'createDate',width:200,sortable:true,align:'center'">创建时间</th>
             <th data-options="field:'url',width:200,sortable:true,align:'center'">链接</th>
-            <th data-options="field:'authority',width:240,sortable:true,align:'center'">菜单权限</th>
+            <!--<th data-options="field:'authority',width:240,sortable:true,align:'center'">菜单权限</th>-->
             <th data-options="field:'icon',width:200,formatter:formatIcon,sortable:true,align:'center'">菜单图标</th>
             <th data-options="field:'orderNum',width:200,sortable:true,align:'center'">排序</th>
         </tr>
@@ -42,9 +42,9 @@
         <div>
             <input class="easyui-textbox" style="width: 100%" id="add_url" name="url" data-options="label:'链接:', required:false">
         </div>
-        <div>
+        <!--<div>
             <t:dict class="easyui-combobox" id="add_authority" name="authority" dict-name="role_type" style="width:100%" data-options="label:'菜单权限:', multiple:true"></t:dict>
-        </div>
+        </div>-->
         <div>
             <input class="easyui-textbox" style="width: 100%" id="add_icon" name="icon" data-options="label:'菜单图标:', required:false">
         </div>
@@ -75,9 +75,9 @@
         <div>
             <input class="easyui-textbox" style="width: 100%" id="edit_url" name="url" data-options="label:'链接:', required:false">
         </div>
-        <div>
+        <!--<div>
             <t:dict class="easyui-combobox" id="edit_authority" name="authority" dict-name="role_type" style="width:100%" data-options="label:'菜单权限:', multiple:true"></t:dict>
-        </div>
+        </div>-->
         <div>
             <input class="easyui-textbox" style="width: 100%" id="edit_icon" name="icon" data-options="label:'菜单图标:', required:false">
         </div>

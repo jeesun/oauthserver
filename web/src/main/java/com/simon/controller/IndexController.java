@@ -9,12 +9,10 @@ import com.simon.service.SideMenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
@@ -34,13 +32,11 @@ import java.util.Map;
 @ApiIgnore
 @Slf4j
 @Controller
-@RequestMapping("/index")
 public class IndexController {
     @Autowired
     private SideMenuService sideMenuService;
 
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('SU')")
-    @GetMapping("/index_iframe")
+    @GetMapping("/index/index_iframe")
     public String indexIframe(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -68,8 +64,7 @@ public class IndexController {
         return "index_iframe";
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('SU')")
-    @GetMapping("/index_v1")
+    @GetMapping(value = {"/index/index_v1", "/index", "/"})
     public String index(Model model, Authentication authentication){
         List<Tree<MenuDO>> trees = new ArrayList<>();
         List<SideMenu> sideMenus = sideMenuService.findAll();

@@ -12,48 +12,100 @@
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="authority" jdbcType="VARCHAR" property="authority" />
+    <result column="request_method" jdbcType="VARCHAR" property="requestMethod" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="show_in_menu" jdbcType="BIT" property="showInMenu" />
+    <result column="entity_name" jdbcType="VARCHAR" property="entityName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="link_id" jdbcType="BIGINT" property="linkId" />
+  </resultMap>
+
+  <resultMap id="SuperResultMap" type="com.simon.model.SideMenu" extends="BaseResultMap">
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
+  </resultMap>
+
+  <resultMap id="ButtonAuthorityDtoMap" type="com.simon.dto.ButtonAuthorityDto">
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
 
   <resultMap id="SuperMap" type="com.simon.model.SideMenu" extends="BaseResultMap">
     <!-- 分步查询 -->
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
     <association property="subSideMenus" javaType="java.util.List" column="id" select="com.simon.mapper.SideMenuMapper.selectByPid" />
   </resultMap>
 
-  <select id="selectByPid" parameterType="Long" resultMap="BaseResultMap">
-    SELECT * FROM t_side_menu WHERE pid=#{pid} ORDER BY order_num ASC
+  <resultMap id="EasyUiTreeDtoMap" type="com.simon.dto.EasyUiTreeDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="text" jdbcType="VARCHAR" property="text" />
+    <result column="authority" jdbcType="VARCHAR" property="authority" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="link_id" jdbcType="BIGINT" property="linkId" />
+  </resultMap>
+
+  <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap">
+    SELECT
+        tsm.*,
+        group_concat( tsma.authority ) as authority
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+	WHERE pid=#{pid}
+	GROUP BY
+        tsm.id
+	ORDER BY order_num ASC
   </select>
 
-  <select id="selectByPids" parameterType="String" resultMap="BaseResultMap">
-    SELECT * FROM t_side_menu WHERE pid IN (#{pids})
+  <select id="selectByPids" parameterType="String" resultMap="SuperResultMap">
+    SELECT
+        tsm.*,
+        group_concat( tsma.authority ) as authority
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE pid IN (#{pids})
+    GROUP BY
+        tsm.id
   </select>
   
-  <select id="selectByPidArray" parameterType="Long[]" resultMap="BaseResultMap">
-    SELECT *
-    FROM t_side_menu tsm
+  <select id="selectByPidArray" parameterType="Long[]" resultMap="SuperResultMap">
+    SELECT
+    tsm.*,
+    group_concat( tsma.authority ) as authority
+    FROM
+    t_side_menu tsm
+    LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     WHERE tsm.pid IN
     <foreach collection="pids" item="pid" index="index" open="(" close=")" separator=",">
       #{pid}
     </foreach>
   </select>
 
-  <select id="selectByPidList" parameterType="List" resultMap="BaseResultMap">
-    SELECT *
-    FROM t_side_menu tsm
+  <select id="selectByPidList" parameterType="List" resultMap="SuperResultMap">
+    SELECT
+    tsm.*,
+    group_concat( tsma.authority ) as authority
+    FROM
+    t_side_menu tsm
+    LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     WHERE tsm.pid IN
     <foreach collection="pidList" item="pid" index="index" open="(" close=")" separator=",">
       #{pid}
     </foreach>
+    GROUP BY
+      tsm.id
   </select>
 
   <select id="selectLevel1" resultMap="SuperMap">
     SELECT
-        *
+    tsm.*,
+    group_concat( tsma.authority ) as authority
     FROM
-        t_side_menu
+    t_side_menu tsm
+    LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     WHERE
         ( pid IS NULL OR pid = 0 )
         <if test="map.authority != null and map.authority != ''">
@@ -62,27 +114,84 @@
         <if test="map.name != null and map.name != ''">
           AND name LIKE CONCAT('%', #{map.name}, '%')
         </if>
+    GROUP BY
+      tsm.id
     ORDER BY
         order_num ASC
   </select>
 
   <select id="selectTreeGrid" resultMap="SuperMap">
     SELECT
-    *
+        tsm.*,
+        group_concat( tsma.authority ) as authority
     FROM
-    t_side_menu
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     WHERE
-    ( pid IS NULL OR pid = 0 )
+    ( tsm.pid IS NULL OR tsm.pid = 0 )
+    GROUP BY
+        tsm.id
     ORDER BY
-    order_num ASC
+    tsm.order_num ASC
+
   </select>
 
-  <select id="findAll" resultMap="BaseResultMap">
+  <select id="findAll" resultMap="SuperResultMap">
     SELECT
-        *
+        tsm.*,
+        group_concat( tsma.authority ) as authority
     FROM
-        t_side_menu
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE
+    tsm.show_in_menu=1
+    GROUP BY
+        tsm.id
     ORDER BY
-        order_num ASC
+        tsm.order_num ASC
+  </select>
+
+  <select id="findAuthorityByUrl" resultType="java.lang.String">
+    SELECT
+        group_concat( tsma.authority ) AS authority
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE
+        tsm.url = #{url}
+    GROUP BY
+        tsm.id
+  </select>
+
+  <delete id="deleteByEntityName" parameterType="java.lang.String">
+    DELETE FROM t_side_menu WHERE entity_name=#{entityName}
+  </delete>
+
+  <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap">
+    SELECT
+        group_concat( tsma.authority ) AS authority,
+        tsm.remark
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE
+        entity_name=#{entityName} AND tsm.remark IS NOT NULL
+    GROUP BY
+        tsm.id
+  </select>
+
+  <select id="findEasyUiTreeDtoByAuthority" parameterType="java.lang.String" resultMap="EasyUiTreeDtoMap">
+    SELECT
+        tsm.id,
+        tsm.pid,
+        tsm.NAME AS text,
+        group_concat( tsma.authority ) AS authority,
+        tsm.order_num,
+        tsm.link_id
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    GROUP BY
+        tsm.id
   </select>
 </mapper>

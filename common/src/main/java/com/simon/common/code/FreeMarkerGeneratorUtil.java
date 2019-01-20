@@ -1,5 +1,6 @@
 package com.simon.common.code;
 
+import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.DbUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -78,7 +79,6 @@ public class FreeMarkerGeneratorUtil {
             EntityDataModel entityModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
             //生成每个表实体
             generateCode(entityModel, templatePath, "entity.ftl", entityDir);
-
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }
@@ -97,7 +97,15 @@ public class FreeMarkerGeneratorUtil {
     private static void generateCode(EntityDataModel dataModel, String templatePath, String templateName, String outDir)
             throws IOException, TemplateException {
 
-        String file = outDir +"/"+ dataModel.getEntityName() + dataModel.getFileSuffix();
+        //String file = outDir +"/"+ dataModel.getEntityName() + dataModel.getFileSuffix();
+        String file;
+        if(templateName.contains("entity")){
+            file = outDir +"/"+ dataModel.getEntityName() + dataModel.getFileSuffix();
+        }else if(templateName.contains("provider")){
+            file = outDir + "/" + dataModel.getEntityName() + "Provider" + dataModel.getFileSuffix();
+        }else{
+            throw new BusinessException("不支持的模板");
+        }
         File targetFile = new File(file);
         if (targetFile.exists()){
             Files.delete(targetFile.toPath());

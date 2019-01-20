@@ -82,6 +82,6 @@
     <root level="INFO">
         <appender-ref ref="ROLLING-FILE" />
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="DB-CLASSIC-MYSQL-POOL" />
+        <!--<appender-ref ref="DB-CLASSIC-MYSQL-POOL" />-->
     </root>
 </configuration>

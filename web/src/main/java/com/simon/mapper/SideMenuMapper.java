@@ -1,12 +1,16 @@
 package com.simon.mapper;
 
 import com.simon.common.mapper.MyMapper;
+import com.simon.dto.ButtonAuthorityDto;
+import com.simon.dto.EasyUiTreeDto;
 import com.simon.model.SideMenu;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
+@Mapper
 public interface SideMenuMapper extends MyMapper<SideMenu> {
     List<SideMenu> selectByPid(@Param("pid") Long pid);
     List<SideMenu> selectByPids(@Param("pids") String pids);
@@ -41,4 +45,17 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
     List<SideMenu> findAll();
 
     List<SideMenu> getList(@Param("map") Map<String, Object> map);
+
+    /**
+     * 根据请求地址查询权限组
+     * @param url 请求地址
+     * @return 权限组
+     */
+    String findAuthorityByUrl(@Param("url") String url);
+
+    int deleteByEntityName(@Param("entityName") String entityName);
+
+    List<ButtonAuthorityDto> findButtonAuthorityDtoByEntityName(@Param("entityName") String entityName);
+
+    List<EasyUiTreeDto> findEasyUiTreeDtoByAuthority(@Param("authority") String authority);
 }

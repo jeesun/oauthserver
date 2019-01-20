@@ -228,6 +228,8 @@ function commonRequest(options) {
                     title: '提示信息',
                     content: '操作成功！'
                 });
+                let index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             }
         }
     });
@@ -287,9 +289,32 @@ function doRequest(options) {
                     });
                     let index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
-
-
+                }else{
+                    parent.toastInfo({
+                        type: 'success',
+                        title: '提示信息',
+                        content: data.message
+                    });
+                    /*let index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);*/
                 }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // 状态码
+                //console.log(XMLHttpRequest.status);
+                // 状态
+                //console.log(XMLHttpRequest.readyState);
+                //console.log(XMLHttpRequest.responseText);
+                // 错误信息
+                //console.log(textStatus);
+                let data = eval('(' + XMLHttpRequest.responseText + ')');
+                parent.toastInfo({
+                    type: 'success',
+                    title: '提示信息',
+                    content: '操作成功！'
+                });
+                /*let index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);*/
             }
         });
     }else{
@@ -372,7 +397,31 @@ function deleteRequest(urlPrefix){
                                 timeout:3000,
                                 showType:'slide'
                             });
+                        }else{
+                            $.messager.show({
+                                title:'提示信息',
+                                msg: data.message,
+                                timeout:3000,
+                                showType:'slide'
+                            });
                         }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $.messager.progress('close');
+                        // 状态码
+                        //console.log(XMLHttpRequest.status);
+                        // 状态
+                        //console.log(XMLHttpRequest.readyState);
+                        //console.log(XMLHttpRequest.responseText);
+                        // 错误信息
+                        //console.log(textStatus);
+                        let data = eval('(' + XMLHttpRequest.responseText + ')');
+                        $.messager.show({
+                            title:'提示信息',
+                            msg:data.message,
+                            timeout:3000,
+                            showType:'slide'
+                        });
                     }
                 });
             }
@@ -420,7 +469,30 @@ function deleteRequestByUserId(urlPrefix){
                                 timeout:3000,
                                 showType:'slide'
                             });
+                        }else{
+                            $.messager.show({
+                                title:'提示信息',
+                                msg: data.message,
+                                timeout:3000,
+                                showType:'slide'
+                            });
                         }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // 状态码
+                        //console.log(XMLHttpRequest.status);
+                        // 状态
+                        //console.log(XMLHttpRequest.readyState);
+                        //console.log(XMLHttpRequest.responseText);
+                        // 错误信息
+                        //console.log(textStatus);
+                        let data = eval('(' + XMLHttpRequest.responseText + ')');
+                        $.messager.show({
+                            title:'提示信息',
+                            msg:data.message,
+                            timeout:3000,
+                            showType:'slide'
+                        });
                     }
                 });
             }

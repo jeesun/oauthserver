@@ -102,10 +102,10 @@
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
         <!--启用不严格检查html-->
-        <dependency>
+        <!--<dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- Spring Boot 热部署 start -->
         <dependency>

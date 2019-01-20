@@ -38,6 +38,8 @@ public class QuartzConfig {
     public Scheduler scheduler(QuartzJobFactory quartzJobFactory) throws Exception {
 
         SchedulerFactoryBean factoryBean=new SchedulerFactoryBean();
+        // 延时启动，应用启动10秒后，定时器才开始启动
+        factoryBean.setStartupDelay(10);
         factoryBean.setJobFactory(quartzJobFactory);
         factoryBean.afterPropertiesSet();
         Scheduler scheduler=factoryBean.getScheduler();

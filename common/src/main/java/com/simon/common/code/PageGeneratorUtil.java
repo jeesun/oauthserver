@@ -1,6 +1,7 @@
 package com.simon.common.code;
 
 import com.google.common.base.CaseFormat;
+import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.DbUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -77,11 +78,25 @@ public class PageGeneratorUtil {
                 entityDirFile.mkdirs();
                 log.info("创建目录：{} 成功！ ",entityDir);
             }
-            //生成每个表实体
+            //生成页面
             entityModel.setFileSuffix(".html");
             generateCode(entityModel, templatePath, "list.ftl", entityDir);
+            generateCode(entityModel, templatePath, "add.ftl", entityDir);
+            generateCode(entityModel, templatePath, "edit.ftl", entityDir);
+            //生成每个表实体
             entityModel.setFileSuffix(".java");
             generateCode(entityModel, templatePath, "controllerWithPage.ftl", CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/"));
+
+            String providerPackage = "com.simon.provider";
+            //检查provider文件夹是否存在，不存在就创建
+            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
+            File providerDirFile = new File(providerDir);
+            if (!providerDirFile.exists()) {
+                providerDirFile.mkdirs();
+                log.info("创建目录：{} 成功！ ",providerDir);
+            }
+            //生成Provider
+            generateCode(entityModel, templatePath, "provider.ftl", providerDir);
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }
@@ -142,11 +157,27 @@ public class PageGeneratorUtil {
                 log.info("创建目录：{} 成功！ ",entityDir);
             }
             EntityDataModel entityModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
-            //生成每个表实体
+            //生成页面
             entityModel.setFileSuffix(".html");
+            //CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityModel.getEntityName()) 首字母小写
             generateCode(entityModel, templatePath, "list.ftl", entityDir);
+            generateCode(entityModel, templatePath, "add.ftl", entityDir);
+            generateCode(entityModel, templatePath, "edit.ftl", entityDir);
+            //生成每个表实体
             entityModel.setFileSuffix(".java");
             generateCode(entityModel, templatePath, "controllerWithPage.ftl", CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/"));
+
+            String providerPackage = "com.simon.provider";
+            //检查provider文件夹是否存在，不存在就创建
+            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
+            File providerDirFile = new File(providerDir);
+            if (!providerDirFile.exists()) {
+                providerDirFile.mkdirs();
+                log.info("创建目录：{} 成功！ ",providerDir);
+            }
+
+            //生成Provider
+            generateCode(entityModel, templatePath, "provider.ftl", providerDir);
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }
@@ -166,10 +197,19 @@ public class PageGeneratorUtil {
 
         String file;
         if(".java".equalsIgnoreCase(dataModel.getFileSuffix())){
-            file = outDir + "/" + dataModel.getEntityName() + "Controller" + dataModel.getFileSuffix();
+            //file = outDir + "/" + dataModel.getEntityName() + "Controller" + dataModel.getFileSuffix();
+            if(templateName.contains("controller")){
+                file = outDir + "/" + dataModel.getEntityName() + "Controller" + dataModel.getFileSuffix();
+            }else if(templateName.contains("provider")){
+                file = outDir + "/" + dataModel.getEntityName() + "Provider" + dataModel.getFileSuffix();
+            }else{
+                throw new BusinessException("不支持的模板");
+            }
         }else{
-            file = outDir + "templates/" + CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, dataModel.getEntityName()) + dataModel.getFileSuffix();
-            File outDirTemplateFile = new File(outDir + "templates");
+            //file = outDir + "templates/" + CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, dataModel.getEntityName()) + dataModel.getFileSuffix();
+            //File outDirTemplateFile = new File(outDir + "templates");
+            file = outDir + "templates/easyui/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()) + "/" + templateName.substring(0, templateName.indexOf(".")) + dataModel.getFileSuffix();
+            File outDirTemplateFile = new File(outDir + "templates/easyui/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()));
             if(!outDirTemplateFile.exists()){
                 outDirTemplateFile.mkdirs();
             }

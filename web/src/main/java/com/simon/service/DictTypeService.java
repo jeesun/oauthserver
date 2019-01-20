@@ -2,6 +2,7 @@ package com.simon.service;
 
 import com.simon.common.service.BasicService;
 import com.simon.dto.DictTypeDto;
+import com.simon.dto.EasyUiTreeDto;
 import com.simon.model.DictType;
 
 import java.util.List;

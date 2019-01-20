@@ -1,6 +1,5 @@
 package com.simon.common.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.base.CaseFormat;
 import com.simon.common.code.*;
 import lombok.extern.slf4j.Slf4j;
@@ -386,8 +385,8 @@ public class DbUtil {
         return dataModel;
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         log.info(JSON.toJSONString(getTables("com.mysql.jdbc.Driver", "jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false", "root", "19941017", null, null)));
         log.info("" + getTableCount("com.mysql.jdbc.Driver", "jdbc:mysql://127.0.0.1:3306/thymelte?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false", "root", "19941017"));
-    }
+    }*/
 }

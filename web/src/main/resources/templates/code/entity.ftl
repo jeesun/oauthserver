@@ -33,4 +33,12 @@ public class ${entityName} implements Serializable{
     ${(column.annotation)}
     private ${column.type} ${column.name};
 </#list>
+
+    @ApiModelProperty(value = "创建人名称")
+    @Transient
+    private String createUser;
+
+    @ApiModelProperty(value = "更新人名称")
+    @Transient
+    private String updateUser;
 }
