@@ -82,7 +82,7 @@
             //初始化图片上传按钮
             initFileUpload('#edit_${column.name}', '${column.name}');
             //显示预览图片
-            imgPreview('#edit_${column.name}', '${column.name}', row.${column.name});
+            imgPreview('#edit_${column.name}', '${column.name}', [[${r'${' + entityName?uncap_first + "." + column.name + r'}'}]]);
             <#break>
         <#case "rich_text">
         var ${column.name}Editor = UE.getEditor('edit_${column.name}_editor', {
