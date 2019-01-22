@@ -38,9 +38,9 @@
         <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="${r'#{reset}'}"></span></a>
     </div>
     <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
-        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="${r'#{add}'}"></span></a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="${r'#{edit}'}"></span></a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="${r'#{delete}'}"></span></a>
+        <a th:if="${r'${#authorization.expression('+'\'hasAnyRole(\'\'__' + r'${add}' + '__\'\')\')}'}" href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="${r'#{add}'}"></span></a>
+        <a th:if="${r'${#authorization.expression('+'\'hasAnyRole(\'\'__' + r'${edit}' + '__\'\')\')}'}" href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="${r'#{edit}'}"></span></a>
+        <a th:if="${r'${#authorization.expression('+'\'hasAnyRole(\'\'__' + r'${delete}' + '__\'\')\')}'}" href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="${r'#{delete}'}"></span></a>
     </div>
 </div>
 <table id="tt">
@@ -179,7 +179,7 @@
     function format${dashedToCamel(column.extraInfo)?cap_first}(value, row) {
         let ${dashedToCamel(column.extraInfo)}List = [[${r'${' + dashedToCamel(column.extraInfo) + 'List}'}]];
         for(let i = 0; i < ${dashedToCamel(column.extraInfo)}List.length; i++){
-            if(value == ${dashedToCamel(column.extraInfo)}List[i].typeCode){
+            if(String(value) == String(${dashedToCamel(column.extraInfo)}List[i].typeCode)){
                 return ${dashedToCamel(column.extraInfo)}List[i].typeName;
             }
         }

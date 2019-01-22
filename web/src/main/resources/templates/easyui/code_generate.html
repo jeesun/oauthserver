@@ -69,19 +69,19 @@
         <th data-options="width:100,sortable:true,align:'center',field:'allowSearch',
             editor:{
                 type:'checkbox',
-                options:{on:'true',off:'false'}
+                options:{on:'1',off:'0'}
             }
             ">是否支持搜索</th>
         <th data-options="width:100,sortable:true,align:'center',field:'hidden',
             editor:{
                 type:'checkbox',
-                options:{on:'true',off:'false'}
+                options:{on:'1',off:'0'}
             }
             ">是否隐藏</th>
         <th data-options="width:100,sortable:true,align:'center',field:'allowInput',
             editor:{
                 type:'checkbox',
-                options:{on:'true',off:'false'}
+                options:{on:'1',off:'0'}
             }
             ">是否允许输入</th>
     </tr>
@@ -161,6 +161,7 @@ $.extend($.fn.datagrid.methods, {
 
 $(function(){
     var data = [[${tableEntity.columns}]];
+    console.log(data);
     var dg = $('#tt').datagrid({
         data: data
     });

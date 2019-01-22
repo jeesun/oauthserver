@@ -1,13 +1,11 @@
 package com.simon.service;
 
-import com.github.pagehelper.PageInfo;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.service.BasicService;
 import com.simon.dto.StatisticDto;
 import com.simon.model.OauthUser;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户
@@ -24,8 +22,6 @@ public interface OauthUserService extends BasicService<OauthUser, Long> {
     int updatePwdByCode(String phone, Integer code, String newPwd);
 
     int updatePwdByOldPwd(String username, String oldPwd, String newPwd);
-
-    PageInfo<OauthUser> getList(Map<String, Object> params, Integer limit, Integer offset, String orderBy);
 
     List<StatisticDto> sexRatio();
 

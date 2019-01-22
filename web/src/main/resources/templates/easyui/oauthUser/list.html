@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('用户表', 'easyui')">
+<body>
+<div id="tb">
+    <div class="datagrid-toolbar" style="padding-bottom: 6px">
+        用户名: <input class="easyui-textbox" style="width: 160px" id="search_username" name="username" data-options="required:false">
+        有效: <t:dict class="easyui-combobox" id="search_enabled" name="enabled" dict-name="enabled_status" style="width:160px" allow-empty="true"></t:dict>
+        手机号: <input class="easyui-textbox" style="width: 160px" id="search_phone" name="phone" data-options="required:false">
+        邮箱: <input class="easyui-textbox" style="width: 160px" id="search_email" name="email" data-options="required:false">
+        性别: <t:dict class="easyui-combobox" id="search_sex" name="sex" dict-name="sex_type"  style="width:160px" allow-empty="true"></t:dict>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
+    </div>
+    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+        <a th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
+        <a th:if="${#authorization.expression('hasAnyRole(''__${edit}__'')')}" href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
+        <a th:if="${#authorization.expression('hasAnyRole(''__${delete}__'')')}" href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
+    </div>
+</div>
+<table id="tt">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'id'">id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'createBy'">创建人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'createDate'">创建时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'updateBy'">更新人id</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:true,field:'updateDate'">更新时间</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'username'">用户名</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'password'">密码</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'enabled',formatter:formatEnabled">有效</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'areaCode'">手机区号</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'phone'">手机号</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'email'">邮箱</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'address'">地址</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'age'">年龄</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'birth'">生日</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'headPhoto',formatter:formatPic">头像</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'personBrief'">个人简介</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'sex',formatter:formatSexType">性别</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'visitCard'">邀请码</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'loginType',formatter:formatLoginType">登录方式</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'loginStatus',formatter:formatLoginStatus">登录状态</th>
+        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'loginDate'">登录时间</th>
+    </tr>
+    </thead>
+</table>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true,border:false" style="width:480px;height:480px;padding:10px"></div>
+<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false,border:false" style="width:720px;height:480px;padding:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $('#tt').datagrid({
+            url: '/api/oauthUsers/data',
+            method: 'get',
+            idField: 'id',
+            nowrap: false,
+            animate: true,
+            rownumbers: true,
+            fit: true,
+            toolbar: '#tb',
+            pagination: true,
+            singleSelect: false,
+            selectOnCheck: true,
+            checkOnSelect: true
+        });
+    });
+
+    function doSearch() {
+        $('#tt').datagrid('load', {
+            username: $('#search_username').val(),
+            enabled: $('#search_enabled').val(),
+            phone: $('#search_phone').val(),
+            email: $('#search_email').val(),
+            sex: $('#search_sex').val(),
+        });
+    }
+
+    function doSearchReset() {
+        $('#search_username').textbox('setValue', '');
+        $('#search_enabled').textbox('setValue', '');
+        $('#search_phone').textbox('setValue', '');
+        $('#search_email').textbox('setValue', '');
+        $('#search_sex').combobox('select', '');
+        doSearch();
+    }
+
+    function doAdd() {
+        parent.showWindow({
+            title:'录入',
+            content:'/api/oauthUsers/add'
+        });
+    }
+
+    function doEdit() {
+        //获取选中的第一行数据
+        //var row = $('#tt').datagrid('getSelected');
+        //获取选中的所有行数据
+        let rows = $('#tt').datagrid('getSelections');
+        if(rows.length == 1){
+            let row = rows[0];
+            parent.showWindow({
+                title:'编辑',
+                content:'/api/oauthUsers/edit?id=' + row.id
+            });
+        }else{
+            $.messager.alert('提示信息','请选择一条数据！','error');
+        }
+    }
+
+    function doDelete() {
+        deleteRequest('/api/oauthUsers/ids/');
+    }
+
+    function formatIcon(val, row){
+        return '<i class="' + val + '" aria-hidden="true"></i>';
+    }
+
+    function formatPic(val, row) {
+        if(!val){
+            return '';
+        }
+        return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + val + '" alt="头像" width="30px">';
+    }
+
+    function formatContent(val, row) {
+        console.log(row.id.toString());
+        return "<a href=\"javascript:void(0)\" class=\"button button-rounded button-small button-primary\" onclick='showContent(\""  + row.id.toString() + "\")'>查看</a>";
+    }
+
+    function showContent(val) {
+        let rows = $('#tt').datagrid('getSelections');
+        $('#window_content').html(rows[0].content);
+        $('#window_content').window('open');
+    }
+
+    function formatSexType(value, row) {
+        let sexTypeList = [[${sexTypeList}]];
+        for(let i = 0; i < sexTypeList.length; i++){
+            if(String(value) == String(sexTypeList[i].typeCode)){
+                return sexTypeList[i].typeName;
+            }
+        }
+        return value;
+    }
+    function formatLoginType(value, row) {
+        let loginTypeList = [[${loginTypeList}]];
+        for(let i = 0; i < loginTypeList.length; i++){
+            if(value == loginTypeList[i].typeCode){
+                return loginTypeList[i].typeName;
+            }
+        }
+        return value;
+    }
+    function formatLoginStatus(value, row) {
+        let loginStatusList = [[${loginStatusList}]];
+        for(let i = 0; i < loginStatusList.length; i++){
+            if(value == loginStatusList[i].typeCode){
+                return loginStatusList[i].typeName;
+            }
+        }
+        return value;
+    }
+
+    function formatEnabled(value, row) {
+        let enabledStatusList = [[${enabledStatusList}]];
+        for(let i = 0; i < enabledStatusList.length; i++){
+            if(String(value) == String(enabledStatusList[i].typeCode)){
+                return enabledStatusList[i].typeName;
+            }
+        }
+        return value;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

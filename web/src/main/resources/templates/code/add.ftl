@@ -6,6 +6,7 @@
     <#list columns as column>
         <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
         <#else>
+            <#if (column.allowInput?string('yes', 'no'))=='yes'>
             <#switch column.easyuiType>
                 <#case "easyui-textbox">
         <div>
@@ -56,6 +57,7 @@
             <input class="easyui-textbox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
         </div>
             </#switch>
+            </#if>
         </#if>
     </#list>
     <div style="text-align:center;padding:5px 0">
@@ -92,7 +94,7 @@
     function add() {
         doRequest({
             formId: '#form_add',
-            url: '/api/${entityName?uncap_first}s',
+            url: '/api/${entityName?uncap_first}s/add',
             type: 'POST',
             extraData: {
     <#list columns as column>

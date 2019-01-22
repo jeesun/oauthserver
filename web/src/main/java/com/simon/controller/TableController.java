@@ -117,7 +117,6 @@ public class TableController extends BaseController {
         model.addAttribute("entityName", entityName);
         try {
             EntityDataModel entityDataModel = DbUtil.getEntityModel(dataSource.getConnection(), tableName, CodeGenerator.BASE_PACKAGE, entityName);
-            List<Column> columns = entityDataModel.getColumns();
 
             //想隐藏显示的列
             List<String> hiddenColumns = new ArrayList<>();
@@ -133,7 +132,7 @@ public class TableController extends BaseController {
             denyInputColumns.add("updateDate");
             denyInputColumns.add("updateBy");
 
-            for(Column column : columns){
+            for(Column column : entityDataModel.getColumns()){
                 if(hiddenColumns.contains(column.getName())){
                     column.setHidden(true);
                 }
@@ -141,7 +140,10 @@ public class TableController extends BaseController {
                     column.setAllowInput(false);
                 }
             }
+
+            log.info(JSON.toJSONString(entityDataModel.getColumns()));
             model.addAttribute("tableEntity", entityDataModel);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

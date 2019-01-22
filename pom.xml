@@ -42,6 +42,7 @@
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<mapstruct.version>1.3.0.Beta2</mapstruct.version>
 		<lombok.version>1.18.4</lombok.version>
+		<fastjson.version>1.2.55</fastjson.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -243,7 +244,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
-				<version>1.2.47</version>
+				<version>${fastjson.version}</version>
 			</dependency>
 
 			<dependency>
