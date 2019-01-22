@@ -83,7 +83,7 @@ public class NewsInfoController extends BaseController{
     }
 
     @ApiOperation(value = "新增")
-    @PostMapping
+    @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody NewsInfo body, Authentication authentication){
         Object principal = authentication.getPrincipal();
@@ -99,7 +99,7 @@ public class NewsInfoController extends BaseController{
     }
 
     @ApiOperation(value = "修改")
-    @PatchMapping
+    @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody NewsInfo body, Authentication authentication){
         Object principal = authentication.getPrincipal();

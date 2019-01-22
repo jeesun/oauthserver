@@ -79,10 +79,10 @@
 <#list columns as column>
     <#switch column.easyuiType>
         <#case "image">
-            //初始化图片上传按钮
-            initFileUpload('#edit_${column.name}', '${column.name}');
-            //显示预览图片
-            imgPreview('#edit_${column.name}', '${column.name}', [[${r'${' + entityName?uncap_first + "." + column.name + r'}'}]]);
+        //初始化图片上传按钮
+        initFileUpload('#edit_${column.name}', '${column.name}');
+        //显示预览图片
+        imgPreview('#edit_${column.name}', '${column.name}', [[${r'${' + entityName?uncap_first + "." + column.name + r'}'}]]);
             <#break>
         <#case "rich_text">
         var ${column.name}Editor = UE.getEditor('edit_${column.name}_editor', {
@@ -93,6 +93,9 @@
             ${column.name}Editor.setContent([[${r'${' + entityName?uncap_first + "." + column.name + r'}'}]]);
         });
         <#break>
+        <#case "t:dict">
+        ${r'$(\'#edit_' + column.name + '\')'}.combobox('setValue', String([[${r'${' + entityName?uncap_first + "." + column.name + r'}'}]]));
+        <#break>
     </#switch>
 </#list>
     });
@@ -100,7 +103,7 @@
     function edit() {
         doRequest({
             formId: '#form_edit',
-            url: '/api/${entityName?uncap_first}s',
+            url: '/api/${entityName?uncap_first}s/edit',
             type: 'PATCH',
             extraData: {
     <#list columns as column>

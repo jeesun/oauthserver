@@ -94,7 +94,7 @@
     function add() {
         doRequest({
             formId: '#form_add',
-            url: '/api/${entityName?uncap_first}s',
+            url: '/api/${entityName?uncap_first}s/add',
             type: 'POST',
             extraData: {
     <#list columns as column>

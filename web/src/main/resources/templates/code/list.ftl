@@ -179,7 +179,7 @@
     function format${dashedToCamel(column.extraInfo)?cap_first}(value, row) {
         let ${dashedToCamel(column.extraInfo)}List = [[${r'${' + dashedToCamel(column.extraInfo) + 'List}'}]];
         for(let i = 0; i < ${dashedToCamel(column.extraInfo)}List.length; i++){
-            if(value == ${dashedToCamel(column.extraInfo)}List[i].typeCode){
+            if(String(value) == String(${dashedToCamel(column.extraInfo)}List[i].typeCode)){
                 return ${dashedToCamel(column.extraInfo)}List[i].typeName;
             }
         }

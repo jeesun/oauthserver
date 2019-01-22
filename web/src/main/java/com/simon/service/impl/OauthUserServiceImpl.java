@@ -8,9 +8,9 @@ import com.simon.common.exception.CodeInvalidException;
 import com.simon.common.exception.PhoneRegisteredException;
 import com.simon.common.exception.UserExistsException;
 import com.simon.common.exception.UserNotValidException;
-import com.simon.common.utils.ValidUtil;
 import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.UsernameUtil;
+import com.simon.common.utils.ValidUtil;
 import com.simon.dto.StatisticDto;
 import com.simon.mapper.AuthorityMapper;
 import com.simon.mapper.OauthUserMapper;
@@ -296,15 +296,17 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public PageInfo<OauthUser> getList(Map<String, Object> params, Integer limit, Integer offset, String orderBy) {
-        orderBy = orderBy.trim();
-        if (org.springframework.util.StringUtils.isEmpty(orderBy)){
-            PageHelper.startPage(offset/limit + 1, limit);
-        }else{
-            PageHelper.startPage(offset/limit + 1, limit, orderBy);
+    public PageInfo<OauthUser> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize){
+            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
-
-        List<OauthUser> list = oauthUserMapper.findByMap(params);
+        orderBy = orderBy.trim();
+        if (StringUtils.isEmpty(orderBy)){
+            PageHelper.startPage(pageNo, pageSize);
+        }else{
+            PageHelper.startPage(pageNo, pageSize, orderBy);
+        }
+        List<OauthUser> list = oauthUserMapper.getList(params);
         return new PageInfo<>(list);
     }
 

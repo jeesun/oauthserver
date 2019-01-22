@@ -54,7 +54,7 @@
     function add() {
         doRequest({
             formId: '#form_add',
-            url: '/api/newsInfos',
+            url: '/api/newsInfos/add',
             type: 'POST',
             extraData: {
                 content: UE.getEditor('add_content_editor').getContent(),

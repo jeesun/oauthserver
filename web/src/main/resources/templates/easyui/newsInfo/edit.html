@@ -57,13 +57,13 @@
             //初始化图片上传按钮
             initFileUpload('#edit_imageUrl', 'imageUrl');
             //显示预览图片
-            imgPreview('#edit_imageUrl', 'imageUrl', row.imageUrl);
+            imgPreview('#edit_imageUrl', 'imageUrl', [[${newsInfo.imageUrl}]]);
     });
 
     function edit() {
         doRequest({
             formId: '#form_edit',
-            url: '/api/newsInfos',
+            url: '/api/newsInfos/edit',
             type: 'PATCH',
             extraData: {
                 content: UE.getEditor('edit_content_editor').getContent(),
