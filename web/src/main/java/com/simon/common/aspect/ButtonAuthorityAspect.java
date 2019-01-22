@@ -38,7 +38,8 @@ public class ButtonAuthorityAspect {
         for(Object object : pjp.getArgs()){
             if(object instanceof Model){
                 Model model = (Model) object;
-                List<ButtonAuthorityDto> buttonAuthorityDtoList = sideMenuService.findButtonAuthorityDtoByEntityName("NewsInfo");
+                String simpleClassName = pjp.getTarget().getClass().getSimpleName();
+                List<ButtonAuthorityDto> buttonAuthorityDtoList = sideMenuService.findButtonAuthorityDtoByEntityName(simpleClassName.substring(0, simpleClassName.indexOf("Controller")));
                 if (null != buttonAuthorityDtoList && buttonAuthorityDtoList.size() > 0){
                     buttonAuthorityDtoList.forEach(item -> model.addAttribute(item.getRemark(), item.getAuthority()));
                 }
