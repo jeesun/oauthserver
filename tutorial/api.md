@@ -19,8 +19,17 @@ public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 **token相关的接口，都需要进行Basic Oauth认证。**  
 如下图所示：  
 ![截图](screenshots/2018-04-26_234934.png)
-> 1、根据用户名和密码获取access_token
->> POST [http://localhost:8181/oauth/token?grant_type=password&username=jeesun&password=1234567890c](http://localhost:8181/oauth/token?grant_type=password&username=jeesun&password=1234567890c)
+
+> 1、获取access_token
+>> 1.1 手机号+密码
+>>> POST [http://localhost:8181/oauth/token?grant_type=password&username=18800000000&password=1234567890c](http://localhost:8181/oauth/token?grant_type=password&username=18800000000&password=1234567890c)
+
+>> 1.2 手机号+验证码
+>>> POST [http://localhost:8181/oauth/token?grant_type=password&username=18800000000&password=123456&auth_type=sms](http://localhost:8181/oauth/token?grant_type=password&username=18800000000&password=123456&auth_type=sms)  
+注：验证码必须先通过[http://localhost:8181/api/veriCodes/sms/18800000000](http://localhost:8181/api/veriCodes/sms/18800000000)获取，测试账号验证码都是123456。
+
+>> 1.3 邮箱+密码
+>>> POST [http://localhost:8181/oauth/token?grant_type=password&username=18800000000@163.com&password=1234567890c](http://localhost:8181/oauth/token?grant_type=password&username=18800000000@163.com&password=1234567890c)
 
 **成功示例**  
 status=200，返回的json数据：

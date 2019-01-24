@@ -1,3 +1,26 @@
+### 1.3.0-2（2019-01-20）
+#### web
+1. 升级Spring Boot 1.5.18.RELEASE到1.5.19.RELEASE；
+2. 模板增加MyBatis Provider模板；
+3. 新增角色管理（权限管理核心）；
+4. 完善权限控制，支持到页面操作按钮；
+5. 使用代码生成器生成“新闻管理”，并不修改一行代码。
+
+### 1.3.0-1(2019-01-06)
+#### web
+1. 新闻管理的新增和修改页面使用layer代替easyui-window，以解决neditor图片上传弹框高度太高，造成确定按钮被遮挡的问题；
+2. 修复订单管理页面搜索bug；
+3. 操作结果使用toastr代替easyui messager；
+4. 移除froala editor依赖，该富文本编辑器不被允许用在开源项目中；
+5. 解决index_iframe页面侧边栏菜单项打不开的bug；
+6. 移除toastr依赖，并在plug-in中添加toastr相关js和css；
+7. 移除index_v1和index_iframe页面的footer，以保留更多的标签页高度，给easyui-window提供更多的高度空间。
+
+### 1.3.0(2018-12-20)
+1. 项目拆分成两个模块，api和web；api运行在8181端口，web运行在8182端口。
+2. 代码生成器[http://localhost:8181/tables?easyui-list](http://localhost:8181/tables?easyui-list)和[http://localhost:8182/tables?easyui-list](http://localhost:8182/tables?easyui-list)
+3. 大量更新；
+
 ### v.1.2.4.beta2(2018-09-13)
 - 默认使用MySQL数据库连接配置，更新MySQL连接配置以支持utf8mb4编码；
 - 新增BaseController，解决接口的时间类型传输问题；

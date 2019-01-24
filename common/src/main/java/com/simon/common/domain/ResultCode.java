@@ -8,10 +8,13 @@ package com.simon.common.domain;
  **/
 
 public enum ResultCode {
-
+    /**
+     * 结果码
+     */
     SUCCESS(200, "操作成功"),
     FAIL(500, "服务器内部错误"),
-    ERROR_VERI_CODE(404001, "验证码错误");
+    ERROR_VERI_CODE(404001, "验证码错误"),
+    ERROR_INVALID_PHONE(404002, "手机号格式不正确");
 
     private final int code;
     private final String msg;
