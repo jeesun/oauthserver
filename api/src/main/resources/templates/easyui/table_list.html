@@ -5,8 +5,8 @@
 <div id="tb">
     表名: <input class="easyui-textbox" style="width: 160px" id="tableName" name="tableName" data-options="required:false">
     表标注: <input class="easyui-textbox" style="width: 160px" id="tableComment" name="tableComment" data-options="required:false">
-    <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="doSearch()" th:text="#{search}">查询</a>
-    <a href="javascript:void(0)" class="button button-rounded button-small" onclick="doSearchReset()" th:text="#{reset}"></a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
 </div>
 <table id="tt" data-options="url: 'tables/data', method:'get',fit:true,rownumbers:true,pagination:true,pageSize:10,toolbar:'#tb',idField:'tableName', singleSelect: true, selectOnCheck: true, checkOnSelect: true">
     <thead>
@@ -53,15 +53,31 @@
             </label>
         </div>
         <div style="text-align:center;padding:5px 0">
-            <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="generateCode()">生成</a>
-            <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="generateCode()">生成</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="#{cancel}"></a>
         </div>
     </form>
 </div>
-<div th:replace="components/easyui/easyui-list :: js('easyui')"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui,layer')"></div>
 <script>
+    function showWindow(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            shadeClose: true,
+            shade: 0.6,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['893px', '600px'],
+            content: options.content
+        });
+    }
+
+    function toastInfo(options) {
+        toastr[options.type](options.content, options.title);
+    }
 
     function doSearch() {
+        console.log("doSearch");
         $('#tt').datagrid('load', {
             tableName: $('#tableName').val(),
             tableComment: $('#tableComment').val()
@@ -77,16 +93,30 @@
     function formatGen(val,row){
         return '<a href="javascript:void(0)" class="button button-rounded button-small button-primary button-pill" onclick="openGenerateCodeModal(\''
                 + row.tableName + '\',\''
-                + row.entityName
+                + row.entityName + '\',\''
+                + row.tableComment + '\',\''
             + '\')">代码生成</a>';
     }
 
-    function openGenerateCodeModal(tableName, entityName) {
-        console.log(tableName + ',' + entityName);
+    function openGenerateCodeModal(tableName, entityName, tableComment) {
+        /*console.log(tableName + ',' + entityName);
         $('#gen_code_table_name').textbox('setValue', tableName);
         $('#gen_code_entity_name').textbox('setValue', entityName);
         $('#gen_code_id_type').combobox('setValue', 'Long');
-        $('#generateCodeModal').window('open');
+        $('#generateCodeModal').window('open');*/
+        /*layer.open({
+            type: 2,
+            title: '代码生成',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['640px', '320px'],
+            content: 'tables/codeGenerate?tableName=' + tableName + '&entityName=' + entityName + '&tableComment=' + tableComment
+        });*/
+        showWindow({
+            title:'代码生成',
+            content:'/tables/codeGenerate?tableName=' + tableName + '&entityName=' + entityName + '&tableComment=' + tableComment
+        });
     }
 
     function submitForm(){

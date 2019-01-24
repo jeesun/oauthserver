@@ -5,34 +5,49 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <!--<meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">-->
     <title th:text="${title}"></title>
     <script th:src="@{/js/easyui/base_loading.js}"></script>
-    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.6.10/themes/super/css/font-awesome.min.css}">
-    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.6.10/themes/super/superBlue.css}" id="themeCss"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/material/easyui.css}">
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/icon.css}"/>
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:href="@{/webjars/easyui/1.7.0/themes/color.css}"/>
 
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload.css}">
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:href="@{/webjars/jquery-file-upload/9.18.0/css/jquery.fileupload-ui.css}">
 
-    <!-- Include external CSS. -->
-    <!--<link href="https://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!--&lt;!&ndash; Include external CSS. &ndash;&gt;
+    &lt;!&ndash;<link href="https://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">&ndash;&gt;
     <link th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" href="https://cdn.bootcss.com/codemirror/5.25.0/codemirror.min.css" rel="stylesheet">
-    <!-- Include Editor style. -->
+    &lt;!&ndash; Include Editor style. &ndash;&gt;
     <link th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" rel="stylesheet" th:href="@{/webjars/froala_editor/2.8.1/css/froala_editor.pkgd.min.css}">
     <link th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" rel="stylesheet" th:href="@{/webjars/froala_editor/2.8.1/css/froala_style.min.css}">
-    <!-- CSS rules for styling the element inside the editor such as p, h1, h2, etc. -->
-    <link th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" rel="stylesheet" th:href="@{/webjars/froala_editor/2.8.1/css/froala_style.min.css}">
+    &lt;!&ndash; CSS rules for styling the element inside the editor such as p, h1, h2, etc. &ndash;&gt;
+    <link th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" rel="stylesheet" th:href="@{/webjars/froala_editor/2.8.1/css/froala_style.min.css}">-->
+
+    <link rel="stylesheet" th:href="@{/plug-in/toastr/2.1.4-7/toastr.min.css}">
 
     <link rel="stylesheet" th:href="@{/plug-in/buttons.jquery.plugin/buttons.css}">
     <link rel="stylesheet" th:href="@{/css/easyui/common.css}">
+    <style>
+        /*解决ueditor宽度不占100%的问题*/
+        .edui-editor{
+            width: 100%!important;
+        }
+    </style>
 </head>
 <body>
 <div th:fragment="js (modules)">
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/jquery.min.js}"></script>
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/jquery.easyui.min.js}"></script>
-    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.6.10/themes/super/super.js}"></script>
-    <script th:if="__${#locale}__ eq 'zh_CN'" th:src="@{/webjars/easyui/1.6.10/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.7.0/jquery.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/webjars/easyui/1.7.0/jquery.easyui.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/plug-in/easyui/datagrid-export/datagrid-export.js}"></script>
+
+    <!-- pdfmake -->
+    <!--<script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/plug-in/pdfmake/0.1.40/pdfmake.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'easyui')}" th:src="@{/plug-in/pdfmake/0.1.40/vfs_fonts.js}"></script>-->
+
+    <script th:if="__${#locale}__ eq 'zh_CN'" th:src="@{/webjars/easyui/1.7.0/locale/easyui-lang-zh_CN.js}"></script>
 
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/webjars/jquery-file-upload/9.18.0/js/vendor/jquery.ui.widget.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/webjars/jquery-file-upload/9.18.0/js/jquery.iframe-transport.js}"></script>
@@ -41,11 +56,28 @@
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/webjars/jquery-file-upload/9.18.0/js/jquery.fileupload-validate.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'upload')}" th:src="@{/js/file_upload.js}"></script>
 
-    <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/froala_editor.pkgd.min.js}"></script>
+    <!--<script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/froala_editor.pkgd.min.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/languages/zh_cn.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/plugins/file.min.js}"></script>
     <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/plugins/image.min.js}"></script>
-    <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/plugins/draggable.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'froala_editor')}" th:src="@{/webjars/froala_editor/2.8.1/js/plugins/draggable.min.js}"></script>-->
+
+    <script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/neditor.config.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/neditor.all.min.js}"> </script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/neditor.service.js}"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/i18n/zh-cn/zh-cn.js}"></script>
+
+    <script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/third-party/browser-md5-file.min.js}"></script>
+    <!--<script th:if="${#strings.containsIgnoreCase(modules,'ueditor')}" th:src="@{/plug-in/neditor/2.1.13/third-party/jquery-1.10.2.min.js}"></script>-->
+
+    <script th:if="${#strings.containsIgnoreCase(modules,'layer')}" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+
+    <script th:if="${#strings.containsIgnoreCase(modules,'tinymce')}" th:src="@{/webjars/tinymce/4.9.1/tinymce.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'tinymce')}" th:src="@{/plug-in/tinymce/tinymce_languages/langs/zh_CN.js}"></script>
+
+    <script th:src="@{/plug-in/toastr/2.1.4-7/toastr.min.js}"></script>
 
     <script th:src="@{/js/easyui/common.js}"></script>
 

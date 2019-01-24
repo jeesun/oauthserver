@@ -72,6 +72,8 @@ public class NewsInfoController extends BaseController{
             @ApiParam(value= "标题")@RequestParam(required = false) String title,
             @ApiParam(value= "状态")@RequestParam(required = false) Integer status,
             @ApiParam(value= "新闻类型")@RequestParam(required = false) Integer newsType,
+            @ApiParam(value = "发布时间-开始时间")@RequestParam(required = false) Date publishDateStart,
+            @ApiParam(value = "发布时间-结束时间")@RequestParam(required = false) Date publishDateEnd,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true)@RequestParam Integer pageSize,
             @ApiParam(value = "排序")@RequestParam(required = false, defaultValue = "") String orderBy){
@@ -79,6 +81,8 @@ public class NewsInfoController extends BaseController{
         params.put("title", title);
         params.put("status", status);
         params.put("newsType", newsType);
+        params.put("publishDateStart", publishDateStart);
+        params.put("publishDateEnd", publishDateEnd);
         return new EasyUIDataGridResult<>(newsInfoService.getList(params, pageNo, pageSize, orderBy));
     }
 

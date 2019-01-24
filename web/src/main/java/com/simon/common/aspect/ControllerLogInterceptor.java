@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -20,9 +23,9 @@ import java.util.UUID;
  **/
 
 @Slf4j
-/*@Aspect
+@Aspect
 @Component
-@Order(1)*/
+@Order(1)
 public class ControllerLogInterceptor {
 
     //创建Pointcut表示式，表示所有controller请求
@@ -59,6 +62,8 @@ public class ControllerLogInterceptor {
                 }
             }
             if (paramMap.size() > 0) {
+                //log.info("[{}]类名1:{}", uuid, joinPoint.getTarget().getClass().getName());
+                //log.info("[{}]类名2:{}", uuid, joinPoint.getTarget().getClass().getSimpleName());
                 log.info("[{}]方法:{}", uuid, joinPoint.getSignature());
                 log.info("[{}]参数:{}", uuid, JSONObject.toJSONString(paramMap));
             }

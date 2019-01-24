@@ -75,12 +75,12 @@ public class CodeGenerator {
     /**
      * 项目在硬盘上的基础路径
      */
-    static final String PROJECT_PATH = System.getProperty("user.dir") + "/web";
+    static String PROJECT_PATH;
 
     /**
      * 模板位置
      */
-    static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";
+    static String TEMPLATE_FILE_PATH;
 
     /**
      * java文件路径
@@ -154,6 +154,9 @@ public class CodeGenerator {
             JAVA_PATH = prop.getProperty("java_path");
             RESOURCES_PATH = prop.getProperty("resources_path");
             BASE_PACKAGE = prop.getProperty("base_package");
+
+            PROJECT_PATH = System.getProperty("user.dir") + prop.getProperty("spring_boot_module_dir");
+            TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";
 
             MODEL_PACKAGE = BASE_PACKAGE + ".model";
             MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
@@ -363,6 +366,7 @@ public class CodeGenerator {
             freemarker.template.Configuration cfg = getConfiguration();
 
             Map<String, Object> data = new HashMap<>();
+            data.put("tableName", tableName);
             data.put("AUTHOR", AUTHOR);
             data.put("CREATE", CREATE);
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;

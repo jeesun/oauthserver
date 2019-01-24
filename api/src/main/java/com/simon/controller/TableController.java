@@ -1,22 +1,28 @@
 package com.simon.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.CaseFormat;
 import com.simon.common.code.CodeGenerator;
+import com.simon.common.code.Column;
+import com.simon.common.code.EntityDataModel;
 import com.simon.common.code.TableInfo;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.utils.DbUtil;
+import com.simon.service.DictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +39,16 @@ import java.util.Map;
 @Controller
 @RequestMapping("/tables")
 public class TableController extends BaseController {
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private DictTypeService dictTypeService;
+
+    @RequestMapping(params = "list", method = RequestMethod.GET)
+    public String list(){
+        return "table_list";
+    }
 
     @RequestMapping(params = "easyui-list", method = RequestMethod.GET)
     public String easyUiList(){
@@ -87,6 +103,78 @@ public class TableController extends BaseController {
         }else{
             CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules);
         }
+        return ResultMsg.success();
+    }
+
+    @GetMapping(value = "codeGenerate")
+    public String codeGenerate(
+            Model model,
+            @RequestParam String tableName,
+            @RequestParam(required = false) String tableComment,
+            @RequestParam String entityName){
+        model.addAttribute("tableName", tableName);
+        model.addAttribute("tableComment", tableComment);
+        model.addAttribute("entityName", entityName);
+        try {
+            EntityDataModel entityDataModel = DbUtil.getEntityModel(dataSource.getConnection(), tableName, CodeGenerator.BASE_PACKAGE, entityName);
+
+            //想隐藏显示的列
+            List<String> hiddenColumns = new ArrayList<>();
+            hiddenColumns.add("createDate");
+            hiddenColumns.add("createBy");
+            hiddenColumns.add("updateDate");
+            hiddenColumns.add("updateBy");
+
+            //想不在页面上输入的列
+            List<String> denyInputColumns = new ArrayList<>();
+            denyInputColumns.add("createDate");
+            denyInputColumns.add("createBy");
+            denyInputColumns.add("updateDate");
+            denyInputColumns.add("updateBy");
+
+            for(Column column : entityDataModel.getColumns()){
+                if(hiddenColumns.contains(column.getName())){
+                    column.setHidden(true);
+                }
+                if (denyInputColumns.contains(column.getName())){
+                    column.setAllowInput(false);
+                }
+            }
+
+            log.info(JSON.toJSONString(entityDataModel.getColumns()));
+            model.addAttribute("tableEntity", entityDataModel);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("easyuiComponents", dictTypeService.getTypeByGroupCode("easyui_component"));
+        return "easyui/code_generate";
+    }
+
+    @RequestMapping(value = "genCode", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResultMsg genCode(
+            @ApiParam(value = "允许访问的角色，多个逗号隔开", required = true) @RequestParam String allowedRoles,
+            @ApiParam(value = "要生成的页面的父菜单id", required = true) @RequestParam Long pid,
+            @RequestParam String tableName,
+            @RequestParam String entityName,
+            @ApiParam(value = "表注释", required = true) @RequestParam String tableComment,
+            @RequestParam String idType,
+            @RequestParam String genModules,
+            @RequestParam String columns){
+        List<Column> columnList = JSON.parseArray(columns, Column.class);
+        EntityDataModel entityDataModel = new EntityDataModel();
+        entityDataModel.setBasePackage(CodeGenerator.BASE_PACKAGE);
+        entityDataModel.setEntityPackage(CodeGenerator.BASE_PACKAGE + ".entity");
+        entityDataModel.setFileSuffix(".java");
+        entityDataModel.setEntityName(entityName);
+        entityDataModel.setTableName(tableName);
+        entityDataModel.setTableComment(tableComment);
+        entityDataModel.setColumns(columnList);
+        entityDataModel.setModelNameUpperCamel(entityName);
+        entityDataModel.setModelNameLowerCamel(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityDataModel.getEntityName()));
+        CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules, null, entityDataModel);
         return ResultMsg.success();
     }
 }

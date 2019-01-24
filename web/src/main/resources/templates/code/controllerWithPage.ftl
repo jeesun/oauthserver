@@ -47,6 +47,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+java.sql.Time;
+
 /**
 * ${tableComment}
 *
@@ -100,19 +102,33 @@ public class ${entityName}Controller extends BaseController{
     @GetMapping("data")
     @ResponseBody
     public EasyUIDataGridResult<${entityName}> data(
-    <#list columns as column>
-        <#if column.allowSearch>
+<#list columns as column>
+    <#if column.allowSearch>
+        <#switch column.type>
+            <#case "Date">
+            @ApiParam(value = "${(column.comment)}-开始时间")@RequestParam(required = false) Date ${column.name}Start,
+            @ApiParam(value = "${(column.comment)}-结束时间")@RequestParam(required = false) Date ${column.name}End,
+            <#break>
+            <#default>
             @ApiParam(value= "${(column.comment)}")@RequestParam(required = false) ${column.type} ${column.name},
-        </#if>
-    </#list>
+        </#switch>
+    </#if>
+</#list>
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true)@RequestParam Integer pageSize,
             @ApiParam(value = "排序")@RequestParam(required = false, defaultValue = "") String orderBy){
         Map<String, Object> params = new LinkedHashMap<>();
 <#list columns as column>
-    <#if column.allowSearch>
+<#if column.allowSearch>
+    <#switch column.type>
+        <#case "Date">
+        params.put("${column.name}Start", ${column.name}Start);
+        params.put("${column.name}End", ${column.name}End);
+        <#break>
+        <#default>
         params.put("${column.name}", ${column.name});
-    </#if>
+    </#switch>
+</#if>
 </#list>
         return new EasyUIDataGridResult<>(${entityName?uncap_first}Service.getList(params, pageNo, pageSize, orderBy));
     }
