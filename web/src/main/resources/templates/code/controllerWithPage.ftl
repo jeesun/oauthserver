@@ -47,7 +47,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-java.sql.Time;
+import java.sql.Time;
 
 /**
 * ${tableComment}
