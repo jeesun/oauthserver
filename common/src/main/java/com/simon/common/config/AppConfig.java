@@ -56,6 +56,11 @@ public class AppConfig {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_SU = "ROLE_SU";
 
+    /**
+     * 可选值yzxSmsServiceImpl，aliSmsServiceImpl
+     */
+    public static final String SMS_SERVICE_IMPL = "yzxSmsServiceImpl";
+
     public static String SERVER_PORT;
     static {
         Properties prop = new Properties();

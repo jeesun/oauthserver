@@ -3,6 +3,8 @@ package com.simon.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simon.common.config.AppConfig;
+import com.simon.common.domain.ResultCode;
+import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.SmsUtil;
 import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
@@ -74,10 +76,19 @@ public class YzxSmsServiceImpl implements SmsService {
         log.info("checkCode");
         var cache = cacheManager.getCache("smsCache");
         var ele = cache.get(mobile);
-        String output = (ele == null ? null : ele.get().toString());
+
+        if (null == ele) {
+            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
+        }
+
+        String output = ele.get().toString();
         log.info("从缓存中读到" + mobile + "," + output);
 
         var result = false;
+
+        if (StringUtils.isEmpty(output)) {
+            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
+        }
 
         if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(output)) {
             if (code.equals(output)) {

@@ -1,6 +1,7 @@
 package com.simon.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultCode;
 import com.simon.common.domain.ResultMsg;
@@ -43,7 +44,7 @@ public class OauthUserController extends BaseController {
     private OauthUserService oauthUserService;
 
     @Autowired
-    @Qualifier(value = "yzxSmsServiceImpl")
+    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
     private SmsService smsService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);

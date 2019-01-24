@@ -10,18 +10,22 @@
 
 # oauthserver
 ## 简介
-oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
-为了开发方便，项目拆分成两个模块，api和web。api运行在8181端口，web运行在8182端口。api模块是提供api服务的，主要是oauth token、支付等接口；web是管理端。
+oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。项目的目的是，仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
+为了开发方便，项目拆分成三个模块，api、web和common：
+1. api运行在8181端口，api模块是提供api服务的，主要是oauth token等其他业务接口；
+2. web运行在8182端口，是一个简单的管理后台；
+3. common是公共工具模块。
 
 支持的关系型数据库：
 - MySQL
 
 ## 功能概览
 ### api
-1. Oauth token服务；
-2. 微信、支付宝支付；
-3. 七牛云存储；
-3. 代码生成器。
+1. Oauth token服务，支持3种登录方式：手机号+验证码、手机号+密码、邮箱+密码（使用流程参考[oauth接口调用示例](tutorial/api.md)，如果你需要使用短信验证码服务，请前往阿里大于和云之讯短信服务购买短信验证码服务，并在application.properties中配置相关参数）；
+2. 短信验证码服务，支持两种：阿里大于和云之讯短信服务；
+3. 微信、支付宝支付；
+4. 七牛云存储；
+5. 代码生成器。
 ### common
 公共工具类模块
 ### web
@@ -51,28 +55,6 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 2. 代码生成器支持时间类型字段；
 3. 代码生成默认位置改为test目录；
 4. 修复java.lang.IllegalArgumentException: Request header is too large。
-### 1.3.0-2（2019-01-20）
-#### web
-1. 升级Spring Boot 1.5.18.RELEASE到1.5.19.RELEASE；
-2. 模板增加MyBatis Provider模板；
-3. 新增角色管理（权限管理核心）；
-4. 完善权限控制，支持到页面操作按钮；
-5. 使用代码生成器生成“新闻管理”，并不修改一行代码。
-
-### 1.3.0-1(2019-01-06)
-#### web
-1. 新闻管理的新增和修改页面使用layer代替easyui-window，以解决neditor图片上传弹框高度太高，造成确定按钮被遮挡的问题；
-2. 修复订单管理页面搜索bug；
-3. 操作结果使用toastr代替easyui messager；
-4. 移除froala editor依赖，该富文本编辑器不被允许用在开源项目中；
-5. 解决index_iframe页面侧边栏菜单项打不开的bug；
-6. 移除toastr依赖，并在plug-in中添加toastr相关js和css；
-7. 移除index_v1和index_iframe页面的footer，以保留更多的标签页高度，给easyui-window提供更多的高度空间。
-
-### 1.3.0(2018-12-20)
-1. 项目拆分成两个模块，api和web；api运行在8181端口，web运行在8182端口。
-2. 代码生成器[http://localhost:8181/tables?easyui-list](http://localhost:8181/tables?easyui-list)和[http://localhost:8182/tables?easyui-list](http://localhost:8182/tables?easyui-list)
-3. 大量更新；
 
 **更多历史更新日志查看[CHANGE_LOG.md](tutorial/CHANGE_LOG.md)**
 

@@ -1,5 +1,6 @@
 package com.simon.common.plugins.oauth;
 
+import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
 import com.simon.service.OauthUserService;
 import com.simon.service.SmsService;
@@ -25,7 +26,7 @@ public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAu
     private OauthUserService oauthUserService;
 
     @Autowired
-    @Qualifier(value = "yzxSmsServiceImpl")
+    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
     private SmsService smsService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);

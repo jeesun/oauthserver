@@ -1,5 +1,7 @@
 package com.simon.common.exception;
 
+import com.simon.common.domain.ResultCode;
+
 /**
  * 业务异常
  *
@@ -15,5 +17,9 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String message) {
         super(message);
+    }
+
+    public BusinessException(ResultCode resultCode){
+        super(resultCode.getMsg());
     }
 }

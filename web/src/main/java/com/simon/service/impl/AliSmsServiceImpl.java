@@ -1,5 +1,7 @@
 package com.simon.service.impl;
 
+import com.simon.common.domain.ResultCode;
+import com.simon.common.exception.BusinessException;
 import com.simon.service.SmsService;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
@@ -81,10 +83,19 @@ public class AliSmsServiceImpl implements SmsService {
         log.info("checkCode");
         var cache = cacheManager.getCache("smsCache");
         var ele = cache.get(mobile);
-        String output = (ele == null ? null : ele.get().toString());
+
+        if (null == ele) {
+            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
+        }
+
+        String output = ele.get().toString();
         log.info("从缓存中读到" + mobile + "," + output);
 
         var result = false;
+
+        if (StringUtils.isEmpty(output)) {
+            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
+        }
 
         if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(output)) {
             if (code.equals(output)) {
