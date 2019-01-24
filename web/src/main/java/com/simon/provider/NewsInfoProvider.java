@@ -33,6 +33,15 @@ public class NewsInfoProvider {
                 if (null != param.get("newsType")) {
                     WHERE("tb1.news_type=#{newsType}");
                 }
+                if (null != param.get("publishDateStart") && null == param.get("publishDateEnd")) {
+                    WHERE("tb1.publish_date gt;=#{publishDateStart}");
+                }
+                if (null == param.get("publishDateStart") && null != param.get("publishDateEnd")) {
+                    WHERE("tb1.publish_date lt;=#{publishDateEnd}");
+                }
+                if (null != param.get("publishDateStart") && null != param.get("publishDateEnd")) {
+                    WHERE("tb1.publish_date BETWEEN #{publishDateStart} AND #{publishDateEnd}");
+                }
             }
         }.toString();
     }

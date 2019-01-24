@@ -24,10 +24,10 @@
         ${column.comment}: <t:dict class="easyui-combobox" id="search_${column.name}" name="${column.name}" dict-name="${column.extraInfo}"  style="width:160px" allow-empty="true"></t:dict>
         <#break>
         <#case "easyui-datetimebox">
-        ${column.comment}: <input class="easyui-datetimebox" style="width: 160px" id="add_${column.name}" name="${column.name}" data-options="required:false">
+        ${column.comment}: <input class="easyui-datetimebox" style="width: 160px" id="search_${column.name}Start" name="${column.name}Start" data-options="required:false">-<input class="easyui-datetimebox" style="width: 160px" id="search_${column.name}End" name="${column.name}End" data-options="required:false">
         <#break>
         <#case "easyui-datebox">
-        ${column.comment}: <input class="easyui-datebox" style="width: 160px" id="add_${column.name}" name="${column.name}" data-options="required:false">
+        ${column.comment}: <input class="easyui-datebox" style="width: 160px" id="search_${column.name}Start" name="${column.name}Start" data-options="required:false">-${column.comment}: <input class="easyui-datebox" style="width: 160px" id="search_${column.name}End" name="${column.name}End" data-options="required:false">
         <#break>
         <#default>
         ${column.comment}: <input class="easyui-textbox" style="width: 160px" id="search_${column.name}" name="${column.name}" data-options="required:false">
@@ -98,6 +98,14 @@
             <#case "t:dict">
             ${column.name}: $('#search_${column.name}').val(),
             <#break>
+            <#case "easyui-datetimebox">
+            ${column.name}Start: $('#search_${column.name}Start').val(),
+            ${column.name}End: $('#search_${column.name}End').val(),
+            <#break>
+            <#case "easyui-datebox">
+            ${column.name}Start: $('#search_${column.name}Start').val(),
+            ${column.name}End: $('#search_${column.name}End').val(),
+            <#break>
             <#default>
             ${column.name}: $('#search_${column.name}').val(),
         </#switch>
@@ -115,6 +123,14 @@
     <#break>
     <#case "t:dict">
         $('#search_${column.name}').combobox('select', '');
+    <#break>
+    <#case "easyui-datetimebox">
+        $('#search_${column.name}Start').datetimebox('setValue', '');
+        $('#search_${column.name}End').datetimebox('setValue', '');
+    <#break>
+    <#case "easyui-datebox">
+        $('#search_${column.name}Start').datebox('setValue', '');
+        $('#search_${column.name}End').datebox('setValue', '')
     <#break>
     <#default>
         $('#search_${column.name}').textbox('setValue', '');

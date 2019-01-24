@@ -73,8 +73,11 @@ function initFileUpload(id, inputName){
 }
 
 function imgPreview(id, inputName, imgUrl) {
-    $('#edit_head_photo' + '-wrapper .preview').empty();
+    if(id.indexOf('#') != 0){
+        id = '#' + id;
+    }
+    $(id + '-wrapper .preview').empty();
     if(imgUrl){
-        $('#edit_head_photo' + '-wrapper .preview').append('<span><img class="image-thumb" src="' + imgUrl + '" width="30px"><button  class=\'easyui-linkbutton delete_file\' type=\'button\'>删除</button><input type="hidden" name="' + inputName + '" value="' + imgUrl + '"></span>');
+        $(id + '-wrapper .preview').append('<span><img class="image-thumb" src="' + imgUrl + '" width="30px"><button  class=\'easyui-linkbutton delete_file\' type=\'button\'>删除</button><input type="hidden" name="' + inputName + '" value="' + imgUrl + '"></span>');
     }
 }

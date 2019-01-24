@@ -144,3 +144,9 @@ mybatis:
     # 二级缓存的总开关
     cache-enabled: false
   mapper-locations: classpath:mapping/*.xml
+
+# 解决java.lang.IllegalArgumentException: Request header is too large
+server:
+  max-http-header-size: 1048576
+  tomcat:
+    max-http-post-size: 2097152

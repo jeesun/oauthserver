@@ -7,6 +7,7 @@
         标题: <input class="easyui-textbox" style="width: 160px" id="search_title" name="title" data-options="required:false">
         状态: <t:dict class="easyui-combobox" id="search_status" name="status" dict-name="news_status"  style="width:160px" allow-empty="true"></t:dict>
         新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_status"  style="width:160px" allow-empty="true"></t:dict>
+        发布时间: <input class="easyui-datetimebox" style="width: 160px" id="search_publishDateStart" name="publishDateStart">-<input class="easyui-datetimebox" style="width: 160px" id="search_publishDateEnd" name="publishDateEnd">
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
     </div>
@@ -63,6 +64,8 @@
             title: $('#search_title').val(),
             status: $('#search_status').val(),
             newsType: $('#search_newsType').val(),
+            publishDateStart: $('#search_publishDateStart').val(),
+            publishDateEnd: $('#search_publishDateEnd').val()
         });
     }
 
@@ -70,6 +73,8 @@
         $('#search_title').textbox('setValue', '');
         $('#search_status').combobox('select', '');
         $('#search_newsType').combobox('select', '');
+        $('#search_publishDateStart').datetimebox('setValue', '');
+        $('#search_publishDateEnd').datetimebox('setValue', '');
         doSearch();
     }
 

@@ -15,11 +15,11 @@ function setTokenInHeader() {
 }
 
 $(function(){
-    setTokenInHeader();
+    //setTokenInHeader();
 
     //只用一种初始化方法来声明easyUI组件以避免重复的提交请求，即删除html中的class声明(class="easyui-datagrid")
-    $('#tt').treegrid({
-        onBeforeLoad: function (row, param) {
+    $('#tt').datagrid({
+        onBeforeLoad: function (param) {
             let pageNo = param.page;
             delete param.page;
             param.pageNo = pageNo;
@@ -41,6 +41,29 @@ $(function(){
         }
     });
 
+    $('#table_tg').treegrid({
+        onBeforeLoad: function (row, param) {
+            let pageNo = param.page;
+            delete param.page;
+            param.pageNo = pageNo;
+            let pageSize = param.rows;
+            delete param.rows;
+            param.pageSize = pageSize;
+            let sort = param.sort;
+            delete param.sort;
+            let order = param.order;
+            delete param.order;
+            let orderBy = ((!sort) ? "" : sort) + " " + ((!order) ? "" : order);
+            orderBy = orderBy.trim();
+            param.orderBy = orderBy;
+        },
+        onLoadSuccess: function (row, data) {
+            //重新渲染
+            $(".easyui-linkbutton").linkbutton();
+            $(".easyui-numberbox").numberbox();
+        }
+    });
+
     $('body').on('click', 'img.image-thumb',function (event) {
         $('#dlg').html('<img src="' + $(this).attr('src') + '" alt="头像" width="100%">');
         $('#dlg').dialog('open');
@@ -48,7 +71,7 @@ $(function(){
 
 });
 
-function initEditor() {
+/*function initEditor() {
     let token = $("meta[name='_csrf']").attr("content");
     $('textarea').froalaEditor({
         width: '100%',
@@ -134,7 +157,7 @@ function initEditor() {
     $('textarea').off('froalaEditor.contentChanged');
     //$('textarea').off('froalaEditor.image.uploaded');
     $('textarea').off('froalaEditor.file.uploaded');
-}
+}*/
 
 function getLocalTime(timestamp) {
     return new Date(parseInt(timestamp)).toLocaleString().replace(/:\d{1,2}$/, ' ');
@@ -162,8 +185,54 @@ Date.prototype.format = function(format) {
     return format;
 };
 
+function formatCheckBox(val, row) {
+    if(val==true){
+        return '<input type="checkbox" " />';
+    }else if(val=false){
+        return '<input type="checkbox" checked = "checked"/>';
+    }
+}
+
 function formatDate(val, row){
     return new Date(parseInt(val)).format('yyyy-MM-dd hh:mm:ss');
+}
+
+function commonRequest(options) {
+    $.ajax({
+        url: options.url,
+        type: options.type,
+        data: JSON.stringify(options.extraData),
+        contentType: "application/json;charset=UTF-8",
+        beforeSend: function(){
+            $.messager.progress({
+                title: '提示信息',
+                msg: '请稍候......'
+            });
+        },
+        complete: function(){
+            $.messager.progress('close');
+        },
+        success:function (data) {
+            console.log(data);
+            if(data.code == 200){
+                $('#tt').datagrid('reload');
+                $('#table_tg').treegrid('reload');
+                /*$.messager.show({
+                    title:'提示信息',
+                    msg:'操作成功！',
+                    timeout:3000,
+                    showType:'slide'
+                });*/
+                parent.toastInfo({
+                    type: 'success',
+                    title: '提示信息',
+                    content: '操作成功！'
+                });
+                let index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+        }
+    });
 }
 
 function doRequest(options) {
@@ -179,6 +248,10 @@ function doRequest(options) {
                 sideMenuGroup[requestData[i].name] = requestData[i].value;
             }
         }
+
+        delete sideMenuGroup['editorValue'];
+        Object.assign(sideMenuGroup, options.extraData);
+
         $.ajax({
             url: options.url,
             type: options.type,
@@ -201,14 +274,47 @@ function doRequest(options) {
 
                     $('#addModal').window('close');
                     $('#editModal').window('close');
-                    $('#tt').treegrid('reload');
-                    $.messager.show({
+                    $('#tt').datagrid('reload');
+                    $('#table_tg').treegrid('reload');
+                    /*$.messager.show({
                         title:'提示信息',
                         msg:'操作成功！',
                         timeout:3000,
                         showType:'slide'
+                    });*/
+                    parent.toastInfo({
+                        type: 'success',
+                        title: '提示信息',
+                        content: '操作成功！'
                     });
+                    let index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }else{
+                    parent.toastInfo({
+                        type: 'success',
+                        title: '提示信息',
+                        content: data.message
+                    });
+                    /*let index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);*/
                 }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // 状态码
+                //console.log(XMLHttpRequest.status);
+                // 状态
+                //console.log(XMLHttpRequest.readyState);
+                //console.log(XMLHttpRequest.responseText);
+                // 错误信息
+                //console.log(textStatus);
+                let data = eval('(' + XMLHttpRequest.responseText + ')');
+                parent.toastInfo({
+                    type: 'success',
+                    title: '提示信息',
+                    content: '操作成功！'
+                });
+                /*let index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);*/
             }
         });
     }else{
@@ -238,7 +344,8 @@ function emptyRequest(url) {
             if(data.code == 200){
                 $('#addModal').window('close');
                 $('#editModal').window('close');
-                $('#tt').treegrid('reload');
+                $('#tt').datagrid('reload');
+                $('#table_tg').treegrid('reload');
                 $.messager.show({
                     title:'提示信息',
                     msg:'操作成功！',
@@ -282,14 +389,39 @@ function deleteRequest(urlPrefix){
                         if(data.code == 200){
                             $('#addModal').window('close');
                             $('#editModal').window('close');
-                            $('#tt').treegrid('reload');
+                            $('#tt').datagrid('reload');
+                            $('#table_tg').treegrid('reload');
                             $.messager.show({
                                 title:'提示信息',
                                 msg:'操作成功！',
                                 timeout:3000,
                                 showType:'slide'
                             });
+                        }else{
+                            $.messager.show({
+                                title:'提示信息',
+                                msg: data.message,
+                                timeout:3000,
+                                showType:'slide'
+                            });
                         }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $.messager.progress('close');
+                        // 状态码
+                        //console.log(XMLHttpRequest.status);
+                        // 状态
+                        //console.log(XMLHttpRequest.readyState);
+                        //console.log(XMLHttpRequest.responseText);
+                        // 错误信息
+                        //console.log(textStatus);
+                        let data = eval('(' + XMLHttpRequest.responseText + ')');
+                        $.messager.show({
+                            title:'提示信息',
+                            msg:data.message,
+                            timeout:3000,
+                            showType:'slide'
+                        });
                     }
                 });
             }
@@ -330,13 +462,37 @@ function deleteRequestByUserId(urlPrefix){
                             $('#addModal').window('close');
                             $('#editModal').window('close');
                             $('#tt').treegrid('reload');
+                            $('#table_tg').treegrid('reload');
                             $.messager.show({
                                 title:'提示信息',
                                 msg:'操作成功！',
                                 timeout:3000,
                                 showType:'slide'
                             });
+                        }else{
+                            $.messager.show({
+                                title:'提示信息',
+                                msg: data.message,
+                                timeout:3000,
+                                showType:'slide'
+                            });
                         }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // 状态码
+                        //console.log(XMLHttpRequest.status);
+                        // 状态
+                        //console.log(XMLHttpRequest.readyState);
+                        //console.log(XMLHttpRequest.responseText);
+                        // 错误信息
+                        //console.log(textStatus);
+                        let data = eval('(' + XMLHttpRequest.responseText + ')');
+                        $.messager.show({
+                            title:'提示信息',
+                            msg:data.message,
+                            timeout:3000,
+                            showType:'slide'
+                        });
                     }
                 });
             }
@@ -452,7 +608,7 @@ $.extend($.fn.validatebox.defaults.rules, {
     //select即选择框的验证
     selectValid:{
         validator:function(value,param){
-            console.log('selectValid' + value + '-' + param[0]);
+            //console.log('selectValid' + value + '-' + param[0]);
             if(value == param[0]){
                 return false;
             }else{
@@ -550,3 +706,34 @@ $.extend($.fn.validatebox.defaults.rules, {
         message: '颜色格式不正确'
     }
 });
+
+/**
+ * 解决ueditor被easyui-window遮盖问题
+ * @param id
+ */
+function ueditorAdapter(id) {
+    if(id.indexOf('#') != 0){
+        id = '#' + id;
+    }
+
+    $(id).window({
+        modal:false,
+        minimizable:true,
+        maximizable:true,
+        resizable:true,
+        closed:true,
+        collapsible:false,
+        onOpen:function(){
+            $(".window").css("z-index","499");
+            $(".window-shadow").css("z-index","498");
+        },
+        onMove:function(left,top){
+            $(".window").css("z-index","499");
+            $(".window-shadow").css("z-index","498");
+        },
+        onResize:function(width,height){
+            $(".window").css("z-index","499");
+            $(".window-shadow").css("z-index","498");
+        },
+    });
+}

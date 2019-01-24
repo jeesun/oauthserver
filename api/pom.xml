@@ -133,7 +133,7 @@
 
         <!--actuator是spring boot提供的对应用系统的自省和监控的集成功能，可以对应用系统进行配置查看、相关功能统计等。-->
         <!--actuator start-->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
@@ -148,7 +148,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator-docs</artifactId>
-        </dependency>
+        </dependency>-->
         <!--actuator end-->
 
         <dependency>
@@ -301,11 +301,16 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>4.7.0</version>
+        </dependency>
         <!-- 自定义的jar start -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>easyui</artifactId>
-            <version>1.6.10</version>
+            <version>1.7.0</version>
         </dependency>
         <!-- 自定义的jar end -->
         <!-- webjars end -->
