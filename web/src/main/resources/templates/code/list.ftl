@@ -50,16 +50,16 @@
     <#list columns as column>
     <#switch column.easyuiType>
         <#case "rich_text">
-        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatContent">${(column.comment)}</th>
+        <th data-options="width:180,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatContent">${(column.comment)}</th>
         <#break>
         <#case "image">
-        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatPic">${(column.comment)}</th>
+        <th data-options="width:180,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:formatPic">${(column.comment)}</th>
         <#break>
         <#case "t:dict">
-        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:format${dashedToCamel(column.extraInfo)?cap_first}">${(column.comment)}</th>
+        <th data-options="width:180,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}',formatter:format${dashedToCamel(column.extraInfo)?cap_first}">${(column.comment)}</th>
         <#break>
         <#default>
-        <th data-options="width:200,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}'">${(column.comment)}</th>
+        <th data-options="width:180,sortable:true,align:'center',hidden:${column.hidden?c},field:'${column.name}'">${(column.comment)}</th>
     </#switch>
     </#list>
     </tr>
