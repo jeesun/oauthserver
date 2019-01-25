@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
+<head th:replace="components/easyui/easyui-list :: head('quartz任务', 'easyui,upload,ueditor')">
+<body>
+<form id="form_edit">
+                <div>
+                    <input class="easyui-numberbox" id="edit_id" name="id" data-options="label:'id:', width:300, required:true" th:value="${quartzJob.id}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_cronExpression" name="cronExpression" data-options="label:'cron表达式:', width:300, required:true" th:value="${quartzJob.cronExpression}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_methodName" name="methodName" data-options="label:'任务调用的方法名:', width:300, required:true" th:value="${quartzJob.methodName}">
+                </div>
+                <div>
+                    <input class="easyui-numberbox" id="edit_isConcurrent" name="isConcurrent" data-options="label:'任务是否有状态:', width:300, required:true" th:value="${quartzJob.isConcurrent}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_description" name="description" data-options="label:'描述:', width:300, required:true" th:value="${quartzJob.description}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_beanName" name="beanName" data-options="label:'完全限定名:', width:300, required:true" th:value="${quartzJob.beanName}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_triggerName" name="triggerName" data-options="label:'触发器名称:', width:300, required:true" th:value="${quartzJob.triggerName}">
+                </div>
+                <div>
+                    <t:dict class="easyui-combobox" id="edit_jobStatus" name="jobStatus" dict-name="job_status" data-options="label:'任务状态:', width:300, multiple:false"></t:dict>
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_springBean" name="springBean" data-options="label:'spring_bean:', width:300, required:true" th:value="${quartzJob.springBean}">
+                </div>
+                <div>
+                    <input class="easyui-textbox" id="edit_jobName" name="jobName" data-options="label:'任务名:', width:300, required:true" th:value="${quartzJob.jobName}">
+                </div>
+    <div style="text-align:center;pediting:5px 0">
+        <a href="javascript:void(0)" class="button button-rounded button-small button-primary" onclick="edit()" th:text="#{ok}"></a>
+        <a href="javascript:void(0)" class="button button-rounded button-small" onclick="clearForm()" th:text="#{cancel}"></a>
+    </div>
+</form>
+<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;pediting:10px"></div>
+<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false" style="width:720px;height:480px;pediting:10px;"></div>
+<div th:replace="components/easyui/easyui-list :: js('easyui,upload,ueditor')"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        /*var editEditor = UE.getEditor('edit_editor', {
+            autoHeight: false
+        });*/
+        $('#edit_jobStatus').combobox('setValue', String([[${quartzJob.jobStatus}]]));
+    });
+
+    function edit() {
+        doRequest({
+            formId: '#form_edit',
+            url: '/api/quartzJobs/edit',
+            type: 'PATCH',
+            extraData: {
+    }
+    });
+    }
+
+    function clearForm() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    /*]]>*/
+</script>
+</body>
+</html>

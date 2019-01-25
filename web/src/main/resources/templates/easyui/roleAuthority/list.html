@@ -5,33 +5,30 @@
 <body>
 <div id="tb">
     <div class="datagrid-toolbar" style="padding-bottom: 6px">
-        <!--标题: <input class="easyui-textbox" style="width: 160px" id="search_title" name="title" data-options="required:false">
-        状态: <input class="easyui-textbox" style="width: 160px" id="search_status" name="status" data-options="required:false">
-        新闻类型: <t:dict class="easyui-combobox" id="search_newsType" name="newsType" dict-name="news_type"  style="width:160px" allow-empty="true"></t:dict>-->
-        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>
+        <!--<a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="doSearch()"><i class="fa fa-search" aria-hidden="true"></i> <span th:text="#{search}"></span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="doSearchReset()"><i class="fa fa-repeat" aria-hidden="true"></i> <span th:text="#{reset}"></span></a>-->
     </div>
-    <div class="datagrid-toolbar easyui-panel" style="padding:5px;">
+    <!--<div class="datagrid-toolbar easyui-panel" style="padding:5px;">
         <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doAdd()"><i class="fa fa-plus" aria-hidden="true"></i> <span th:text="#{add}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-warning" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doEdit()"><i class="fa fa-pencil" aria-hidden="true"></i> <span th:text="#{edit}"></span></a>
         <a href="javascript:void(0)" class="easyui-linkbutton c-danger" style="width:80px" data-options="toggle:true,group:'g1'" onclick="doDelete()"><i class="fa fa-trash" aria-hidden="true"></i> <span th:text="#{delete}"></span></a>
-    </div>
+    </div>-->
 </div>
 <table id="tt">
     <thead>
     <tr>
         <!--<th data-options="field:'ck',checkbox:true"></th>-->
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'id'">id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createBy'">创建人id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'createDate'">创建时间</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateBy'">更新人id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'updateDate'">更新时间</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeCode'">字典编码</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeName'">字典编码名称</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeGroupId'">字典组id</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'typeGroupCode'">字典组编码</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'orderNum'">排序</th>
-        <th data-options="width:200,sortable:true,align:'center',hidden:false,field:'operation',formatter:formatRoleAuthority">操作</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:false,field:'id'">id</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'createBy'">创建人id</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'createDate'">创建时间</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'updateBy'">更新人id</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'updateDate'">更新时间</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:false,field:'typeCode'">字典编码</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:false,field:'typeName'">字典编码名称</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'typeGroupId'">字典组id</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:true,field:'typeGroupCode'">字典组编码</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:false,field:'orderNum'">排序</th>
+        <th data-options="width:160,sortable:true,align:'center',hidden:false,field:'operation',formatter:formatRoleAuthority">操作</th>
     </tr>
     </thead>
 </table>
