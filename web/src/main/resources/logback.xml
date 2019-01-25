@@ -73,7 +73,7 @@
 
     <!-- 2. 输出SQL 的参数到控制台和文件-->
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder" additivity="false" level="TRACE">
-        <level value="TRACE" />
+        <level value="DEBUG" />
         <appender-ref ref="ROLLING-FILE" />
         <appender-ref ref="CONSOLE" />
     </logger>
