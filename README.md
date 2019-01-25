@@ -19,6 +19,8 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 支持的关系型数据库：
 - MySQL
 
+注：本项目是本人利用闲暇时间维护的开源项目，所以不会有任何收费的情况，未来也不会。目前项目正趋于稳定，等打一个正式版的tag后，会开新的分支，升级到Spring Boot 2.0。若项目无法运行或者运行过程中出现问题，欢迎提交issues。
+
 ## 功能概览
 ### api
 1. Oauth token服务，支持3种登录方式：手机号+验证码、手机号+密码、邮箱+密码（使用流程参考[oauth接口调用示例](tutorial/api.md)，如果你需要使用短信验证码服务，请前往阿里大于和云之讯短信服务购买短信验证码服务，并在application.properties中配置相关参数）；
@@ -81,3 +83,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 ### 管理端页面样式2
 访问地址：[http://localhost:8182/index/index_iframe](http://localhost:8182/index/index_iframe)
 ![index_iframe](tutorial/screenshots/index_iframe.jpg)
+
+## 分享交流
+在使用过程中有任何疑问或者问题，可以微信扫码询问。
+![author](tutorial/screenshots/author.jpg)
