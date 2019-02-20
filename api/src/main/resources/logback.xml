@@ -33,8 +33,8 @@
     </appender>
 
     <!-- https://github.com/qos-ch/logback/tree/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script -->
-    <!-- 将日志写入数据库 -->
-    <appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">
+    <!-- 将日志写入MySQL数据库 -->
+    <!--<appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">
         <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
             <dataSource class="org.apache.commons.dbcp.BasicDataSource">
                 <driverClassName>com.mysql.cj.jdbc.Driver</driverClassName>
@@ -43,12 +43,29 @@
                 <password>19941017</password>
             </dataSource>
         </connectionSource>
-        <!-- 临界值过滤器（ThresholdFilter），过滤掉低于指定临界值的事件。 -->
+        &lt;!&ndash; 临界值过滤器（ThresholdFilter），过滤掉低于指定临界值的事件。 &ndash;&gt;
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <!-- 过滤掉TRACE，DEBUG，INFO级别的日志 -->
+            &lt;!&ndash; 过滤掉TRACE，DEBUG，INFO级别的日志 &ndash;&gt;
             <level>warn</level>
         </filter>
-    </appender>
+    </appender>-->
+
+    <!-- 将日志写入PostgreSQL数据库 -->
+    <!--<appender name="DB-CLASSIC-POSTGRESQL-POOL" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
+            <dataSource class="org.apache.commons.dbcp.BasicDataSource">
+                <driverClassName>org.postgresql.Driver</driverClassName>
+                <url>jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8</url>
+                <username>postgres</username>
+                <password>19961120</password>
+            </dataSource>
+        </connectionSource>
+        &lt;!&ndash; 临界值过滤器（ThresholdFilter），过滤掉低于指定临界值的事件。 &ndash;&gt;
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            &lt;!&ndash; 过滤掉TRACE，DEBUG，INFO级别的日志 &ndash;&gt;
+            <level>warn</level>
+        </filter>
+    </appender>-->
 
     <!-- additivity属性为false，表示此logger的打印信息不再向上级传递。 -->
     <logger name="com.simon" level="DEBUG" additivity="true" />
@@ -82,6 +99,6 @@
     <root level="INFO">
         <appender-ref ref="ROLLING-FILE" />
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="DB-CLASSIC-MYSQL-POOL" />
+        <!--<appender-ref ref="DB-CLASSIC-MYSQL-POOL" />-->
     </root>
 </configuration>

@@ -49,7 +49,12 @@
   <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap">
     SELECT
         tsm.*,
-        group_concat( tsma.authority ) as authority
+        <if test="_databaseId == 'mysql'">
+            group_concat( tsma.authority ) as authority
+        </if>
+        <if test="_databaseId == 'postgresql'">
+            string_agg( tsma.authority, ',') as authority
+        </if>
     FROM
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -62,7 +67,12 @@
   <select id="selectByPids" parameterType="String" resultMap="SuperResultMap">
     SELECT
         tsm.*,
-        group_concat( tsma.authority ) as authority
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority
+      </if>
     FROM
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -74,7 +84,12 @@
   <select id="selectByPidArray" parameterType="Long[]" resultMap="SuperResultMap">
     SELECT
     tsm.*,
-    group_concat( tsma.authority ) as authority
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority
+      </if>
     FROM
     t_side_menu tsm
     LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -87,7 +102,12 @@
   <select id="selectByPidList" parameterType="List" resultMap="SuperResultMap">
     SELECT
     tsm.*,
-    group_concat( tsma.authority ) as authority
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority
+      </if>
     FROM
     t_side_menu tsm
     LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -102,7 +122,12 @@
   <select id="selectLevel1" resultMap="SuperMap">
     SELECT
     tsm.*,
-    group_concat( tsma.authority ) as authority
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority
+      </if>
     FROM
     t_side_menu tsm
     LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -123,7 +148,12 @@
   <select id="selectTreeGrid" resultMap="SuperMap">
     SELECT
         tsm.*,
-        group_concat( tsma.authority ) as authority
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority
+      </if>
     FROM
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -136,7 +166,7 @@
 
   </select>
 
-  <select id="findAll" resultMap="SuperResultMap">
+  <select id="findAll" resultMap="SuperResultMap" databaseId="mysql">
     SELECT
         tsm.*,
         group_concat( tsma.authority ) as authority
@@ -144,16 +174,31 @@
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     WHERE
-    tsm.show_in_menu=1
+        tsm.show_in_menu=1
     GROUP BY
         tsm.id
     ORDER BY
         tsm.order_num ASC
   </select>
 
-  <select id="findAuthorityByUrl" resultType="java.lang.String">
+    <select id="findAll" resultMap="SuperResultMap" databaseId="postgresql">
+        SELECT
+            tsm.*,
+            string_agg( tsma.authority, ',') as authority
+        FROM
+            t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+            tsm.show_in_menu=true
+        GROUP BY
+            tsm.id
+        ORDER BY
+            tsm.order_num ASC
+    </select>
+
+  <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="mysql">
     SELECT
-        group_concat( tsma.authority ) AS authority
+      group_concat( tsma.authority ) as authority
     FROM
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -163,13 +208,30 @@
         tsm.id
   </select>
 
+    <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="postgresql">
+        SELECT
+        string_agg( tsma.authority, ',') as authority
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+        tsm.url = #{url}
+        GROUP BY
+        tsm.id
+    </select>
+
   <delete id="deleteByEntityName" parameterType="java.lang.String">
     DELETE FROM t_side_menu WHERE entity_name=#{entityName}
   </delete>
 
   <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap">
     SELECT
-        group_concat( tsma.authority ) AS authority,
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority,
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority,
+      </if>
         tsm.remark
     FROM
         t_side_menu tsm
@@ -185,7 +247,12 @@
         tsm.id,
         tsm.pid,
         tsm.NAME AS text,
-        group_concat( tsma.authority ) AS authority,
+      <if test="_databaseId == 'mysql'">
+          group_concat( tsma.authority ) as authority,
+      </if>
+      <if test="_databaseId == 'postgresql'">
+          string_agg( tsma.authority, ',') as authority,
+      </if>
         tsm.order_num,
         tsm.link_id
     FROM

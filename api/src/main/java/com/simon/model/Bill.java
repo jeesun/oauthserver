@@ -85,7 +85,7 @@ public class Bill implements Serializable{
     @Column(name = "bill_date")
     private Date billDate;
 
-    @ApiModelProperty(value = "付款金额")
+    @ApiModelProperty(value = "付款金额", notes = "微信单位是分，支付宝单位是元")
     @Column(name = "total_amount")
     private Double totalAmount;
 
