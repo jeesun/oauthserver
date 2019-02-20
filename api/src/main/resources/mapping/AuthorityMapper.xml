@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.AuthorityMapper">
-  <resultMap id="BaseResultMap" type="com.simon.model.Authority">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="create_by" jdbcType="BIGINT" property="createBy" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="authority" jdbcType="VARCHAR" property="authority" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.simon.model.Authority">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+    </resultMap>
 
-  <resultMap id="AuthorityDtoMap" type="com.simon.dto.AuthorityDto">
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="authorities" jdbcType="VARCHAR" property="authority" />
-  </resultMap>
+    <resultMap id="AuthorityDtoMap" type="com.simon.dto.AuthorityDto">
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="authorities" jdbcType="VARCHAR" property="authority"/>
+    </resultMap>
 
-  <select id="getDtoList" resultMap="AuthorityDtoMap">
-    SELECT
+    <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="mysql">
+        SELECT
         ta.user_id,
         tu.username,
         GROUP_CONCAT( ta.authority SEPARATOR ',' ) authorities
-    FROM
+        FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
-    <where>
-        <if test="map.userId != null">
-            ta.user_id=#{map.userId}
-        </if>
-        <if test="map.username != null and map.username != ''">
-            AND tu.username LIKE CONCAT('%', #{map.username}, '%')
-        </if>
-    </where>
-    GROUP BY
+        <where>
+            <if test="map.userId != null">
+                ta.user_id=#{map.userId}
+            </if>
+            <if test="map.username != null and map.username != ''">
+                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            </if>
+        </where>
+        GROUP BY
         ta.user_id
-    <if test="map.authority != null and map.authority != ''">
-        HAVING GROUP_CONCAT( ta.authority SEPARATOR ',' ) LIKE CONCAT('%', #{map.authority}, '%')
-    </if>
-  </select>
+        <if test="map.authority != null and map.authority != ''">
+            HAVING GROUP_CONCAT( ta.authority SEPARATOR ',' ) LIKE CONCAT('%', #{map.authority}, '%')
+        </if>
+    </select>
 
+    <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="postgresql">
+        SELECT
+        ta.user_id,
+        tu.username,
+        string_agg( ta.authority, ',') as authorities
+        FROM
+        t_authorities ta
+        LEFT JOIN t_users tu ON ta.user_id = tu.id
+        <where>
+            <if test="map.userId != null">
+                ta.user_id=#{map.userId}
+            </if>
+            <if test="map.username != null and map.username != ''">
+                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            </if>
+        </where>
+        GROUP BY
+        ta.user_id
+        <if test="map.authority != null and map.authority != ''">
+            HAVING string_agg( ta.authority, ',') LIKE CONCAT('%', #{map.authority}, '%')
+        </if>
+    </select>
 
     <delete id="deleteByUserIds" parameterType="String">
         DELETE
         FROM
-            t_authorities
+        t_authorities
         WHERE
-            user_id IN
-            <if test="userIds != null and userIds != ''">
-                <foreach collection="userIds.split(',')" item="item" index="index" separator="," open="(" close=")">
-                    #{item}
-                </foreach>
-            </if>
+        user_id IN
+        <if test="userIds != null and userIds != ''">
+            <foreach collection="userIds.split(',')" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
     </delete>
 </mapper>

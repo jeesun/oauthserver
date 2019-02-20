@@ -64,6 +64,7 @@ public class WxPayController extends BaseController {
         orderRequest.setMchId(wxPayProperties.getMchId());
         orderRequest.setAppid(wxPayProperties.getAppId());
         orderRequest.setOutTradeNo(bill.getOutTradeNo());
+        //支付金额单位是分，所以bill.getTotalAmount()要乘以100
         orderRequest.setTotalFee(new Double(bill.getTotalAmount() * 100).intValue());
         orderRequest.setNonceStr(UUID.randomUUID().toString().replace("-", ""));
         orderRequest.setNotifyUrl(wxPayProperties.getNotifyUrl());

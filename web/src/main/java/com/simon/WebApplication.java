@@ -11,7 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@MapperScan("com.simon.mapper")
+@MapperScan(value = "com.simon.mapper")
 @EnableAsync
 //@EnableDiscoveryClient
 public class WebApplication implements CommandLineRunner {

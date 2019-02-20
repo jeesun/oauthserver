@@ -330,6 +330,10 @@
                     var tabId = $(this).data("id");
                     methods.setActTab(tabId).locationTab(tabId);
                 });
+                // 选项卡清单滚动条点击不关闭
+                nthTabs.on('click','.scroll-element',function (e) {
+                    e.stopPropagation();
+                });
                 return this;
             }
         };
