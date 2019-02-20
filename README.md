@@ -1,8 +1,8 @@
 <p align="center">
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
-<a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.18-990066.svg"></a>
-<img src="https://img.shields.io/badge/Database-MySQL-brightgreen.svg">
+<a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.19-990066.svg"></a>
+<img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL-brightgreen.svg">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
 <img src="https://img.shields.io/badge/release-1.3.0-brightgreen.svg">
 
@@ -18,6 +18,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 
 支持的关系型数据库：
 - MySQL
+- PostgreSQL
 
 注：本项目是本人利用闲暇时间维护的开源项目，所以不会有任何收费的情况，未来也不会。目前项目正趋于稳定，等打一个正式版的tag后，会开新的分支，升级到Spring Boot 2.0。若项目无法运行或者运行过程中出现问题，欢迎提交issues。
 
@@ -48,11 +49,13 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 1.3.0-4 alpha(2019-02-20)
+1. 支持PostgreSQL。
 ### 1.3.0-3 alpha（2019-01-24）
-### api
+#### api
 1. 移植web模块的代码生成器；
 2. 代码生成默认位置改为test目录；
-### web
+#### web
 1. 使用代码生成器生成用户管理；
 2. 代码生成器支持时间类型字段；
 3. 代码生成默认位置改为test目录；
@@ -65,10 +68,14 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 有部分自建jar在中央仓库是没有的，需要使用`mvn install`安装到本地。执行“需要安装的jars”文件夹下的`install.bat`安装。
 ### 2. 建表
 - MySQL  
-请执行`数据初始化脚本.sql`，完成数据表的创建和测试数据的导入。
+请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。
+- PostgreSQL
+请执行`schema-pg.sql`，完成数据表的创建和测试数据的导入。
 ### 3. 修改数据库连接信息
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=mysql`。  
+- PostgreSQL   
+连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=pg`。  
 ### 4. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
 
@@ -85,5 +92,5 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 ![index_iframe](tutorial/screenshots/index_iframe.jpg)
 
 ## 分享交流
-在使用过程中有任何疑问或者问题，可以微信扫码询问。
+在使用过程中有任何疑问或者问题，可以微信扫码询问。  
 ![author](tutorial/screenshots/author.jpg)
