@@ -69,13 +69,13 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 ### 2. 建表
 - MySQL  
 请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。
-- PostgreSQL
+- PostgreSQL  
 请执行`schema-pg.sql`，完成数据表的创建和测试数据的导入。
 ### 3. 修改数据库连接信息
 - MySQL  
-连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=mysql`。  
-- PostgreSQL   
-连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application.yml`的`spring.profiles.active=pg`。  
+连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=mysql`。  
+- PostgreSQL  
+连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=pg`。  
 ### 4. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
 
