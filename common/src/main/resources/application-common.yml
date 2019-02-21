@@ -3,7 +3,7 @@ security:
     enabled: false
 spring:
   profiles:
-    active: mysql #pg, mysql, oracle。默认使用MySQL数据库连接配置。
+    active: pg #pg, mysql, oracle。默认使用MySQL数据库连接配置。
   thymeleaf:
     prefix: classpath:/templates/ #默认值
     suffix: .html
@@ -11,8 +11,8 @@ spring:
     encoding: UTF-8
     content-type: text/html
     cache: false #页面热部署
-#  jmx:
-#    default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException
+  #  jmx:
+  #    default-domain: ShowCase #解决javax.management.InstanceAlreadyExistsException
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -36,23 +36,23 @@ spring:
         enabled: true
       stat-view-servlet:
         enabled: true
-        login-username: simon
-        login-password: 19961120
+        #        login-username: simon
+        #        login-password: 19961120
         reset-enable: true
         allow: 127.0.0.1
         url-pattern: /druid/*
-# 若要使用Redis，请取消以下redis配置的注释，并修改连接参数。
-#  redis:
-#    database: 0 #Redis数据库索引（默认为0）
-#    host: 127.0.0.1 #Redis服务器地址
-#    port: 6379 #Redis服务器连接端口
-#    password: 19941017 #Redis服务器连接密码（默认为空）
-#    pool:
-#      max-active: 8 #连接池最大连接数（使用负值表示没有限制）
-#      max-wait: -1 #连接池最大阻塞等待时间（使用负值表示没有限制）
-#      max-idle: 8 #连接池中的最大空闲连接
-#      min-idle: 0 #连接池中的最小空闲连接
-#    timeout: 0 #连接超时时间（毫秒）
+  # 若要使用Redis，请取消以下redis配置的注释，并修改连接参数。
+  #  redis:
+  #    database: 0 #Redis数据库索引（默认为0）
+  #    host: 127.0.0.1 #Redis服务器地址
+  #    port: 6379 #Redis服务器连接端口
+  #    password: 19941017 #Redis服务器连接密码（默认为空）
+  #    pool:
+  #      max-active: 8 #连接池最大连接数（使用负值表示没有限制）
+  #      max-wait: -1 #连接池最大阻塞等待时间（使用负值表示没有限制）
+  #      max-idle: 8 #连接池中的最大空闲连接
+  #      min-idle: 0 #连接池中的最小空闲连接
+  #    timeout: 0 #连接超时时间（毫秒）
   cache:
     # 若要使用Ehcache缓存，请注释RedisConfig的@Configuration和@EnableCaching注解，并取消EhcacheConfig的@Configuration和@EnableCaching注解的注释。
     # 若要使用Redis缓存，请注释EhcacheConfig的@Configuration和@EnableCaching注解，并取消RedisConfig的@Configuration和@EnableCaching注解的注释。
@@ -85,6 +85,24 @@ spring:
       force: true
   aop:
     proxy-target-class: true
+  mail:
+    default-encoding: UTF-8
+    protocol: smtp
+    test-connection: true
+    host: smtp.qq.com
+    port: 587
+    username: 2313036302@qq.com
+    password: xjtekyebkhifdjad
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          timeout: 25000
+          starttls:
+            enabled: true
+            required: true
+
 logging:
   level:
     org.springframework.web: INFO
