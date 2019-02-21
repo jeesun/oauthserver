@@ -2,4 +2,4 @@
 # bootstrap里面的属性不能被覆盖
 spring:
   application:
-    name: auth
+    name: api
