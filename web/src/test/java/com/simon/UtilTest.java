@@ -1,7 +1,6 @@
 package com.simon;
 
 import com.google.common.base.CaseFormat;
-import org.junit.Test;
 
 /**
  * @author simon
@@ -9,7 +8,7 @@ import org.junit.Test;
  **/
 
 public class UtilTest {
-    @Test
+    //@Test
     public void codeTest(){
         System.out.println(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, "test-data"));
         System.out.println(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, "test_data"));
@@ -25,13 +24,13 @@ public class UtilTest {
         System.out.println(toFormat.to(fromFormat, s));
     }
 
-    @Test
+    //@Test
     public void strTest(){
         String templateName = "list.ftl";
         System.out.println(templateName.substring(0, templateName.indexOf(".")));
     }
 
-    @Test
+    //@Test
     public void str2Test(){
         String url = "/api/newsInfos/ids/1";
         System.out.println(url.substring(0, url.lastIndexOf("ids") + 3));
