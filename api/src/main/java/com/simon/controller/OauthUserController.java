@@ -49,9 +49,25 @@ public class OauthUserController extends BaseController {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 
+    @ApiOperation("获取用户信息")
+    @GetMapping("/userInfo")
+    @ResponseBody
+    public ResultMsg getUserInfo(Authentication authentication){
+        Object principal = authentication.getPrincipal();
+        UserEntity userEntity = null;
+        if(principal instanceof UserEntity){
+            userEntity = (UserEntity)principal;
+        }
+        if(null != userEntity){
+            return ResultMsg.success(userEntity);
+        }
+        return ResultMsg.fail(ResultCode.FAIL);
+    }
+
     @ApiOperation(value = "注册：手机号+验证码")
     @PermitAll
     @PostMapping("/register/phoneAndCode")
+    @ResponseBody
     public ResultMsg register(
             @ApiParam(value = "区号", required = true, defaultValue = "+86") @RequestParam String areaCode,
             @ApiParam(value = "手机号", required = true) @RequestParam String phone,
@@ -71,6 +87,7 @@ public class OauthUserController extends BaseController {
     @ApiOperation(value = "注册: (手机号、邮箱、用户名)+密码")
     @PermitAll
     @PostMapping("/register/accountAndCode")
+    @ResponseBody
     public ResultMsg register(
             @ApiParam(value = "账号（手机号、邮箱、用户名）", required = true) @RequestParam String account,
             @ApiParam(value = "密码", required = true)@RequestParam String password){

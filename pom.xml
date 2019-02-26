@@ -315,6 +315,12 @@
 			</dependency>
 			<!-- ali dayu end -->
 
+			<!--<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+			</dependency>-->
+
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>

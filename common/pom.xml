@@ -125,6 +125,12 @@
         <!--<version>1.8.7</version>-->
         <!--</dependency>-->
         <!-- swagger依赖end -->
+
+        <!--<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
     </dependencies>
 
     <build>
