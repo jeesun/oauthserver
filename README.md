@@ -2,7 +2,7 @@
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
 <a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.19-990066.svg"></a>
-<img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL-brightgreen.svg">
+<img src="https://img.shields.io/badge/Database-MySQL%7CPostgreSQL%7COracle-brightgreen.svg">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
 <img src="https://img.shields.io/badge/release-1.3.0-brightgreen.svg">
 
@@ -19,6 +19,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 支持的关系型数据库：
 - MySQL
 - PostgreSQL
+- Oracle
 
 注：本项目是本人利用闲暇时间维护的开源项目，所以不会有任何收费的情况，未来也不会。目前项目正趋于稳定，等打一个正式版的tag后，会开新的分支，升级到Spring Boot 2.0。若项目无法运行或者运行过程中出现问题，欢迎提交issues。
 
@@ -71,11 +72,15 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。
 - PostgreSQL  
 请执行`schema-pg.sql`，完成数据表的创建和测试数据的导入。
+- Oracle  
+请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。
 ### 3. 修改数据库连接信息
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=mysql`。  
 - PostgreSQL  
 连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=pg`。  
+- Oracle  
+连接信息在`application-oracle.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=oracle`。  
 ### 4. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
 
