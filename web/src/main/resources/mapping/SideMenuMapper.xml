@@ -46,15 +46,28 @@
     <result column="link_id" jdbcType="BIGINT" property="linkId" />
   </resultMap>
 
-  <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap">
+    <sql id="t_side_menu_Column_List">
+        tsm.id,
+        tsm.create_by,
+        tsm.create_date,
+        tsm.update_by,
+        tsm.update_date,
+        tsm.name,
+        tsm.url,
+        tsm.request_method,
+        tsm.icon,
+        tsm.pid,
+        tsm.order_num,
+        tsm.show_in_menu,
+        tsm.entity_name,
+        tsm.remark,
+        tsm.link_id
+    </sql>
+
+  <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap" databaseId="mysql">
     SELECT
         tsm.*,
-        <if test="_databaseId == 'mysql'">
-            group_concat( tsma.authority ) as authority
-        </if>
-        <if test="_databaseId == 'postgresql'">
-            string_agg( tsma.authority, ',') as authority
-        </if>
+        group_concat( tsma.authority ) as authority
     FROM
         t_side_menu tsm
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -63,6 +76,32 @@
         tsm.id
 	ORDER BY order_num ASC
   </select>
+
+    <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap" databaseId="postgresql">
+        SELECT
+        tsm.*,
+        string_agg( tsma.authority, ',') as authority
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE pid=#{pid}
+        GROUP BY
+        tsm.id
+        ORDER BY order_num ASC
+    </select>
+
+    <select id="selectByPid" parameterType="Long" resultMap="SuperResultMap" databaseId="oracle">
+        SELECT
+        <include refid="t_side_menu_Column_List" />,
+        wm_concat( tsma.authority ) as authority
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE pid=#{pid}
+        GROUP BY
+        <include refid="t_side_menu_Column_List" />
+        ORDER BY order_num ASC
+    </select>
 
   <select id="selectByPids" parameterType="String" resultMap="SuperResultMap">
     SELECT
@@ -119,15 +158,10 @@
       tsm.id
   </select>
 
-  <select id="selectLevel1" resultMap="SuperMap">
+  <select id="selectLevel1" resultMap="SuperMap" databaseId="mysql">
     SELECT
-    tsm.*,
-      <if test="_databaseId == 'mysql'">
-          group_concat( tsma.authority ) as authority
-      </if>
-      <if test="_databaseId == 'postgresql'">
-          string_agg( tsma.authority, ',') as authority
-      </if>
+      tsm.*,
+      group_concat( tsma.authority ) as authority
     FROM
     t_side_menu tsm
     LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
@@ -144,6 +178,48 @@
     ORDER BY
         order_num ASC
   </select>
+
+    <select id="selectLevel1" resultMap="SuperMap" databaseId="postgresql">
+        SELECT
+          tsm.*,
+          string_agg( tsma.authority, ',') as authority
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+        ( pid IS NULL OR pid = 0 )
+        <if test="map.authority != null and map.authority != ''">
+            AND authority=#{map.authority}
+        </if>
+        <if test="map.name != null and map.name != ''">
+            AND name LIKE CONCAT('%', #{map.name}, '%')
+        </if>
+        GROUP BY
+        tsm.id
+        ORDER BY
+        order_num ASC
+    </select>
+
+    <select id="selectLevel1" resultMap="SuperMap" databaseId="oracle">
+        SELECT
+        <include refid="t_side_menu_Column_List" />,
+        WM_CONCAT( tsma.authority ) as authority
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+        ( pid IS NULL OR pid = 0 )
+        <if test="map.authority != null and map.authority != ''">
+            AND authority=#{map.authority}
+        </if>
+        <if test="map.name != null and map.name != ''">
+            AND name LIKE CONCAT('%', #{map.name}, '%')
+        </if>
+        GROUP BY
+        <include refid="t_side_menu_Column_List" />
+        ORDER BY
+        order_num ASC
+    </select>
 
   <select id="selectTreeGrid" resultMap="SuperMap">
     SELECT
@@ -196,6 +272,21 @@
             tsm.order_num ASC
     </select>
 
+  <select id="findAll" resultMap="SuperResultMap" databaseId="oracle">
+    SELECT
+      <include refid="t_side_menu_Column_List" />,
+        wm_concat ( tsma.authority ) AS authority
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE
+        tsm.show_in_menu = 1
+    GROUP BY
+      <include refid="t_side_menu_Column_List" />
+    ORDER BY
+        tsm.order_num ASC
+  </select>
+
   <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="mysql">
     SELECT
       group_concat( tsma.authority ) as authority
@@ -220,18 +311,25 @@
         tsm.id
     </select>
 
+  <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="oracle">
+    SELECT
+      wm_concat( tsma.authority ) as authority
+    FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+    WHERE
+        tsm.url = #{url}
+    GROUP BY
+        tsm.id
+  </select>
+
   <delete id="deleteByEntityName" parameterType="java.lang.String">
     DELETE FROM t_side_menu WHERE entity_name=#{entityName}
   </delete>
 
-  <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap">
+  <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap" databaseId="mysql">
     SELECT
-      <if test="_databaseId == 'mysql'">
-          group_concat( tsma.authority ) as authority,
-      </if>
-      <if test="_databaseId == 'postgresql'">
-          string_agg( tsma.authority, ',') as authority,
-      </if>
+        group_concat( tsma.authority ) as authority,
         tsm.remark
     FROM
         t_side_menu tsm
@@ -241,6 +339,32 @@
     GROUP BY
         tsm.id
   </select>
+
+    <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap" databaseId="postgresql">
+        SELECT
+        string_agg( tsma.authority, ',') as authority,
+        tsm.remark
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+        entity_name=#{entityName} AND tsm.remark IS NOT NULL
+        GROUP BY
+        tsm.id
+    </select>
+
+    <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap" databaseId="oracle">
+        SELECT
+        wm_concat( tsma.authority ) as authority,
+        tsm.remark
+        FROM
+        t_side_menu tsm
+        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+        entity_name=#{entityName} AND tsm.remark IS NOT NULL
+        GROUP BY
+        tsm.id,tsm.remark
+    </select>
 
   <select id="findEasyUiTreeDtoByAuthority" parameterType="java.lang.String" resultMap="EasyUiTreeDtoMap">
     SELECT
@@ -252,6 +376,9 @@
       </if>
       <if test="_databaseId == 'postgresql'">
           string_agg( tsma.authority, ',') as authority,
+      </if>
+      <if test="_databaseId == 'oracle'">
+          wm_concat( tsma.authority ) as authority,
       </if>
         tsm.order_num,
         tsm.link_id

@@ -66,6 +66,29 @@
         </if>
     </select>
 
+    <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="oracle">
+        SELECT
+        ta.user_id,
+        tu.username,
+        WM_CONCAT( ta.authority) authorities
+        FROM
+        t_authorities ta
+        LEFT JOIN t_users tu ON ta.user_id = tu.id
+        <where>
+            <if test="map.userId != null">
+                ta.user_id=#{map.userId}
+            </if>
+            <if test="map.username != null and map.username != ''">
+                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            </if>
+        </where>
+        GROUP BY
+        ta.user_id,tu.username
+        <if test="map.authority != null and map.authority != ''">
+            HAVING WM_CONCAT( ta.authority) LIKE CONCAT('%', #{map.authority}, '%')
+        </if>
+    </select>
+
     <delete id="deleteByUserIds" parameterType="String">
         DELETE
         FROM
