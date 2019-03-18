@@ -1035,3 +1035,8 @@ ALTER TABLE "public"."t_authorities" ADD CONSTRAINT "t_authorities_user_id_fkey"
 -- Foreign Keys structure for table t_dict_type
 -- ----------------------------
 ALTER TABLE "public"."t_dict_type" ADD CONSTRAINT "fk_type_group_id" FOREIGN KEY ("type_group_id") REFERENCES "public"."t_dict_type_group" ("id") ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- update by 20190318
+INSERT INTO t_authorities VALUES (6, NULL, NULL, NULL, 1000000000, 'ROLE_SU');
+INSERT INTO t_s_quartz_job VALUES (1, 1, '2018-12-21 22:21:26', 1000000000, '2019-01-25 14:25:43', '*/5 * * * * ?', 'execute', 0, '测试', 'com.simon.task.SampleTask', 'org.quartz.CronTrigger', 0, NULL, 'com.simon.task.SampleTask');

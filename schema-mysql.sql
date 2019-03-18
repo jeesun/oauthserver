@@ -182,6 +182,7 @@ INSERT INTO `t_authorities` VALUES (1, NULL, NULL, NULL, NULL, 1000000000, 'ROLE
 INSERT INTO `t_authorities` VALUES (2, NULL, NULL, NULL, NULL, 1000000000, 'ROLE_SU');
 INSERT INTO `t_authorities` VALUES (3, NULL, NULL, NULL, NULL, 1000000002, 'ROLE_ADMIN');
 INSERT INTO `t_authorities` VALUES (4, NULL, NULL, NULL, NULL, 1000000003, 'ROLE_USER');
+INSERT INTO `t_authorities` VALUES (5, NULL, NULL, NULL, NULL, 1000000000, 'ROLE_USER');
 
 -- ----------------------------
 -- Table structure for t_bill
