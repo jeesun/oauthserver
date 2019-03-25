@@ -11,26 +11,30 @@ $().ready(function() {
         return validate(value);
     }, "验证码错误");
 
-    $("#loginForm").validate({
-        rules:{
-            username: {
-                required: true,
-                minlength: 1
+    function validForm() {
+        return $("#loginForm").validate({
+            rules:{
+                username: {
+                    required: true,
+                    minlength: 1
+                },
+                password: {
+                    required: true,
+                    rangelength: [6,20],
+                    password: true
+                },
+                input_vericode: {
+                    required: true,
+                    minlength: 4,
+                    vericode: true
+                }
             },
-            password: {
-                required: true,
-                rangelength: [6,20],
-                password: true
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
             },
-            input_vericode: {
-                required: true,
-                minlength: 4,
-                vericode: true
-            }
-        },
-        errorPlacement: function(error, element) {
-            error.appendTo(element.parent());
-        },
-        errorElement: "span"
-    });
+            errorElement: "span"
+        });
+    }
+
+    $(validForm());
 });

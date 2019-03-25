@@ -1,4 +1,12 @@
 var code = "";
+
+function validate(value) {
+    let result = (value.toUpperCase() === code.toUpperCase());
+    /*if(!result){
+        $("#codeimg").click();//主动触发单击事件，更换验证码
+    }*/
+    return result;
+}
 $().ready(function() {
     //将函数返回值赋给code
     code = createCode();
@@ -75,7 +83,3 @@ $().ready(function() {
         return code;
     }
 });
-
-function validate(value) {
-    return value.toUpperCase() === code.toUpperCase();
-}
