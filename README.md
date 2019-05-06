@@ -47,6 +47,10 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 2.0.20190506-alpha
+1. 新增了很多功能；
+2. 修复了很多bug；
+3. 管理端页面重构，使用Vue + Element UI代替JQuery + EasyUI。
 
 **更多历史更新日志查看[CHANGE_LOG.md](tutorial/CHANGE_LOG.md)**
 
