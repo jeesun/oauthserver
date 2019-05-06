@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head th:replace="components/vue/vue-list :: head('新增', 'commit')"></head>
+<body>
+<div id="app" style="padding-top: 10px">
+    <el-row>
+        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
+                :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <!--<el-form-item label="id" prop="id">
+                    <el-input v-model="ruleForm.id" placeholder="请输入id" :disabled="true"></el-input>
+                </el-form-item>-->
+                <el-form-item label="菜单名称" prop="name">
+                    <el-input v-model="ruleForm.name" placeholder="请输入菜单名称"></el-input>
+                </el-form-item>
+                <!--<el-form-item label="菜单图标" prop="icon">
+                    <el-input v-model="ruleForm.icon" placeholder="请输入菜单图标"></el-input>
+                </el-form-item>-->
+                <el-form-item label="菜单图标" prop="icon">
+                    <el-select v-model="ruleForm.icon" filterable placeholder="请选择菜单图标">
+                        <el-option
+                                v-for="item in icons"
+                                :key="item.iconClass"
+                                :label="item.tags"
+                                :value="item.iconClass">
+                            <span style="float: left"><i v-bind:class="item.iconClass" style="font-size: 1.2em"></i></span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.tags }}</span>
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色" prop="authorities">
+                    <el-select v-model="ruleForm.authorities" multiple placeholder="请选择">
+                        <el-option
+                                v-for="item in roleTypeList"
+                                :key="item.typeCode"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="排序" prop="orderNum">
+                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button @click="closeWindow">关闭</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:src="@{/js/vue/validateRule.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {
+        url: "/api/sideMenus/add"
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            roleTypeList: [[${roleTypeList}]],
+            icons: [[${icons}]],
+            ruleForm: {
+                id: "",
+                name: "",
+                icon: "",
+                orderNum: "",
+                menuType: "1",
+                pid: "0",
+                requestMethod: "*",
+                showInMenu: "true",
+                authorities: ""
+            },
+            rules: {
+                name: [
+                    {required: true, message: '菜单名称不能为空', trigger: 'blur'}
+                ],
+                icon: [
+                    {required: true, message: '菜单图标不能为空', trigger: 'blur'}
+                ],
+                orderNum: [
+                    {required: true, message: '排序不能为空', trigger: 'blur'}
+                ],
+                authorities: [
+                    {required: true, message: "权限不能为空", trigger: "blur"}
+                ]
+            }
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            sendMessage(event) {
+                console.log("sendMessage");
+                closeLayer();
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showMsg("修改成功");
+                            parent.updateListData();
+                            closeLayer();
+                        }).catch((response) => {
+                            console.error(response);
+                            parent.closeLoading();
+                            parent.showMsg("发生错误");
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            closeWindow(event) {
+                closeLayer();
+            },
+            handleAvatarSuccess(res, file) {
+                //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
+                console.log(eval(res));
+                res = eval(res);
+                this.ruleForm.headPhoto = res.data[0];
+            },
+            beforeAvatarUpload(file) {
+                console.log(file.type);
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</html>

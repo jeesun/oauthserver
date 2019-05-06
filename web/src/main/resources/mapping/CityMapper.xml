@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.CityMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.City">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+  </resultMap>
+
+  <select id="findByProvinceId" resultMap="BaseResultMap" parameterType="string">
+    select * from t_s_city where province_id = #{provinceId}
+  </select>
+
+  <select id="getCascaderOptionDtos" resultType="com.simon.dto.vue.CascaderOptionDto">
+    select id as id, name as label, city_id as value from t_s_city where province_id = #{provinceId}
+  </select>
+</mapper>

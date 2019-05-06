@@ -1,5 +1,7 @@
 package com.simon.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
@@ -27,6 +29,7 @@ import java.util.Date;
 public class SideMenuAuthority implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @Column(name = "id")
     @KeySql(genId = SnowflakeGenId.class)
@@ -34,6 +37,7 @@ public class SideMenuAuthority implements Serializable{
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "创建人id")
     @Column(name = "create_by")
     private Long createBy;
@@ -43,6 +47,7 @@ public class SideMenuAuthority implements Serializable{
     @Column(name = "create_date")
     private Date createDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
     private Long updateBy;
@@ -52,6 +57,7 @@ public class SideMenuAuthority implements Serializable{
     @Column(name = "update_date")
     private Date updateDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "side_menu_id")
     @Column(name = "side_menu_id", nullable = false)
     private Long sideMenuId;

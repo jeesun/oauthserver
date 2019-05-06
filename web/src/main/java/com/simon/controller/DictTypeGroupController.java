@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -29,7 +30,7 @@ import java.util.Map;
 @Slf4j
 @Api(description = "字典")
 @Controller
-@RequestMapping("dictTypeGroups")
+@RequestMapping("/api/dictTypeGroups")
 public class DictTypeGroupController extends BaseController{
 
     @Autowired
@@ -39,9 +40,9 @@ public class DictTypeGroupController extends BaseController{
     private DictTypeGroupService dictTypeGroupService;
 
     @ApiIgnore
-    @GetMapping("data")
+    @GetMapping("data2")
     @ResponseBody
-    public Map<String, Object> list(
+    public Map<String, Object> data2(
             @RequestParam(required = false, defaultValue = "10") Integer limit,
             @RequestParam(required = false, defaultValue = "0") Integer offset){
         Map<String, Object> resultMap = new LinkedHashMap<>(2);
@@ -51,21 +52,44 @@ public class DictTypeGroupController extends BaseController{
     }
 
     @ApiIgnore
-    @GetMapping(params = "list")
-    public String getList(){
-        return "dict_type";
+    @GetMapping("list")
+    public String list(Model model){
+        return "vue/dictType/list";
     }
 
     @ApiIgnore
-    @GetMapping(params = "easyui-list")
-    public String getEasyUIList(){
-        return "easyui/dict_type";
+    @GetMapping("add")
+    public String add(Model model){
+        return "vue/dictType/add";
     }
 
     @ApiIgnore
-    @GetMapping("easyui/list")
+    @GetMapping("edit")
+    public String edit(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id){
+        model.addAttribute("entity", entityToMap(dictTypeGroupService.getDtoById(id)));
+        return "vue/dictType/edit";
+    }
+
+    @ApiIgnore
+    @GetMapping("subAdd")
+    public String subAdd(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id){
+        DictTypeDto dictTypeDto = dictTypeGroupService.getDtoById(id);
+        model.addAttribute("entity", entityToMap(dictTypeDto));
+        return "vue/dictType/subAdd";
+    }
+
+    @ApiIgnore
+    @GetMapping("subEdit")
+    public String subEdit(Model model, @ApiParam(value = "子字典id", required = true) @RequestParam Long id){
+        DictTypeDto dictTypeDto = dictTypeService.getDtoById(id);
+        model.addAttribute("entity", entityToMap(dictTypeDto));
+        return "vue/dictType/subEdit";
+    }
+
+    @ApiIgnore
+    @GetMapping("data")
     @ResponseBody
-    public EasyUIDataGridResult<EasyUiTreeGridDto> getEasyUIListData(
+    public EasyUIDataGridResult<EasyUiTreeGridDto> data(
             @ApiParam(value = "父字典名称", required = false) @RequestParam(required = false) String name,
             @ApiParam(value = "父字典编码", required = false) @RequestParam(required = false) String code,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
@@ -79,7 +103,7 @@ public class DictTypeGroupController extends BaseController{
     }
 
     @ApiIgnore
-    @PostMapping
+    @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody DictTypeDto dictTypeDto){
         if(1 == dictTypeDto.getType()){
@@ -93,7 +117,7 @@ public class DictTypeGroupController extends BaseController{
     }
 
     @ApiIgnore
-    @PatchMapping
+    @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody DictTypeDto dictTypeDto){
         if(1 == dictTypeDto.getType()){
@@ -103,6 +127,19 @@ public class DictTypeGroupController extends BaseController{
             //子字典
             dictTypeService.save(dictTypeDto);
         }
+        return ResultMsg.success();
+    }
+
+    @DeleteMapping("delete")
+    @ResponseBody
+    public ResultMsg delete(
+            @RequestParam Long id,
+            @ApiParam(value = "字典类型[1:父字典, 2:子字典]") @RequestParam Integer type){
+            if (1 == type) {
+                dictTypeGroupService.delete(id);
+            }else if (2 == type) {
+                dictTypeService.delete(id);
+            }
         return ResultMsg.success();
     }
 

@@ -45,9 +45,9 @@ public class Column implements Serializable{
     private Boolean allowSearch = false;
 
     /**
-     * EasyUI类型
+     * UI类型
      */
-    private String easyuiType = "easyui-text";
+    private String uiType = "Input";
 
     /**
      * 是否隐藏

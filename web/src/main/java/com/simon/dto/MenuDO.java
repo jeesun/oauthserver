@@ -1,5 +1,7 @@
 package com.simon.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,9 +22,11 @@ import java.util.Date;
 public class MenuDO implements Serializable {
     private static final long serialVersionUID = -6743756021695562306L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "菜单id")
     private Long menuId;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "父菜单ID，一级菜单为0")
     private Long parentId;
 

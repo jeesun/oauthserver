@@ -19,7 +19,7 @@ import java.util.Date;
 * @author SimonSun
 * @date 2018-09-12
 **/
-@ApiModel(value = "权限")
+@ApiModel(value = "权限", description = "该文件的任何修改必须同步到common下的相同文件")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity

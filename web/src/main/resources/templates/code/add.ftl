@@ -1,120 +1,158 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:t="http://www.w3.org/1999/xhtml">
-<head th:replace="components/easyui/easyui-list :: head('${tableComment}', 'easyui,upload,ueditor')">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('${tableComment}', 'commit')"></head>
 <body>
-<form id="form_add">
+<div id="app" style="padding-top: 10px">
+    <el-row>
+        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
+                :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+<#list columns as column>
+    <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+    <#else>
+    <#if (column.allowInput?string('yes', 'no'))=='yes'>
+        <#switch column.uiType>
+            <#case "Input">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#default>
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+        </#switch>
+    </#if>
+    </#if>
+</#list>
+                <#--<el-form-item label="图标class" prop="iconClass">
+                    <el-input v-model="ruleForm.iconClass" placeholder="请输入图标class"></el-input>
+                </el-form-item>
+                <el-form-item label="英文标签" prop="label">
+                    <el-input v-model="ruleForm.label" placeholder="请输入英文标签"></el-input>
+                </el-form-item>
+                <el-form-item label="中文标签" prop="tags">
+                    <el-input v-model="ruleForm.tags" placeholder="请输入中文标签"></el-input>
+                </el-form-item>
+                <el-form-item label="排序" prop="orderNum">
+                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
+                </el-form-item>
+                <el-form-item label="状态" prop="status">
+                    <el-select v-model="ruleForm.status" placeholder="请输入状态">
+                        <el-option label="可用" value="1"></el-option>
+                        <el-option label="不可用" value="0"></el-option>
+                    </el-select>
+                </el-form-item>-->
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button @click="closeWindow">关闭</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:src="@{/js/vue/validateRule.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${r'${_csrf.headerName}'}]];
+    axios.defaults.headers.common[headerName] = [[${r'${_csrf.token}'}]];
+
+    var requestUrls = {
+        url: "/api/${entityName?uncap_first}s/add"
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            ruleForm: {
     <#list columns as column>
         <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
         <#else>
             <#if (column.allowInput?string('yes', 'no'))=='yes'>
-            <#switch column.easyuiType>
-                <#case "easyui-textbox">
-        <div>
-            <input class="easyui-textbox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
-        </div>
-                <#break>
-                <#case "easyui-numberbox">
-        <div>
-            <input class="easyui-numberbox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
-        </div>
-                <#break>
-                <#case "easyui-datebox">
-        <div>
-            <input class="easyui-datebox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
-        </div>
-                <#break>
-                <#case "easyui-datetimebox">
-        <div>
-            <input class="easyui-datetimebox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
-        </div>
-                <#break>
-                <#case "image">
-        <div>
-            <label style="width: 80px;float:left;">${column.comment}:</label>
-            <div th:replace="components/toolbar :: file-upload (idVal='add_${column.name}',nameVal='${column.name}')" style="width:94%;float:left;"></div>
-            <div style="clear:both"></div>
-        </div>
-                <#break>
-                <#case "rich_text">
-        <div>
-            <label style="width: 80px;float:left;">${column.comment}:</label>
-            <div id="add_${column.name}_editor" type="text/plain" style="width:80%;height:400px;float:left;"></div>
-            <div style="clear:both"></div>
-        </div>
-                <#break>
-                <#case "t:select">
-        <div>
-            <t:select id="add_${column.name}" allow-empty="false" name="${column.name}" order="desc" query="${column.extraInfo}" class="easyui-combobox" data-options="label:'${column.comment}:', width:300"></t:select>
-        </div>
-                <#break>
-                <#case "t:dict">
-        <div>
-            <t:dict class="easyui-combobox" id="add_${column.name}" name="${column.name}" dict-name="${column.extraInfo}" data-options="label:'${column.comment}:', width:300, multiple:false"></t:dict>
-        </div>
-                <#break>
-                <#default>
-        <div>
-            <input class="easyui-textbox" id="add_${column.name}" name="${column.name}" data-options="label:'${column.comment}:', width:300, required:true">
-        </div>
-            </#switch>
+                ${column.name}: "",
             </#if>
         </#if>
     </#list>
-    <div style="text-align:center;padding:5px 0">
-        <a href="javascript:void(0)" class="easyui-linkbutton c-primary" style="width:80px" onclick="add()" th:text="${r'#{ok}'}"></a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c-basic" style="width:80px" onclick="clearForm()" th:text="${r'#{cancel}'}"></a>
-    </div>
-</form>
-<div id="dlg" class="easyui-dialog" data-options="title:'图片信息',closed:true" style="width:480px;height:480px;padding:10px"></div>
-<div id="window_content" class="easyui-window" title="内容详情" data-options="modal:true,closed:true,collapsible:false" style="width:720px;height:480px;padding:10px;"></div>
-<div th:replace="components/easyui/easyui-list :: js('easyui,upload,ueditor')"></div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    $(function () {
-        //实例化编辑器
-        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-        /*var addEditor = UE.getEditor('add_editor', {
-            autoHeight: false
-        });*/
-<#list columns as column>
-    <#switch column.easyuiType>
-        <#case "image">
-        //初始化图片上传按钮
-        initFileUpload('#add_${column.name}', '${column.name}');
-            <#break>
-        <#case "rich_text">
-        var ${column.name}Editor = UE.getEditor('add_${column.name}_editor', {
-            autoHeight: false
-        });
-            <#break>
-    </#switch>
-</#list>
-    });
-
-    function add() {
-        doRequest({
-            formId: '#form_add',
-            url: '/api/${entityName?uncap_first}s/add',
-            type: 'POST',
-            extraData: {
-    <#list columns as column>
-        <#switch column.easyuiType>
-            <#case "rich_text">
-                ${column.name}: UE.getEditor('add_${column.name}_editor').getContent(),
-                <#break>
-            <#default>
-        </#switch>
-    </#list>
+            },
+            rules: {
+                iconClass: [
+                    {required: true, message: '图标class不能为空', trigger: 'blur'}
+                ],
+                label: [
+                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
+                ],
+                tags: [
+                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
+                ]
             }
-        });
-    }
+        },
+        mounted: function () {
 
-    function clearForm() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
-    }
+        },
+        methods: {
+            sendMessage(event) {
+                console.log("sendMessage");
+                closeLayer();
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showMsg("新增成功");
+                            parent.updateListData();
+                            closeLayer();
+                        }).catch((error) => {
+                            let errorMessage = "发生错误";
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.closeLoading();
+                            parent.showError(errorMessage);
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            closeWindow(event) {
+                closeLayer();
+            },
+            handleAvatarSuccess(res, file) {
+                //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
+                console.log(eval(res));
+                res = eval(res);
+                this.ruleForm.headPhoto = res.data[0];
+            },
+            beforeAvatarUpload(file) {
+                console.log(file.type);
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
 
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
+        }
+    });
     /*]]>*/
 </script>
-</body>
 </html>

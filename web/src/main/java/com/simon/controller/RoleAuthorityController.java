@@ -1,6 +1,7 @@
 package com.simon.controller;
 
 import com.simon.common.controller.BaseController;
+import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.dto.EasyUiTreeDto;
 import com.simon.model.DictType;
@@ -45,30 +46,30 @@ public class RoleAuthorityController extends BaseController {
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
     public String list(Model model){
-        return "easyui/roleAuthority/list";
+        return "vue/roleAuthority/list";
     }
 
     @ApiIgnore
     @ApiOperation(value = "列表数据")
     @GetMapping("data")
     @ResponseBody
-    public List<DictType> data(
+    public EasyUIDataGridResult<DictType> data(
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy) {
-        return dictTypeService.getTypeByGroupCode("role_type");
+        return new EasyUIDataGridResult<>(dictTypeService.getTypeByGroupCode("role_type"));
     }
 
     @GetMapping("authConfig")
     public String authConfig(@RequestParam String typeCode, Model model){
         model.addAttribute("typeCode", typeCode);
-        return "easyui/roleAuthority/auth_config";
+        return "vue/roleAuthority/auth_config";
     }
 
     @GetMapping("authData")
     @ResponseBody
-    public List<EasyUiTreeDto> getAuthData(@RequestParam String typeCode){
-        return sideMenuService.getAuth(typeCode);
+    public ResultMsg<List<EasyUiTreeDto>> getAuthData(@RequestParam String typeCode){
+        return ResultMsg.success(sideMenuService.getAuth(typeCode));
     }
 
     @PostMapping("updateAuth")

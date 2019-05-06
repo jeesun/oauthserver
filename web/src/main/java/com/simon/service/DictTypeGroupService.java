@@ -21,4 +21,18 @@ public interface DictTypeGroupService extends BasicService<DictTypeGroup, Long> 
     DictTypeGroup save(DictTypeDto dictTypeDto);
 
     int countByTypeGroupCode(String typeGroupCode);
+
+    /**
+     * 根据id返回字典dto
+     * @param id 字典组id
+     * @return 字典dto
+     */
+    DictTypeDto getDtoById(Long id);
+
+    /**
+     * 根据id删除记录
+     * @param id
+     * @return
+     */
+    int deleteById(Long id);
 }

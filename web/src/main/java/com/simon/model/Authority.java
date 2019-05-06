@@ -1,5 +1,7 @@
 package com.simon.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
@@ -19,7 +21,7 @@ import java.util.Date;
 * @author SimonSun
 * @date 2018-09-12
 **/
-@ApiModel(value = "权限")
+@ApiModel(value = "权限", description = "该文件的任何修改必须同步到common下的相同文件")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -27,12 +29,14 @@ import java.util.Date;
 public class Authority implements GrantedAuthority, Serializable, Comparable<Authority>{
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @KeySql(genId = SnowflakeGenId.class)
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "创建人id")
     @Column(name = "create_by")
     private Long createBy;
@@ -42,6 +46,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<Aut
     @Column(name = "create_date")
     private Date createDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
     private Long updateBy;
@@ -51,6 +56,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<Aut
     @Column(name = "update_date")
     private Date updateDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "用户id")
     @Column(name = "user_id", nullable = false)
     private Long userId;

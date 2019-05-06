@@ -3,6 +3,7 @@ package com.simon.mapper;
 import com.simon.common.mapper.MyMapper;
 import com.simon.dto.ButtonAuthorityDto;
 import com.simon.dto.EasyUiTreeDto;
+import com.simon.dto.SideMenuDto;
 import com.simon.model.SideMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -58,4 +59,17 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
     List<ButtonAuthorityDto> findButtonAuthorityDtoByEntityName(@Param("entityName") String entityName);
 
     List<EasyUiTreeDto> findEasyUiTreeDtoByAuthority(@Param("authority") String authority);
+
+    /**
+     * 根据id返回子菜单详情
+     * @param id 子菜单id
+     * @return 子菜单详情
+     */
+    SideMenu getSubMenuDetailById(@Param("id") Long id);
+
+    /**
+     * 获取一级菜单
+     * @return 一级菜单列表
+     */
+    List<SideMenuDto> getLevel1();
 }

@@ -383,6 +383,7 @@ public class CodeGenerator {
                     new FileWriter(file));
             log.info(modelNameUpperCamel + "Mapper.java 重新生成成功");
 
+
         } catch (Exception e) {
             throw new RuntimeException("生成Mapper失败", e);
         }

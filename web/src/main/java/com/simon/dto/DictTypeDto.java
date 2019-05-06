@@ -32,6 +32,12 @@ public class DictTypeDto implements Serializable {
     @ApiModelProperty(value = "父字典id")
     private String pid;
 
+    @ApiModelProperty(value = "父字典名称")
+    private String parentName;
+
+    @ApiModelProperty(value = "父字典code")
+    private String parentCode;
+
     @ApiModelProperty(value = "排序")
     private Integer orderNum;
 

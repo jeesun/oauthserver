@@ -1,5 +1,6 @@
 package com.simon.common.aspect;
 
+import com.alibaba.fastjson.JSON;
 import com.simon.dto.ButtonAuthorityDto;
 import com.simon.service.SideMenuService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +36,23 @@ public class ButtonAuthorityAspect {
 
     @Around("listMethod()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
+        boolean isModelExists = false;
         for(Object object : pjp.getArgs()){
             if(object instanceof Model){
+                isModelExists = true;
                 Model model = (Model) object;
                 String simpleClassName = pjp.getTarget().getClass().getSimpleName();
                 List<ButtonAuthorityDto> buttonAuthorityDtoList = sideMenuService.findButtonAuthorityDtoByEntityName(simpleClassName.substring(0, simpleClassName.indexOf("Controller")));
+                log.info(JSON.toJSONString(buttonAuthorityDtoList));
                 if (null != buttonAuthorityDtoList && buttonAuthorityDtoList.size() > 0){
                     buttonAuthorityDtoList.forEach(item -> model.addAttribute(item.getRemark(), item.getAuthority()));
                 }
+                break;
             }
+        }
+        if (!isModelExists) {
+            log.error("list方法必须有Model对象参数，否则无法进行按钮的权限控制");
+            throw new RuntimeException("list方法必须有Model对象参数，否则无法进行按钮的权限控制");
         }
 
         return pjp.proceed();

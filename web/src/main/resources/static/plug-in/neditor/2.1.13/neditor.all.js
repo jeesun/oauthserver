@@ -29720,7 +29720,7 @@ UE.ui = baidu.editor.ui = {};
   };
   Menu.prototype = {
     items: null,
-    uiName: "menu",
+    uiName: "index.html",
     initMenu: function() {
       this.items = this.items || [];
       this.initPopup();

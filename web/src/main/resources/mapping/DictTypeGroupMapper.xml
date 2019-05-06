@@ -28,6 +28,14 @@
     <collection property="children" ofType="com.simon.dto.EasyUiTreeGridDto" javaType="java.util.List" column="code" select="com.simon.mapper.DictTypeMapper.getTreeGridDtos" />
   </resultMap>
 
+    <resultMap id="DictTypeDtoMap" type="com.simon.dto.DictTypeDto">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="pid" jdbcType="BIGINT" property="pid" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+    </resultMap>
+
   <select id="getAll" resultMap="SuperMap">
     SELECT * FROM t_dict_type_group
   </select>
@@ -50,4 +58,17 @@
         </if>
     </where>
   </select>
+
+    <select id="getDtoById" resultMap="DictTypeDtoMap">
+        SELECT
+            id,
+            0 AS pid,
+            type_group_name AS name,
+            type_group_code AS code,
+            1 AS type
+        FROM
+            t_dict_type_group
+        WHERE
+            id = #{id}
+    </select>
 </mapper>

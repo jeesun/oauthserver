@@ -78,6 +78,15 @@ public class PageGeneratorUtil {
                 entityDirFile.mkdirs();
                 log.info("创建目录：{} 成功！ ",entityDir);
             }
+
+            //设置id列类型
+            for(Column column : entityModel.getColumns()){
+                if (column.getName().equalsIgnoreCase("id")) {
+                    entityModel.setIdType(column.getType());
+                    break;
+                }
+            }
+
             //生成页面
             entityModel.setFileSuffix(".html");
             generateCode(entityModel, templatePath, "list.ftl", entityDir);
@@ -86,17 +95,6 @@ public class PageGeneratorUtil {
             //生成每个表实体
             entityModel.setFileSuffix(".java");
             generateCode(entityModel, templatePath, "controllerWithPage.ftl", CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/"));
-
-            String providerPackage = "com.simon.provider";
-            //检查provider文件夹是否存在，不存在就创建
-            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
-            File providerDirFile = new File(providerDir);
-            if (!providerDirFile.exists()) {
-                providerDirFile.mkdirs();
-                log.info("创建目录：{} 成功！ ",providerDir);
-            }
-            //生成Provider
-            generateCode(entityModel, templatePath, "provider.ftl", providerDir);
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }
@@ -157,6 +155,15 @@ public class PageGeneratorUtil {
                 log.info("创建目录：{} 成功！ ",entityDir);
             }
             EntityDataModel entityModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
+
+            //设置id列类型
+            for(Column column : entityModel.getColumns()){
+                if (column.getName().equalsIgnoreCase("id")) {
+                    entityModel.setIdType(column.getType());
+                    break;
+                }
+            }
+
             //生成页面
             entityModel.setFileSuffix(".html");
             //CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityModel.getEntityName()) 首字母小写
@@ -167,7 +174,7 @@ public class PageGeneratorUtil {
             entityModel.setFileSuffix(".java");
             generateCode(entityModel, templatePath, "controllerWithPage.ftl", CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/"));
 
-            String providerPackage = "com.simon.provider";
+            /*String providerPackage = "com.simon.provider";
             //检查provider文件夹是否存在，不存在就创建
             String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
             File providerDirFile = new File(providerDir);
@@ -177,7 +184,7 @@ public class PageGeneratorUtil {
             }
 
             //生成Provider
-            generateCode(entityModel, templatePath, "provider.ftl", providerDir);
+            generateCode(entityModel, templatePath, "provider.ftl", providerDir);*/
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }
@@ -208,8 +215,8 @@ public class PageGeneratorUtil {
         }else{
             //file = outDir + "templates/" + CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, dataModel.getEntityName()) + dataModel.getFileSuffix();
             //File outDirTemplateFile = new File(outDir + "templates");
-            file = outDir + "templates/easyui/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()) + "/" + templateName.substring(0, templateName.indexOf(".")) + dataModel.getFileSuffix();
-            File outDirTemplateFile = new File(outDir + "templates/easyui/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()));
+            file = outDir + "templates/vue/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()) + "/" + templateName.substring(0, templateName.indexOf(".")) + dataModel.getFileSuffix();
+            File outDirTemplateFile = new File(outDir + "templates/vue/" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, dataModel.getEntityName()));
             if(!outDirTemplateFile.exists()){
                 outDirTemplateFile.mkdirs();
             }

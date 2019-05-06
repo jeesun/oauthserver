@@ -13,6 +13,11 @@ public enum ResultCode {
      */
     SUCCESS(200, "操作成功"),
     FAIL(500, "服务器内部错误"),
+    FAIL_ICON_CLASS_EXISTS(500001, "图标class已存在"),
+    FAIL_PHONE_EXISTS(500002, "手机号已存在"),
+    FAIL_EMAIL_EXISTS(500003, "邮箱已存在"),
+    FAIL_PHONE_OR_EMAIL_EXISTS(500004, "手机号或邮箱已存在"),
+    FAIL_INCORRECT_PASSWORD(500005, "密码错误"),
     ERROR_VERI_CODE(404001, "验证码错误"),
     ERROR_INVALID_PHONE(404002, "手机号格式不正确");
 

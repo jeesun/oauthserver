@@ -2631,7 +2631,7 @@ vjs.MenuButton.prototype.onClick = function(){
   // So we'll remove focus when the mouse leaves the button.
   // Focus is needed for tab navigation.
   this.one('mouseout', vjs.bind(this, function(){
-    this.menu.unlockShowing();
+    this.index.unlockShowing();
     this.el_.blur();
   }));
   if (this.buttonPressed_){

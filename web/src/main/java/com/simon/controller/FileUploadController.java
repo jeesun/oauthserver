@@ -102,7 +102,7 @@ public class FileUploadController extends BaseController {
         return resultMap;
     }
 
-    @RequestMapping(value = "/ueditor/upload/file")
+    @RequestMapping(value = "/ueditor/upload/file", method = {RequestMethod.GET, RequestMethod.POST})
     public FileInfo uploadFile(HttpServletRequest request){
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         if (null == files || files.size() <= 0){

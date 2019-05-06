@@ -7,7 +7,6 @@ import com.simon.common.config.AppConfig;
 import com.simon.dto.DictTypeDto;
 import com.simon.mapper.DictTypeMapper;
 import com.simon.model.DictType;
-import com.simon.model.DictTypeGroup;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.repository.DictTypeRepository;
 import com.simon.service.DictTypeService;
@@ -152,5 +151,10 @@ public class DictTypeServiceImpl implements DictTypeService {
         dictType.setTypeCode(dictTypeDto.getCode());
         dictType.setOrderNum(dictTypeDto.getOrderNum());
         return dictTypeRepository.save(dictType);
+    }
+
+    @Override
+    public DictTypeDto getDtoById(Long id) {
+        return dictTypeMapper.getDtoById(id);
     }
 }

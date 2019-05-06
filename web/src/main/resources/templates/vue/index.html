@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title th:text="${title}"></title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script th:src="@{/webjars/vue/2.6.9/dist/vue.min.js}"></script>
+    <script th:src="@{/webjars/axios/0.19.0-beta.1/dist/axios.min.js}"></script>
+    <!-- 引入样式 -->
+    <link th:href="@{/webjars/element-ui/2.7.2/lib/theme-chalk/index.css}" rel="stylesheet">
+    <!-- 引入组件库 -->
+    <script th:src="@{/webjars/element-ui/2.7.2/lib/index.js}"></script>
+    <!-- font awesome -->
+    <script th:src="@{/webjars/font-awesome/5.8.1/js/all.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/plug-in/vue-element-extends/1.2.12/index.css}">
+    <!-- 引入脚本 -->
+    <script th:src="@{/plug-in/xe-utils/1.8.20/xe-utils.min.js}"></script>
+    <script th:src="@{/plug-in/vue-element-extends/1.2.12/index.umd.js}"></script>
+    <!-- 全局js -->
+    <script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+    <script th:src="@{/js/plugins/layer-v3.1.1/layer/layer.js}"></script>
+    <style>
+        .el-menu-vertical-demo:not(.el-menu--collapse) {
+            border: none;
+            width: 200px;
+            height: 100%;
+            background-color: rgb(48, 65, 86);
+        }
+
+        html, body, #container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .el-header {
+            background-color: #fff;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            color: #333;
+        }
+
+
+        .el-tag + .el-tag {
+            margin-left: 10px;
+        }
+
+        .button-new-tag {
+            margin-left: 10px;
+            height: 32px;
+            line-height: 30px;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .input-new-tag {
+            width: 90px;
+            margin-left: 10px;
+            vertical-align: bottom;
+        }
+
+        .nth-tabs-frame {
+            width: 100%;
+            /*height: calc(100% - 42px);*/
+            height: 100%;
+            position: relative;
+
+        }
+
+    </style>
+</head>
+<body>
+<el-container id="container">
+    <el-aside style="width:auto;height:100%;background-color: #304156;">
+        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+                 :collapse="isCollapse"
+                 background-color="#304156"
+                 text-color="#BFCBD9"
+                 active-text-color="#409EFF">
+            <!-- 参考https://www.cnblogs.com/luyuefeng/p/8039020.html -->
+            <!--<template v-if="menuData.length > 0" v-for="(menuItem, menuIndex) in menuData">
+                <el-submenu :index="menuIndex">
+                    <template slot="title">
+                        <i v-bind:class="menuItem.iconCls" style="font-size: 1.2em"></i>
+                        <span slot="title">{{menuItem.name}}</span>
+                    </template>
+                    <template v-if="menuItem.children && menuItem.children.length > 0" v-for="(subMenuItem, subMenuIndex) in menuItem.children">
+                        <el-menu-item :index="menuIndex + '-' + subMenuIndex" v-on:click="addTab(subMenuItem.id, subMenuItem.name, subMenuItem.url)">
+                            <i v-bind:class="subMenuItem.iconCls" style="font-size: 1.2em"></i> {{subMenuItem.name}}
+                        </el-menu-item>
+                    </template>
+                </el-submenu>
+            </template>-->
+            <template th:each="menuItem, iterStat : ${menuData}">
+                <el-submenu th:attr="'v-bind:index'=${iterStat.index}">
+                    <template slot="title">
+                        <i th:class="${menuItem.iconCls}" style="font-size: 1.2em"></i>
+                        <span slot="title" th:text="${menuItem.name}"></span>
+                    </template>
+                    <template th:each="subMenuItem, subIterStat : ${menuItem.children}">
+                        <el-menu-item
+                                th:attr="'v-bind:index'=${iterStat.index + '-' + subIterStat.index}, 'v-on:click'='addTab(\'' + ${subMenuItem.id} + '\', \'' + ${subMenuItem.name} + '\', \'' + ${subMenuItem.url} + '\', \'closable\')'"
+                                th:if="${#authorization.expression('hasAnyRole(''__${subMenuItem.authority}__'')')}">
+                            <i th:class="${subMenuItem.iconCls}" style="font-size: 1.2em"></i>&nbsp;<span
+                                th:text="${subMenuItem.name}"></span>
+                        </el-menu-item>
+                    </template>
+                </el-submenu>
+            </template>
+        </el-menu>
+    </el-aside>
+
+    <el-container style="height:100%;">
+        <el-header
+                style="font-size: 12px;background-color: #FFFFFF;color: #ffffff;padding: 0;border-bottom: 2px solid #ECEEF1;">
+            <el-container>
+                <el-aside style="width:50px">
+                    <el-button type="text" v-on:click="greet" style="color: #000000;width:50px" :key="inOrOutKey"><i
+                            style="font-size: 1.5em;color: #000000" class="fas" v-bind:class="inOrOut"></i></el-button>
+                </el-aside>
+                <el-main>
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item>{{parentPath}}</el-breadcrumb-item>
+                        <el-breadcrumb-item><a href="javascript:void(0);">{{childPath}}</a></el-breadcrumb-item>
+                    </el-breadcrumb>
+                </el-main>
+                <div style="float: right">
+                    <i class="fas fa-user-circle fa-3x" style="color: #409EFF"></i>
+                    <el-dropdown trigger="click" @command="handleCommand">
+                            <span class="el-dropdown-link" style="margin-right: 15px;">
+                                <span sec:authentication="name"></span><i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
+                            <el-dropdown-item divided command="logout">注销</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+            </el-container>
+        </el-header>
+        <el-container style="padding: 0;margin: 0;height:100%;">
+            <el-main style="padding: 0;height:100%;">
+                <el-tabs v-model="editableTabsValue" type="card" @tab-remove="removeTab" @tab-click="clickTab">
+                    <el-tab-pane
+                            v-for="(item, index) in editableTabs"
+                            :key="item.name"
+                            :label="item.title"
+                            :name="item.name"
+                            :closable="item.closable"
+                    >
+                        <span v-html="item.content"></span>
+                    </el-tab-pane>
+                    <el-dialog title="修改密码" :visible.sync="dialogChangePwdFormVisible" width="30%" center>
+                        <el-form :model="changePwdForm" :rules="rules" ref="changePwdForm" label-width="100px">
+                            <el-form-item label="旧密码" prop="oldPassword">
+                                <el-input v-model="changePwdForm.oldPassword" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="新密码" prop="newPassword">
+                                <el-input v-model="changePwdForm.newPassword" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="确认新密码" prop="repeatNewPassword">
+                                <el-input v-model="changePwdForm.repeatNewPassword" autocomplete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="dialogChangePwdFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="submitChangePwdForm('changePwdForm')">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                </el-tabs>
+            </el-main>
+        </el-container>
+
+    </el-container>
+</el-container>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    Vue.prototype.$http = axios;
+
+    var requestUrls = {
+        changePassword: "/api/oauthUsers/changePassword"
+    };
+
+    //标识当前弹出的新增或者修改页面
+    var currentLayer;
+    //标识当前的加载层
+    var loadingLayer;
+
+    var container = new Vue({
+        el: '#container',
+        data: {
+            tableData: [],
+            isCollapse: false,
+            inOrOut: {
+                'fa-indent': false,
+                'fa-outdent': true
+            },
+            inOrOutKey: 1,
+            menuData: [],
+            dynamicTags: ['标签一', '标签二', '标签三'],
+            inputVisible: false,
+            inputValue: '',
+            editableTabsValue: '2',
+            editableTabs: [],
+            tabIndex: 2,
+            parentPath: '主页',
+            childPath: '了解OauthServer',
+            dialogChangePwdFormVisible: false,
+            changePwdForm: {
+                oldPassword: "",
+                newPassword: "",
+                repeatNewPassword: ""
+            },
+            rules: {
+                oldPassword: [
+                    {required: true, message: '旧密码不能为空', trigger: 'blur'}
+                ],
+                newPassword: [
+                    {required: true, message: '新密码不能为空', trigger: 'blur'}
+                ],
+                repeatNewPassword: [
+                    {required: true, message: '重复新密码不能为空', trigger: 'blur'}
+                ]
+            }
+        },
+        mounted: function () {
+            this.loadMenuData();
+        },
+        methods: {
+            handleCommand(command) {
+                if (command === "changePassword") {
+                    this.dialogChangePwdFormVisible = true;
+                }else if (command === "logout") {
+                    window.location.href="/logout";
+                }
+            },
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            greet: function (event) {
+                this.isCollapse = !this.isCollapse;
+                console.log(this.isCollapse);
+                this.inOrOut["fa-indent"] = this.isCollapse;
+                this.inOrOut["fa-outdent"] = !this.isCollapse;
+
+                this.inOrOutKey++;//重新渲染组件，参考https://blog.csdn.net/zyx1303031629/article/details/86656785
+            },
+            loadMenuData: function () {
+                this.$http.get("/api/sideMenus/data/all", {}).then(function (response) {
+                    this.menuData = response.data.data;
+                    console.log(this.menuData);
+                }).catch(function (response) {
+                    console.error(response);
+                });
+            },
+            handleClose(tag) {
+                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+            },
+
+            showInput() {
+                this.inputVisible = true;
+                this.$nextTick(_ => {
+                    this.$refs.saveTagInput.$refs.input.focus();
+                });
+            },
+
+            handleInputConfirm() {
+                let inputValue = this.inputValue;
+                if (inputValue) {
+                    this.dynamicTags.push(inputValue);
+                }
+                this.inputVisible = false;
+                this.inputValue = '';
+            },
+            showLogin: function () {
+                //console.log("showLogin");
+                this.addTab(123, '登录', '/vue/demo', true);
+            },
+            addTab: function (id, title, url, closable) {
+                //console.log("id=" + id + ",title=" + title + ",url=" + url);
+                let targetName = id + '';
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    //do nothing
+                } else {
+                    let isExists = false;
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            isExists = true;
+                        }
+                    });
+                    if (!isExists) {
+                        //不存在该tab则新增
+                        this.editableTabs.push({
+                            title: title,
+                            name: targetName,
+                            content: '<div style="height:500px;width:100%"><iframe id="' + targetName + '" frameborder="0" src="' + url + '" class="nth-tabs-frame"></iframe></div>',
+                            closable: closable
+                        });
+                    }
+                    this.editableTabsValue = targetName;
+                }
+                this.changeTitle(id);
+            },
+            removeTab(targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            },
+            clickTab: function (targetName) {
+                this.changeTitle(targetName.name);
+            },
+            changeTitle: function (id) {
+                let found = false;
+                for (let i = 0; i < this.menuData.length; i++) {
+                    let menuItem = this.menuData[i];
+                    for (let j = 0; j < menuItem.children.length; j++) {
+                        let subMenuItem = menuItem.children[j];
+                        if (subMenuItem['id'] == id) {
+                            this.parentPath = menuItem['name'];
+                            this.childPath = subMenuItem['name'];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        break;
+                    }
+                }
+            },
+            submitChangePwdForm(formName){
+                openLoading();
+                this.$refs[formName].validate((valid) => {
+                    if(valid){
+                        this.$http.post(requestUrls.changePassword, this.changePwdForm).then((response) => {
+                            closeLoading();
+                            showMsg("修改密码成功");
+                            this.dialogChangePwdFormVisible = false;
+                        }).catch((error) => {
+                            console.error(error);
+                            console.error(error.response.data.message);
+                            closeLoading();
+                            showMsg(error.response.data.message);
+                        });
+                    }else{
+                        closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            }
+        }
+    });
+    container.addTab('94108390556434432', '了解OauthServer', '/vue/home', false);
+
+    function showWindow(options) {
+        currentLayer = layer.open({
+            type: 2,
+            title: options.title,
+            shadeClose: true,
+            shade: 0.6,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['893px', '600px'],
+            content: options.content
+        });
+    }
+
+    function updateListData() {
+        //父页面使用原生JS调用iframe方法
+        let frameWin = document.getElementById(container.$data.editableTabsValue + '').contentWindow;
+        frameWin.iframeUpdateList();  //method为子页面的方法
+        layer.close(currentLayer);
+    }
+
+    function showDelete(index, row) {
+        //询问框
+        //console.log(row);
+        console.log('showDelete');
+        console.log('editableTabsValue=' + container.$data.editableTabsValue);
+        layer.confirm('确认删除该记录？', {
+            btn: ['确定', '取消'] //按钮
+        }, function (index, layero) {
+            //父页面使用原生JS调用iframe方法
+            let frameWin = document.getElementById(container.$data.editableTabsValue + '').contentWindow;
+            frameWin.iframeMethond(index, row);  //method为子页面的方法
+            layer.close(index);
+        }, function (index) {
+            layer.close(index);
+        });
+    }
+
+    function showMsg(message) {
+        layer.msg(message, {
+            icon: 1,
+            offset: 't',
+            anim: 0
+        });
+    }
+
+    function showSuccess(message) {
+        showMsg(message);
+    }
+
+    function showError(message) {
+        layer.msg(message, {
+            icon: 2,
+            offset: 't',
+            anim: 0
+        });
+    }
+
+    function openLoading() {
+        loadingLayer = layer.load(1, {
+            shade: [0.6, '#fff'] //0.6透明度的白色背景
+        });
+    }
+
+    function closeLoading() {
+        layer.close(loadingLayer);
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

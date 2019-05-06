@@ -1,5 +1,7 @@
 package com.simon.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +26,7 @@ import java.io.Serializable;
 public class LoggingEvent implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "时间")
     @Column(name = "timestmp", nullable = false)
     private Long timestmp;
@@ -80,6 +83,7 @@ public class LoggingEvent implements Serializable{
     @Column(name = "caller_line", nullable = false, columnDefinition ="char(4)")
     private String callerLine;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @ApiModelProperty(value = "事件id")
     @Column(name = "event_id", nullable = false)

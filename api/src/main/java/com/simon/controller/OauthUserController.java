@@ -53,11 +53,7 @@ public class OauthUserController extends BaseController {
     @GetMapping("/userInfo")
     @ResponseBody
     public ResultMsg getUserInfo(Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         if(null != userEntity){
             return ResultMsg.success(userEntity);
         }
@@ -121,15 +117,7 @@ public class OauthUserController extends BaseController {
     @ResponseBody
     public ResultMsg update(@RequestBody OauthUser oauthUser, Authentication authentication){
         oauthUserService.updateByPrimaryKeySelective(oauthUser);
-
-//        log.info("birth=" + new SimpleDateFormat("yyyy-MM-dd").format(oauthUser.getBirth()));
-        log.info(JSON.toJSONString(oauthUser));
-
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         if(null != userEntity){
             //更新session中的principal
             BeanUtils.copyPropertiesIgnoreNull(oauthUser, userEntity);

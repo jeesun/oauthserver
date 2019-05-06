@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="${tableName}")
+@Table(name = "${tableName}")
 public class ${entityName} implements Serializable{
     private static final long serialVersionUID = 1L;
 <#list columns as column>

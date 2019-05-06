@@ -1,5 +1,7 @@
 package com.simon.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,9 +22,11 @@ import java.util.List;
 public class EasyUiTreeGridDto implements Serializable {
     private static final long serialVersionUID = -6124138315161529007L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "id")
     private Long id;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "菜单组id")
     private Long pid;
 

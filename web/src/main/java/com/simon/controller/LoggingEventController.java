@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -23,7 +24,7 @@ import java.util.Map;
 **/
 @Slf4j
 @ApiIgnore
-@Api(description = "日志记录")
+@Api(value = "日志记录")
 @Controller
 @RequestMapping("/api/loggingEvents")
 public class LoggingEventController extends BaseController{
@@ -31,14 +32,14 @@ public class LoggingEventController extends BaseController{
     @Autowired
     private LoggingEventService loggingEventService;
 
-    @GetMapping(params = "easyui-list")
-    public String easyUIList(){
-        return "easyui/logging_event";
+    @GetMapping("list")
+    public String list(Model model){
+        return "vue/loggingEvent/list";
     }
 
-    @GetMapping("/easyui/list")
+    @GetMapping("data")
     @ResponseBody
-    public EasyUIDataGridResult<LoggingEvent> getEasyUIList(
+    public EasyUIDataGridResult<LoggingEvent> data(
             @ApiParam(value = "日志等级", required = false) @RequestParam(required = false) String levelString,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true)@RequestParam Integer pageSize,

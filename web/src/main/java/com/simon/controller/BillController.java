@@ -39,17 +39,17 @@ public class BillController extends BaseController {
     private DictTypeService dictTypeService;
 
     @ApiIgnore
-    @GetMapping(params = "easyui-list")
-    public String getEasyUIList(Model model){
-        model.addAttribute("billType", dictTypeService.getTypeByGroupCode("bill_type"));
-        model.addAttribute("billStatus", dictTypeService.getTypeByGroupCode("bill_status"));
-        model.addAttribute("paymentType", dictTypeService.getTypeByGroupCode("payment_type"));
-        return "easyui/bill";
+    @GetMapping("list")
+    public String list(Model model){
+        model.addAttribute("billTypeList", dictTypeService.getTypeByGroupCode("bill_type"));
+        model.addAttribute("billStatusList", dictTypeService.getTypeByGroupCode("bill_status"));
+        model.addAttribute("paymentTypeList", dictTypeService.getTypeByGroupCode("payment_type"));
+        return "vue/bill/list";
     }
 
     @ApiIgnore
-    @ApiOperation(value = "easyui列表")
-    @GetMapping("easyui/list")
+    @ApiOperation(value = "列表数据")
+    @GetMapping("data")
     @ResponseBody
     public EasyUIDataGridResult<Bill> getEasyUIList(
             @ApiParam(value = "账单分类") @RequestParam(required = false) String billType,

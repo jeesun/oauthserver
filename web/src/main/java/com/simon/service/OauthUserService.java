@@ -2,6 +2,7 @@ package com.simon.service;
 
 import com.simon.common.domain.UserEntity;
 import com.simon.common.service.BasicService;
+import com.simon.dto.AuthorityDto;
 import com.simon.dto.StatisticDto;
 import com.simon.model.OauthUser;
 
@@ -67,4 +68,27 @@ public interface OauthUserService extends BasicService<OauthUser, Long> {
      * @return 注册账号信息
      */
     OauthUser registerByUsernameAndPwd(String username, String password);
+
+
+    /**
+     * 获取未配置角色的用户
+     * @return 未配置角色的用户列表
+     */
+    List<AuthorityDto> getUnauthorized();
+
+    /**
+     * 根据手机号或者邮箱登录
+     * @param phone 手机号
+     * @param email 邮箱
+     * @return 记录个数
+     */
+    int countByPhoneOrEmail(String phone, String email);
+
+    /**
+     * 根据用户id更新密码
+     * @param userId 用户id
+     * @param newPassword 新密码
+     * @return 影响行数
+     */
+    int updatePasswordByUserId(Long userId, String newPassword);
 }

@@ -3,7 +3,7 @@ security:
     enabled: false
 spring:
   profiles:
-    active: mysql #pg, mysql, oracle。默认使用MySQL数据库连接配置。
+    active: oracle #pg, mysql, oracle。默认使用MySQL数据库连接配置。
   thymeleaf:
     prefix: classpath:/templates/ #默认值
     suffix: .html

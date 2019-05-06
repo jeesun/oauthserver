@@ -19,4 +19,11 @@ public interface AuthorityService extends BasicService<Authority, Long> {
     void updateByDto(AuthorityDto authorityDto);
 
     int deleteByUserIds(String userIds);
+
+    /**
+     * 根据用户id查询权限dto
+     * @param userId 用户id
+     * @return 权限dto
+     */
+    AuthorityDto findDtoByUserId(Long userId);
 }

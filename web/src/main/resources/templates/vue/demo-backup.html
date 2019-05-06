@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <!-- 引入样式 -->
+    <link href="https://cdn.bootcss.com/element-ui/2.7.2/theme-chalk/index.css" rel="stylesheet">
+    <!-- 引入组件库 -->
+    <script src="https://cdn.bootcss.com/element-ui/2.7.2/index.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+        }
+        .el-menu-vertical-demo:not(.el-menu--collapse) {
+            width: 200px;
+            min-height: 400px;
+        }
+
+        .el-col {
+            border-radius: 4px;
+        }
+        .bg-purple-dark {
+            background: #99a9bf;
+        }
+        .bg-purple {
+            background: #d3dce6;
+        }
+        .bg-purple-light {
+            background: #e5e9f2;
+        }
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+    </style>
+</head>
+<body>
+<div id="vm">
+    <!--<el-row :gutter="3" style="margin: 10px 0;">
+        <el-col :span="5">
+            <el-input placeholder="输入用户名称查询" v-model="username" icon="search" @change="changeUsername">
+            </el-input>
+        </el-col>
+    </el-row>
+    <el-row :gutter="3" style="margin: 10px 0;">
+        <el-col :span="5">
+            <el-switch
+                    v-model="username"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949" @change="changeUsername">
+            </el-switch>
+        </el-col>
+    </el-row>-->
+    <el-table border :data="tableData" highlight-current-row style="font-size: 12px;" v-loading="tableLoading">
+        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column prop="username" label="用户名称"></el-table-column>
+        <el-table-column prop="sex" label="性别" :formatter="formatSex"></el-table-column>
+        <el-table-column prop="birth" label="生日" sortable></el-table-column>
+    </el-table>
+    <el-col class="toolbar" style="padding:10px;">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNo" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize"
+                       layout="total, sizes, prev, pager, next, jumper" :total="total" style="float:right"></el-pagination>
+    </el-col>
+</div>
+</body>
+<script>
+    Vue.http.options.emulateJSON = true;
+    Vue.http.options.emulateHTTP = true;
+    var vm = new Vue({
+        el: '#vm',
+        data: {
+            tableData: [],
+            pageNo: 1,
+            pageSize: 10,
+            total: 1000,
+            tableLoading: true,
+            username: null
+        },
+        mounted: function () {
+            this.loadData(this.pageNo, this.pageSize);
+        },
+        methods: {
+            loadData: function (pageNo, pageSize) {
+                this.tableLoading = true;
+
+                if (!isNaN(pageNo)) {
+                    this.pageNo = pageNo;
+                }
+                if (!isNaN(pageSize)) {
+                    this.pageSize = pageSize;
+                }
+                var params_ = {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize
+                };
+                if (this.username && this.username.trim() != "") {
+                    params_['username'] = this.username;
+                }
+                this.$http.get("/api/oauthUsers/data", {
+                    params: params_
+                }).then(function (response) {
+                    this.total = parseInt(response.data.total);
+                    this.tableData = [];
+                    for (var key in response.data.rows) {
+                        this.$set(this.tableData, key, response.data.rows[key]);
+                    }
+                }).catch(function (response) {
+                    console.error(response);
+                });
+                this.tableLoading = false;
+            },
+            //每页显示数据量变更
+            handleSizeChange: function(val) {
+                this.pageSize = val;
+                this.loadData(this.pageNo, this.pageSize);
+            },
+            //页码变更
+            handleCurrentChange: function(val) {
+                this.pageNo = val;
+                this.loadData(this.pageNo, this.pageSize);
+            },
+            formatSex: function (row, column) {
+                if (row.sex != null) {
+                    return row.sex == 1 ? '男' : '女';
+                }
+            },
+            changeUsername: function () {
+                this.loadData(this.pageNo, this.pageSize);
+            }
+        }
+    });
+
+    var sideMenu = new Vue({
+        el: '#sideMenu',
+        data: {
+            isCollapse: true
+        },
+        methods: {
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        }
+    });
+</script>
+</html>

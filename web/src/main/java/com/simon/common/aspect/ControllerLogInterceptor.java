@@ -12,10 +12,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author simon
@@ -53,12 +54,18 @@ public class ControllerLogInterceptor {
         // 打印请求内容
         try {
             // 下面两个数组中，参数值和参数名的个数和位置是一一对应的。
-            Object[] objs = joinPoint.getArgs();
+            Object[] args = joinPoint.getArgs();
             String[] argNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames(); // 参数名
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            for (int i = 0; i < objs.length; i++) {
-                if (!(objs[i] instanceof ExtendedServletRequestDataBinder) && !(objs[i] instanceof HttpServletResponseWrapper)) {
-                    paramMap.put(argNames[i], objs[i]);
+            Map<String, Object> paramMap = new HashMap<>();
+
+            //序列化时过滤掉request和response
+            List<Object> objs = Arrays.stream(args)
+                    .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                    .collect(Collectors.toList());
+
+            for (int i = 0; i < objs.size(); i++) {
+                if (!(objs.get(i) instanceof ExtendedServletRequestDataBinder) && !(objs.get(i) instanceof HttpServletResponseWrapper)) {
+                    paramMap.put(argNames[i], objs.get(i));
                 }
             }
             if (paramMap.size() > 0) {

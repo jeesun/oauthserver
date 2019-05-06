@@ -68,4 +68,8 @@ public class EntityDataModel implements Serializable {
      */
     private List<Column> columns;
 
+    /**
+     * id列类型[Long, Integer, String]
+     */
+    private String idType = "Long";
 }

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('新增', 'commit')"></head>
+<body>
+<div id="app" style="padding-top: 10px">
+    <el-row>
+        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
+                :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="侧边栏菜单树" prop="name">
+                    <el-tree
+                            :data="treeData"
+                            show-checkbox
+                            default-expand-all
+                            node-key="id"
+                            ref="tree"
+                            highlight-current
+                            :props="defaultProps">
+                    </el-tree>
+                </el-form-item>
+                <!--<el-form-item>
+                    <div class="buttons">
+                        <el-button @click="getCheckedNodes">通过 node 获取</el-button>
+                        <el-button @click="getCheckedKeys">通过 key 获取</el-button>
+                        <el-button @click="setCheckedNodes">通过 node 设置</el-button>
+                        <el-button @click="setCheckedKeys">通过 key 设置</el-button>
+                        <el-button @click="resetChecked">清空</el-button>
+                    </div>
+                </el-form-item>-->
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button @click="closeWindow">关闭</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:src="@{/js/vue/validateRule.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {
+        authData: "/api/roleAuthorities/authData",
+        updateAuth: "/api/roleAuthorities/updateAuth"
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            treeData: [],
+            checkedKeys: [],
+            ruleForm: {
+                ids: "",
+                authority: [[${typeCode}]]
+            },
+            rules: {
+
+            },
+            defaultProps: {
+                children: 'children',
+                label: 'text'
+            }
+        },
+        mounted: function () {
+            this.loadTreeData();
+        },
+        methods: {
+            sendMessage(event) {
+                console.log("sendMessage");
+                closeLayer();
+            },
+            loadTreeData(){
+                let params_ = {
+                    typeCode: [[${typeCode}]]
+                };
+                this.$http.get(requestUrls.authData, {
+                    params: params_
+                }).then((response) => {
+                    this.treeData = response.data.data;
+                    this.setCheckedKeys();
+                    this.$refs.tree.setCheckedKeys(this.checkedKeys);
+                }).catch((response) => {
+                    console.error(response);
+                });
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.ruleForm.ids = this.$refs.tree.getCheckedKeys().join(",");
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(requestUrls.updateAuth, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showMsg("更新成功");
+                            parent.updateListData();
+                            closeLayer();
+                        }).catch((response) => {
+                            console.error(response);
+                            parent.closeLoading();
+                            parent.showMsg("发生错误");
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            closeWindow(event) {
+                closeLayer();
+            },
+            handleAvatarSuccess(res, file) {
+                //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
+                console.log(eval(res));
+                res = eval(res);
+                this.ruleForm.headPhoto = res.data[0];
+            },
+            beforeAvatarUpload(file) {
+                console.log(file.type);
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            },
+            getCheckedNodes() {
+                console.log(this.$refs.tree.getCheckedNodes());
+            },
+            getCheckedKeys() {
+                console.log(this.$refs.tree.getCheckedKeys());
+            },
+            setCheckedNodes() {
+                this.$refs.tree.setCheckedNodes([{
+                    id: 5,
+                    label: '二级 2-1'
+                }, {
+                    id: 9,
+                    label: '三级 1-1-1'
+                }]);
+            },
+            setCheckedKeys() {
+                //通过 key 设置
+                loadChecked(this.treeData);
+            },
+            resetChecked() {
+                this.$refs.tree.setCheckedKeys([]);
+            }
+        }
+    });
+
+    /**
+     * 递归初始化选中
+     */
+    function loadChecked(treeData) {
+        if (treeData && treeData.length) {
+            for(let i = 0; i < treeData.length; i++){
+                if (treeData[i].checked){
+                    app.checkedKeys.push(treeData[i].id);
+                }
+                if (treeData[i].children && treeData[i].children.length) {
+                    loadChecked(treeData[i].children);
+                }
+            }
+        }
+    }
+    /*]]>*/
+</script>
+</html>

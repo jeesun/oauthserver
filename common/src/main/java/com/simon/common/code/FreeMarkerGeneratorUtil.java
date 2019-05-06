@@ -79,6 +79,17 @@ public class FreeMarkerGeneratorUtil {
             EntityDataModel entityModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
             //生成每个表实体
             generateCode(entityModel, templatePath, "entity.ftl", entityDir);
+
+            String providerPackage = "com.simon.provider";
+            //检查provider文件夹是否存在，不存在就创建
+            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
+            File providerDirFile = new File(providerDir);
+            if (!providerDirFile.exists()) {
+                providerDirFile.mkdirs();
+                log.info("创建目录：{} 成功！ ",providerDir);
+            }
+            //生成Provider
+            generateCode(entityModel, templatePath, "provider.ftl", providerDir);
         } catch (Exception e) {
             log.error("代码生成出错 {}", e.getMessage());
         }

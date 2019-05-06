@@ -19,7 +19,7 @@ import java.util.Date;
  * @date 2018-10-27
  **/
 
-@Configuration
+/*@Configuration*/
 public class FastJsonHttpDateConverter  extends FastJsonHttpMessageConverter {
 
     private static SerializeConfig mapping = new SerializeConfig();

@@ -1,6 +1,7 @@
 package com.simon;
 
 import com.google.common.base.CaseFormat;
+import org.junit.Test;
 
 /**
  * @author simon
@@ -34,5 +35,10 @@ public class UtilTest {
     public void str2Test(){
         String url = "/api/newsInfos/ids/1";
         System.out.println(url.substring(0, url.lastIndexOf("ids") + 3));
+    }
+
+    @Test
+    public void dirTest(){
+        System.out.println("路径为" + UtilTest.class.getResource("/").getPath());
     }
 }

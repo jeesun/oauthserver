@@ -17,17 +17,22 @@
     <resultMap id="AuthorityDtoMap" type="com.simon.dto.AuthorityDto">
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
-        <result column="authorities" jdbcType="VARCHAR" property="authority"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+        <result column="authority_name" jdbcType="VARCHAR" property="authorityName" />
     </resultMap>
 
     <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="mysql">
         SELECT
         ta.user_id,
         tu.username,
-        GROUP_CONCAT( ta.authority SEPARATOR ',' ) authorities
+        tu.phone,
+        GROUP_CONCAT( ta.authority SEPARATOR ',' ) authority,
+        GROUP_CONCAT(tdt.type_name SEPARATOR ',') authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
+        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
         <where>
             <if test="map.userId != null">
                 ta.user_id=#{map.userId}
@@ -47,10 +52,13 @@
         SELECT
         ta.user_id,
         tu.username,
-        string_agg( ta.authority, ',') as authorities
+        tu.phone,
+        string_agg( ta.authority, ',') as authority,
+        string_agg( tdt.type_name, ',') as authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
+        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
         <where>
             <if test="map.userId != null">
                 ta.user_id=#{map.userId}
@@ -70,10 +78,13 @@
         SELECT
         ta.user_id,
         tu.username,
-        WM_CONCAT( ta.authority) authorities
+        tu.phone,
+        WM_CONCAT(to_char(ta.authority)) authority,
+        WM_CONCAT(to_char(tdt.type_name)) authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
+        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
         <where>
             <if test="map.userId != null">
                 ta.user_id=#{map.userId}
@@ -83,9 +94,9 @@
             </if>
         </where>
         GROUP BY
-        ta.user_id,tu.username
+        ta.user_id,tu.username,tu.phone
         <if test="map.authority != null and map.authority != ''">
-            HAVING WM_CONCAT( ta.authority) LIKE CONCAT('%', #{map.authority}, '%')
+            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT('%', #{map.authority}, '%')
         </if>
     </select>
 

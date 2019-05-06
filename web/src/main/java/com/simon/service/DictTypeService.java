@@ -2,7 +2,6 @@ package com.simon.service;
 
 import com.simon.common.service.BasicService;
 import com.simon.dto.DictTypeDto;
-import com.simon.dto.EasyUiTreeDto;
 import com.simon.model.DictType;
 
 import java.util.List;
@@ -20,4 +19,11 @@ public interface DictTypeService extends BasicService<DictType, Long> {
     List<DictType> getTypeByGroupCode(String groupCode);
 
     DictType save(DictTypeDto dictTypeDto);
+
+    /**
+     * 根据id返回字典dto
+     * @param id 子字典id
+     * @return 字典dto
+     */
+    DictTypeDto getDtoById(Long id);
 }

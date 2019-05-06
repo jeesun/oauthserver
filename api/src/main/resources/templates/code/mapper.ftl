@@ -3,9 +3,10 @@ package ${basePackage}.mapper;
 import ${basePackage}.common.mapper.MyMapper;
 import ${basePackage}.model.${modelNameUpperCamel};
 //import ${basePackage}.provider.${modelNameUpperCamel}Provider;
-import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
 import java.util.Map;
