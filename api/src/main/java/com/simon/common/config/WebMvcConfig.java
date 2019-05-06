@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,13 +48,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private MappingJackson2HttpMessageConverter jackson2HttpMessageConverter(){
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        //定义对象映射器
         ObjectMapper objectMapper = new ObjectMapper();
         //对于Long 类型的数据，如果在Controller层通过@ResponseBody将返回数据自动转换成json时，不做任何处理，而直接传给前端的话，在Long长度大于17位时会出现精度丢失的问题。
         //将Long类型的数据转换成字符串，解决Long类型数据传入前端精度丢失的问题
+        //定义对象模型
         SimpleModule simpleModule = new SimpleModule();
+        //添加对长整型的转换关系
+        simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        //将对象模型添加至对象映射器
         objectMapper.registerModule(simpleModule);
+        //将对象映射器添加至Json转换器
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         return jackson2HttpMessageConverter;
     }

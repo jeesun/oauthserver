@@ -107,7 +107,7 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li th:each="cmenu : ${menu.children}">
-                            <a class="J_menuItem" th:text="${cmenu.text}" th:href="${cmenu.attributes.url}" th:if="${#authorization.expression('hasAnyRole(''__${cmenu.attributes.perms}__'')')}">系统管理</a>
+                            <a class="J_menuItem" th:text="${cmenu.text}" th:href="${cmenu.attributes.url}" th:if="${#authorization.expression('hasAnyRole(''__${cmenu.attributes.perms}__'')')}"></a>
                         </li>
                     </ul>
                 </li>

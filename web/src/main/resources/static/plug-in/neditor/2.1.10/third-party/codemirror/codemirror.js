@@ -151,7 +151,7 @@ var CodeMirror = (function() {
             undo: operation(undo),
             redo: operation(redo),
             indentLine: operation(function(n, dir) {
-                if (isLine(n)) indentLine(n, dir == null ? "smart" : dir ? "add" : "subtract");
+                if (isLine(n)) indentLine(n, dir == null ? "smart" : dir ? "templates.code.add" : "subtract");
             }),
             indentSelection: operation(indentSelected),
             historySize: function() {return {undo: history.done.length, redo: history.undone.length};},
@@ -1147,7 +1147,7 @@ var CodeMirror = (function() {
         }
 
         function indentLine(n, how) {
-            if (!how) how = "add";
+            if (!how) how = "templates.code.add";
             if (how == "smart") {
                 if (!mode.indent) how = "prev";
                 else var state = getStateBefore(n);
@@ -1160,7 +1160,7 @@ var CodeMirror = (function() {
                 else indentation = 0;
             }
             else if (how == "smart") indentation = mode.indent(state, line.text.slice(curSpaceString.length), line.text);
-            else if (how == "add") indentation = curSpace + options.indentUnit;
+            else if (how == "templates.code.add") indentation = curSpace + options.indentUnit;
             else if (how == "subtract") indentation = curSpace - options.indentUnit;
             indentation = Math.max(0, indentation);
             var diff = indentation - curSpace;
@@ -1818,7 +1818,7 @@ var CodeMirror = (function() {
         delWordLeft: function(cm) {cm.deleteH(-1, "word");},
         delWordRight: function(cm) {cm.deleteH(1, "word");},
         indentAuto: function(cm) {cm.indentSelection("smart");},
-        indentMore: function(cm) {cm.indentSelection("add");},
+        indentMore: function(cm) {cm.indentSelection("templates.code.add");},
         indentLess: function(cm) {cm.indentSelection("subtract");},
         insertTab: function(cm) {cm.replaceSelection("\t", "end");},
         transposeChars: function(cm) {

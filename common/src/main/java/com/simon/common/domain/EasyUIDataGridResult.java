@@ -46,4 +46,10 @@ public class EasyUIDataGridResult<T> implements Serializable {
         this.total = page.getTotalElements();
         this.rows = page.getContent();
     }
+
+    public EasyUIDataGridResult(List<T> rows) {
+        int temp = rows.size();
+        this.total = (long)temp;
+        this.rows = rows;
+    }
 }

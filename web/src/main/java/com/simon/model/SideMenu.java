@@ -1,5 +1,7 @@
 package com.simon.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
 import com.simon.common.utils.SnowflakeGenId;
@@ -16,18 +18,20 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* 侧边菜单
-* @author SimonSun
-* @date 2018-10-02
-**/
+ * 侧边菜单
+ *
+ * @author SimonSun
+ * @date 2018-10-02
+ **/
 @ApiModel(value = "侧边菜单")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="t_side_menu")
-public class SideMenu implements Serializable{
+@Table(name = "t_side_menu")
+public class SideMenu implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @Column(name = "id")
     @KeySql(genId = SnowflakeGenId.class)
@@ -35,6 +39,7 @@ public class SideMenu implements Serializable{
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "创建人id")
     @Column(name = "create_by")
     private Long createBy;
@@ -44,6 +49,7 @@ public class SideMenu implements Serializable{
     @Column(name = "create_date")
     private Date createDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
     private Long updateBy;
@@ -69,6 +75,7 @@ public class SideMenu implements Serializable{
     @Column(name = "icon")
     private String icon;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "菜单组id")
     @Column(name = "pid")
     private Long pid;
@@ -89,19 +96,32 @@ public class SideMenu implements Serializable{
     @Column(name = "remark")
     private String remark;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "关联id")
     @Column(name = "link_id")
     private Long linkId;
 
-    @ApiModelProperty(value = "菜单类型[1:一级菜单, 2:二级菜单]")
-    @Transient
+    @ApiModelProperty(value = "菜单类型[1:一级菜单, 2:二级菜单, 3:三级菜单]")
+    @Column(name = "menu_type")
     private Integer menuType;
 
     @ApiModelProperty(value = "子菜单列表")
     @Transient
     private List<SideMenu> subSideMenus;
 
-    @ApiModelProperty(value = "菜单权限")
+    @ApiModelProperty(value = "菜单权限，多个用逗号隔开")
     @Transient
     private String authority;
+
+    @ApiModelProperty(value = "菜单权限名称，多个用逗号隔开")
+    @Transient
+    private String authorityName;
+
+    @ApiModelProperty(value = "父菜单名称")
+    @Transient
+    private String parentName;
+
+    @ApiModelProperty(value = "菜单权限数组")
+    @Transient
+    private String[] authorities;
 }

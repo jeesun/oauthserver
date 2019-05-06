@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +31,8 @@ import java.util.Map;
  * @date 2018-12-22
  **/
 @Slf4j
-@Api(description = "quartz任务")
+@ApiIgnore
+@Api(value = "quartz任务")
 @Controller
 @RequestMapping("/api/quartzJobs")
 public class QuartzJobController extends BaseController {
@@ -46,30 +46,26 @@ public class QuartzJobController extends BaseController {
     @Autowired
     private QuartzManage quartzManage;
 
-    @ApiIgnore
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
     public String list(Model model) {
-        model.addAttribute("jobStatusList", dictTypeService.getTypeByGroupCode("job_status"));
-        return "easyui/quartzJob/list";
+        model.addAttribute("jobStatusList", listToMap(dictTypeService.getTypeByGroupCode("job_status")));
+        return "vue/quartzJob/list";
     }
 
-    @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
-    public String add() {
-        return "easyui/quartzJob/add";
+    public String add(Model model) {
+        return "vue/quartzJob/add";
     }
 
-    @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
     public String edit(@RequestParam Long id, Model model) {
-        model.addAttribute("quartzJob", quartzJobService.findById(id));
-        return "easyui/quartzJob/edit";
+        model.addAttribute("entity", entityToMap(quartzJobService.findById(id)));
+        return "vue/quartzJob/edit";
     }
 
-    @ApiIgnore
     @ApiOperation(value = "列表数据")
     @GetMapping("data")
     @ResponseBody
@@ -89,11 +85,7 @@ public class QuartzJobController extends BaseController {
     @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody QuartzJob body, Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if (principal instanceof UserEntity) {
-            userEntity = (UserEntity) principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
         quartzJobService.insertSelective(body);
@@ -104,11 +96,7 @@ public class QuartzJobController extends BaseController {
     @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody QuartzJob body, Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if (principal instanceof UserEntity) {
-            userEntity = (UserEntity) principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(new Date());
         body.setUpdateBy(userEntity.getId());
         quartzJobService.updateByPrimaryKeySelective(body);
@@ -123,8 +111,6 @@ public class QuartzJobController extends BaseController {
         return ResultMsg.success();
     }
 
-    //@PreAuthorize("isAuthenticated()")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SU')")
     @ApiOperation(value = "定时任务操作（启动，暂停）")
     @PostMapping("/id/{id}/jobStatus/{jobStatus}")
     @ResponseBody
@@ -132,11 +118,7 @@ public class QuartzJobController extends BaseController {
             Authentication authentication,
             @PathVariable Long id,
             @ApiParam(value = "job状态[0:off, 1:on]", required = true) @PathVariable int jobStatus) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if (principal instanceof UserEntity) {
-            userEntity = (UserEntity) principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
 
         QuartzJob quartzJob = quartzJobService.findById(id);
 

@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/**
+* 头像上传样式start
+*/
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
+
+/**
+* 头像上传样式end
+*/
+
+/**
+输入框、下拉框、日期选择器
+ */
+.el-input, .el-select, .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 100%;
+}

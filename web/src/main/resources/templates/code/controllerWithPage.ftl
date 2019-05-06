@@ -72,29 +72,29 @@ public class ${entityName}Controller extends BaseController{
     @GetMapping("list")
     public String list(Model model){
 <#list columns as column>
-    <#switch column.easyuiType>
+    <#switch column.uiType>
         <#case "t:dict">
         model.addAttribute("${dashedToCamel(column.extraInfo)}List", dictTypeService.getTypeByGroupCode("${column.extraInfo}"));
         <#break>
         <#default>
     </#switch>
 </#list>
-        return "easyui/${entityName?uncap_first}/list";
+        return "vue/${entityName?uncap_first}/list";
     }
 
     @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
     public String add(){
-        return "easyui/${entityName?uncap_first}/add";
+        return "vue/${entityName?uncap_first}/add";
     }
 
     @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
-    public String edit(@RequestParam Long id, Model model){
-        model.addAttribute("${entityName?uncap_first}", ${entityName?uncap_first}Service.findById(id));
-        return "easyui/${entityName?uncap_first}/edit";
+    public String edit(@RequestParam ${idType} id, Model model){
+        model.addAttribute("entity", ${entityName?uncap_first}Service.findById(id));
+        return "vue/${entityName?uncap_first}/edit";
     }
 
     @ApiIgnore
@@ -137,11 +137,7 @@ public class ${entityName}Controller extends BaseController{
     @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody ${entityName} body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
 <#list columns as column>
@@ -157,11 +153,7 @@ public class ${entityName}Controller extends BaseController{
     @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody ${entityName} body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(new Date());
         body.setUpdateBy(userEntity.getId());
         ${entityName?uncap_first}Service.updateByPrimaryKeySelective(body);

@@ -1,3 +1,15 @@
+### 1.3.0-4 alpha(2019-02-20)
+1. 支持PostgreSQL。
+### 1.3.0-3 alpha（2019-01-24）
+#### api
+1. 移植web模块的代码生成器；
+2. 代码生成默认位置改为test目录；
+#### web
+1. 使用代码生成器生成用户管理；
+2. 代码生成器支持时间类型字段；
+3. 代码生成默认位置改为test目录；
+4. 修复java.lang.IllegalArgumentException: Request header is too large。
+
 ### 1.3.0-2（2019-01-20）
 #### web
 1. 升级Spring Boot 1.5.18.RELEASE到1.5.19.RELEASE；

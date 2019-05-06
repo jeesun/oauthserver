@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('介绍', 'list')"></head>
+<body>
+<div id="app">
+    <template>
+        <div class="block">
+            <el-timeline>
+                <el-timeline-item timestamp="2018/4/12" placement="top">
+                    <el-card>
+                        <h4>更新 Github 模板</h4>
+                        <p>王小虎 提交于 2018/4/12 20:46</p>
+                    </el-card>
+                </el-timeline-item>
+                <el-timeline-item timestamp="2018/4/3" placement="top">
+                    <el-card>
+                        <h4>更新 Github 模板</h4>
+                        <p>王小虎 提交于 2018/4/3 20:46</p>
+                    </el-card>
+                </el-timeline-item>
+                <el-timeline-item timestamp="2018/4/2" placement="top">
+                    <el-card>
+                        <h4>更新 Github 模板</h4>
+                        <p>王小虎 提交于 2018/4/2 20:46</p>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
+        </div>
+    </template>
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {
+
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        mounted: function () {
+
+        },
+        methods: {
+
+        }
+    });
+
+    function iframeMethond(index, row) {
+
+    }
+
+    function iframeUpdateList() {
+
+    }
+
+    /*]]>*/
+</script>
+</html>

@@ -17,14 +17,14 @@
     <resultMap id="AuthorityDtoMap" type="com.simon.dto.AuthorityDto">
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
-        <result column="authorities" jdbcType="VARCHAR" property="authority"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
     </resultMap>
 
     <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="mysql">
         SELECT
         ta.user_id,
         tu.username,
-        GROUP_CONCAT( ta.authority SEPARATOR ',' ) authorities
+        GROUP_CONCAT( ta.authority SEPARATOR ',' ) authority
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
@@ -47,7 +47,7 @@
         SELECT
         ta.user_id,
         tu.username,
-        string_agg( ta.authority, ',') as authorities
+        string_agg( ta.authority, ',') as authority
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id

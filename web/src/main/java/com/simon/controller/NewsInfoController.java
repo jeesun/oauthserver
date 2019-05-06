@@ -45,23 +45,23 @@ public class NewsInfoController extends BaseController{
     @GetMapping("list")
     public String list(Model model){
         model.addAttribute("newsStatusList", dictTypeService.getTypeByGroupCode("news_status"));
-        model.addAttribute("newsStatusList", dictTypeService.getTypeByGroupCode("news_status"));
-        return "easyui/newsInfo/list";
+        model.addAttribute("newsTypeList", dictTypeService.getTypeByGroupCode("news_type"));
+        return "vue/newsInfo/list";
     }
 
     @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
     public String add(){
-        return "easyui/newsInfo/add";
+        return "vue/newsInfo/add";
     }
 
     @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
     public String edit(@RequestParam Long id, Model model){
-        model.addAttribute("newsInfo", newsInfoService.findById(id));
-        return "easyui/newsInfo/edit";
+        model.addAttribute("entity", entityToMap(newsInfoService.findById(id)));
+        return "vue/newsInfo/edit";
     }
 
     @ApiIgnore
@@ -90,11 +90,7 @@ public class NewsInfoController extends BaseController{
     @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody NewsInfo body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
         body.setUserId(userEntity.getId());
@@ -106,11 +102,7 @@ public class NewsInfoController extends BaseController{
     @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody NewsInfo body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(new Date());
         body.setUpdateBy(userEntity.getId());
         newsInfoService.updateByPrimaryKeySelective(body);

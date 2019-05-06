@@ -103,7 +103,7 @@ defaultOptions.exporting = {
 		contextButton: {
 			menuClassName: PREFIX + 'contextmenu',
 			//x: -10,
-			symbol: 'menu',
+			symbol: 'index.html',
 			_titleKey: 'contextButtonTitle',
 			menuItems: [{
 				textKey: 'printChart',

@@ -1,6 +1,7 @@
 package com.simon.mapper;
 
 import com.simon.common.mapper.MyMapper;
+import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.model.DictType;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,11 @@ public interface DictTypeMapper extends MyMapper<DictType> {
     List<EasyUiTreeGridDto> getTreeGridDtos(@Param("groupCode") String groupCode);
 
     List<DictType> getList(@Param("map") Map<String, Object> map);
+
+    /**
+     * 根据id返回字典dto
+     * @param id 子字典id
+     * @return 字典dto
+     */
+    DictTypeDto getDtoById(@Param("id") Long id);
 }

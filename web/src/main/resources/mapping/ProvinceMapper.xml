@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.ProvinceMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.Province">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+  </resultMap>
+
+  <select id="getCascaderOptionDtos" resultType="com.simon.dto.vue.CascaderOptionDto">
+    SELECT
+        id AS id,
+        name AS label,
+        province_id AS value
+    FROM
+        t_s_province
+  </select>
+</mapper>

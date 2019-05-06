@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.DictTypeMapper">
-  <cache eviction="FIFO" flushInterval="60000" readOnly="true" size="512" />
+  <!--<cache eviction="FIFO" flushInterval="60000" readOnly="true" size="512" />-->
   <resultMap id="BaseResultMap" type="com.simon.model.DictType">
     <!--
       WARNING - @mbg.generated
@@ -26,6 +26,17 @@
         <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     </resultMap>
 
+    <resultMap id="DictTypeDtoMap" type="com.simon.dto.DictTypeDto">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="pid" jdbcType="BIGINT" property="pid" />
+        <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+        <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    </resultMap>
+
   <select id="getByGroupCode" parameterType="String" resultMap="BaseResultMap" useCache="true">
     SELECT
         *
@@ -33,6 +44,7 @@
         t_dict_type
     WHERE
         type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
+    ORDER BY order_num ASC
   </select>
   
   <select id="getTreeGridDtos" parameterType="java.lang.String" resultMap="EasyUiTreeGridDtoMap">
@@ -46,5 +58,23 @@
         t_dict_type
     WHERE
         type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
+    ORDER BY order_num ASC
   </select>
+
+    <select id="getDtoById" resultMap="DictTypeDtoMap">
+        SELECT
+            tdt.id,
+            tdt.type_code AS code,
+            tdt.type_name AS name,
+            tdt.type_group_id AS pid,
+            tdt.type_group_code AS parent_code,
+            tdtg.type_group_name AS parent_name,
+            2 AS type,
+            tdt.order_num
+        FROM
+            t_dict_type tdt
+        LEFT JOIN t_dict_type_group tdtg ON tdt.type_group_id = tdtg.id
+        WHERE
+            tdt.id = #{id}
+    </select>
 </mapper>

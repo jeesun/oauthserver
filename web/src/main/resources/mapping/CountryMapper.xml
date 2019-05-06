@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.CountryMapper">
+  <resultMap id="BaseResultMap" type="com.simon.model.Country">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="country_id" jdbcType="VARCHAR" property="countryId" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+  </resultMap>
+
+  <select id="findByCityId" resultMap="BaseResultMap">
+    select * from t_s_country where city_id = #{cityId}
+  </select>
+
+  <select id="getCascaderOptionDtos" resultType="com.simon.dto.vue.CascaderOptionDto">
+    select id as id, name as label, country_id as value from t_s_country where city_id = #{cityId}
+  </select>
+</mapper>

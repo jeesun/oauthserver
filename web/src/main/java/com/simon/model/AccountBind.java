@@ -1,20 +1,20 @@
 package com.simon.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
-import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.math.BigDecimal;
 
 /**
 * 账号绑定
@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 public class AccountBind implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @Column(name = "id")
     @KeySql(genId = SnowflakeGenId.class)
@@ -36,6 +37,7 @@ public class AccountBind implements Serializable{
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "创建人id")
     @Column(name = "create_by")
     private Long createBy;
@@ -45,6 +47,7 @@ public class AccountBind implements Serializable{
     @Column(name = "create_date")
     private Date createDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
     private Long updateBy;
@@ -54,6 +57,7 @@ public class AccountBind implements Serializable{
     @Column(name = "update_date")
     private Date updateDate;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "用户id")
     @Column(name = "user_id")
     private Long userId;
@@ -76,7 +80,7 @@ public class AccountBind implements Serializable{
 
     @ApiModelProperty(value = "是否绑定")
     @Column(name = "is_bind")
-    private Byte[] isBind;
+    private Boolean isBind;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
 @ApiModelProperty(value = "绑定过期时间")

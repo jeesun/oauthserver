@@ -5,12 +5,15 @@ import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.dto.AuthorityDto;
 import com.simon.service.AuthorityService;
+import com.simon.service.DictTypeService;
+import com.simon.service.OauthUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -32,13 +35,37 @@ public class AuthorityController extends BaseController {
     @Autowired
     private AuthorityService authorityService;
 
-    @GetMapping(params = "easyui-list")
-    public String getEasyUIList(){
-        return "easyui/authority";
+    @Autowired
+    private OauthUserService oauthUserService;
+
+    @Autowired
+    private DictTypeService dictTypeService;
+
+    @GetMapping("list")
+    public String list(Model model){
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+        return "vue/authority/list";
+    }
+
+    @ApiIgnore
+    @ApiOperation(value = "新增页面")
+    @GetMapping("add")
+    public String add(Model model) {
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+        return "vue/authority/add";
+    }
+
+    @ApiIgnore
+    @ApiOperation(value = "编辑页面")
+    @GetMapping("edit")
+    public String edit(@RequestParam Long userId, Model model) {
+        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type")));
+        model.addAttribute("entity", entityToMap(authorityService.findDtoByUserId(userId)));
+        return "vue/authority/edit";
     }
 
     @ApiOperation(value = "easyui列表")
-    @GetMapping("easyui/list")
+    @GetMapping("data")
     @ResponseBody
     public EasyUIDataGridResult<AuthorityDto> getEasyUIList(
             @ApiParam(value = "用户id", required = false) @RequestParam(required = false) Long userId,
@@ -55,7 +82,7 @@ public class AuthorityController extends BaseController {
     }
 
     @ApiOperation(value = "新增")
-    @PostMapping
+    @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody AuthorityDto authorityDto){
         authorityService.updateByDto(authorityDto);
@@ -63,7 +90,7 @@ public class AuthorityController extends BaseController {
     }
 
     @ApiOperation(value = "修改")
-    @PatchMapping
+    @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody AuthorityDto authorityDto){
         authorityService.updateByDto(authorityDto);
@@ -76,5 +103,11 @@ public class AuthorityController extends BaseController {
     public ResultMsg delete(@PathVariable String userIds){
         authorityService.deleteByUserIds(userIds);
         return ResultMsg.success();
+    }
+
+    @GetMapping("/unauthorized")
+    @ResponseBody
+    public ResultMsg getUnauthorized(){
+        return ResultMsg.success(oauthUserService.getUnauthorized());
     }
 }

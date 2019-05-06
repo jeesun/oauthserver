@@ -304,7 +304,9 @@ public class DbUtil {
             String annotation = "";
             if ("id".equalsIgnoreCase(name)) {
                 if ("Long".equalsIgnoreCase(propertyType)) {
-                    annotation = "@Id\n" +
+                    //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
+                    annotation = "@JSONField(serializeUsing = ToStringSerializer.class)\n" +
+                            "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
@@ -327,6 +329,9 @@ public class DbUtil {
             }else{
                 if("Date".equalsIgnoreCase(propertyType)){
                     annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n";
+                }else if ("Long".equalsIgnoreCase(propertyType)) {
+                    //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
+                    annotation = "@JSONField(serializeUsing = ToStringSerializer.class)\n";
                 }
 
                 if(!"".equals(annotation)){

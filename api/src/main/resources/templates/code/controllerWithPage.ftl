@@ -137,11 +137,7 @@ public class ${entityName}Controller extends BaseController{
     @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody ${entityName} body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
 <#list columns as column>
@@ -157,11 +153,7 @@ public class ${entityName}Controller extends BaseController{
     @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody ${entityName} body, Authentication authentication){
-        Object principal = authentication.getPrincipal();
-        UserEntity userEntity = null;
-        if(principal instanceof UserEntity){
-            userEntity = (UserEntity)principal;
-        }
+        UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(new Date());
         body.setUpdateBy(userEntity.getId());
         ${entityName?uncap_first}Service.updateByPrimaryKeySelective(body);

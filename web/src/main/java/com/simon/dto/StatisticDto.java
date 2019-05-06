@@ -1,5 +1,7 @@
 package com.simon.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +20,7 @@ public class StatisticDto {
     @ApiModelProperty(value = "分类")
     private String classify;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "统计")
     private Long value;
 

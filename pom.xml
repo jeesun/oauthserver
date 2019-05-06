@@ -11,13 +11,13 @@
     <!-- 项目说明：这里作为聚合工程的父工程 -->
 	<groupId>com.simon</groupId>
 	<artifactId>oauthserver</artifactId>
-	<version>1.3.0</version>
+	<version>2.0.20190506-alpha</version>
 
 	<!-- 继承说明：这里继承SpringBoot提供的父工程 -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.19.RELEASE</version>
+		<version>1.5.20.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -32,7 +32,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<spring-boot.version>1.5.19.RELEASE</spring-boot.version>
+		<spring-boot.version>1.5.20.RELEASE</spring-boot.version>
 		<docker.registry>127.0.0.1:5000</docker.registry>
 		<swagger2.version>2.9.2</swagger2.version>
 		<spring-cloud.version>Edgware.RELEASE</spring-cloud.version>
@@ -42,7 +42,7 @@
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<mapstruct.version>1.3.0.Beta2</mapstruct.version>
 		<lombok.version>1.18.4</lombok.version>
-		<fastjson.version>1.2.55</fastjson.version>
+		<fastjson.version>1.2.57</fastjson.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -155,12 +155,6 @@
 				<artifactId>spring-boot-starter-mail</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
-			<!--启用不严格检查html-->
-			<dependency>
-				<groupId>net.sourceforge.nekohtml</groupId>
-				<artifactId>nekohtml</artifactId>
-				<version>1.9.22</version>
-			</dependency>
 
 			<!-- Spring Boot 热部署 start -->
 			<dependency>
@@ -216,7 +210,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid-spring-boot-starter</artifactId>
-				<version>1.1.14</version>
+				<version>1.1.16</version>
 			</dependency>
 			<dependency>
 				<groupId>mysql</groupId>
@@ -286,12 +280,12 @@
 			<dependency>
 				<groupId>tk.mybatis</groupId>
 				<artifactId>mapper-spring-boot-starter</artifactId>
-				<version>2.1.2</version>
+				<version>2.1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>tk.mybatis</groupId>
 				<artifactId>mapper-generator</artifactId>
-				<version>1.1.2</version>
+				<version>1.1.5</version>
 			</dependency>
 
 			<dependency>
@@ -314,6 +308,14 @@
 				<version>1.0</version>
 			</dependency>
 			<!-- ali dayu end -->
+
+			<!-- 腾讯云短信服务 start -->
+			<dependency>
+				<groupId>com.github.qcloudsms</groupId>
+				<artifactId>qcloudsms</artifactId>
+				<version>1.0.6</version>
+			</dependency>
+			<!-- 腾讯云短信服务 end -->
 
 			<!--<dependency>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -414,7 +416,13 @@
 			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>
 				<artifactId>okhttp</artifactId>
-				<version>3.12.1</version>
+				<version>3.14.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>easyexcel</artifactId>
+				<version>1.1.2-beta5</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

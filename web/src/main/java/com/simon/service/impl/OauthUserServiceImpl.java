@@ -11,6 +11,7 @@ import com.simon.common.exception.UserNotValidException;
 import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.UsernameUtil;
 import com.simon.common.utils.ValidUtil;
+import com.simon.dto.AuthorityDto;
 import com.simon.dto.StatisticDto;
 import com.simon.mapper.AuthorityMapper;
 import com.simon.mapper.OauthUserMapper;
@@ -65,7 +66,8 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Autowired
     private CacheManager cacheManager;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void register(Integer code, String phone, String password) {
@@ -255,6 +257,7 @@ public class OauthUserServiceImpl implements OauthUserService {
     //@CachePut(key="#model.username", cacheNames = {"oauthUserCache"})
     @Override
     public int updateByPrimaryKey(OauthUser model) {
+        model.setPassword(passwordEncoder.encode(model.getPassword()));
         int affectLineNum = oauthUserMapper.updateByPrimaryKey(model);
         if(null != cacheManager){
             Cache cache = cacheManager.getCache("oauthUserCache");
@@ -413,5 +416,20 @@ public class OauthUserServiceImpl implements OauthUserService {
         }else{
             throw new UserExistsException("用户已存在，请登录");
         }
+    }
+
+    @Override
+    public List<AuthorityDto> getUnauthorized() {
+        return oauthUserMapper.getUnauthorized();
+    }
+
+    @Override
+    public int countByPhoneOrEmail(String phone, String email) {
+        return oauthUserMapper.countByPhoneOrEmail(phone, email);
+    }
+
+    @Override
+    public int updatePasswordByUserId(Long userId, String newPassword) {
+        return oauthUserMapper.updatePasswordByUserId(userId, newPassword);
     }
 }

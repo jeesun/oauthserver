@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('新增', 'commit')"></head>
+<body>
+<div id="app" style="padding-top: 10px">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-row>
+            <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
+                    :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+                <template>
+                    <el-form-item label="权限">
+                        <el-select v-model="ruleForm.allowedRoles" multiple placeholder="请选择">
+                            <el-option
+                                    v-for="item in roleTypeList"
+                                    :key="item.typeCode"
+                                    :label="item.typeName"
+                                    :value="item.typeCode">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="父菜单名称">
+                        <el-select v-model="ruleForm.pid" placeholder="请选择">
+                            <el-option
+                                    v-for="item in parentMenus"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="表名" prop="tableName" :disabled="true">
+                        <el-input v-model="ruleForm.tableName" placeholder="请输入表名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="实体名" prop="entityName">
+                        <el-input v-model="ruleForm.entityName" placeholder="请输入实体名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="表标注" prop="tableComment">
+                        <el-input v-model="ruleForm.tableComment" placeholder="请输入表标注"></el-input>
+                    </el-form-item>
+                    <el-form-item label="id列类型" prop="idType">
+                        <el-select v-model="ruleForm.idType" placeholder="请选择">
+                            <el-option label="Long" value="Long"></el-option>
+                            <el-option label="Integer" value="Integer"></el-option>
+                            <el-option label="String" value="String"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="要生成的代码" prop="genModules">
+                        <el-checkbox-group v-model="ruleForm.genModules">
+                            <el-checkbox label="modelAndMapper"></el-checkbox>
+                            <el-checkbox label="repository"></el-checkbox>
+                            <el-checkbox label="service"></el-checkbox>
+                            <el-checkbox label="controller"></el-checkbox>
+                            <el-checkbox label="controllerAndPage"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                </template>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :xs="{span: 24, offset: 0}" :sm="{span: 20, offset: 2}" :md="{span: 20, offset: 2}"
+                    :lg="{span: 16, offset: 4}" :xl="{span: 16, offset: 4}">
+                <el-form-item label="属性列表" props="columns">
+                    <elx-editable ref="editable" :data.sync="ruleForm.columns" border>
+                        <elx-editable-column align="center" type="index" width="50"></elx-editable-column>
+                        <elx-editable-column align="center" prop="name" label="属性名" width="180"></elx-editable-column>
+                        <elx-editable-column align="center" prop="type" label="属性类型" width="100"></elx-editable-column>
+                        <elx-editable-column align="center" prop="comment" label="属性注释" width="180"></elx-editable-column>
+                        <elx-editable-column align="center" prop="uiType" label="Element Form组件" width="180" :edit-render="{name : 'ElSelect', options: elementComponents}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="extraInfo" label="补充信息" width="160" :show-overflow-tooltip="true" :edit-render="{name: 'ElInput'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="allowSearch" label="是否允许搜索" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="hidden" label="是否隐藏" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="allowInput" label="是否允许输入" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}">
+                    </elx-editable>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
+                    :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-button @click="closeWindow">关闭</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+    </el-form>
+
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:src="@{/js/vue/validateRule.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {
+        url: "/api/tables/genCode"
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            elementComponents: [],
+            tableLoading: false,
+            roleTypeList: [[${roleTypeList}]],
+            parentMenus: [[${parentMenus}]],
+            ruleForm: {
+                allowedRoles: [],
+                pid: "",
+                tableName: [[${tableName}]],
+                entityName: [[${entityName}]],
+                tableComment: [[${tableComment}]],
+                idType: [[${idType}]],
+                /*genModules: ["modelAndMapper", "repository", "service"],*/
+                genModules: ["controllerAndPage"],
+                columns: [[${tableEntity.columns}]]
+            },
+            rules: {
+                iconClass: [
+                    {required: true, message: '图标class不能为空', trigger: 'blur'}
+                ],
+                label: [
+                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
+                ],
+                tags: [
+                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
+                ]
+            }
+        },
+        mounted: function () {
+            this.initElementComponents();
+        },
+        methods: {
+            initElementComponents(){
+                let list = [[${elementComponents}]];
+                for(let i = 0; i < list.length; i++){
+                    this.elementComponents.push({
+                       'label' : list[i].typeName,
+                        'value': list[i].typeCode
+                    });
+                }
+            },
+            sendMessage(event) {
+                console.log("sendMessage");
+                closeLayer();
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showMsg("新增成功");
+                            parent.updateListData();
+                            closeLayer();
+                        }).catch((error) => {
+                            let errorMessage = "发生错误";
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.closeLoading();
+                            parent.showError(errorMessage);
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            closeWindow(event) {
+                closeLayer();
+            },
+            handleAvatarSuccess(res, file) {
+                //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
+                console.log(eval(res));
+                res = eval(res);
+                this.ruleForm.headPhoto = res.data[0];
+            },
+            beforeAvatarUpload(file) {
+                console.log(file.type);
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</html>

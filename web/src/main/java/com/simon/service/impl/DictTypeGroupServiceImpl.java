@@ -80,7 +80,7 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
 
     @Override
     public void delete(Long id){
-        dictTypeGroupRepository.delete(id);
+        dictTypeGroupMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
                 for(int j = 0; j < dictTypes.size(); j++){
                     DictType dictType = dictTypes.get(j);
                     DictTypeDto subDto = new DictTypeDto();
-                    subDto.setId(String.valueOf(dictTypeGroup.getId()) + "-" + String.valueOf(dictType.getId()));
+                    subDto.setId(dictTypeGroup.getId() + "-" + dictType.getId());
                     subDto.setName(dictType.getTypeName());
                     subDto.setCode(dictType.getTypeCode());
                     subDto.setOrderNum(dictType.getOrderNum());
@@ -202,5 +202,15 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     @Override
     public int countByTypeGroupCode(String typeGroupCode) {
         return dictTypeGroupRepository.countByTypeGroupCode(typeGroupCode);
+    }
+
+    @Override
+    public DictTypeDto getDtoById(Long id) {
+        return dictTypeGroupMapper.getDtoById(id);
+    }
+
+    @Override
+    public int deleteById(Long id) {
+        return 0;
     }
 }

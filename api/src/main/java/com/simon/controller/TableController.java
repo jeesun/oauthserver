@@ -94,11 +94,7 @@ public class TableController extends BaseController {
             @RequestParam(required = false) String genModules,
             Authentication authentication){
         if(null != authentication){
-            Object principal = authentication.getPrincipal();
-            UserEntity userEntity = new UserEntity();
-            if(principal instanceof UserEntity){
-                userEntity = (UserEntity)principal;
-            }
+            UserEntity userEntity = getCurrentUser(authentication);
             CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules, userEntity.getUsername());
         }else{
             CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules);

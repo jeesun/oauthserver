@@ -2,19 +2,17 @@ package com.simon.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
-import com.simon.common.utils.UUIdGenId;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 import tk.mybatis.mapper.annotation.KeySql;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.math.BigDecimal;
 
 /**
 * 账号绑定
@@ -76,7 +74,7 @@ public class AccountBind implements Serializable{
 
     @ApiModelProperty(value = "是否绑定")
     @Column(name = "is_bind")
-    private Byte[] isBind;
+    private Boolean isBind;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
 @ApiModelProperty(value = "绑定过期时间")
