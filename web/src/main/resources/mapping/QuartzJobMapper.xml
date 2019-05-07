@@ -11,13 +11,10 @@
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
         <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
-        <result column="method_name" jdbcType="VARCHAR" property="methodName"/>
-        <result column="is_concurrent" jdbcType="INTEGER" property="isConcurrent"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="bean_name" jdbcType="VARCHAR" property="beanName"/>
         <result column="trigger_name" jdbcType="VARCHAR" property="triggerName"/>
         <result column="job_status" jdbcType="INTEGER" property="jobStatus"/>
-        <result column="spring_bean" jdbcType="VARCHAR" property="springBean"/>
         <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
     </resultMap>
 

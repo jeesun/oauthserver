@@ -4,7 +4,7 @@ import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.plugins.quartz.QuartzManage;
+import com.simon.common.plugins.quartz.QuartzManager;
 import com.simon.common.utils.BeanUtils;
 import com.simon.model.QuartzJob;
 import com.simon.service.DictTypeService;
@@ -44,8 +44,7 @@ public class QuartzJobController extends BaseController {
     @Autowired
     private DictTypeService dictTypeService;
 
-    @Autowired
-    private QuartzManage quartzManage;
+    private String TRIGGER_GROUP_NAME = "XLXXCC_JOB_GROUP";
 
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
@@ -89,8 +88,6 @@ public class QuartzJobController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
-        body.setSpringBean(body.getBeanName());
-        body.setJobName(body.getJobName());
         //任务状态默认为停止
         body.setJobStatus(0);
         quartzJobService.insertSelective(body);
@@ -106,15 +103,13 @@ public class QuartzJobController extends BaseController {
         QuartzJob quartzJob = quartzJobService.findById(body.getId());
         if (!quartzJob.getCronExpression().equals(body.getCronExpression())) {
             BeanUtils.copyPropertiesIgnoreNull(body, quartzJob);
-            quartzManage.updateJobCron(quartzJob);
+            QuartzManager.modifyJobTime(quartzJob, TRIGGER_GROUP_NAME);
             //更新cron之后，定时任务会启动。
             quartzJob.setJobStatus(1);
         }
 
         quartzJob.setUpdateDate(new Date());
         quartzJob.setUpdateBy(userEntity.getId());
-        quartzJob.setSpringBean(body.getBeanName());
-        quartzJob.setJobName(body.getBeanName());
         quartzJobService.updateByPrimaryKeySelective(quartzJob);
 
         return ResultMsg.success();
@@ -135,13 +130,13 @@ public class QuartzJobController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         QuartzJob quartzJob = quartzJobService.findById(body.getId());
 
-        if (!quartzManage.isJobExists(quartzJob.getJobName())) {
-            quartzManage.addJob(quartzJob);
+        if (!QuartzManager.isJobExists(quartzJob)) {
+            QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
         }
         if (0 == body.getJobStatus()) {
-            quartzManage.pauseJob(quartzJob.getJobName());
+            QuartzManager.pauseJob(quartzJob);
         } else {
-            quartzManage.resumeJob(quartzJob.getJobName());
+            QuartzManager.resumeJob(quartzJob);
         }
 
         quartzJob.setJobStatus(body.getJobStatus());

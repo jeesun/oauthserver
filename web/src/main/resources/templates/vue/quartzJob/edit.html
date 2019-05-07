@@ -7,27 +7,18 @@
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="任务名" prop="jobName">
+                    <el-input v-model="ruleForm.jobName" placeholder="请输入任务名" :disabled="true"></el-input>
+                </el-form-item>
                 <el-form-item label="cron表达式" prop="cronExpression">
                     <el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式"></el-input>
                 </el-form-item>
                 <el-form-item label="完全限定类名" prop="beanName">
                     <el-input v-model="ruleForm.beanName" placeholder="请输入完全限定类名" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="方法名" prop="methodName">
-                    <el-input v-model="ruleForm.methodName" placeholder="请输入方法名" :disabled="true"></el-input>
-                </el-form-item>
                 <el-form-item label="描述" prop="description">
                     <el-input v-model="ruleForm.description" placeholder="请输入描述"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="任务是否有状态" prop="isConcurrent">
-                    <el-input v-model="ruleForm.isConcurrent" placeholder="请输入任务是否有状态"></el-input>
-                </el-form-item>-->
-                <!--<el-form-item label="触发器名称" prop="triggerName">
-                    <el-input v-model="ruleForm.triggerName" placeholder="请输入触发器名称" :disabled="true"></el-input>
-                </el-form-item>-->
-                <!--<el-form-item label="任务状态" prop="jobStatus">
-                    <el-input v-model="ruleForm.jobStatus" placeholder="请输入任务状态"></el-input>
-                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                     <el-button @click="closeWindow">关闭</el-button>
@@ -56,13 +47,10 @@
             ruleForm: {
                 id: [[${entity.id}]],
                 cronExpression: [[${entity.cronExpression}]],
-                methodName: [[${entity.methodName}]],
-                isConcurrent: [[${entity.isConcurrent}]],
                 description: [[${entity.description}]],
                 beanName: [[${entity.beanName}]],
                 triggerName: [[${entity.triggerName}]],
                 jobStatus: [[${entity.jobStatus}]],
-                springBean: [[${entity.springBean}]],
                 jobName: [[${entity.jobName}]],
             },
             rules: {

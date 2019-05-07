@@ -4,7 +4,7 @@ package com.simon.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
-import com.simon.common.plugins.quartz.QuartzManage;
+import com.simon.common.plugins.quartz.QuartzManager;
 import com.simon.mapper.QuartzJobMapper;
 import com.simon.model.QuartzJob;
 import com.simon.repository.QuartzJobRepository;
@@ -36,8 +36,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Autowired
     private QuartzJobRepository quartzJobRepository;
 
-    @Autowired
-    private QuartzManage quartzManage;
+    private String TRIGGER_GROUP_NAME = "XLXXCC_JOB_GROUP";
 
     @Override
     public long count() {
@@ -138,7 +137,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     public void runJobsOnStart() throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
         List<QuartzJob> quartzJobs = quartzJobMapper.selectAll();
         for (QuartzJob quartzJob : quartzJobs) {
-            quartzManage.addJob(quartzJob);
+            QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
         }
         quartzJobMapper.updateJobStatus(1);
     }
