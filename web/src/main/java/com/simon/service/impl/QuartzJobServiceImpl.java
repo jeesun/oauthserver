@@ -4,7 +4,7 @@ package com.simon.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
-import com.simon.common.plugins.quartz.QuartzManage;
+import com.simon.common.plugins.quartz.QuartzManager;
 import com.simon.mapper.QuartzJobMapper;
 import com.simon.model.QuartzJob;
 import com.simon.repository.QuartzJobRepository;
@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author SimonSun
-* @date 2018-12-21
-**/
+ * @author SimonSun
+ * @date 2018-12-21
+ **/
 @Slf4j
 @Service
 @Transactional(rollbackFor = {Exception.class})
@@ -36,8 +36,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Autowired
     private QuartzJobRepository quartzJobRepository;
 
-    @Autowired
-    private QuartzManage quartzManage;
+    private String TRIGGER_GROUP_NAME = "XLXXCC_JOB_GROUP";
 
     @Override
     public long count() {
@@ -45,7 +44,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    public QuartzJob save(QuartzJob quartzJob){
+    public QuartzJob save(QuartzJob quartzJob) {
         return quartzJobRepository.save(quartzJob);
     }
 
@@ -55,14 +54,14 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    public PageInfo<QuartzJob> findAll(Integer pageNo, Integer pageSize, String orderBy){
-        if (null == pageSize){
+    public PageInfo<QuartzJob> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         List<QuartzJob> list = quartzJobMapper.selectAll();
@@ -70,64 +69,64 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    public Page<QuartzJob> findAll(Pageable pageable){
+    public Page<QuartzJob> findAll(Pageable pageable) {
         return quartzJobRepository.findAll(pageable);
     }
 
     @Override
-    public List<QuartzJob> findAll(){
+    public List<QuartzJob> findAll() {
         return quartzJobRepository.findAll();
     }
 
     @Override
-    public void delete(Long id){
+    public void delete(Long id) {
         quartzJobRepository.delete(id);
     }
 
     @Override
-    public int deleteByIds(String ids){
+    public int deleteByIds(String ids) {
         return quartzJobMapper.deleteByIds(ids);
     }
 
     @Override
-    public QuartzJob findById(Long id){
+    public QuartzJob findById(Long id) {
         return quartzJobRepository.findOne(id);
     }
 
     @Override
-    public int insertList(List<QuartzJob> list){
+    public int insertList(List<QuartzJob> list) {
         return quartzJobMapper.insertList(list);
     }
 
     @Override
-    public int insert(QuartzJob quartzJob){
+    public int insert(QuartzJob quartzJob) {
         return quartzJobMapper.insert(quartzJob);
     }
 
     @Override
-    public int insertSelective(QuartzJob quartzJob){
+    public int insertSelective(QuartzJob quartzJob) {
         return quartzJobMapper.insertSelective(quartzJob);
     }
 
     @Override
-    public int updateByPrimaryKey(QuartzJob quartzJob){
+    public int updateByPrimaryKey(QuartzJob quartzJob) {
         return quartzJobMapper.updateByPrimaryKey(quartzJob);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(QuartzJob quartzJob){
+    public int updateByPrimaryKeySelective(QuartzJob quartzJob) {
         return quartzJobMapper.updateByPrimaryKeySelective(quartzJob);
     }
 
     @Override
     public PageInfo<QuartzJob> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         var list = quartzJobMapper.getList(params);
@@ -137,8 +136,8 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Override
     public void runJobsOnStart() throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
         List<QuartzJob> quartzJobs = quartzJobMapper.selectAll();
-        for(QuartzJob quartzJob : quartzJobs){
-            quartzManage.addJob(quartzJob);
+        for (QuartzJob quartzJob : quartzJobs) {
+            QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
         }
         quartzJobMapper.updateJobStatus(1);
     }

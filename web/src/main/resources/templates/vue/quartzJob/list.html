@@ -24,7 +24,9 @@
                     <el-button size="mini" icon="el-icon-refresh" @click="doReset">重置</el-button>
                 </el-form-item>
             </el-form>
-            <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini" icon="el-icon-plus" @click="doAdd">新增</el-button>
+            <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini"
+                       icon="el-icon-plus" @click="doAdd">新增
+            </el-button>
             <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport">导入</el-button>
             <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>
         </div>
@@ -32,22 +34,28 @@
                   style="font-size: 12px"
                   v-loading="tableLoading" cell-style="padding:1px">
             <el-table-column align="center" type="index" :index="indexSerial" width="50"></el-table-column>
-            <el-table-column align="center" prop="id" label="id" width="180"></el-table-column>
+            <!--<el-table-column align="center" prop="id" label="id" width="180"></el-table-column>-->
             <el-table-column align="center" prop="cronExpression" label="cron表达式" width="180"></el-table-column>
-            <el-table-column align="center" prop="beanName" label="完全限定类名" width="240" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="methodName" label="任务调用的方法名" width="180"></el-table-column>
+            <el-table-column align="center" prop="jobName" label="任务名" width="180"></el-table-column>
+            <el-table-column align="center" prop="beanName" label="完全限定类名" width="240"
+                             :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="description" label="描述" width="180"></el-table-column>
-            <el-table-column align="center" prop="isConcurrent" label="任务是否有状态" width="180"></el-table-column>
             <el-table-column align="center" prop="triggerName" label="触发器名称" width="180"></el-table-column>
-            <el-table-column align="center" prop="jobStatus" label="任务状态" width="180"></el-table-column>
-            <el-table-column align="center" prop="springBean" label="spring_bean" width="180"></el-table-column>
-            <el-table-column align="center" prop="jobName" label="任务名" width="240" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" prop="jobStatus" label="任务状态" width="180" :formatter="formatJobStatus"></el-table-column>
+            <el-table-column align="center" label="操作" width="400">
                 <template slot-scope="scope">
-                    <el-button th:if="${#authorization.expression('hasAnyRole(''__${edit}__'')')}" size="mini" type="primary" icon="el-icon-edit"
+                    <el-button size="mini" type="primary" icon="el-icon-circle-check-outline"
+                               @click="handleStartJob(scope.$index, scope.row)">启动
+                    </el-button>
+                    <el-button size="mini" type="primary" icon="el-icon-circle-close-outline"
+                               @click="handleStopJob(scope.$index, scope.row)">暂停
+                    </el-button>
+                    <el-button th:if="${#authorization.expression('hasAnyRole(''__${edit}__'')')}" size="mini"
+                               type="primary" icon="el-icon-edit"
                                @click="handleEdit(scope.$index, scope.row)">编辑
                     </el-button>
-                    <el-button th:if="${#authorization.expression('hasAnyRole(''__${delete}__'')')}" size="mini" type="danger" icon="el-icon-delete"
+                    <el-button th:if="${#authorization.expression('hasAnyRole(''__${delete}__'')')}" size="mini"
+                               type="danger" icon="el-icon-delete"
                                @click="handleDelete(scope.$index, scope.row)">删除
                     </el-button>
                 </template>
@@ -74,7 +82,8 @@
         list: "/api/quartzJobs/data",
         add: "/api/quartzJobs/add",
         edit: "/api/quartzJobs/edit?id=",
-        delete: "/api/quartzJobs/ids/"
+        delete: "/api/quartzJobs/ids/",
+        updateJobStatus: "/api/quartzJobs/updateJobStatus"
     };
 
     var app = new Vue({
@@ -151,33 +160,57 @@
                 }
                 this.doSearch(event);
             },
-            formatSex(row, column) {
-                let list = [[${sexTypeList}]];
+            formatJobStatus(row, column) {
+                let list = [[${jobStatusList}]];
+                let value = row.jobStatus;
                 for (let i = 0; i < list.length; i++) {
-                    if (String(row.sex) === String(list[i]["typeCode"])) {
+                    if (String(value) === String(list[i]["typeCode"])) {
                         return list[i]["typeName"];
                     }
                 }
-                return row.sex;
+                return value;
             },
-            formatEnabled(row, column) {
-                let list = [[${enabledStatusList}]];
-                for (let i = 0; i < list.length; i++) {
-                    if (String(row.enabled) === String(list[i]["typeCode"])) {
-                        return list[i]["typeName"];
+            handleStartJob(index, row) {
+                parent.openLoading();
+                this.$http.post(requestUrls.updateJobStatus, {
+                    id: row.id,
+                    jobStatus: 1
+                }).then((response) => {
+                        parent.closeLoading();
+                        parent.showMsg("任务已启动");
+                        parent.updateListData();
+                        closeLayer();
+                    }).catch((error) => {
+                    let errorMessage = "发生错误";
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
                     }
-                }
+                    parent.closeLoading();
+                    parent.showError(errorMessage);
+                });
             },
-            formatHeadPhoto(row, column) {
-                let value = row.headPhoto;
-                if (!value) {
-                    return '';
-                }
-                return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + value + '" alt="头像" width="30px">';
+            handleStopJob(index, row) {
+                parent.openLoading();
+                this.$http.post(requestUrls.updateJobStatus, {
+                    id: row.id,
+                    jobStatus: 0
+                }).then((response) => {
+                    parent.closeLoading();
+                    parent.showMsg("任务已停止");
+                    parent.updateListData();
+                    closeLayer();
+                }).catch((error) => {
+                    let errorMessage = "发生错误";
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.closeLoading();
+                    parent.showError(errorMessage);
+                });
             },
             handleEdit(index, row) {
                 parent.showWindow({
-                    title: '新增',
+                    title: '修改',
                     content: requestUrls.edit + row.id
                 });
             },
@@ -194,7 +227,7 @@
 
             },
             doDelete(index, row) {
-                this.$http.delete(requestUrls.delete + row.userId)
+                this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
                         parent.showMsg("删除成功");
                         this.loadData(this.pageNo, this.pageSize);

@@ -4,7 +4,8 @@ import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.plugins.quartz.QuartzManage;
+import com.simon.common.plugins.quartz.QuartzManager;
+import com.simon.common.utils.BeanUtils;
 import com.simon.model.QuartzJob;
 import com.simon.service.DictTypeService;
 import com.simon.service.QuartzJobService;
@@ -43,8 +44,7 @@ public class QuartzJobController extends BaseController {
     @Autowired
     private DictTypeService dictTypeService;
 
-    @Autowired
-    private QuartzManage quartzManage;
+    private String TRIGGER_GROUP_NAME = "XLXXCC_JOB_GROUP";
 
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
@@ -88,18 +88,30 @@ public class QuartzJobController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(new Date());
         body.setCreateBy(userEntity.getId());
+        //任务状态默认为停止
+        body.setJobStatus(0);
         quartzJobService.insertSelective(body);
         return ResultMsg.success();
     }
 
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改", notes = "限制只能修改cron表达式和任务描述")
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg update(@RequestBody QuartzJob body, Authentication authentication) {
+    public ResultMsg update(@RequestBody QuartzJob body, Authentication authentication) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setUpdateDate(new Date());
-        body.setUpdateBy(userEntity.getId());
-        quartzJobService.updateByPrimaryKeySelective(body);
+
+        QuartzJob quartzJob = quartzJobService.findById(body.getId());
+        if (!quartzJob.getCronExpression().equals(body.getCronExpression())) {
+            BeanUtils.copyPropertiesIgnoreNull(body, quartzJob);
+            QuartzManager.modifyJobTime(quartzJob, TRIGGER_GROUP_NAME);
+            //更新cron之后，定时任务会启动。
+            quartzJob.setJobStatus(1);
+        }
+
+        quartzJob.setUpdateDate(new Date());
+        quartzJob.setUpdateBy(userEntity.getId());
+        quartzJobService.updateByPrimaryKeySelective(quartzJob);
+
         return ResultMsg.success();
     }
 
@@ -112,29 +124,22 @@ public class QuartzJobController extends BaseController {
     }
 
     @ApiOperation(value = "定时任务操作（启动，暂停）")
-    @PostMapping("/id/{id}/jobStatus/{jobStatus}")
+    @PostMapping("/updateJobStatus")
     @ResponseBody
-    public ResultMsg operation(
-            Authentication authentication,
-            @PathVariable Long id,
-            @ApiParam(value = "job状态[0:off, 1:on]", required = true) @PathVariable int jobStatus) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
+    public ResultMsg operation(@RequestBody QuartzJob body, Authentication authentication) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
         UserEntity userEntity = getCurrentUser(authentication);
+        QuartzJob quartzJob = quartzJobService.findById(body.getId());
 
-        QuartzJob quartzJob = quartzJobService.findById(id);
-
-        if (quartzManage.isRun(quartzJob.getJobName())) {
-            if (0 == jobStatus) {
-                quartzManage.pauseJob(quartzJob);
-            } else {
-                quartzManage.resumeJob(quartzJob);
-            }
+        if (!QuartzManager.isJobExists(quartzJob)) {
+            QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
+        }
+        if (0 == body.getJobStatus()) {
+            QuartzManager.pauseJob(quartzJob);
         } else {
-            if (1 == jobStatus) {
-                quartzManage.addJob(quartzJob);
-            }
+            QuartzManager.resumeJob(quartzJob);
         }
 
-        quartzJob.setJobStatus(jobStatus);
+        quartzJob.setJobStatus(body.getJobStatus());
         quartzJob.setUpdateBy(userEntity.getId());
         quartzJob.setUpdateDate(new Date());
         quartzJobService.updateByPrimaryKeySelective(quartzJob);

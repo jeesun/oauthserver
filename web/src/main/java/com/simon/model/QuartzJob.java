@@ -61,19 +61,11 @@ public class QuartzJob implements Serializable{
     @Column(name = "cron_expression")
     private String cronExpression;
 
-    @ApiModelProperty(value = "任务调用的方法名")
-    @Column(name = "method_name")
-    private String methodName;
-
-    @ApiModelProperty(value = "任务是否有状态")
-    @Column(name = "is_concurrent")
-    private Integer isConcurrent;
-
     @ApiModelProperty(value = "描述")
     @Column(name = "description")
     private String description;
 
-    @ApiModelProperty(value = "任务执行时调用哪个类的方法 包名+类名，完全限定名")
+    @ApiModelProperty(value = "完全限定类名")
     @Column(name = "bean_name")
     private String beanName;
 
@@ -84,10 +76,6 @@ public class QuartzJob implements Serializable{
     @ApiModelProperty(value = "任务状态")
     @Column(name = "job_status")
     private Integer jobStatus;
-
-    @ApiModelProperty(value = "spring_bean")
-    @Column(name = "spring_bean")
-    private String springBean;
 
     @ApiModelProperty(value = "任务名")
     @Column(name = "job_name")
