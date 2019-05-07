@@ -401,12 +401,12 @@
 			<dependency>
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
-				<version>2.3.0</version>
+				<version>2.3.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz-jobs</artifactId>
-				<version>2.3.0</version>
+				<version>2.3.1</version>
 			</dependency>
 			<!--<dependency>
 				<groupId>com.simon</groupId>

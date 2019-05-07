@@ -1,13 +1,14 @@
 package com.simon.common.plugins.quartz;
 
 import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.AdaptableJobFactory;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,12 +38,16 @@ public class QuartzConfig {
     @Bean(name = "scheduler")
     public Scheduler scheduler(QuartzJobFactory quartzJobFactory) throws Exception {
 
-        SchedulerFactoryBean factoryBean=new SchedulerFactoryBean();
+        /*SchedulerFactoryBean factoryBean=new SchedulerFactoryBean();
         // 延时启动，应用启动10秒后，定时器才开始启动
         factoryBean.setStartupDelay(10);
         factoryBean.setJobFactory(quartzJobFactory);
         factoryBean.afterPropertiesSet();
         Scheduler scheduler=factoryBean.getScheduler();
+        scheduler.start();
+        return scheduler;*/
+        SchedulerFactory sf = new StdSchedulerFactory();
+        Scheduler scheduler = sf.getScheduler();
         scheduler.start();
         return scheduler;
     }

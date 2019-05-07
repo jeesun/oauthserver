@@ -1,13 +1,12 @@
 package com.simon.common.plugins.quartz;
 
 import com.simon.model.QuartzJob;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
-import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * 任务管理类
@@ -15,7 +14,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @author simon
  * @date 2018-12-21
  **/
-
+@Slf4j
 @Component
 public class QuartzManage {
     @Resource(name = "scheduler")
@@ -28,13 +27,13 @@ public class QuartzManage {
         //通过实体类和任务名创建 JobDetail
         JobDetail jobDetail = JobBuilder.newJob(jobEntity.getClass())
                 .withDescription(job.getDescription())
-                .withIdentity(job.getJobName())
+                .withIdentity(job.getJobName(), Scheduler.DEFAULT_GROUP)
                 .build();
         //通过触发器名和cron 表达式创建 Trigger
-        Trigger cronTrigger = newTrigger()
-                .withIdentity(job.getTriggerName())
+        Trigger cronTrigger = TriggerBuilder.newTrigger()
+                .forJob(jobDetail)
                 //一旦加入scheduler，立即生效
-                .startNow()
+                /*.startNow()*/
                 //使用cron表达式触发器
                 .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExpression()))
                 .build();
@@ -48,65 +47,50 @@ public class QuartzManage {
      * @param quartzJob
      * @throws SchedulerException
      */
-    public void updateJobCron(QuartzJob quartzJob) throws SchedulerException {
-
-        TriggerKey triggerKey = TriggerKey.triggerKey(quartzJob.getJobName());
-        CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(quartzJob.getCronExpression());
-        trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-        scheduler.rescheduleJob(triggerKey, trigger);
+    public void updateJobCron(QuartzJob quartzJob) throws SchedulerException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+        deleteJob(quartzJob.getJobName());
+        addJob(quartzJob);
     }
 
     /**
      * 删除一个job
      *
-     * @param quartzJob
+     * @param jobName
      * @throws SchedulerException
      */
-    public void deleteJob(QuartzJob quartzJob) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(quartzJob.getJobName());
+    public void deleteJob(String jobName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName);
         scheduler.deleteJob(jobKey);
     }
 
     /**
      * 恢复一个job
      *
-     * @param quartzJob
+     * @param jobName
      * @throws SchedulerException
      */
-    public void resumeJob(QuartzJob quartzJob) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(quartzJob.getJobName());
+    public void resumeJob(String jobName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName);
         scheduler.resumeJob(jobKey);
-    }
-
-    /**
-     * 立即执行job
-     *
-     * @param quartzJob
-     * @throws SchedulerException
-     */
-    public void runAJobNow(QuartzJob quartzJob) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(quartzJob.getJobName());
-        scheduler.triggerJob(jobKey);
     }
 
     /**
      * 暂停一个job
      *
-     * @param quartzJob
+     * @param jobName
      * @throws SchedulerException
      */
-    public void pauseJob(QuartzJob quartzJob) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(quartzJob.getJobName());
+    public void pauseJob(String jobName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName);
         scheduler.pauseJob(jobKey);
     }
 
     /**
-     * 判断任务是否正在运行
+     * 判断任务是否存在
      * @param name 任务名称
-     * @return 是否正在运行
+     * @return 是否存在
      */
-    public boolean isRun(String name) {
+    public boolean isJobExists(String name) {
         try {
             for(String groupName : scheduler.getJobGroupNames()){
                 for(JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))){
@@ -121,12 +105,22 @@ public class QuartzManage {
         return false;
     }
 
-    /**
-     * 判断任务是否正在运行
-     * @param quartzJob 任务
-     * @return 是否正在运行
-     */
-    public boolean isRun(QuartzJob quartzJob){
-        return isRun(quartzJob.getJobName());
+    public TriggerKey getTriggerKeyByJobName(String jobName) throws SchedulerException {
+        JobKey jobKey = getJobKeyByJobName(jobName);
+        if (null == jobKey){
+            return null;
+        }
+        return TriggerKey.triggerKey(jobKey.getName(), jobKey.getGroup());
+    }
+
+    public JobKey getJobKeyByJobName(String jobName) throws SchedulerException {
+        for(String groupName : scheduler.getJobGroupNames()){
+            for(JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))){
+                if (jobName.equalsIgnoreCase(jobKey.getName())){
+                    return jobKey;
+                }
+            }
+        }
+        return null;
     }
 }

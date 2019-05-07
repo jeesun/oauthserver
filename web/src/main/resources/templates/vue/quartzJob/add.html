@@ -10,30 +10,24 @@
                 <el-form-item label="cron表达式" prop="cronExpression">
                     <el-input v-model="ruleForm.cronExpression" placeholder="请输入cron表达式"></el-input>
                 </el-form-item>
-                <el-form-item label="任务调用的方法名" prop="methodName">
-                    <el-input v-model="ruleForm.methodName" placeholder="请输入任务调用的方法名"></el-input>
-                </el-form-item>
-                <el-form-item label="任务是否有状态" prop="isConcurrent">
-                    <el-input v-model="ruleForm.isConcurrent" placeholder="请输入任务是否有状态"></el-input>
-                </el-form-item>
-                <el-form-item label="描述" prop="description">
-                    <el-input v-model="ruleForm.description" placeholder="请输入描述"></el-input>
-                </el-form-item>
                 <el-form-item label="完全限定类名" prop="beanName">
                     <el-input v-model="ruleForm.beanName" placeholder="请输入完全限定类名"></el-input>
                 </el-form-item>
-                <el-form-item label="触发器名称" prop="triggerName">
-                    <el-input v-model="ruleForm.triggerName" placeholder="请输入触发器名称"></el-input>
+                <el-form-item label="方法名" prop="methodName">
+                    <el-input v-model="ruleForm.methodName" placeholder="请输入方法名"></el-input>
                 </el-form-item>
-                <el-form-item label="任务状态" prop="jobStatus">
+                <!--<el-form-item label="任务是否有状态" prop="isConcurrent">
+                    <el-input v-model="ruleForm.isConcurrent" placeholder="请输入任务是否有状态"></el-input>
+                </el-form-item>-->
+                <el-form-item label="描述" prop="description">
+                    <el-input v-model="ruleForm.description" placeholder="请输入描述"></el-input>
+                </el-form-item>
+                <!--<el-form-item label="触发器名称" prop="triggerName">
+                    <el-input v-model="ruleForm.triggerName" placeholder="请输入触发器名称" :disabled="true"></el-input>
+                </el-form-item>-->
+                <!--<el-form-item label="任务状态" prop="jobStatus">
                     <el-input v-model="ruleForm.jobStatus" placeholder="请输入任务状态"></el-input>
-                </el-form-item>
-                <el-form-item label="spring_bean" prop="springBean">
-                    <el-input v-model="ruleForm.springBean" placeholder="请输入spring_bean"></el-input>
-                </el-form-item>
-                <el-form-item label="任务名" prop="jobName">
-                    <el-input v-model="ruleForm.jobName" placeholder="请输入任务名"></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                     <el-button @click="closeWindow">关闭</el-button>
@@ -61,11 +55,11 @@
         data: {
             ruleForm: {
                 cronExpression: "",
-                methodName: "",
-                isConcurrent: "",
+                methodName: "execute",
+                isConcurrent: "1",
                 description: "",
                 beanName: "",
-                triggerName: "",
+                triggerName: "org.quartz.CronTrigger",
                 jobStatus: "",
                 springBean: "",
                 jobName: "",

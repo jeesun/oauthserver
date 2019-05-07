@@ -79,6 +79,8 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 
 ## 管理端页面
 测试账号：手机号18800000000，密码1234567890c
+![登录页](tutorial/screenshots/login.png)
+
 ![管理端主页](tutorial/screenshots/index.png)
 
 ## 分享交流

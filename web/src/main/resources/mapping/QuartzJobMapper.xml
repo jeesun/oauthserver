@@ -1,51 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.QuartzJobMapper">
-  <resultMap id="BaseResultMap" type="com.simon.model.QuartzJob">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <result column="id" jdbcType="BIGINT" property="id" />
-    <result column="create_by" jdbcType="BIGINT" property="createBy" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
-    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
-    <result column="is_concurrent" jdbcType="INTEGER" property="isConcurrent" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="bean_name" jdbcType="VARCHAR" property="beanName" />
-    <result column="trigger_name" jdbcType="VARCHAR" property="triggerName" />
-    <result column="job_status" jdbcType="INTEGER" property="jobStatus" />
-    <result column="spring_bean" jdbcType="VARCHAR" property="springBean" />
-    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.simon.model.QuartzJob">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="method_name" jdbcType="VARCHAR" property="methodName"/>
+        <result column="is_concurrent" jdbcType="INTEGER" property="isConcurrent"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="bean_name" jdbcType="VARCHAR" property="beanName"/>
+        <result column="trigger_name" jdbcType="VARCHAR" property="triggerName"/>
+        <result column="job_status" jdbcType="INTEGER" property="jobStatus"/>
+        <result column="spring_bean" jdbcType="VARCHAR" property="springBean"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+    </resultMap>
 
-  <resultMap id="SuperMap" type="com.simon.model.QuartzJob" extends="BaseResultMap">
-    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
-    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
-  </resultMap>
+    <resultMap id="SuperMap" type="com.simon.model.QuartzJob" extends="BaseResultMap">
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
 
-  <select id="getList" parameterType="java.util.Map" resultMap="SuperMap">
-      SELECT
-      qj.*,
-      tu1.username AS create_user,
-      tu2.username AS update_user
-      FROM
-      t_s_quartz_job qj
-      LEFT JOIN t_users tu1 ON qj.create_by = tu1.id
-      LEFT JOIN t_users tu2 ON qj.update_by = tu2.id
-    <where>
-      <if test="map.beanName != null and map.beanName != ''">
-        qj.bean_name like CONCAT('%', #{map.beanName}, '%')
-      </if>
-      <if test="map.jobStatus != null">
-        qj.job_status=#{map.jobStatus}
-      </if>
-    </where>
-  </select>
+    <select id="getList" parameterType="java.util.Map" resultMap="SuperMap" databaseId="mysql">
+        SELECT
+        qj.*,
+        tu1.username AS create_user,
+        tu2.username AS update_user
+        FROM
+        t_s_quartz_job qj
+        LEFT JOIN t_users tu1 ON qj.create_by = tu1.id
+        LEFT JOIN t_users tu2 ON qj.update_by = tu2.id
+        <where>
+            <if test="map.beanName != null and map.beanName != ''">
+                qj.bean_name like CONCAT('%', #{map.beanName}, '%')
+            </if>
+            <if test="map.jobStatus != null">
+                AND qj.job_status=#{map.jobStatus}
+            </if>
+        </where>
+    </select>
 
-  <update id="updateJobStatus">
+    <select id="getList" parameterType="java.util.Map" resultMap="SuperMap" databaseId="postgresql">
+        SELECT
+        qj.*,
+        tu1.username AS create_user,
+        tu2.username AS update_user
+        FROM
+        t_s_quartz_job qj
+        LEFT JOIN t_users tu1 ON qj.create_by = tu1.id
+        LEFT JOIN t_users tu2 ON qj.update_by = tu2.id
+        <where>
+            <if test="map.beanName != null and map.beanName != ''">
+                qj.bean_name like CONCAT('%', #{map.beanName}, '%')
+            </if>
+            <if test="map.jobStatus != null">
+                AND qj.job_status=#{map.jobStatus}
+            </if>
+        </where>
+    </select>
+
+    <select id="getList" parameterType="java.util.Map" resultMap="SuperMap" databaseId="oracle">
+        SELECT
+        qj.*,
+        tu1.username AS create_user,
+        tu2.username AS update_user
+        FROM
+        t_s_quartz_job qj
+        LEFT JOIN t_users tu1 ON qj.create_by = tu1.id
+        LEFT JOIN t_users tu2 ON qj.update_by = tu2.id
+        <where>
+            <if test="map.beanName != null and map.beanName != ''">
+                qj.bean_name like CONCAT(CONCAT('%', #{map.beanName}), '%')
+            </if>
+            <if test="map.jobStatus != null and map.beanName != ''">
+                AND qj.job_status=#{map.jobStatus}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateJobStatus">
     update t_s_quartz_job set job_status=#{jobStatus}
   </update>
 </mapper>
