@@ -1,5 +1,7 @@
 package com.simon.common.config;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +25,6 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class Swagger2 {
-    @Value("${swagger2.base-package}")
-    private String basePackage;
-
     @Value("${swagger2.title}")
     private String title;
 
@@ -59,8 +58,8 @@ public class Swagger2 {
                 .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors
-                        .basePackage(basePackage))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.regex("^(?!oauth).*$"))
                 .build()
                 .securitySchemes(securitySchemes())

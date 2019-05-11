@@ -3,6 +3,7 @@ package ${basePackage}.mapper;
 import ${basePackage}.common.mapper.MyMapper;
 import ${basePackage}.model.${modelNameUpperCamel};
 import ${basePackage}.provider.${modelNameUpperCamel}Provider;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
@@ -15,6 +16,7 @@ import java.util.Map;
 * @author ${AUTHOR}
 * @date ${CREATE}
 **/
+@Mapper
 public interface ${modelNameUpperCamel}Mapper extends MyMapper<${modelNameUpperCamel}> {
     /**
      * 使用Map查询

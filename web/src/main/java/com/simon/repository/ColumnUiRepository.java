@@ -11,7 +11,7 @@ import java.util.List;
 * @date 2019-05-03
 **/
 @Repository
-public interface ColumnUiRepository extends JpaRepository<ColumnUi, Integer> {
+public interface ColumnUiRepository extends JpaRepository<ColumnUi, Long> {
     /**
      * 根据表名删除
      * @param tableName 表名

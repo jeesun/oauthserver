@@ -236,10 +236,10 @@ public class AliPayController extends BaseController {
             //请在这里加上商户的业务逻辑程序代码
 
             //判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额）
-            if(Float.parseFloat(receiptAmount) < Float.parseFloat(totalAmount)){//如果实付金额小于订单金额
+            /*if(Float.parseFloat(receiptAmount) < Float.parseFloat(totalAmount)){//如果实付金额小于订单金额
                 log.error("实付金额小于订单金额!");
                 return "fail";
-            }
+            }*/
 
             //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
 

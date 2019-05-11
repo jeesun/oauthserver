@@ -2,6 +2,7 @@ package com.simon.dto;
 
 import com.simon.common.code.Column;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,4 +34,11 @@ public class GenCodeDto implements Serializable {
     private String[] genModules;
 
     private List<Column> columns;
+
+    private String moduleDir;
+
+    private String basePackage;
+
+    @ApiModelProperty(value = "要生成的位置是main目录还是test目录")
+    private String mainOrTest;
 }

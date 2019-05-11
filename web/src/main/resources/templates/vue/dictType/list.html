@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="components/vue/vue-list :: head('权限列表', 'list')"></head>
+<head th:replace="components/vue/vue-list :: head('数据字典', 'list')"></head>
 <body>
 <div id="app">
     <template>
@@ -22,8 +22,8 @@
             <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>-->
         </div>
         <el-table border stripe size="medium" max-height="355" :data="tableData" highlight-current-row
-                  style="font-size: 12px"
-                  v-loading="tableLoading" cell-style="padding:1px" row-key="name">
+                  style="font-size: 12px;"
+                  v-loading="tableLoading" cell-style="padding:1px" row-key="id">
             <el-table-column align="center" type="index" :index="indexSerial" width="50"></el-table-column>
             <el-table-column align="left" prop="name" label="名称" width="200" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="left" prop="code" label="编码" width="200" :show-overflow-tooltip="true"></el-table-column>

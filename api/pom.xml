@@ -326,22 +326,6 @@
             <artifactId>popper.js</artifactId>
             <version>1.12.5</version>
         </dependency>
-        <!-- 自定义的jar start -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>easyui</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <!-- 自定义的jar end -->
-        <!-- webjars end -->
-
-        <!-- 自定义jar start -->
-        <dependency>
-            <groupId>com.github.jeesun.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-db</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <!-- 自定义jar end -->
 
         <dependency>
             <groupId>com.simon</groupId>

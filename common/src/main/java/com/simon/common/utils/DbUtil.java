@@ -227,7 +227,7 @@ public class DbUtil {
         }else if(dbType == DbType.POSTGRESQL){
             sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C WHERE relname = '" + tableName + "'";
         }else if(dbType == DbType.ORACLE){
-            sql = "select TABLE_NAME,COMMENTS from all_tab_comments WHERE table_name='" + tableName.toUpperCase() + "'";
+            sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE table_name='" + tableName.toUpperCase() + "'";
         }else{
             throw new Exception("暂不支持其他数据库");
         }

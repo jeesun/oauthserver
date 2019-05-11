@@ -87,7 +87,7 @@ public class TableController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "generate", method = RequestMethod.GET)
+    /*@RequestMapping(value = "generate", method = RequestMethod.GET)
     @ResponseBody
     public ResultMsg generate(
             @RequestParam String tableName,
@@ -102,7 +102,7 @@ public class TableController extends BaseController {
             CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules);
         }
         return ResultMsg.success();
-    }
+    }*/
 
     @GetMapping(value = "codeGenerate")
     public String codeGenerate(
@@ -185,10 +185,11 @@ public class TableController extends BaseController {
     @RequestMapping(value = "genCode", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResultMsg genCode(@RequestBody GenCodeDto body, Authentication authentication) {
+        UserEntity userEntity = getCurrentUser(authentication);
         List<Column> columnList = body.getColumns();
         EntityDataModel entityDataModel = new EntityDataModel();
-        entityDataModel.setBasePackage(CodeGenerator.BASE_PACKAGE);
-        entityDataModel.setEntityPackage(CodeGenerator.BASE_PACKAGE + ".entity");
+        entityDataModel.setBasePackage(body.getBasePackage());
+        entityDataModel.setEntityPackage(body.getBasePackage() + ".entity");
         entityDataModel.setFileSuffix(".java");
         entityDataModel.setEntityName(body.getEntityName());
         entityDataModel.setTableName(body.getTableName());
@@ -196,7 +197,7 @@ public class TableController extends BaseController {
         entityDataModel.setColumns(columnList);
         entityDataModel.setModelNameUpperCamel(body.getEntityName());
         entityDataModel.setModelNameLowerCamel(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityDataModel.getEntityName()));
-        CodeGenerator.genCodeByCustomModelName(body.getTableName(), body.getEntityName(), body.getIdType(), StringUtils.join(body.getGenModules(), ","), null, entityDataModel);
+        CodeGenerator.genCodeByCustomModelName(body.getMainOrTest(), body.getBasePackage(), body.getModuleDir(), body.getTableName(), body.getTableComment(), body.getEntityName(), body.getIdType(), StringUtils.join(body.getGenModules(), ","), userEntity.getUsername(), entityDataModel);
 
         //保存用户生成代码时的UI属性配置。
         //代码生成时，向t_side_menu表添加访问权限数据。

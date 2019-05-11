@@ -1,7 +1,7 @@
 spring:
   datasource:
     # Oracle连接信息
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:orcl
     username: yuhang #明文thymelte
     password: yuhang #明文thymelte123456
