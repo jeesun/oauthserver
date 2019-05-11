@@ -11,6 +11,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -150,29 +151,8 @@ public class CodeGenerator {
             JDBC_USERNAME = prop.getProperty("jdbc_username");
             JDBC_PASSWORD = prop.getProperty("jdbc_password");
             JDBC_DIVER_CLASS_NAME = prop.getProperty("jdbc_driver_class_name");
-            AUTHOR = prop.getProperty("author");
-            JAVA_PATH = prop.getProperty("java_path");
-            RESOURCES_PATH = prop.getProperty("resources_path");
-            BASE_PACKAGE = prop.getProperty("base_package");
-
-            PROJECT_PATH = System.getProperty("user.dir") + prop.getProperty("spring_boot_module_dir");
             TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";
-
-            MODEL_PACKAGE = BASE_PACKAGE + ".model";
-            MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
-            REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
-            SERVICE_PACKAGE = BASE_PACKAGE + ".service";
-            SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".service.impl";
-            CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
             MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper_interface_reference");
-
-            PACKAGE_PATH_MAPPER = packageConvertPath(MAPPER_PACKAGE);
-            PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
-            PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);
-            PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);
-            PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);
-
-            GEN_MODULES = prop.getProperty("gen_modules");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,83 +162,83 @@ public class CodeGenerator {
 
     }
 
-    /**
-     * main函数入口,放入表名运行即可生成代码
-     * @param args
-     */
-    /*public static void main(String[] args) {
-        //genCode("users", "news_info");
 
-        //genCodeByCustomModelName("输入表名","输入自定义Model名称");
-        //genCodeByCustomModelName("t_authorities", "Authority");
-        //genCodeByCustomModelName("t_side_menu", "SideMenu");
-        //genCodeByCustomModelName("t_side_menu", "SideMenu");
-        //genCodeByCustomModelName("t_dict_type_group", "DictTypeGroup");
-//        genCodeByCustomModelName("t_news_info","NewsInfo");
-//        genCodeByCustomModelName("t_users", "OauthUser");
-//        genCodeByCustomModelName("t_veri_code", "VeriCode");
-//        genCodeByCustomModelName("t_reset_pwd_info", "ResetPwdInfo");
-//        genCodeByCustomModelName("t_qr_code", "QrCode");
-//        genCodeByCustomModelName("t_log_login", "LogLogin");
-//        genCodeByCustomModelName("t_news_tag", "NewsTag");
-    }*/
-
-    /**
-     * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。
-     * 如输入表名称 "t_user_detail" 将生成 TUserDetail、TUserDetailMapper、TUserDetailService ...
-     * @param tableNames 数据表名称...
-     */
-    public static void genCode(String... tableNames) {
-        for (String tableName : tableNames) {
-            genCodeByCustomModelName(tableName, null);
+    public static void genCodeByCustomModelName(String mainOrTest, String basePackage, String moduleDir, String tableName, String tableComment, String modelName, String idType, String genModules, String author, EntityDataModel entityDataModel) {
+        if (StringUtils.isEmpty(basePackage)) {
+            throw new RuntimeException("缺少基础包名");
         }
-    }
+        BASE_PACKAGE = basePackage;
+        MODEL_PACKAGE = BASE_PACKAGE + ".model";
+        MAPPER_PACKAGE = BASE_PACKAGE + ".mapper";
+        REPOSITORY_PACKAGE = BASE_PACKAGE + ".repository";
+        SERVICE_PACKAGE = BASE_PACKAGE + ".service";
+        SERVICE_IMPL_PACKAGE = BASE_PACKAGE + ".service.impl";
+        CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
 
-    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules, String author, EntityDataModel entityDataModel) {
-        if(StringUtils.isNotEmpty(author)){
-            AUTHOR = author;
+        PACKAGE_PATH_MAPPER = packageConvertPath(MAPPER_PACKAGE);
+        PACKAGE_PATH_REPOSITORY = packageConvertPath(REPOSITORY_PACKAGE);
+        PACKAGE_PATH_SERVICE = packageConvertPath(SERVICE_PACKAGE);
+        PACKAGE_PATH_SERVICE_IMPL = packageConvertPath(SERVICE_IMPL_PACKAGE);
+        PACKAGE_PATH_CONTROLLER = packageConvertPath(CONTROLLER_PACKAGE);
+
+        if (StringUtils.isEmpty(moduleDir)) {
+            throw new RuntimeException("缺少要生成的模块目录");
         }
+        PROJECT_PATH = System.getProperty("user.dir") + moduleDir;
+        TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/templates/code";
+
+        if(StringUtils.isEmpty(author)){
+            throw new RuntimeException("缺少作者");
+        }
+        AUTHOR = author;
 
         if (StringUtils.isEmpty(genModules)){
-            genModules = GEN_MODULES;
+            throw new RuntimeException("缺少要生成的模块说明");
         }
 
+        if (StringUtils.isEmpty(mainOrTest)) {
+            throw new RuntimeException("缺少要生成的位置配置是main还是test目录");
+        }
+        String javaPathPattern = "/src/{0}/java";
+        String resourcesPathPattern = "/src/{0}/resources";
+        JAVA_PATH = MessageFormat.format(javaPathPattern, mainOrTest);
+        RESOURCES_PATH = MessageFormat.format(resourcesPathPattern, mainOrTest);
+
         if(StringUtils.isEmpty(genModules)){
-            genModelAndMapper(tableName, modelName, idType);
-            genRepository(tableName, modelName, idType);
-            genService(tableName, modelName, idType);
-            //genController(tableName, modelName);
+            genModelAndMapper(tableName, tableComment, modelName, idType);
+            genRepository(tableName, tableComment, modelName, idType);
+            genService(tableName, tableComment, modelName, idType);
         }else{
             String[] modules = genModules.toLowerCase().split(",");
 
             if(Arrays.asList(modules).contains(MODULE_MODEL_AND_MAPPER)){
-                genModelAndMapper(tableName, modelName, idType);
+                genModelAndMapper(tableName, tableComment, modelName, idType);
             }
             if(Arrays.asList(modules).contains(MODULE_REPOSITORY)){
-                genRepository(tableName, modelName, idType);
+                genRepository(tableName, tableComment, modelName, idType);
             }
             if(Arrays.asList(modules).contains(MODULE_SERVICE)){
-                genService(tableName, modelName, idType);
+                genService(tableName, tableComment, modelName, idType);
             }
             if(Arrays.asList(modules).contains(MODULE_CONTROLLER)){
-                genController(tableName, modelName, idType);
+                genController(tableName, tableComment, modelName, idType);
             }
             if(Arrays.asList(modules).contains(MODULE_CONTROLLER_AND_PAGE)){
                 if (null == entityDataModel){
-                    genControllerAndPage(tableName, modelName, idType);
+                    genControllerAndPage(tableName, tableComment, modelName, idType);
                 }else{
-                    genControllerAndPage(tableName, modelName, idType, entityDataModel);
+                    genControllerAndPage(tableName, tableComment, modelName, idType, entityDataModel);
                 }
             }
         }
     }
 
-    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules, String author) {
-        genCodeByCustomModelName(tableName, modelName, idType, genModules, author, null);
+    public static void genCodeByCustomModelName(String mainOrTest, String basePackage, String moduleDir, String tableName, String tableComment, String modelName, String idType, String genModules, String author) {
+        genCodeByCustomModelName(mainOrTest, basePackage, moduleDir, tableName, tableComment, modelName, idType, genModules, author, null);
     }
 
-    public static void genCodeByCustomModelName(String tableName, String modelName, String idType, String genModules) {
-        genCodeByCustomModelName(tableName, modelName, idType, genModules, null);
+    public static void genCodeByCustomModelName(String mainOrTest, String basePackage, String moduleDir, String tableName, String tableComment, String modelName, String idType, String genModules) {
+        genCodeByCustomModelName(mainOrTest, basePackage, moduleDir, tableName, tableComment, modelName, idType, genModules, null);
     }
 
     /**
@@ -267,12 +247,12 @@ public class CodeGenerator {
      * @param tableName 数据表名称
      * @param modelName 自定义的 Model 名称
      */
-    public static void genCodeByCustomModelName(String tableName, String modelName) {
-        genCodeByCustomModelName(tableName, modelName, "Long", null);
+    public static void genCodeByCustomModelName(String mainOrTest, String basePackage, String moduleDir, String tableName, String tableComment, String modelName) {
+        genCodeByCustomModelName(mainOrTest, basePackage, moduleDir, tableName, tableComment, modelName, "Long", null);
     }
 
 
-    private static void genModelAndMapper(String tableName, String modelName, String idType) {
+    private static void genModelAndMapper(String tableName, String tableComment, String modelName, String idType) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -352,7 +332,7 @@ public class CodeGenerator {
                 modelName,
                 MODEL_PACKAGE);
 
-        reGenMapper(tableName, modelName, idType);
+        reGenMapper(tableName, tableComment, modelName, idType);
     }
 
     /**
@@ -361,12 +341,13 @@ public class CodeGenerator {
      * @param modelName
      * @param idType
      */
-    private static void reGenMapper(String tableName, String modelName, String idType) {
+    private static void reGenMapper(String tableName, String tableComment, String modelName, String idType) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
             Map<String, Object> data = new HashMap<>();
             data.put("tableName", tableName);
+            data.put("tableComment", tableComment);
             data.put("AUTHOR", AUTHOR);
             data.put("CREATE", CREATE);
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
@@ -389,7 +370,7 @@ public class CodeGenerator {
         }
     }
 
-    private static void genRepository(String tableName, String modelName, String idType) {
+    private static void genRepository(String tableName, String tableComment, String modelName, String idType) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -415,7 +396,7 @@ public class CodeGenerator {
         }
     }
 
-    private static void genService(String tableName, String modelName, String idType) {
+    private static void genService(String tableName, String tableComment, String modelName, String idType) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -448,7 +429,7 @@ public class CodeGenerator {
         }
     }
 
-    private static void genController(String tableName, String modelName, String idType) {
+    private static void genController(String tableName, String tableComment, String modelName, String idType) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -476,7 +457,7 @@ public class CodeGenerator {
 
     }
 
-    private static void genControllerAndPage(String tableName, String modelName, String idType){
+    private static void genControllerAndPage(String tableName, String tableComment, String modelName, String idType){
         PageGeneratorUtil.generatorPage(
                 JDBC_DIVER_CLASS_NAME,
                 JDBC_URL,
@@ -487,7 +468,7 @@ public class CodeGenerator {
                 CONTROLLER_PACKAGE);
     }
 
-    private static void genControllerAndPage(String tableName, String modelName, String idType, EntityDataModel entityDataModel){
+    private static void genControllerAndPage(String tableName, String tableComment, String modelName, String idType, EntityDataModel entityDataModel){
         PageGeneratorUtil.generatorPage(
                 JDBC_DIVER_CLASS_NAME,
                 JDBC_URL,

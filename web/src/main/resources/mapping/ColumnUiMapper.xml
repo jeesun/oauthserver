@@ -5,7 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="id" jdbcType="BIGINT" property="id" />
     <result column="table_name" jdbcType="VARCHAR" property="tableName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="ui_type" jdbcType="VARCHAR" property="uiType" />

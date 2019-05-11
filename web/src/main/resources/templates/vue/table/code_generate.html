@@ -28,6 +28,21 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="模块" prop="moduleDir">
+                        <el-select v-model="ruleForm.moduleDir" placeholder="请选择">
+                            <el-option label="/web" value="/web"></el-option>
+                            <el-option label="/api" value="/api"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="基础包名" prop="basePackage">
+                        <el-input v-model="ruleForm.basePackage" placeholder="请输入基础包名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="位置" prop="mainOrTest">
+                        <el-select v-model="ruleForm.mainOrTest" placeholder="请选择">
+                            <el-option label="test目录" value="test"></el-option>
+                            <el-option label="main目录" value="main"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="表名" prop="tableName" :disabled="true">
                         <el-input v-model="ruleForm.tableName" placeholder="请输入表名"></el-input>
                     </el-form-item>
@@ -57,8 +72,8 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col :xs="{span: 24, offset: 0}" :sm="{span: 20, offset: 2}" :md="{span: 20, offset: 2}"
-                    :lg="{span: 16, offset: 4}" :xl="{span: 16, offset: 4}">
+            <el-col :xs="{span: 24, offset: 0}" :sm="{span: 24, offset: 0}" :md="{span: 24, offset: 0}"
+                    :lg="{span: 24, offset: 0}" :xl="{span: 20, offset: 2}">
                 <el-form-item label="属性列表" props="columns">
                     <elx-editable ref="editable" :data.sync="ruleForm.columns" border>
                         <elx-editable-column align="center" type="index" width="50"></elx-editable-column>
@@ -108,8 +123,11 @@
             roleTypeList: [[${roleTypeList}]],
             parentMenus: [[${parentMenus}]],
             ruleForm: {
+                mainOrTest: "test",
+                basePackage: "",
                 allowedRoles: [],
                 pid: "",
+                moduleDir: "/web",
                 tableName: [[${tableName}]],
                 entityName: [[${entityName}]],
                 tableComment: [[${tableComment}]],

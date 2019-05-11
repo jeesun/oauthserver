@@ -46,6 +46,7 @@ public class TypeTranslator {
     private static String NUMBER = "NUMBER";
     private static String RAW = "RAW";
     private static String LONGRAW = "LONGRAW";
+    private static String NVARCHAR2 = "NVARCHAR2";
 
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries%2Fmysql-data-types.html%23
@@ -175,7 +176,7 @@ public class TypeTranslator {
     public static String translateOracle(String columnType, String dataType){
         Integer dataLength = Integer.parseInt(columnType);
         dataType = dataType.toUpperCase();
-        if(CHAR.equals(dataType) || VARCHAR2.equals(dataType) || LONG.equals(dataType)){
+        if(CHAR.equals(dataType) || VARCHAR2.equals(dataType) || NVARCHAR2.equals(dataType) || LONG.equals(dataType)){
             if (1 == dataLength){
                 return "Boolean";
             }else{

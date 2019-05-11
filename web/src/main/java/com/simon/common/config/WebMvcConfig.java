@@ -120,7 +120,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/protocol.html").setViewName("protocol");
 
         registry.addViewController("/vue/demo").setViewName("vue/demo");
-        registry.addViewController("/vue/login").setViewName("vue/login");
         registry.addViewController("/vue/home").setViewName("vue/home");
     }
 

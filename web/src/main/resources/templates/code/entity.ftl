@@ -1,5 +1,7 @@
 package ${basePackage}.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ${basePackage}.common.config.AppConfig;
 import ${basePackage}.common.utils.UUIdGenId;

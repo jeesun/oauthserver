@@ -1,5 +1,7 @@
 package ${basePackage}.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ${basePackage}.common.config.AppConfig;
 import ${basePackage}.common.utils.UUIdGenId;
@@ -25,7 +27,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "${tableName}")
+@Table(name="${tableName}")
 public class ${entityName} implements Serializable{
     private static final long serialVersionUID = 1L;
 <#list columns as column>

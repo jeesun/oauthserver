@@ -74,7 +74,7 @@ public class ColumnUiServiceImpl implements ColumnUiService {
     }
 
     @Override
-    public void delete(Integer id){
+    public void delete(Long id){
         columnUiRepository.delete(id);
     }
 
@@ -84,7 +84,7 @@ public class ColumnUiServiceImpl implements ColumnUiService {
     }
 
     @Override
-    public ColumnUi findById(Integer id){
+    public ColumnUi findById(Long id){
         return columnUiRepository.findOne(id);
     }
 

@@ -1,6 +1,5 @@
 package com.simon.common.config;
 
-import com.github.jeesun.thymeleaf.extras.dialect.DbDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +21,6 @@ public class CustomDialectConfig {
 
     @Autowired
     private CacheManager cacheManager;
-
-    @Bean
-    public DbDialect helloDialect(){
-        return new DbDialect(jdbcTemplate, cacheManager);
-    }
 
     /*@Bean
     public com.jeesun.thymeleaf.extras.dialect.HelloDialect helloDialect(){

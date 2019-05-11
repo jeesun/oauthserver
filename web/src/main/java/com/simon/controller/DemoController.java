@@ -52,8 +52,4 @@ public class DemoController {
         return ResultMsg.success(provinceService.findAll());
     }
 
-    @GetMapping("/vue/login")
-    public String vueLogin(){
-        return "vue/login";
-    }
 }
