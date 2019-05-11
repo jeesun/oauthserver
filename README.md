@@ -63,9 +63,9 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 有部分自建jar在中央仓库是没有的，需要使用`mvn install`安装到本地。执行“需要安装的jars”文件夹下的`install.bat`安装。
 ### 2. 建表
 - MySQL  
-请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。
+请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
 - Oracle  
-请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。
+请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
 ### 3. 修改数据库连接信息
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=mysql`。    
