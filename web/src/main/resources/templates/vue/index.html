@@ -204,6 +204,7 @@
     var container = new Vue({
         el: '#container',
         data: {
+            iframeHeight: 0,
             tableData: [],
             isCollapse: false,
             inOrOut: {
@@ -240,6 +241,7 @@
         },
         mounted: function () {
             this.loadMenuData();
+            this.iframeHeight = document.body.clientHeight - 120;
         },
         methods: {
             handleCommand(command) {
@@ -313,7 +315,7 @@
                         this.editableTabs.push({
                             title: title,
                             name: targetName,
-                            content: '<div style="height:500px;width:100%"><iframe id="' + targetName + '" frameborder="0" src="' + url + '" class="nth-tabs-frame"></iframe></div>',
+                            content: '<div style="height:' + this.iframeHeight + 'px;width:100%"><iframe id="' + targetName + '" frameborder="0" src="' + url + '" class="nth-tabs-frame"></iframe></div>',
                             closable: closable
                         });
                     }
