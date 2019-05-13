@@ -34,3 +34,7 @@ body {
 .el-form-item{
     margin-bottom: 6px;
 }
+
+.el-cascader{
+    width: 222px;
+}

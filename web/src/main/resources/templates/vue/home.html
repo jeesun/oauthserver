@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="components/vue/vue-list :: head('介绍', 'list')"></head>
+<head th:replace="components/vue/vue-list :: head('介绍', 'home,echarts')"></head>
 <body>
 <div id="app">
-    <template>
+    <!--<template>
         <div class="block">
-            <el-timeline>
-                <el-timeline-item timestamp="2018/4/12" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/12 20:46</p>
-                    </el-card>
-                </el-timeline-item>
-                <el-timeline-item timestamp="2018/4/3" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/3 20:46</p>
-                    </el-card>
-                </el-timeline-item>
-                <el-timeline-item timestamp="2018/4/2" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/2 20:46</p>
-                    </el-card>
-                </el-timeline-item>
-            </el-timeline>
+            <div>选择省市区</div>
+            <el-cascader
+                    :options="regions"
+                    @active-item-change="handleItemChange"
+                    :props="props"
+                    placeholder="请选择省市区"
+            ></el-cascader>
         </div>
-    </template>
+    </template>-->
+    <el-row :gutter="20" style="margin: 20px 0 20px 0">
+        <el-col :span="8">
+            <el-card shadow="hover">
+                卡片内容1
+            </el-card>
+        </el-col>
+        <el-col :span="8">
+            <el-card shadow="hover">
+                卡片内容2
+            </el-card>
+        </el-col>
+        <el-col :span="8">
+            <el-card shadow="hover">
+                卡片内容3
+            </el-card>
+        </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin: 20px 0 20px 0">
+        <el-col :span="24">
+            <el-card shadow="hover">
+                <div id="chart0" style="width: 100%;height:400px;"></div>
+            </el-card>
+        </el-col>
+    </el-row>
+    <el-row :gutter="20" style="margin: 20px 0 20px 0">
+        <el-col :span="8">
+            <el-card shadow="hover">
+                <div id="chart1" style="width: 100%;height:300px;"></div>
+            </el-card>
+        </el-col>
+        <el-col :span="8">
+            <el-card shadow="hover">
+                <div id="chart2" style="width: 100%;height:300px;"></div>
+            </el-card>
+        </el-col>
+        <el-col :span="8">
+            <el-card shadow="hover">
+                <div id="chart3" style="width: 100%;height:300px;"></div>
+            </el-card>
+        </el-col>
+    </el-row>
 </div>
 </body>
 <script th:src="@{/js/vue/common.js}"></script>
@@ -44,15 +72,280 @@
     var app = new Vue({
         el: '#app',
         data: {
-
+            regions: [],
+            props: {
+                value: 'value',
+                label: 'label',
+                children: 'children'
+            }
         },
         mounted: function () {
-
+            this.loadProvinces();
         },
         methods: {
-
+            loadProvinces(){
+                //获取省份
+                this.$http.get("/api/chinaRegions/provinces")
+                    .then((response) => {
+                        this.regions = response.data.data;
+                        for(let i = 0; i < this.regions.length; i++){
+                            this.regions[i].children = [];
+                        }
+                    }).catch((response) => {
+                    console.error(response);
+                });
+            },
+            handleItemChange(val) {
+                console.log(val.length);
+                console.log(JSON.stringify(val));
+                if (val.length === 1){
+                    //获取市
+                    this.$http.get("/api/chinaRegions/provinces/" + val[0] + "/cities")
+                        .then((response) => {
+                            for(let i = 0; i < this.regions.length; i++){
+                                if(this.regions[i]["value"] === val[0]) {
+                                    this.regions[i]["children"] = response.data.data;
+                                    for(let j = 0; j < this.regions[i]["children"].length; j++){
+                                        this.regions[i]["children"][j]["children"] = [];
+                                    }
+                                    break;
+                                }
+                            }
+                        }).catch((response) => {
+                        console.error(response);
+                    });
+                }else if(val.length === 2){
+                    //获取区
+                    this.$http.get("/api/chinaRegions/provinces/" + val[0] + "/cities/" + val[1] + "/countries")
+                        .then((response) => {
+                            let province = {};
+                            let city = {};
+                            for(let i = 0; i < this.regions.length; i++){
+                                if(this.regions[i]["value"] === val[0]) {
+                                    province = this.regions[i];
+                                }
+                            }
+                            for(let i = 0; i < province.children.length; i++){
+                                if(province.children[i]["value"] === val[1]){
+                                    city = province.children[i];
+                                }
+                            }
+                            city["children"] = response.data.data;
+                        }).catch((response) => {
+                        console.error(response);
+                    });
+                }
+            }
         }
     });
+
+    var chart0 = echarts.init(document.getElementById('chart0'), 'light');
+    option0 = {
+        /*title: {
+            text: '折线图堆叠'
+        },*/
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        /*toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },*/
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'邮件营销',
+                type:'line',
+                stack: '总量',
+                data:[120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name:'联盟广告',
+                type:'line',
+                stack: '总量',
+                data:[220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name:'视频广告',
+                type:'line',
+                stack: '总量',
+                data:[150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name:'直接访问',
+                type:'line',
+                stack: '总量',
+                data:[320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name:'搜索引擎',
+                type:'line',
+                stack: '总量',
+                data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };
+    chart0.setOption(option0);
+
+    var chart1 = echarts.init(document.getElementById('chart1'), 'light');
+    var option1 = {
+        /*title: {
+            text: '基础雷达图'
+        },*/
+        tooltip: {
+            trigger: 'item',
+            // 相对位置
+            position: ['50%', '50%']
+        },
+        /*legend: {
+            data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
+        },*/
+        radar: {
+            // shape: 'circle',
+            name: {
+                textStyle: {
+                    color: '#fff',
+                    backgroundColor: '#999',
+                    borderRadius: 3,
+                    padding: [3, 5]
+                }
+            },
+            indicator: [
+                { name: '销售', max: 6500},
+                { name: '管理', max: 16000},
+                { name: '信息技术', max: 30000},
+                { name: '客服', max: 38000},
+                { name: '研发', max: 52000},
+                { name: '市场', max: 25000}
+            ],
+            radius: 80
+        },
+        series: [{
+            name: '预算 vs 开销',
+            type: 'radar',
+            // areaStyle: {normal: {}},
+            data : [
+                {
+                    value : [4300, 10000, 28000, 35000, 50000, 19000],
+                    name : '预算分配'
+                },
+                {
+                    value : [5000, 14000, 28000, 31000, 42000, 21000],
+                    name : '实际开销'
+                }
+            ]
+        }]
+    };
+    chart1.setOption(option1);
+
+    var chart2 = echarts.init(document.getElementById('chart2'), 'light');
+    option2 = {
+        /*title : {
+            text: '南丁格尔玫瑰图',
+            subtext: '纯属虚构',
+            x:'center'
+        },*/
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        /*legend: {
+            x : 'center',
+            y : 'bottom',
+            data:['rose1','rose2','rose3','rose4','rose5','rose6','rose7','rose8']
+        },*/
+        /*toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },*/
+        calculable : true,
+        series : [
+            {
+                name:'面积模式',
+                type:'pie',
+                radius : [30, 110],
+                center : ['50%', '50%'],
+                roseType : 'area',
+                data:[
+                    {value:10, name:'rose1'},
+                    {value:5, name:'rose2'},
+                    {value:15, name:'rose3'},
+                    {value:25, name:'rose4'},
+                    {value:20, name:'rose5'},
+                    {value:35, name:'rose6'},
+                    {value:30, name:'rose7'},
+                    {value:40, name:'rose8'}
+                ]
+            }
+        ]
+    };
+    chart2.setOption(option2);
+
+    var chart3 = echarts.init(document.getElementById('chart3'), 'light');;
+    var option3 = {
+        color: ['#3398DB'],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:[10, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+    };
+    chart3.setOption(option3);
 
     function iframeMethond(index, row) {
 

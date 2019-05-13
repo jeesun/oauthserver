@@ -1,0 +1,8 @@
+body{
+    padding: 0 10px 20px 10px;
+    background-color: #f0f2f5;
+}
+
+.el-tabs__header {
+    margin: 0;
+}

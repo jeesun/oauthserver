@@ -337,6 +337,12 @@
 
         <dependency>
             <groupId>org.webjars.bower</groupId>
+            <artifactId>echarts</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
             <artifactId>jquery-validation</artifactId>
             <version>1.18.0</version>
             <exclusions>

@@ -244,7 +244,7 @@
             AND authority=#{map.authority}
         </if>
         <if test="map.name != null and map.name != ''">
-            AND name LIKE CONCAT('%', #{map.name}, '%')
+            AND name LIKE CONCAT(CONCAT('%', #{map.name}), '%')
         </if>
         GROUP BY
         <include refid="t_side_menu_Column_List" />
