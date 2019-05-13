@@ -12,6 +12,7 @@ import com.simon.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -134,6 +135,7 @@ public class CountryServiceImpl implements CountryService {
         return countryMapper.findByCityId(cityId);
     }
 
+    @Cacheable(value = "chinaRegionCache", key = "'cityId' + #cityId")
     @Override
     public List<CascaderOptionDto> getCascaderOptionDtos(String cityId) {
         return countryMapper.getCascaderOptionDtos(cityId);

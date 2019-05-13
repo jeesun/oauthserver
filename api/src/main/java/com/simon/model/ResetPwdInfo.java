@@ -50,6 +50,7 @@ public class ResetPwdInfo implements Serializable{
     @Column(name = "update_date")
     private Date updateDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "expires_in")
     @Column(name = "expires_in")
     private Date expiresIn;

@@ -27,6 +27,42 @@
     icon_class, label, tags
   </sql>
 
+  <select id="getList" resultMap="BaseResultMap" databaseId="mysql">
+    select * from t_s_font_awesome
+    <where>
+      <if test="map.label != null and map.label != ''">
+        label like CONCAT('%', #{map.label}, '%')
+      </if>
+      <if test="map.tags != null and map.tags != ''">
+        tags like CONCAT('%', #{map.tags}, '%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getList" resultMap="BaseResultMap" databaseId="postgresql">
+    select * from t_s_font_awesome
+    <where>
+      <if test="map.label != null and map.label != ''">
+        label like CONCAT('%', #{map.label}, '%')
+      </if>
+      <if test="map.tags != null and map.tags != ''">
+        tags like CONCAT('%', #{map.tags}, '%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getList" resultMap="BaseResultMap" databaseId="oracle">
+    select * from t_s_font_awesome
+    <where>
+      <if test="map.label != null and map.label != ''">
+        label like CONCAT(CONCAT('%', #{map.label}), '%')
+      </if>
+      <if test="map.tags != null and map.tags != ''">
+        and tags like CONCAT(CONCAT('%', #{map.tags}), '%')
+      </if>
+    </where>
+  </select>
+
   <select id="getDtos" resultMap="FontAwesomeDtoMap">
     select <include refid="base_columns" /> from t_s_font_awesome where status = 1 order by order_num
   </select>

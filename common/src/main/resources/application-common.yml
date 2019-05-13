@@ -59,7 +59,7 @@ spring:
     type: ehcache #redis, ehcache。默认是Ehcache缓存。
     ehcache:
       config: ehcache.xml
-    cache-names: oauthUserCache,listOptionCache,smsCache
+    cache-names: DictionaryCache,smsCache,oauthUserCache,listOptionCache,chinaRegionCache
   jpa:
     hibernate:
       naming:

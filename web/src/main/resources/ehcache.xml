@@ -67,4 +67,12 @@
            diskPersistent="true"
            memoryStoreEvictionPolicy="LRU">
     </cache>
+
+    <cache name="chinaRegionCache"
+           maxElementsInMemory="0"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
 </ehcache>

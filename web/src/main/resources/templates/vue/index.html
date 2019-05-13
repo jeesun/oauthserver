@@ -87,20 +87,6 @@
                  background-color="#304156"
                  text-color="#BFCBD9"
                  active-text-color="#409EFF">
-            <!-- 参考https://www.cnblogs.com/luyuefeng/p/8039020.html -->
-            <!--<template v-if="menuData.length > 0" v-for="(menuItem, menuIndex) in menuData">
-                <el-submenu :index="menuIndex">
-                    <template slot="title">
-                        <i v-bind:class="menuItem.iconCls" style="font-size: 1.2em"></i>
-                        <span slot="title">{{menuItem.name}}</span>
-                    </template>
-                    <template v-if="menuItem.children && menuItem.children.length > 0" v-for="(subMenuItem, subMenuIndex) in menuItem.children">
-                        <el-menu-item :index="menuIndex + '-' + subMenuIndex" v-on:click="addTab(subMenuItem.id, subMenuItem.name, subMenuItem.url)">
-                            <i v-bind:class="subMenuItem.iconCls" style="font-size: 1.2em"></i> {{subMenuItem.name}}
-                        </el-menu-item>
-                    </template>
-                </el-submenu>
-            </template>-->
             <template th:each="menuItem, iterStat : ${menuData}">
                 <el-submenu th:attr="'v-bind:index'=${iterStat.index}">
                     <template slot="title">
@@ -204,6 +190,7 @@
     var container = new Vue({
         el: '#container',
         data: {
+            iframeHeight: 0,
             tableData: [],
             isCollapse: false,
             inOrOut: {
@@ -240,6 +227,7 @@
         },
         mounted: function () {
             this.loadMenuData();
+            this.iframeHeight = document.body.clientHeight - 120;
         },
         methods: {
             handleCommand(command) {
@@ -313,7 +301,7 @@
                         this.editableTabs.push({
                             title: title,
                             name: targetName,
-                            content: '<div style="height:500px;width:100%"><iframe id="' + targetName + '" frameborder="0" src="' + url + '" class="nth-tabs-frame"></iframe></div>',
+                            content: '<div style="height:' + this.iframeHeight + 'px;width:100%"><iframe id="' + targetName + '" frameborder="0" src="' + url + '" class="nth-tabs-frame"></iframe></div>',
                             closable: closable
                         });
                     }

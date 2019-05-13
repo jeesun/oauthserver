@@ -96,7 +96,7 @@
         GROUP BY
         ta.user_id,tu.username,tu.phone
         <if test="map.authority != null and map.authority != ''">
-            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT('%', #{map.authority}, '%')
+            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT(CONCAT('%', #{map.authority}), '%')
         </if>
     </select>
 

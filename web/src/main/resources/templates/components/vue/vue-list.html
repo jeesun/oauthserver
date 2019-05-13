@@ -33,6 +33,9 @@
     <script th:src="@{/js/plugins/layer-v3.1.1/layer/layer.js}"></script>
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'list')}" th:href="@{/css/vue/list.css}">
     <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'commit')}" th:href="@{/css/vue/commit.css}">
+    <link rel="stylesheet" th:if="${#strings.containsIgnoreCase(modules,'home')}" th:href="@{/css/vue/home.css}">
+    <script th:if="${#strings.containsIgnoreCase(modules,'echarts')}" th:src="@{/webjars/echarts/4.2.1/dist/echarts.min.js}"></script>
+    <script th:if="${#strings.containsIgnoreCase(modules,'echarts')}" th:src="@{/webjars/echarts/4.2.1/src/theme/light.js}"></script>
 </head>
 <body>
 

@@ -12,6 +12,7 @@ import com.simon.service.ProvinceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -129,6 +130,7 @@ public class ProvinceServiceImpl implements ProvinceService {
         return new PageInfo<>(list);
     }
 
+    @Cacheable(value = "chinaRegionCache", key = "'provinces'")
     @Override
     public List<CascaderOptionDto> getCascaderOptionDtos() {
         return provinceMapper.getCascaderOptionDtos();
