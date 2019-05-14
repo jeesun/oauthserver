@@ -126,7 +126,7 @@ public class Bill implements Serializable{
     private String remark;
 
     @ApiModelProperty(value = "付款详情页的订单信息")
-    @Column(name = "bill_context", columnDefinition="LONGTEXT")
+    @Column(name = "bill_context")
     private String billContext;
 
     @ApiModelProperty(value = "用户id")

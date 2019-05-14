@@ -226,6 +226,13 @@
         </dependency>
         <!-- ali dayu end -->
 
+        <!-- 腾讯云短信服务 start -->
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+        </dependency>
+        <!-- 腾讯云短信服务 end -->
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

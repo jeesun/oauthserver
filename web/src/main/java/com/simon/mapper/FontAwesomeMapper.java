@@ -18,7 +18,7 @@ public interface FontAwesomeMapper extends MyMapper<FontAwesome> {
      * @param map 查询条件
      * @return 结果列表
      */
-    List<FontAwesome> getList(Map<String, Object> map);
+    List<FontAwesome> getList(@Param("map") Map<String, Object> map);
 
     List<FontAwesomeDto> getDtos();
 
