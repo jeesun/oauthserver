@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class NewsInfoController extends BaseController{
     @ResponseBody
     public ResultMsg add(@RequestBody NewsInfo body, Authentication authentication){
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
         body.setUserId(userEntity.getId());
         newsInfoService.insertSelective(body);
@@ -103,7 +104,7 @@ public class NewsInfoController extends BaseController{
     @ResponseBody
     public ResultMsg update(@RequestBody NewsInfo body, Authentication authentication){
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setUpdateDate(new Date());
+        body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
         newsInfoService.updateByPrimaryKeySelective(body);
         return ResultMsg.success();

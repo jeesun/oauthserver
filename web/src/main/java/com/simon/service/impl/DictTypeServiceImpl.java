@@ -18,7 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -144,7 +144,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         if(StringUtils.isNotEmpty(dictTypeDto.getId())){
             dictType.setId(Long.parseLong(dictTypeDto.getId()));
         }
-        dictType.setCreateDate(new Date());
+        dictType.setCreateDate(LocalDateTime.now());
         dictType.setTypeGroupId(Long.parseLong(dictTypeDto.getPid()));
         dictType.setTypeGroupCode(dictTypeGroupRepository.findOne(Long.parseLong(dictTypeDto.getPid())).getTypeGroupCode());
         dictType.setTypeName(dictTypeDto.getName());

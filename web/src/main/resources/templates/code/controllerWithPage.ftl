@@ -48,6 +48,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import java.sql.Time;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
 * ${tableComment}

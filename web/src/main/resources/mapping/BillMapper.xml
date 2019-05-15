@@ -29,7 +29,7 @@
     <result column="integral_reward" jdbcType="INTEGER" property="integralReward" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="bill_context" jdbcType="LONGVARCHAR" property="billContext" />
+    <result column="bill_context" jdbcType="VARCHAR" property="billContext" />
     <result column="username" jdbcType="VARCHAR" property="username" />
   </resultMap>
 

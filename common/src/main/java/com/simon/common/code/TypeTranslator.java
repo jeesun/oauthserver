@@ -50,68 +50,72 @@ public class TypeTranslator {
 
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries%2Fmysql-data-types.html%23
+     *
      * @param columnType 列类型
-     * @param dataType 数据类型
+     * @param dataType   数据类型
      * @return java数据类型
      */
-    public static String translateMySQL(String columnType, String dataType){
+    public static String translateMySQL(String columnType, String dataType) {
         columnType = columnType.toUpperCase();
         dataType = dataType.toUpperCase();
-        if(dataType.contains(BIT)){
-            if(BIT1.equals(dataType)){
+        if (dataType.contains(BIT)) {
+            if (BIT1.equals(dataType)) {
                 return "Boolean";
-            }else{
+            } else {
                 return "Byte[]";
             }
         }
-        if(dataType.contains(TINYINT)){
-            if(TINYINT1.equals(columnType)){
+        if (dataType.contains(TINYINT)) {
+            if (TINYINT1.equals(columnType)) {
                 return "Boolean";
-            }else{
+            } else {
                 return "Integer";
             }
         }
-        if(BOOLEAN.equals(dataType) || BOOL.equals(dataType)){
+        if (BOOLEAN.equals(dataType) || BOOL.equals(dataType)) {
             return "Boolean";
         }
-        if(SMALLINT.equals(dataType)){
+        if (SMALLINT.equals(dataType)) {
             return "Short";
         }
-        if(MEDIUMINT.equals(dataType) || YEAR.equals(dataType) || INT.equals(dataType)){
+        if (MEDIUMINT.equals(dataType) || YEAR.equals(dataType) || INT.equals(dataType)) {
             return "Integer";
         }
-        if(dataType.contains(INTEGER)){
-            if(dataType.contains(UNSIGNED)){
+        if (dataType.contains(INTEGER)) {
+            if (dataType.contains(UNSIGNED)) {
                 return "Long";
-            }else{
+            } else {
                 return "Integer";
             }
         }
-        if(dataType.contains(BIGINT)){
-            if(dataType.contains(UNSIGNED)){
+        if (dataType.contains(BIGINT)) {
+            if (dataType.contains(UNSIGNED)) {
                 return "BigInteger";
             }
             return "Long";
         }
-        if(FLOAT.equals(dataType)){
+        if (FLOAT.equals(dataType)) {
             return "Float";
         }
-        if(DOUBLE.equals(dataType)){
+        if (DOUBLE.equals(dataType)) {
             return "Double";
         }
-        if(DECIMAL.equals(dataType) || NUMERIC.equals(dataType)){
+        if (DECIMAL.equals(dataType) || NUMERIC.equals(dataType)) {
             return "BigDecimal";
         }
-        if(DATE.equals(dataType) || DATETIME.equals(dataType) || TIMESTAMP.equals(dataType)){
-            return "Date";
+        if (DATETIME.equals(dataType) || TIMESTAMP.equals(dataType)) {
+            return "LocalDateTime";
         }
-        if(TIME.equals(dataType)){
-            return "Time";
+        if (DATE.equals(dataType)) {
+            return "LocalDate";
         }
-        if(dataType.contains(CHAR) || TEXT.equals(dataType) || LONGTEXT.equals(dataType)){
+        if (TIME.equals(dataType)) {
+            return "LocalTime";
+        }
+        if (dataType.contains(CHAR) || TEXT.equals(dataType) || LONGTEXT.equals(dataType)) {
             return "String";
         }
-        if(dataType.contains(BINARY) || BLOB.equals(dataType)){
+        if (dataType.contains(BINARY) || BLOB.equals(dataType)) {
             return "Byte[]";
         }
         return "Object";
@@ -119,49 +123,50 @@ public class TypeTranslator {
 
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries/postgresql-data-types.html
+     *
      * @param columnType 列类型
-     * @param dataType 数据类型
+     * @param dataType   数据类型
      * @return java数据类型
      */
-    public static String translatePostgreSQL(String columnType, String dataType){
+    public static String translatePostgreSQL(String columnType, String dataType) {
         columnType = columnType.toUpperCase();
         dataType = dataType.toUpperCase();
 
-        if(dataType.contains(BIT)){
-            if(BIT1.equals(dataType)){
+        if (dataType.contains(BIT)) {
+            if (BIT1.equals(dataType)) {
                 return "Boolean";
-            }else{
+            } else {
                 return "Byte[]";
             }
         }
-        if(SMALLINT.equals(dataType)){
+        if (SMALLINT.equals(dataType)) {
             return "Short";
         }
-        if(INTEGER.equals(dataType) || SERIAL.equals(dataType)){
+        if (INTEGER.equals(dataType) || SERIAL.equals(dataType)) {
             return "Integer";
         }
-        if(BIGINT.equals(dataType) || BIGSERIAL.equals(dataType)){
+        if (BIGINT.equals(dataType) || BIGSERIAL.equals(dataType)) {
             return "Long";
         }
-        if(dataType.contains(CHARACTER) || dataType.contains(TEXT)){
+        if (dataType.contains(CHARACTER) || dataType.contains(TEXT)) {
             return "String";
         }
-        if(BOOLEAN.equals(dataType)){
+        if (BOOLEAN.equals(dataType)) {
             return "Boolean";
         }
-        if(DECIMAL.equals(dataType) || NUMERIC.equals(dataType)){
+        if (DECIMAL.equals(dataType) || NUMERIC.equals(dataType)) {
             return "BigDecimal";
         }
-        if(REAL.equals(dataType)){
+        if (REAL.equals(dataType)) {
             return "Float";
         }
-        if(dataType.contains(DOUBLE)){
+        if (dataType.contains(DOUBLE)) {
             return "Double";
         }
-        if(dataType.contains(TIME) || DATE.equals(dataType)){
-            return "Date";
+        if (dataType.contains(TIME) || DATE.equals(dataType)) {
+            return "LocalDateTime";
         }
-        if(BYTEA.equals(dataType)){
+        if (BYTEA.equals(dataType)) {
             return "Byte[]";
         }
         return "Object";
@@ -169,49 +174,50 @@ public class TypeTranslator {
 
     /**
      * Oracle数据类型转java类型
+     *
      * @param columnType DATA_LENGTH
-     * @param dataType DATA_TYPE
+     * @param dataType   DATA_TYPE
      * @return
      */
-    public static String translateOracle(String columnType, String dataType){
+    public static String translateOracle(String columnType, String dataType) {
         Integer dataLength = Integer.parseInt(columnType);
         dataType = dataType.toUpperCase();
-        if(CHAR.equals(dataType) || VARCHAR2.equals(dataType) || NVARCHAR2.equals(dataType) || LONG.equals(dataType)){
-            if (1 == dataLength){
+        if (CHAR.equals(dataType) || VARCHAR2.equals(dataType) || NVARCHAR2.equals(dataType) || LONG.equals(dataType)) {
+            if (1 == dataLength) {
                 return "Boolean";
-            }else{
+            } else {
                 return "String";
             }
         }
-        if(RAW.equals(dataType) || LONGRAW.equals(dataType)){
+        if (RAW.equals(dataType) || LONGRAW.equals(dataType)) {
             return "Byte[]";
         }
-        if(DATE.equals(dataType)){
-            return "Date";
+        if (DATE.equals(dataType)) {
+            return "LocalDateTime";
         }
-        if (dataType.contains(TIMESTAMP)){
+        if (dataType.contains(TIMESTAMP)) {
             return "Timestamp";
         }
-        if(NUMBER.equals(dataType)){
-            if (1 == dataLength){
+        if (NUMBER.equals(dataType)) {
+            if (1 == dataLength) {
                 return "Boolean";
             }
-            if (2 ==dataLength){
+            if (2 == dataLength) {
                 return "Byte";
             }
-            if (3 <= dataLength && dataLength <= 4){
+            if (3 <= dataLength && dataLength <= 4) {
                 return "Short";
             }
-            if(5 <= dataLength && dataLength <= 9){
+            if (5 <= dataLength && dataLength <= 9) {
                 return "Integer";
             }
-            if(10 <= dataLength && dataLength <= 18){
+            if (10 <= dataLength && dataLength <= 18) {
                 return "Long";
-            }else{
+            } else {
                 return "BigDecimal";
             }
         }
-        if(BLOB.equals(dataType)){
+        if (BLOB.equals(dataType)) {
             return "Object";
         }
         return "Object";

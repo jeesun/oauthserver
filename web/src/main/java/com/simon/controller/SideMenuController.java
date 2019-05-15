@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -172,7 +173,7 @@ public class SideMenuController extends BaseController {
     public ResultMsg updateById(@RequestBody SideMenu body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateBy(userEntity.getId());
-        body.setUpdateDate(new Date());
+        body.setUpdateDate(LocalDateTime.now());
 
         sideMenuService.updateByPrimaryKeySelective(body);
         return ResultMsg.success();
@@ -182,7 +183,7 @@ public class SideMenuController extends BaseController {
     @ResponseBody
     public ResponseEntity<ResultMsg> add(@RequestBody SideMenu body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
 
         boolean isPidValid = (1 == body.getMenuType() && (null == body.getPid() || 0L != body.getPid()));
