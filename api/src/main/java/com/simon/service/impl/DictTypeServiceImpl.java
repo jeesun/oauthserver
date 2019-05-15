@@ -7,7 +7,6 @@ import com.simon.common.config.AppConfig;
 import com.simon.dto.DictTypeDto;
 import com.simon.mapper.DictTypeMapper;
 import com.simon.model.DictType;
-import com.simon.model.DictTypeGroup;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.repository.DictTypeRepository;
 import com.simon.service.DictTypeService;
@@ -18,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +133,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         if(StringUtils.isNotEmpty(dictTypeDto.getId())){
             dictType.setId(Long.parseLong(dictTypeDto.getId()));
         }
-        dictType.setCreateDate(new Date());
+        dictType.setCreateDate(LocalDateTime.now());
         dictType.setTypeGroupId(Long.parseLong(dictTypeDto.getPid()));
         dictType.setTypeGroupCode(dictTypeGroupRepository.findOne(Long.parseLong(dictTypeDto.getPid())).getTypeGroupCode());
         dictType.setTypeName(dictTypeDto.getName());

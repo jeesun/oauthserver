@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +137,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill createBill(OauthUser oauthUser, BillRequest billRequest) {
-        Date createDate = new Date();
+        LocalDateTime createDate = LocalDateTime.now();
         Bill bill = new Bill();
         bill.setUserId(oauthUser.getId());
         bill.setCreateBy(oauthUser.getId());

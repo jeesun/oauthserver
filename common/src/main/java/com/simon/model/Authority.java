@@ -15,18 +15,18 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
- * @author SimonSun
- * @date 2018-09-12
- **/
-@ApiModel(value = "权限")
+* @author SimonSun
+* @date 2018-09-12
+**/
+@ApiModel(value = "权限", description = "该文件的任何修改必须同步到common下的相同文件")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_authorities")
-public class Authority implements GrantedAuthority, Serializable, Comparable<Authority>{
+public class Authority implements GrantedAuthority, Serializable, Comparable<com.simon.model.Authority>{
     private static final long serialVersionUID = 1L;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
@@ -44,7 +44,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<Aut
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
@@ -54,7 +54,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<Aut
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "用户id")
@@ -70,7 +70,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<Aut
     private String username;
 
     @Override
-    public int compareTo(Authority o) {
+    public int compareTo(com.simon.model.Authority o) {
         return (int)(this.userId - o.userId);
     }
 }

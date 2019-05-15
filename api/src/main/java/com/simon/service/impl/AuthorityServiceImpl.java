@@ -17,8 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -159,7 +159,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                     }
                     if (toAdd){
                         Authority authority = new Authority();
-                        authority.setCreateDate(new Date());
+                        authority.setCreateDate(LocalDateTime.now());
                         authority.setUserId(authorityDto.getUserId());
                         authority.setAuthority(authArr[i]);
                         authorityList.add(authority);

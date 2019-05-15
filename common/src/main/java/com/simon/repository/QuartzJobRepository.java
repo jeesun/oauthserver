@@ -1,16 +1,13 @@
 package com.simon.repository;
 
-import com.simon.model.SideMenu;
+import com.simon.model.QuartzJob;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
 * @author SimonSun
-* @date 2018-09-26
+* @date 2018-12-21
 **/
 @Repository
-public interface SideMenuRepository extends JpaRepository<SideMenu, Long> {
-
+public interface QuartzJobRepository extends JpaRepository<QuartzJob, Long> {
 }
