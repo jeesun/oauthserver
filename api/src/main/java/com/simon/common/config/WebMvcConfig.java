@@ -1,8 +1,10 @@
 package com.simon.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.simon.common.handler.CurrentUserMethodArgumentResolver;
 import com.simon.common.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +52,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         //定义对象映射器
         ObjectMapper objectMapper = new ObjectMapper();
+        //解决jackson java8时间类型格式化问题
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         //对于Long 类型的数据，如果在Controller层通过@ResponseBody将返回数据自动转换成json时，不做任何处理，而直接传给前端的话，在Long长度大于17位时会出现精度丢失的问题。
         //将Long类型的数据转换成字符串，解决Long类型数据传入前端精度丢失的问题
         //定义对象模型
