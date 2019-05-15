@@ -14,7 +14,7 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * 订单
@@ -45,7 +45,7 @@ public class Bill implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
 @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
@@ -55,7 +55,7 @@ public class Bill implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
 @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @ApiModelProperty(value = "账单分类")
     @Column(name = "bill_type")
@@ -88,7 +88,7 @@ public class Bill implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
 @ApiModelProperty(value = "账单日期")
     @Column(name = "bill_date")
-    private Date billDate;
+    private LocalDateTime billDate;
 
     @ApiModelProperty(value = "付款金额")
     @Column(name = "total_amount")

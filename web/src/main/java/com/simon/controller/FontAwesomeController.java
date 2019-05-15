@@ -20,7 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +85,7 @@ public class FontAwesomeController extends BaseController {
         }
 
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
         fontAwesomeService.insertSelective(body);
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.CREATED);
@@ -95,7 +95,7 @@ public class FontAwesomeController extends BaseController {
     @ResponseBody
     public ResponseEntity<ResultMsg> edit(@RequestBody FontAwesome body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setUpdateDate(new Date());
+        body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
         fontAwesomeService.updateByPrimaryKeySelective(body);
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.OK);

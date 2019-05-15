@@ -4,7 +4,7 @@ import com.simon.model.Authority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ public class UserEntity implements UserDetails, Serializable {
     private String phone;
     private String email;
     private String address;
-    private Date birth;
+    private LocalDate birth;
     private Integer age;
     private String headPhoto;
     private String personBrief;
@@ -32,7 +32,7 @@ public class UserEntity implements UserDetails, Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, Date birth, Integer age, String headPhoto, String personBrief, Boolean sex) {
+    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex) {
         super();
         this.id = id;
         this.username = username;
@@ -48,7 +48,7 @@ public class UserEntity implements UserDetails, Serializable {
         this.sex = sex;
     }
 
-    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, Date birth, Integer age, String headPhoto, String personBrief, Boolean sex, List<Authority> authorities) {
+    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex, List<Authority> authorities) {
         super();
         this.id = id;
         this.username = username;
@@ -113,11 +113,11 @@ public class UserEntity implements UserDetails, Serializable {
         this.address = address;
     }
 
-    public Date getBirth() {
+    public LocalDate getBirth() {
         return birth;
     }
 
-    public void setBirth(Date birth) {
+    public void setBirth(LocalDate birth) {
         this.birth = birth;
     }
 

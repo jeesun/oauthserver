@@ -12,7 +12,7 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,7 +40,7 @@ public class DictTypeGroup implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
@@ -49,7 +49,7 @@ public class DictTypeGroup implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @ApiModelProperty(value = "字典组编码")
     @Column(name = "type_group_code", nullable = false)

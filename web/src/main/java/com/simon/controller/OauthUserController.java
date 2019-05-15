@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -135,7 +136,7 @@ public class OauthUserController extends BaseController {
         }
 
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
         oauthUserService.insertSelective(body);
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.CREATED);
@@ -146,7 +147,7 @@ public class OauthUserController extends BaseController {
     @ResponseBody
     public ResultMsg update(@RequestBody OauthUser body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setUpdateDate(new Date());
+        body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
         oauthUserService.updateByPrimaryKeySelective(body);
         return ResultMsg.success();

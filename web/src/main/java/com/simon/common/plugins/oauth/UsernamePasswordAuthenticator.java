@@ -3,6 +3,7 @@ package com.simon.common.plugins.oauth;
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.exception.BusinessException;
+import com.simon.common.utils.DateUtil;
 import com.simon.common.utils.ValidUtil;
 import com.simon.model.Authority;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
         sqlLoadUserByName = "select id,username,password,enabled,phone,email,address,birth,age,head_photo,person_brief,sex from t_users where username=?";
         sqlLoadAuthorities = "select user_id,authority from t_authorities where user_id = ?";
 
-        myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"),rs.getString("address"), rs.getDate("birth"), rs.getInt("age"), rs.getString("head_photo"), rs.getString("person_brief"), rs.getBoolean("sex"));
+        myUserDetailsRowMapper = (rs, i) -> new UserEntity(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getString("phone"), rs.getString("email"),rs.getString("address"), DateUtil.dateToLocalDate(rs.getDate("birth")), rs.getInt("age"), rs.getString("head_photo"), rs.getString("person_brief"), rs.getBoolean("sex"));
 
         authorityRowMapper = (rs,i) -> {
             Authority authority = new Authority();

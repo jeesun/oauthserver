@@ -21,7 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -86,7 +86,7 @@ public class QuartzJobController extends BaseController {
     @ResponseBody
     public ResultMsg add(@RequestBody QuartzJob body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
         //任务状态默认为停止
         body.setJobStatus(0);
@@ -108,7 +108,7 @@ public class QuartzJobController extends BaseController {
             quartzJob.setJobStatus(1);
         }
 
-        quartzJob.setUpdateDate(new Date());
+        quartzJob.setUpdateDate(LocalDateTime.now());
         quartzJob.setUpdateBy(userEntity.getId());
         quartzJobService.updateByPrimaryKeySelective(quartzJob);
 
@@ -141,7 +141,7 @@ public class QuartzJobController extends BaseController {
 
         quartzJob.setJobStatus(body.getJobStatus());
         quartzJob.setUpdateBy(userEntity.getId());
-        quartzJob.setUpdateDate(new Date());
+        quartzJob.setUpdateDate(LocalDateTime.now());
         quartzJobService.updateByPrimaryKeySelective(quartzJob);
         return ResultMsg.success();
     }

@@ -17,6 +17,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
 * ${tableComment}

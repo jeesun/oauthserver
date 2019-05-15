@@ -15,7 +15,8 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
 * @author SimonSun
@@ -48,7 +49,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ExcelProperty(value = {TABLE_TITLE, "更新人id"}, index = 3)
@@ -60,7 +61,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @ExcelProperty(value = {TABLE_TITLE, "用户名(昵称)"}, index = 5)
     @ApiModelProperty(value = "用户名(昵称)")
@@ -107,7 +108,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "生日")
     @Column(name = "birth")
-    private Date birth;
+    private LocalDate birth;
 
     @ExcelProperty(value = {TABLE_TITLE, "头像"}, index = 14)
     @ApiModelProperty(value = "头像")
@@ -143,7 +144,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "登录时间")
     @Column(name = "login_date")
-    private Date loginDate;
+    private LocalDateTime loginDate;
 
     @ApiModelProperty(value = "角色")
     @Transient

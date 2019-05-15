@@ -7,11 +7,11 @@ import com.simon.common.config.AppConfig;
 import com.simon.common.domain.BillStatus;
 import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.snowflake.SnowFlakeId;
-import com.simon.model.OauthUser;
-import com.simon.request.BillRequest;
 import com.simon.mapper.BillMapper;
 import com.simon.model.Bill;
+import com.simon.model.OauthUser;
 import com.simon.repository.BillRepository;
+import com.simon.request.BillRequest;
 import com.simon.service.BillService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -146,7 +146,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill createBill(OauthUser oauthUser, BillRequest billRequest) {
-        Date createDate = new Date();
+        LocalDateTime createDate = LocalDateTime.now();
         Bill bill = new Bill();
         bill.setUserId(oauthUser.getId());
         bill.setCreateBy(oauthUser.getId());

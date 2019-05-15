@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 菜单
@@ -45,8 +45,8 @@ public class MenuDO implements Serializable {
     private Integer orderNum;
 
     @ApiModelProperty(value = "创建时间")
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
 
     @ApiModelProperty(value = "修改时间")
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
 }
