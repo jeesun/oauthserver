@@ -65,7 +65,7 @@ public class AppConfig {
     static {
         Properties prop = new Properties();
         try {
-            prop.load(AppConfig.class.getResourceAsStream("/application.properties"));
+            prop.load(AppConfig.class.getResourceAsStream("/application-common.properties"));
             FILE_UPLOAD_DIR = prop.getProperty("file.upload.dir");
             FILE_UPLOAD_TYPE = prop.getProperty("file.upload.type");
             SERVER_PORT = prop.getProperty("server.port");

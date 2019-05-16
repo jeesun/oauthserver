@@ -48,6 +48,8 @@ public class TypeTranslator {
     private static String LONGRAW = "LONGRAW";
     private static String NVARCHAR2 = "NVARCHAR2";
 
+    private static String CLOB = "CLOB";
+
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries%2Fmysql-data-types.html%23
      *
@@ -189,6 +191,9 @@ public class TypeTranslator {
                 return "String";
             }
         }
+        if (CLOB.equals(dataType)) {
+            return "String";
+        }
         if (RAW.equals(dataType) || LONGRAW.equals(dataType)) {
             return "Byte[]";
         }
@@ -218,7 +223,7 @@ public class TypeTranslator {
             }
         }
         if (BLOB.equals(dataType)) {
-            return "Object";
+            return "Byte[]";
         }
         return "Object";
     }

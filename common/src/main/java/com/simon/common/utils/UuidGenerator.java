@@ -1,7 +1,7 @@
 package com.simon.common.utils;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 import java.io.Serializable;
@@ -14,8 +14,13 @@ import java.io.Serializable;
  **/
 
 public class UuidGenerator implements IdentifierGenerator {
-    @Override
+    /*@Override
     public Serializable generate(SessionImplementor sessionImplementor, Object o) throws HibernateException {
+        return UuidUtils.getUUID();
+    }*/
+
+    @Override
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
         return UuidUtils.getUUID();
     }
 }

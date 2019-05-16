@@ -1,7 +1,6 @@
 package com.simon.service.impl;
 
 import com.simon.service.SmsService;
-import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class TxSmsServiceImpl implements SmsService {
     private org.springframework.cache.CacheManager cacheManager;
 
     @Override
-    public boolean sendIdentifyCode(String mobile) throws ApiException {
+    public boolean sendIdentifyCode(String mobile) {
         return false;
     }
 

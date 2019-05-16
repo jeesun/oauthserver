@@ -36,7 +36,6 @@ public class YzxSmsServiceImpl implements SmsService {
     @Value("${sms.password}")
     private String password;
 
-    //@Value("${sms.identity-code-msg-template}")
     private String identityCodeMsgTemplate = AppConfig.SMS_TEMPLATE;
 
     @Autowired

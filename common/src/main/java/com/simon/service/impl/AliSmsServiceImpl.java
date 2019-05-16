@@ -52,7 +52,7 @@ public class AliSmsServiceImpl implements SmsService {
     private org.springframework.cache.CacheManager cacheManager;
 
     @Override
-    public boolean sendIdentifyCode(String mobile) throws ApiException {
+    public boolean sendIdentifyCode(String mobile) {
         var code = RandomUtils.nextInt(100000, 999999);
         var client = new DefaultTaobaoClient(
                 DAYU_URL_REAL, DAYU_APP_KEY, DAYU_APP_SECRET);
@@ -63,17 +63,22 @@ public class AliSmsServiceImpl implements SmsService {
         req.setSmsParamString("{veriCode:'"+code+"'}");
         req.setRecNum(mobile);
         req.setSmsTemplateCode(DAYU_SMS_TEMPLATE_CODE);
-        AlibabaAliqinFcSmsNumSendResponse rsp = null;
-        rsp = client.execute(req);
-        BizResult bizResult = rsp.getResult();
-        if (null != bizResult && bizResult.getSuccess()){
-            //写入缓存
-            var cache = cacheManager.getCache("smsCache");
-            cache.put(mobile, code);
+        try {
+            AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+            BizResult bizResult = rsp.getResult();
+            if (null != bizResult && bizResult.getSuccess()){
+                //写入缓存
+                var cache = cacheManager.getCache("smsCache");
+                cache.put(mobile, code);
 
-            return true;
-        }else{
-            log.error("请确认阿里大于账号还有余额");
+                return true;
+            }else{
+                log.error("请确认阿里大于账号还有余额");
+                return false;
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            log.error(e.getErrMsg());
             return false;
         }
     }
