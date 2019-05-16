@@ -32,7 +32,7 @@
             background-color: rgb(48, 65, 86);
         }
 
-        html, body, #container {
+        html, body, #app {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -80,7 +80,7 @@
     </style>
 </head>
 <body>
-<el-container id="container">
+<el-container id="app">
     <el-aside style="width:auto;height:100%;background-color: #304156;">
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                  :collapse="isCollapse"
@@ -187,8 +187,8 @@
     //标识当前的加载层
     var loadingLayer;
 
-    var container = new Vue({
-        el: '#container',
+    var app = new Vue({
+        el: '#app',
         data: {
             iframeHeight: 0,
             tableData: [],
@@ -373,7 +373,7 @@
             }
         }
     });
-    container.addTab('94108390556434432', '了解OauthServer', '/vue/home', false);
+    app.addTab('94108390556434432', '了解OauthServer', '/vue/home', false);
 
     function showWindow(options) {
         currentLayer = layer.open({
@@ -389,7 +389,7 @@
 
     function updateListData() {
         //父页面使用原生JS调用iframe方法
-        let frameWin = document.getElementById(container.$data.editableTabsValue + '').contentWindow;
+        let frameWin = document.getElementById(app.$data.editableTabsValue + '').contentWindow;
         frameWin.iframeUpdateList();  //method为子页面的方法
         layer.close(currentLayer);
     }
@@ -398,12 +398,12 @@
         //询问框
         //console.log(row);
         console.log('showDelete');
-        console.log('editableTabsValue=' + container.$data.editableTabsValue);
+        console.log('editableTabsValue=' + app.$data.editableTabsValue);
         layer.confirm('确认删除该记录？', {
             btn: ['确定', '取消'] //按钮
         }, function (index, layero) {
             //父页面使用原生JS调用iframe方法
-            let frameWin = document.getElementById(container.$data.editableTabsValue + '').contentWindow;
+            let frameWin = document.getElementById(app.$data.editableTabsValue + '').contentWindow;
             frameWin.iframeMethond(index, row);  //method为子页面的方法
             layer.close(index);
         }, function (index) {
