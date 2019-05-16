@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
@@ -18,19 +17,21 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+* 通知消息
 * @author SimonSun
-* @date 2018-09-12
+* @date 2018-11-24
 **/
-@ApiModel(value = "权限", description = "该文件的任何修改必须同步到common下的相同文件")
+@ApiModel(description = "通知消息")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="t_authorities")
-public class Authority implements GrantedAuthority, Serializable, Comparable<com.simon.model.Authority>{
+@Table(name="t_notice_msg")
+public class NoticeMsg implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
+    @Column(name = "id")
     @KeySql(genId = SnowflakeGenId.class)
     @GeneratedValue(generator = "sequenceId")
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
@@ -42,7 +43,7 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<com
     private Long createBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
-    @ApiModelProperty(value = "创建时间")
+@ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
@@ -52,25 +53,24 @@ public class Authority implements GrantedAuthority, Serializable, Comparable<com
     private Long updateBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
-    @ApiModelProperty(value = "更新时间")
+@ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "用户id")
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private Long userId;
 
-    @ApiModelProperty(value = "权限")
-    @Column(name = "authority", nullable = false)
-    private String authority;
+    @ApiModelProperty(value = "消息类型")
+    @Column(name = "msg_type")
+    private Integer msgType;
 
-    @ApiModelProperty(value = "用户名(昵称)")
-    @Transient
-    private String username;
+    @ApiModelProperty(value = "消息内容")
+    @Column(name = "content", columnDefinition = "LONGTEXT")
+    private String content;
 
-    @Override
-    public int compareTo(com.simon.model.Authority o) {
-        return (int)(this.userId - o.userId);
-    }
+    @ApiModelProperty(value = "是否已读")
+    @Column(name = "is_read", nullable = false)
+    private Boolean isRead;
 }

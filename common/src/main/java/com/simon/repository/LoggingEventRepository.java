@@ -1,0 +1,13 @@
+package com.simon.repository;
+
+import com.simon.model.LoggingEvent;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+* @author SimonSun
+* @date 2018-11-09
+**/
+@Repository
+public interface LoggingEventRepository extends JpaRepository<LoggingEvent, Long> {
+}
