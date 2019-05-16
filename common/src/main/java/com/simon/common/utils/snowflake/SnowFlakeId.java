@@ -1,6 +1,7 @@
 package com.simon.common.utils.snowflake;
 
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 import java.io.Serializable;
@@ -178,8 +179,13 @@ public class SnowFlakeId implements IdentifierGenerator{
         return System.currentTimeMillis();
     }
 
-    @Override
+    /*@Override
     public Serializable generate(SessionImplementor s, Object obj) {
+        return getId();
+    }*/
+
+    @Override
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
         return getId();
     }
 }
