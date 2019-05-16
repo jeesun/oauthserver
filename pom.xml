@@ -44,6 +44,7 @@
 		<lombok.version>1.18.8</lombok.version>
 		<fastjson.version>1.2.57</fastjson.version>
 		<qcloudsms.version>1.0.6</qcloudsms.version>
+		<hibernate.version>5.4.2.Final</hibernate.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -79,11 +80,33 @@
 				<artifactId>spring-boot-starter-jdbc</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
+            <!-- 解决hibernate低版本java8时间类型序列化失败的bug start -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-jpa</artifactId>
 				<version>${spring-boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-entitymanager</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>5.4.2.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>5.4.2.Final</version>
+			</dependency>
+            <!-- 解决hibernate低版本java8时间类型序列化失败的bug end -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>

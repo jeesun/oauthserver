@@ -28,7 +28,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="t_users")
 public class OauthUser extends BaseRowModel implements Serializable{
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4898481229724057581L;
+
     private static final String TABLE_TITLE = "用户";
 
     @JSONField(serializeUsing = ToStringSerializer.class)
