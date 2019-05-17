@@ -104,7 +104,7 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showMsg("新增成功");
+                            parent.showSuccess("新增成功");
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {

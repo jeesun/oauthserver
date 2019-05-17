@@ -79,7 +79,7 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showMsg("修改成功");
+                            parent.showSuccess("修改成功");
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {

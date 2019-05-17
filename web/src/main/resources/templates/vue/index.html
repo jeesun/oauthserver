@@ -353,13 +353,19 @@
                     if(valid){
                         this.$http.post(requestUrls.changePassword, this.changePwdForm).then((response) => {
                             closeLoading();
-                            showMsg("修改密码成功");
+                            this.$message({
+                                message: "修改密码成功",
+                                type: 'success'
+                            });
                             this.dialogChangePwdFormVisible = false;
                         }).catch((error) => {
                             console.error(error);
                             console.error(error.response.data.message);
                             closeLoading();
-                            showMsg(error.response.data.message);
+                            this.$message({
+                                message: error.response.data.message,
+                                type: 'error'
+                            });
                         });
                     }else{
                         closeLoading();
@@ -370,8 +376,14 @@
                         return false;
                     }
                 });
+            },
+            showMessage(message, type) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
             }
-        }
+        }//methods
     });
     app.addTab('94108390556434432', '了解OauthServer', '/vue/home', false);
 
@@ -411,24 +423,20 @@
         });
     }
 
-    function showMsg(message) {
-        layer.msg(message, {
-            icon: 1,
-            offset: 't',
-            anim: 0
-        });
-    }
-
     function showSuccess(message) {
-        showMsg(message);
+        app.showMessage(message, 'success');
     }
 
+    function showWarning(message) {
+        app.showMessage(message, 'warning');
+    }
+    
+    function showInfo(message) {
+        app.showMessage(message, 'info');
+    }
+    
     function showError(message) {
-        layer.msg(message, {
-            icon: 2,
-            offset: 't',
-            anim: 0
-        });
+        app.showMessage(message, 'error');
     }
 
     function openLoading() {

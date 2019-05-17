@@ -89,13 +89,13 @@
                         console.log(JSON.stringify(this.ruleForm));
                         this.$http.post(requestUrls.add, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showMsg("新增成功");
+                            parent.showSuccess("新增成功");
                             parent.updateListData();
                             closeLayer();
                         }).catch((response) => {
                             console.error(response);
                             parent.closeLoading();
-                            parent.showMsg("发生错误");
+                            parent.showError("发生错误");
                         });
                     } else {
                         parent.closeLoading();

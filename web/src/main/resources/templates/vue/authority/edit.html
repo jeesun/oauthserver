@@ -83,13 +83,13 @@
                         this.ruleForm.authority = this.ruleForm.authorities.join(",");
                         this.$http.patch(requestUrls.add, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showMsg("修改成功");
+                            parent.showSuccess("修改成功");
                             parent.updateListData();
                             closeLayer();
                         }).catch((response) => {
                             console.error(response);
                             parent.closeLoading();
-                            parent.showMsg("发生错误");
+                            parent.showError("发生错误");
                         });
                     } else {
                         parent.closeLoading();

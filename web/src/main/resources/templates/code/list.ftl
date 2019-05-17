@@ -137,7 +137,7 @@
                 }).catch((response) => {
                     this.tableLoading = false;
                     console.error(response);
-                    parent.showMsg("发生错误");
+                    parent.showSuccess("发生错误");
                 });
             },
             //每页显示数据量变更
@@ -187,7 +187,7 @@
             doDelete(index, row) {
                 this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
-                        parent.showMsg("删除成功");
+                        parent.showSuccess("删除成功");
                         this.loadData(this.pageNo, this.pageSize);
                     }).catch((response) => {
                     console.error(response);
