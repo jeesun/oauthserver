@@ -48,6 +48,17 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 2.0.20190517-alpha
+1. 修复quartz定时任务bug；
+2. 移除api模块的代码生成器，统一使用web模块的生成器，代码生成器位置允许选择common模块；
+3. 省市区信息添加缓存；
+4. 重写home页面；
+5. 使用java8时间类型代替Date类型，并解决序列化问题；
+6. 合并model、service、serviceImpl、repository、mapper到common模块；
+7. 增加登录失败原因提示；
+8. Spring Boot 1.5.20->1.5.21；
+9. 动态计算iframe高度；
+10. 其他bug修复。
 ### 2.0.20190506-alpha
 1. 新增了很多功能；
 2. 修复了很多bug；
