@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.sql.DataSource;
+import java.net.URLEncoder;
 
 /**
  * Created by simon on 2017/2/18.
@@ -31,6 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthSuccessHandler authSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Override
     @Bean
@@ -101,6 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .successHandler(authSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/index")
                 .and()
@@ -122,7 +128,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement()
                 .maximumSessions(1)
-                .expiredUrl("/login?result=loginAnotherLocation");
+                .expiredUrl("/login?errMsg=" + URLEncoder.encode("您已在其他地方登录", "utf-8"));
     }
-
 }
