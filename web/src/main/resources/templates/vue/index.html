@@ -198,7 +198,7 @@
                 'fa-outdent': true
             },
             inOrOutKey: 1,
-            menuData: [],
+            menuData: [[${menuData}]],
             dynamicTags: ['标签一', '标签二', '标签三'],
             inputVisible: false,
             inputValue: '',
@@ -226,7 +226,7 @@
             }
         },
         mounted: function () {
-            this.loadMenuData();
+            //this.loadMenuData();
             this.iframeHeight = document.body.clientHeight - 120;
         },
         methods: {
@@ -283,7 +283,7 @@
                 this.addTab(123, '登录', '/vue/demo', true);
             },
             addTab: function (id, title, url, closable) {
-                //console.log("id=" + id + ",title=" + title + ",url=" + url);
+                console.log("id=" + id + ",title=" + title + ",url=" + url);
                 let targetName = id + '';
                 let tabs = this.editableTabs;
                 let activeName = this.editableTabsValue;
@@ -331,11 +331,11 @@
             },
             changeTitle: function (id) {
                 let found = false;
-                for (let i = 0; i < this.menuData.length; i++) {
+                for (let i = 0, len = this.menuData.length; i < len; i++) {
                     let menuItem = this.menuData[i];
-                    for (let j = 0; j < menuItem.children.length; j++) {
+                    for (let j = 0, childrenLen = menuItem.children.length; j < childrenLen; j++) {
                         let subMenuItem = menuItem.children[j];
-                        if (subMenuItem['id'] == id) {
+                        if (subMenuItem['id'] === id) {
                             this.parentPath = menuItem['name'];
                             this.childPath = subMenuItem['name'];
                             found = true;
