@@ -7,12 +7,14 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.fastjson.JSON;
+import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultCode;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.utils.BeanUtils;
+import com.simon.common.utils.CreateImageCode;
 import com.simon.dto.ChangePasswordDto;
 import com.simon.model.OauthUser;
 import com.simon.service.DictTypeService;
@@ -36,6 +38,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -303,5 +306,31 @@ public class OauthUserController extends BaseController {
         oauthUserService.updatePasswordByUserId(userEntity.getId(), passwordEncoder.encode(body.getNewPassword()));
 
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "获取验证码图片", notes = "前端获取session中的值很麻烦，不刷新页面无法获取最新值。所以最好前端再访问后台接口校验验证码图片。")
+    @PermitAll
+    @GetMapping("getVeriCode")
+    public void getCode3(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        // 设置响应的类型格式为图片格式
+        response.setContentType("image/jpeg");
+        //禁止图像缓存。
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        CreateImageCode vCode = new CreateImageCode(100, 30, 4, 10);
+        session.setAttribute(AppConfig.SESSION_VERI_CODE, vCode.getCode());
+        vCode.write(response.getOutputStream());
+    }
+
+    @ApiOperation(value = "校验验证码图片")
+    @PermitAll
+    @PostMapping("checkVeriCode")
+    @ResponseBody
+    public Boolean checkCode(HttpServletRequest request, HttpServletResponse response, HttpSession session, @ApiParam(value = "验证码", required = true) @RequestParam String veriCode) {
+        if (veriCode.equals(session.getAttribute(AppConfig.SESSION_VERI_CODE).toString())) {
+            return true;
+        }
+        return false;
     }
 }

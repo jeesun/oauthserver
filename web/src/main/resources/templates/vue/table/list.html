@@ -113,10 +113,14 @@
                     for (let key in response.data.rows) {
                         this.$set(this.tableData, key, response.data.rows[key]);
                     }
-                }).catch((response) => {
+                }).catch((error) => {
                     this.tableLoading = false;
-                    console.error(response);
-                    parent.showError("发生错误");
+                    let errorMessage = "发生错误";
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
+
                 });
             },
             //每页显示数据量变更

@@ -108,11 +108,11 @@
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
+                            parent.closeLoading();
                             let errorMessage = "发生错误";
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.closeLoading();
                             parent.showError(errorMessage);
                         });
                     } else {

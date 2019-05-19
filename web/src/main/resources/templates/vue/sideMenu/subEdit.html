@@ -126,10 +126,14 @@
                             parent.showSuccess("修改成功");
                             parent.updateListData();
                             closeLayer();
-                        }).catch((response) => {
+                        }).catch((error) => {
                             console.error(response);
                             parent.closeLoading();
-                            parent.showError("发生错误");
+                            let errorMessage = "发生错误";
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.showError(errorMessage);
                         });
                     } else {
                         parent.closeLoading();

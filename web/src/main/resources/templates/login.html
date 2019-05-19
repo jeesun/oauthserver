@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet">
     <title th:text="#{login}"></title>
     <style>
@@ -25,17 +27,17 @@
             padding: 20px 6px 20px 6px;
         }
 
-        #code,#codeimg{
-            width:80%;
-            font-size:16px;
-            font-style:italic;
-            color:green;
-            border:0;
-            letter-spacing:3px;
-            font-weight:bolder;
+        #code, #codeimg {
+            width: 80%;
+            font-size: 16px;
+            font-style: italic;
+            color: green;
+            border: 0;
+            letter-spacing: 3px;
+            font-weight: bolder;
         }
 
-        body{
+        body {
             /*background-color: #F1F3F4;*/
             background-image: url("/img/bg_login.jpg");
             background-position: 50% 50%;
@@ -50,7 +52,8 @@
 <body>
 <div class="container h-100">
     <div class="row align-items-center h-100">
-        <form id="loginForm" th:action="@{login}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+        <form id="loginForm" th:action="@{login}" method="post"
+              class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
             <h1 class="text-center" th:text="#{signIn}"></h1>
             <div th:if="${(param.errMsg != null)}">
                 <div class="text-center error" th:text="${param.errMsg}"></div>
@@ -67,16 +70,19 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6">
                         <label for="veriCode"></label>
-                        <input type="text" class="form-control" id="veriCode" name="veriCode" th:placeholder="#{veriCode}">
+                        <input type="text" class="form-control" id="veriCode" name="veriCode"
+                               th:placeholder="#{veriCode}">
                     </div>
-                    <div class="col-md-6 col-sm-6" style="display: flex;align-items: center;">
-                        <canvas class="codeimg" id="codeimg">
+                    <div class="col-md-6 col-sm-6">
+                        <!--<canvas class="codeimg" id="codeimg">
                             你的浏览器不支持canvas。
-                        </canvas>
+                        </canvas>-->
+                        <img id="randCodeImage" th:src="@{/api/oauthUsers/getVeriCode}" style="width:100px;height:30px;float:right;margin:25px 20px 0 0;"/>
+                        <div style="clear: both"></div>
                     </div>
                 </div>
             </div>
-            <div class="form-check">
+            <div class="form-check" style="padding-bottom: 10px;">
                 <label class="form-check-label">
                     <input class="form-check-input" type="checkbox">记住密码
                 </label>
@@ -91,6 +97,91 @@
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 <script th:src="@{/webjars/jquery-validation/1.18.0/dist/jquery.validate.min.js}"></script>
 <script th:src="@{/webjars/jquery-validation/1.18.0/src/localization/messages_zh.js}"></script>
-<script th:src="@{/js/login/vcode.js}"></script>
+<script>
+    function setTokenInHeader() {
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    }
+
+    function reloadCodeImage() {
+        var date = new Date();
+        var img = document.getElementById("randCodeImage");
+        img.src = "/api/oauthUsers/getVeriCode?a=" + date.getTime();
+    }
+
+    $('#randCodeImage').click(function () {
+        reloadCodeImage();
+    });
+
+
+    $().ready(function () {
+        setTokenInHeader();
+
+        jQuery.validator.addMethod("password", function (value, element, param) {
+            var rex = /^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S{6,16}$/;
+            return this.optional(element) || (rex.test(value));
+        }, "必须包含数字、字母或特殊字符");
+
+        function validForm() {
+            return $("#loginForm").validate({
+                debug: false,
+                onsubmit: true,// 是否在提交是验证
+                onfocusout: false,// 是否在获取焦点时验证
+                onkeyup: false,// 是否在敲击键盘时验证
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 1
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    },
+                    veriCode: {
+                        required: true,
+                        minlength: 4,
+                        remote: {
+                            url: '/api/oauthUsers/checkVeriCode',
+                            type: 'post',
+                            async: false,//必须加非异步，否则即使校验失败也会有提交的风险
+                            dataType: 'json',
+                            /*data: {
+                                username: function(){
+                                    return $('#username').val()
+                                }
+                            },*/
+                        }
+                    }
+                },
+                messages: {
+                    veriCode: {
+                        remote: '验证码错误'
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent());
+                },
+                errorElement: "span",
+                //单条校验失败，后会调用此方法，在此方法中，编写错误消息如何显示 及  校验失败回调方法
+                showErrors: function (errorMap, errorList) {
+                    let reload = false;
+                    for (let obj in errorMap) {
+                        reload = true;
+                    }
+                    if (reload) {
+                        reloadCodeImage();
+                    }
+                    // 此处注意，一定要调用默认方法，这样保证提示消息的默认效果
+                    this.defaultShowErrors();
+                }
+            });
+        }
+
+        $(validForm());
+    });
+</script>
 </body>
 </html>

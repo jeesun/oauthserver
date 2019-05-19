@@ -96,10 +96,13 @@
                             parent.showSuccess("新增成功");
                             parent.updateListData();
                             closeLayer();
-                        }).catch((response) => {
-                            console.error(response);
+                        }).catch((error) => {
                             parent.closeLoading();
-                            parent.showError("发生错误");
+                            let errorMessage = "发生错误";
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.showError(errorMessage);
                         });
                     } else {
                         parent.closeLoading();

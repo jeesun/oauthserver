@@ -73,4 +73,9 @@ public class AppConfig {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 存储在session中的验证码key
+     */
+    public static final String SESSION_VERI_CODE = "code";
 }
