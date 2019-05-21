@@ -118,8 +118,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**").permitAll()
-                .antMatchers("/login", "/logout", "/register", "/register_result", "/forget_password", "/reset_password", "/users/sendEmail", "/users/resetPassword", "/users/forgetPwd","/users/check", "/users/resetPwd", "/users/test", "/users/checkExists").permitAll()
-                .antMatchers("/just_test", "/upload", "/users/uuid/**", "/users/loopCheck/**", "/users/register", "/hello").permitAll()
+                .antMatchers("/login", "/logout", "/register", "/register_result", "/forget_password", "/reset_password", "/users/sendEmail", "/users/resetPassword", "/users/forgetPwd","/users/check", "/users/resetPwd", "/users/test", "/users/checkExists", "/api/oauthUsers/getVeriCode", "/api/oauthUsers/checkVeriCode").permitAll()
+                .antMatchers("/just_test", "/upload", "/users/uuid/**", "/users/loopCheck/**", "/users/register", "/hello", "/api/demos/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .rememberMe();

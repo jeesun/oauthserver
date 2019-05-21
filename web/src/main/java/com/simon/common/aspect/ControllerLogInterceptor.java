@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequ
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,13 +61,11 @@ public class ControllerLogInterceptor {
 
             //序列化时过滤掉request和response
             List<Object> objs = Arrays.stream(args)
-                    .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                    .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse) && !(arg instanceof HttpSession) && !(arg instanceof ExtendedServletRequestDataBinder) && !(arg instanceof HttpServletResponseWrapper)))
                     .collect(Collectors.toList());
 
             for (int i = 0; i < objs.size(); i++) {
-                if (!(objs.get(i) instanceof ExtendedServletRequestDataBinder) && !(objs.get(i) instanceof HttpServletResponseWrapper)) {
-                    paramMap.put(argNames[i], objs.get(i));
-                }
+                paramMap.put(argNames[i], objs.get(i));
             }
             if (paramMap.size() > 0) {
                 //log.info("[{}]类名1:{}", uuid, joinPoint.getTarget().getClass().getName());

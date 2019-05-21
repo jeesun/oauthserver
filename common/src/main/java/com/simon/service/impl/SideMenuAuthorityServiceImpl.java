@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
 import com.simon.mapper.SideMenuAuthorityMapper;
+import com.simon.mapper.SideMenuMapper;
 import com.simon.model.SideMenuAuthority;
 import com.simon.repository.SideMenuAuthorityRepository;
 import com.simon.service.SideMenuAuthorityService;
@@ -19,11 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
-* @author SimonSun
-* @date 2019-01-14
-**/
+ * @author SimonSun
+ * @date 2019-01-14
+ **/
 @Slf4j
 @Service
 @Transactional(rollbackFor = {Exception.class})
@@ -34,13 +36,16 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
     @Autowired
     private SideMenuAuthorityRepository sideMenuAuthorityRepository;
 
+    @Autowired
+    private SideMenuMapper sideMenuMapper;
+
     @Override
     public long count() {
         return sideMenuAuthorityRepository.count();
     }
 
     @Override
-    public SideMenuAuthority save(SideMenuAuthority sideMenuAuthority){
+    public SideMenuAuthority save(SideMenuAuthority sideMenuAuthority) {
         return sideMenuAuthorityRepository.save(sideMenuAuthority);
     }
 
@@ -50,14 +55,14 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
     }
 
     @Override
-    public PageInfo<SideMenuAuthority> findAll(Integer pageNo, Integer pageSize, String orderBy){
-        if (null == pageSize){
+    public PageInfo<SideMenuAuthority> findAll(Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         List<SideMenuAuthority> list = sideMenuAuthorityMapper.selectAll();
@@ -65,64 +70,64 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
     }
 
     @Override
-    public Page<SideMenuAuthority> findAll(Pageable pageable){
+    public Page<SideMenuAuthority> findAll(Pageable pageable) {
         return sideMenuAuthorityRepository.findAll(pageable);
     }
 
     @Override
-    public List<SideMenuAuthority> findAll(){
+    public List<SideMenuAuthority> findAll() {
         return sideMenuAuthorityRepository.findAll();
     }
 
     @Override
-    public void delete(Long id){
+    public void delete(Long id) {
         sideMenuAuthorityRepository.delete(id);
     }
 
     @Override
-    public int deleteByIds(String ids){
+    public int deleteByIds(String ids) {
         return sideMenuAuthorityMapper.deleteByIds(ids);
     }
 
     @Override
-    public SideMenuAuthority findById(Long id){
+    public SideMenuAuthority findById(Long id) {
         return sideMenuAuthorityRepository.findOne(id);
     }
 
     @Override
-    public int insertList(List<SideMenuAuthority> list){
+    public int insertList(List<SideMenuAuthority> list) {
         return sideMenuAuthorityMapper.insertList(list);
     }
 
     @Override
-    public int insert(SideMenuAuthority sideMenuAuthority){
+    public int insert(SideMenuAuthority sideMenuAuthority) {
         return sideMenuAuthorityMapper.insert(sideMenuAuthority);
     }
 
     @Override
-    public int insertSelective(SideMenuAuthority sideMenuAuthority){
+    public int insertSelective(SideMenuAuthority sideMenuAuthority) {
         return sideMenuAuthorityMapper.insertSelective(sideMenuAuthority);
     }
 
     @Override
-    public int updateByPrimaryKey(SideMenuAuthority sideMenuAuthority){
+    public int updateByPrimaryKey(SideMenuAuthority sideMenuAuthority) {
         return sideMenuAuthorityMapper.updateByPrimaryKey(sideMenuAuthority);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(SideMenuAuthority sideMenuAuthority){
+    public int updateByPrimaryKeySelective(SideMenuAuthority sideMenuAuthority) {
         return sideMenuAuthorityMapper.updateByPrimaryKeySelective(sideMenuAuthority);
     }
 
     @Override
     public PageInfo<SideMenuAuthority> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         List<SideMenuAuthority> list = sideMenuAuthorityMapper.getList(params);
@@ -130,14 +135,18 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
     }
 
     @Override
-    public void updateAuth(String sideMenuIds, String authority) {
-        sideMenuAuthorityMapper.deleteByAuthorityAndNotIn(authority, sideMenuIds);
-        String[] sideMenuIdArr = sideMenuIds.split(",");
+    public void updateAuth(List<Long> sideMenuIds, String authority) {
+        sideMenuAuthorityMapper.deleteByAuthorityAndNotIn(authority, StringUtils.join(sideMenuIds, ","));
+        //获取linkIds，并合并sideMenuIds和linkIds
+        sideMenuIds.addAll(sideMenuMapper.getLinkIdsByIds(sideMenuIds.toArray(new Long[0])));
+        //去重
+        sideMenuIds = sideMenuIds.stream().distinct().collect(Collectors.toList());
+
         List<SideMenuAuthority> sideMenuAuthorityList = new ArrayList<>();
-        for(String sideMenuId : sideMenuIdArr){
+        for (Long sideMenuId : sideMenuIds) {
             SideMenuAuthority sideMenuAuthority = new SideMenuAuthority();
             sideMenuAuthority.setAuthority(authority);
-            sideMenuAuthority.setSideMenuId(Long.parseLong(sideMenuId));
+            sideMenuAuthority.setSideMenuId(sideMenuId);
             sideMenuAuthorityList.add(sideMenuAuthority);
         }
         sideMenuAuthorityMapper.insertList(sideMenuAuthorityList);

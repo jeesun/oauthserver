@@ -134,10 +134,13 @@
                     for (let key in response.data.rows) {
                         this.$set(this.tableData, key, response.data.rows[key]);
                     }
-                }).catch((response) => {
+                }).catch((error) => {
                     this.tableLoading = false;
-                    console.error(response);
-                    parent.showMsg("发生错误");
+                    let errorMessage = "发生错误";
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
                 });
             },
             //每页显示数据量变更
@@ -177,7 +180,7 @@
                     jobStatus: 1
                 }).then((response) => {
                         parent.closeLoading();
-                        parent.showMsg("任务已启动");
+                        parent.showSuccess("任务已启动");
                         parent.updateListData();
                         closeLayer();
                     }).catch((error) => {
@@ -196,7 +199,7 @@
                     jobStatus: 0
                 }).then((response) => {
                     parent.closeLoading();
-                    parent.showMsg("任务已停止");
+                    parent.showSuccess("任务已停止");
                     parent.updateListData();
                     closeLayer();
                 }).catch((error) => {
@@ -229,7 +232,7 @@
             doDelete(index, row) {
                 this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
-                        parent.showMsg("删除成功");
+                        parent.showSuccess("删除成功");
                         this.loadData(this.pageNo, this.pageSize);
                     }).catch((response) => {
                     console.error(response);

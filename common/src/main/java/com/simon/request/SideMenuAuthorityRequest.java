@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author simon
@@ -16,7 +17,7 @@ import java.io.Serializable;
 public class SideMenuAuthorityRequest implements Serializable {
     private static final long serialVersionUID = -6446735244844186753L;
 
-    private String ids;
+    private List<Long> ids;
 
     private String authority;
 }

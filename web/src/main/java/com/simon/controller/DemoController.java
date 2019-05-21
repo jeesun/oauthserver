@@ -3,6 +3,7 @@ package com.simon.controller;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.service.ProvinceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import java.util.Map;
  * @author simon
  * @date 2018-12-29
  **/
-
+@Slf4j
 @Controller
 @RequestMapping("/api/demos")
 public class DemoController {
@@ -51,5 +52,6 @@ public class DemoController {
     public ResultMsg getProvince(){
         return ResultMsg.success(provinceService.findAll());
     }
+
 
 }

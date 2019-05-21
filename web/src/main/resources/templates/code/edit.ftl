@@ -104,15 +104,15 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showMsg("新增成功");
+                            parent.showSuccess("新增成功");
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
+                            parent.closeLoading();
                             let errorMessage = "发生错误";
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.closeLoading();
                             parent.showError(errorMessage);
                         });
                     } else {

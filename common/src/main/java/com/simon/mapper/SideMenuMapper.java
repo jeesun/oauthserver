@@ -72,4 +72,11 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
      * @return 一级菜单列表
      */
     List<SideMenuDto> getLevel1();
+
+    /**
+     * 根据菜单id获取关联
+     * @param ids 菜单ids
+     * @return 关联ids
+     */
+    List<Long> getLinkIdsByIds(@Param("ids") Long[] ids);
 }
