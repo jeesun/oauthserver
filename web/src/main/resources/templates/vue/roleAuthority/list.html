@@ -3,49 +3,60 @@
 <head th:replace="components/vue/vue-list :: head('权限列表', 'list')"></head>
 <body>
 <div id="app">
-    <template>
-        <!--<div style="margin-left: 6px;margin-bottom: 6px;">
-            <el-form :inline="true" :model="searchForm" style="margin: 0; padding: 0;">
-                <el-form-item label="字典名称">
-                    <el-input size="small" v-model="searchForm.typeName" placeholder="请输入字典名称" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="字典编码">
-                    <el-input size="small" v-model="searchForm.typeCode" placeholder="请输入字典编码" clearable></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch">搜索</el-button>
-                    <el-button size="mini" icon="el-icon-refresh" @click="doReset">重置</el-button>
-                </el-form-item>
-            </el-form>
-            <el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd">新增</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport">导入</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>
-        </div>-->
-        <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
-                  style="font-size: 12px"
-                  v-loading="tableLoading" cell-style="padding:1px">
-            <el-table-column align="center" type="index" :index="indexSerial" width="50"></el-table-column>
-            <el-table-column align="center" prop="id" label="id" width="180"></el-table-column>
-            <el-table-column align="center" prop="typeName" label="字典名称" width="180"></el-table-column>
-            <el-table-column align="center" prop="typeCode" label="字典编码" width="180"></el-table-column>
-            <el-table-column align="center" label="操作" width="200">
-                <template slot-scope="scope">
-                    <el-button size="mini" type="primary" icon="el-icon-edit"
-                               @click="handleEdit(scope.$index, scope.row)">编辑
-                    </el-button>
-                    <!--<el-button size="mini" type="danger" icon="el-icon-delete"
-                               @click="handleDelete(scope.$index, scope.row)">删除
-                    </el-button>-->
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-col class="toolbar" style="padding:10px;">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNo"
-                           :page-sizes="[10, 20, 30, 40]" :page-size="pageSize"
-                           layout="total, sizes, prev, pager, next, jumper" :total="total"
-                           style="float:right"></el-pagination>
+    <el-row>
+        <el-col :span="15">
+            <template>
+                <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
+                          style="font-size: 12px"
+                          v-loading="tableLoading" cell-style="padding:1px">
+                    <el-table-column align="center" type="index" :index="indexSerial" width="50"></el-table-column>
+                    <el-table-column align="center" prop="id" label="id" width="180"></el-table-column>
+                    <el-table-column align="center" prop="typeName" label="字典名称" width="160"></el-table-column>
+                    <el-table-column align="center" prop="typeCode" label="字典编码" width="160"></el-table-column>
+                    <el-table-column align="center" label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="primary" icon="el-icon-edit"
+                                       @click="handleEdit(scope.$index, scope.row)">
+                            </el-button>
+                            <!--<el-button size="mini" type="danger" icon="el-icon-delete"
+                                       @click="handleDelete(scope.$index, scope.row)">删除
+                            </el-button>-->
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-col class="toolbar" style="padding:10px;">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNo"
+                                   :page-sizes="[10, 20, 30, 40]" :page-size="pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper" :total="total"
+                                   style="float:right"></el-pagination>
+                </el-col>
+            </template>
         </el-col>
-    </template>
+        <el-col :offset="1" :span="8">
+            <el-card shadow="never">
+                <div slot="header">
+                    <span>权限列表{{ruleForm.authority}}</span>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="submitForm('ruleForm')"><i class="fas fa-save" style="color: #409EFF"></i>&nbsp;保存</el-button>
+                </div>
+                <div style="height:400px;overflow-y:auto;overflow-x:hidden;">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm" height="300px">
+                        <el-form-item label="" prop="name">
+                            <el-tree
+                                    :data="treeData"
+                                    show-checkbox
+                                    default-expand-all
+                                    node-key="id"
+                                    ref="tree"
+                                    highlight-current
+                                    :props="defaultProps">
+                            </el-tree>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
+
 </div>
 </body>
 <script th:src="@{/js/vue/common.js}"></script>
@@ -59,8 +70,10 @@
     var requestUrls = {
         list: "/api/roleAuthorities/data",
         add: "/api/roleAuthorities/add",
-        edit: "/api/roleAuthorities/authConfig?typeCode=",
-        delete: "/api/roleAuthorities/ids/"
+        edit: "",
+        delete: "/api/roleAuthorities/ids/",
+        authData: "/api/roleAuthorities/authData",
+        updateAuth: "/api/roleAuthorities/updateAuth"
     };
 
     var app = new Vue({
@@ -74,14 +87,78 @@
             searchForm: {
                 typeName: '',
                 typeCode: ''
+            },
+            treeData: [],
+            checkedKeys: [],
+            ruleForm: {
+                ids: "",
+                authority: ''
+            },
+            rules: {
+
+            },
+            defaultProps: {
+                children: 'children',
+                label: 'text'
             }
         },
         mounted: function () {
             this.loadData(this.pageNo, this.pageSize);
+            //this.loadTreeData();
         },
         methods: {
             indexSerial(index) {
                 return index + 1 + (this.pageNo - 1) * this.pageSize;
+            },
+            loadTreeData(){
+                let params_ = {
+                    typeCode: this.ruleForm.authority
+                };
+                this.$http.get(requestUrls.authData, {
+                    params: params_
+                }).then((response) => {
+                    this.treeData = response.data.data;
+                    this.setCheckedKeys();
+                    this.$refs.tree.setCheckedKeys(this.checkedKeys);
+                }).catch((error) => {
+                    let errorMessage = "发生错误";
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
+                });
+            },
+            setCheckedKeys() {
+                //通过 key 设置
+                loadChecked(this.treeData);
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.ruleForm.ids = this.$refs.tree.getCheckedKeys().join(",");
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.post(requestUrls.updateAuth, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showSuccess("更新成功");
+                            parent.updateListData();
+                            closeLayer();
+                        }).catch((error) => {
+                            parent.closeLoading();
+                            let errorMessage = "发生错误";
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.showError(errorMessage);
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
             },
             loadData(pageNo, pageSize) {
                 if (!isNaN(pageNo)) {
@@ -164,10 +241,14 @@
                 return '<img class="image-thumb" src="' + [[${filePathPrefix}]] + value + '" alt="头像" width="30px">';
             },
             handleEdit(index, row) {
-                parent.showWindow({
+                /*parent.showWindow({
                     title: '新增',
                     content: requestUrls.edit + row.typeCode
-                });
+                });*/
+                this.ruleForm.authority = row.typeCode;
+                this.treeData = [];
+                this.checkedKeys = [];
+                this.loadTreeData();
             },
             handleDelete(index, row) {
                 parent.showDelete(index, row);
@@ -217,6 +298,21 @@
         app.loadData(app.pageNo, app.pageSize);
     }
 
+    /**
+     * 递归初始化选中
+     */
+    function loadChecked(treeData) {
+        if (treeData && treeData.length) {
+            for(let i = 0; i < treeData.length; i++){
+                if (treeData[i].checked){
+                    app.checkedKeys.push(treeData[i].id);
+                }
+                if (treeData[i].children && treeData[i].children.length) {
+                    loadChecked(treeData[i].children);
+                }
+            }
+        }
+    }
     /*]]>*/
 </script>
 </html>

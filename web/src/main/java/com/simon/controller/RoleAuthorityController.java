@@ -60,12 +60,6 @@ public class RoleAuthorityController extends BaseController {
         return new EasyUIDataGridResult<>(dictTypeService.getTypeByGroupCode("role_type"));
     }
 
-    @GetMapping("authConfig")
-    public String authConfig(@RequestParam String typeCode, Model model){
-        model.addAttribute("typeCode", typeCode);
-        return "vue/roleAuthority/auth_config";
-    }
-
     @GetMapping("authData")
     @ResponseBody
     public ResultMsg<List<EasyUiTreeDto>> getAuthData(@RequestParam String typeCode){
