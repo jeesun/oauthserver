@@ -91,7 +91,7 @@
             treeData: [],
             checkedKeys: [],
             ruleForm: {
-                ids: "",
+                ids: [],
                 authority: ''
             },
             rules: {
@@ -134,7 +134,7 @@
             },
             submitForm(formName) {
                 parent.openLoading();
-                this.ruleForm.ids = this.$refs.tree.getCheckedKeys().join(",");
+                this.ruleForm.ids = this.$refs.tree.getCheckedKeys();
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$http.post(requestUrls.updateAuth, this.ruleForm).then((response) => {

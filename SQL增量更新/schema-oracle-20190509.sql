@@ -52,3 +52,6 @@ ALTER TABLE T_SIDE_MENU_AUTHORITY ADD PRIMARY KEY (ID);
 ALTER TABLE T_USERS ADD PRIMARY KEY (ID);
 ALTER TABLE T_VERI_CODE ADD PRIMARY KEY (ID);
 CREATE UNIQUE INDEX ix_auth_username ON T_AUTHORITIES (user_id ASC, authority ASC);
+
+-- 2019-05-21 by simon 修改数据
+update t_side_menu set url='/api/loggingEvents/list' where id=93126997827387392;

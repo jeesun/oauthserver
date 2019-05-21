@@ -102,7 +102,7 @@ public class NewsInfoController extends BaseController{
     @ApiOperation(value = "修改")
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg update(@RequestBody NewsInfo body, Authentication authentication){
+    public ResultMsg edit(@RequestBody NewsInfo body, Authentication authentication){
         UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());

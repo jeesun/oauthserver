@@ -496,4 +496,16 @@
         ORDER BY
             order_num asc
     </select>
+
+    <select id="getLinkIdsByIds" parameterType="arraylist" resultType="long">
+        SELECT DISTINCT
+            link_id
+        FROM
+            t_side_menu
+        WHERE
+            id IN
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>
