@@ -2,6 +2,7 @@ package com.simon.common.utils;
 
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -84,5 +85,9 @@ public class DateUtil {
         LocalDate localDate = LocalDate.now();
         LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static String currentTimeString() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
     }
 }

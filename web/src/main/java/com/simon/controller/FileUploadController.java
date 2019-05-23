@@ -6,6 +6,7 @@ import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.exception.BusinessException;
 import com.simon.common.plugins.qiniu.QiNiuUtil;
+import com.simon.common.utils.DateUtil;
 import com.simon.common.utils.FileUploadUtil;
 import com.simon.dto.ueditor.FileInfo;
 import io.swagger.annotations.Api;
@@ -47,6 +48,15 @@ public class FileUploadController extends BaseController {
 
     @Value("${server.port}")
     private String serverPort;
+
+    /**
+     * http/https
+     */
+    @Value("${file.upload.http}")
+    private String http;
+
+    @Value("${file.upload.server-ip}")
+    private String serverIp;
 
     @Autowired
     public FileUploadController(ResourceLoader resourceLoader){
@@ -109,16 +119,20 @@ public class FileUploadController extends BaseController {
             throw new BusinessException("缺少文件");
         }
         if(AppConfig.FILE_UPLOAD_TYPE_QINIU.equals(fileUploadType)){
-            QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).uploadCommonsMultipartFile(files.get(0), ROOT + "/" + files.get(0).getOriginalFilename(), true);
+            String originFileName = files.get(0).getOriginalFilename();
+            String fileType = originFileName.substring(originFileName.lastIndexOf("."));
+            String fileName = DateUtil.currentTimeString() + fileType;
+
+            QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).uploadCommonsMultipartFile(files.get(0), ROOT + "/" + fileName, true);
             FileInfo fileInfo = new FileInfo();
             fileInfo.setCode(200);
             fileInfo.setState("SUCCESS");
             fileInfo.setOriginal(files.get(0).getOriginalFilename());
-            fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + files.get(0).getOriginalFilename());
+            fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + fileName);
             fileInfo.setTitle(files.get(0).getOriginalFilename());
             return fileInfo;
         }else{
-            String[] savedFiles = FileUploadUtil.saveFiles(files.toArray(new MultipartFile[files.size()]));
+            String[] savedFiles = FileUploadUtil.saveFiles(files.toArray(new MultipartFile[0]));
             if(null == savedFiles || savedFiles.length <= 0){
                 throw new BusinessException("存储文件失败");
             }
@@ -126,8 +140,8 @@ public class FileUploadController extends BaseController {
             fileInfo.setCode(200);
             fileInfo.setState("SUCCESS");
             fileInfo.setOriginal(files.get(0).getOriginalFilename());
-            fileInfo.setUrl("http://localhost:" + serverPort + savedFiles[0]);
-            fileInfo.setTitle(files.get(0).getOriginalFilename());
+            fileInfo.setUrl(http + "://" + serverIp + ":" + serverPort + savedFiles[0]);
+            fileInfo.setTitle(savedFiles[0]);
             return fileInfo;
         }
     }

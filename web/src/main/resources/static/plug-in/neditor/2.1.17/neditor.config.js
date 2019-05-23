@@ -24,12 +24,15 @@
      * 配置项主体。注意，此处所有涉及到路径的配置别遗漏URL变量。
      */
     window.UEDITOR_CONFIG = {
+        videoAllowFiles: [
+            ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",
+            ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid"],
         //为编辑器实例添加一个路径，这个不能被注释
         UEDITOR_HOME_URL: URL,
 
         // 服务器统一请求接口路径
         //serverUrl: window.NEDITOR_UPLOAD || URL + "php/controller.php",
-        serverUrl: "",
+        serverUrl: "/fileUploads/ueditor/upload/file",
         imageActionName: "uploadimage",
         scrawlActionName: "uploadscrawl",
         videoActionName: "uploadvideo",
