@@ -1,6 +1,5 @@
 package com.simon.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultCode;
@@ -8,7 +7,6 @@ import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.exception.RegisterException;
 import com.simon.common.utils.BeanUtils;
-import com.simon.dto.StatisticDto;
 import com.simon.model.OauthUser;
 import com.simon.service.OauthUserService;
 import com.simon.service.SmsService;
@@ -20,13 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
-import java.util.List;
 
 /**
  * @author simon
@@ -47,14 +43,15 @@ public class OauthUserController extends BaseController {
     @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
     private SmsService smsService;
 
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @ApiOperation("获取用户信息")
     @GetMapping("/userInfo")
     @ResponseBody
-    public ResultMsg getUserInfo(Authentication authentication){
+    public ResultMsg getUserInfo(Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
-        if(null != userEntity){
+        if (null != userEntity) {
             return ResultMsg.success(userEntity);
         }
         return ResultMsg.fail(ResultCode.FAIL);
@@ -67,15 +64,15 @@ public class OauthUserController extends BaseController {
     public ResultMsg register(
             @ApiParam(value = "区号", required = true, defaultValue = "+86") @RequestParam String areaCode,
             @ApiParam(value = "手机号", required = true) @RequestParam String phone,
-            @ApiParam(value = "验证码", required = true) @RequestParam String code){
-        if(smsService.checkCode(phone, code)){
+            @ApiParam(value = "验证码", required = true) @RequestParam String code) {
+        if (smsService.checkCode(phone, code)) {
             //手机号验证码正确，注册账号
             OauthUser oauthUser = oauthUserService.registerByPhone(areaCode, phone);
-            if (null == oauthUser){
+            if (null == oauthUser) {
                 throw new RegisterException("注册失败，请稍后重试");
             }
             return ResultMsg.success();
-        }else{
+        } else {
             return ResultMsg.fail(ResultCode.ERROR_VERI_CODE);
         }
     }
@@ -86,13 +83,13 @@ public class OauthUserController extends BaseController {
     @ResponseBody
     public ResultMsg register(
             @ApiParam(value = "账号（手机号、邮箱、用户名）", required = true) @RequestParam String account,
-            @ApiParam(value = "密码", required = true)@RequestParam String password){
+            @ApiParam(value = "密码", required = true) @RequestParam String password) {
         return ResultMsg.success();
     }
 
     @PostMapping(value = "")
     @ResponseBody
-    public ResultMsg add(@RequestBody OauthUser body){
+    public ResultMsg add(@RequestBody OauthUser body) {
         body.setPassword(passwordEncoder.encode(body.getPassword()));
         oauthUserService.save(body);
         return ResultMsg.success();
@@ -100,25 +97,18 @@ public class OauthUserController extends BaseController {
 
     @DeleteMapping("/ids/{ids}")
     @ResponseBody
-    public ResultMsg delete(@PathVariable String ids){
+    public ResultMsg delete(@PathVariable String ids) {
         oauthUserService.deleteByIds(ids);
         return ResultMsg.success();
-    }
-
-    @PermitAll
-    @GetMapping("/statistics/sex")
-    @ResponseBody
-    public ResultMsg<List<StatisticDto>> sexRatio(){
-        return ResultMsg.success(oauthUserService.sexRatio());
     }
 
     @ApiOperation(value = "更新个人信息")
     @PatchMapping
     @ResponseBody
-    public ResultMsg update(@RequestBody OauthUser oauthUser, Authentication authentication){
+    public ResultMsg update(@RequestBody OauthUser oauthUser, Authentication authentication) {
         oauthUserService.updateByPrimaryKeySelective(oauthUser);
         UserEntity userEntity = getCurrentUser(authentication);
-        if(null != userEntity){
+        if (null != userEntity) {
             //更新session中的principal
             BeanUtils.copyPropertiesIgnoreNull(oauthUser, userEntity);
         }

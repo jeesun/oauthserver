@@ -27,6 +27,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -185,6 +191,13 @@
             <artifactId>dayu-source</artifactId>
         </dependency>
         <!-- ali dayu end -->
+
+        <!-- 腾讯云短信服务 start -->
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+        </dependency>
+        <!-- 腾讯云短信服务 end -->
 
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
