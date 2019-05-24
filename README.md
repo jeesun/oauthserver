@@ -9,6 +9,9 @@
 </p>
 
 # oauthserver
+
+国内用户可访问[gitee](https://gitee.com/jeesun/oauthserver)，代码和[github](https://github.com/jeesun/oauthserver)同步。
+
 ## 简介
 oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。项目的目的是，仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
 为了开发方便，项目拆分成三个模块，api、web和common：
