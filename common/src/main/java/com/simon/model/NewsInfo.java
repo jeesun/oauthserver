@@ -42,6 +42,7 @@ public class NewsInfo implements Serializable{
     @Column(name = "create_by")
     private Long createBy;
 
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
@@ -52,6 +53,7 @@ public class NewsInfo implements Serializable{
     @Column(name = "update_by")
     private Long updateBy;
 
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
@@ -61,6 +63,7 @@ public class NewsInfo implements Serializable{
     @Column(name = "title")
     private String title;
 
+    @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "用户id")
     @Column(name = "user_id")
     private Long userId;
@@ -77,6 +80,7 @@ public class NewsInfo implements Serializable{
     @Column(name = "image_url")
     private String imageUrl;
 
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "发布时间")
     @Column(name = "publish_date")

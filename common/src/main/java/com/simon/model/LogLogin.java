@@ -40,6 +40,7 @@ public class LogLogin implements Serializable{
     @Column(name = "create_by")
     private Long createBy;
 
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
@@ -50,12 +51,15 @@ public class LogLogin implements Serializable{
     @Column(name = "update_by")
     private Long updateBy;
 
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    @ApiModelProperty(value = "create_time")
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
+    @ApiModelProperty(value = "创建时间")
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
