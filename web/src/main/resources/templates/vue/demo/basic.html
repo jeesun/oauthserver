@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('介绍', 'home,echarts')"></head>
+<body>
+<div id="app">
+
+</div>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {};
+
+    var app = new Vue({
+        el: '#app',
+        data: {},
+        mounted: function () {
+
+        },
+        methods: {}
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

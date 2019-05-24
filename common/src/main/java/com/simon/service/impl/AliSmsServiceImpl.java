@@ -9,11 +9,11 @@ import com.taobao.api.domain.BizResult;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +52,11 @@ public class AliSmsServiceImpl implements SmsService {
     private org.springframework.cache.CacheManager cacheManager;
 
     @Override
-    public boolean sendIdentifyCode(String mobile) {
-        var code = RandomUtils.nextInt(100000, 999999);
-        var client = new DefaultTaobaoClient(
+    public boolean sendIdentifyCode(String nationCode, String mobile) {
+        int code = RandomUtils.nextInt(100000, 999999);
+        DefaultTaobaoClient client = new DefaultTaobaoClient(
                 DAYU_URL_REAL, DAYU_APP_KEY, DAYU_APP_SECRET);
-        var req = new AlibabaAliqinFcSmsNumSendRequest();
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("");
         req.setSmsType(DAYU_SMS_TYPE);
         req.setSmsFreeSignName(DAYU_SMS_FREE_SIGN_NAME);
@@ -68,7 +68,7 @@ public class AliSmsServiceImpl implements SmsService {
             BizResult bizResult = rsp.getResult();
             if (null != bizResult && bizResult.getSuccess()){
                 //写入缓存
-                var cache = cacheManager.getCache("smsCache");
+                Cache cache = cacheManager.getCache("smsCache");
                 cache.put(mobile, code);
 
                 return true;
@@ -85,18 +85,16 @@ public class AliSmsServiceImpl implements SmsService {
 
     @Override
     public boolean checkCode(String mobile, String code) {
-        log.info("checkCode");
-        var cache = cacheManager.getCache("smsCache");
-        var ele = cache.get(mobile);
+        Cache cache = cacheManager.getCache("smsCache");
+        Cache.ValueWrapper ele = cache.get(mobile);
 
         if (null == ele) {
             throw new BusinessException(ResultCode.ERROR_VERI_CODE);
         }
 
         String output = ele.get().toString();
-        log.info("从缓存中读到" + mobile + "," + output);
 
-        var result = false;
+        boolean result = false;
 
         if (StringUtils.isEmpty(output)) {
             throw new BusinessException(ResultCode.ERROR_VERI_CODE);

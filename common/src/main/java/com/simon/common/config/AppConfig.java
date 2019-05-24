@@ -50,14 +50,12 @@ public class AppConfig {
     public static String FILE_UPLOAD_TYPE_LOCAL = "local";
     public static String FILE_UPLOAD_TYPE_QINIU = "qiniu";
 
-    public static String SMS_TEMPLATE = "【thymelte】您的验证码是:%s，在5分钟内有效。如非本人操作请忽略本短信。";
-
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_SU = "ROLE_SU";
 
     /**
-     * 可选值yzxSmsServiceImpl，aliSmsServiceImpl
+     * 可选值{"云之讯": "yzxSmsServiceImpl"，"阿里大鱼": "aliSmsServiceImpl", "腾讯云": "txSmsServiceImpl"}
      */
     public static final String SMS_SERVICE_IMPL = "yzxSmsServiceImpl";
 

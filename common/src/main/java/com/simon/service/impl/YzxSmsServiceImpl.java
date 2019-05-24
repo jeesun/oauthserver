@@ -2,17 +2,16 @@ package com.simon.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simon.common.config.AppConfig;
 import com.simon.common.domain.ResultCode;
 import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.SmsUtil;
 import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,13 +35,14 @@ public class YzxSmsServiceImpl implements SmsService {
     @Value("${sms.password}")
     private String password;
 
-    private String identityCodeMsgTemplate = AppConfig.SMS_TEMPLATE;
+    @Value("${sms.identity-code-msg-template}")
+    private String identityCodeMsgTemplate;
 
     @Autowired
     private org.springframework.cache.CacheManager cacheManager;
 
     @Override
-    public boolean sendIdentifyCode(String mobile) {
+    public boolean sendIdentifyCode(String nationCode, String mobile) {
         int code = RandomUtils.nextInt(100000, 999999);
         String content = String.format(identityCodeMsgTemplate, code);
         String result = SmsUtil.getInstance().sendSMS(clientid, password, mobile, content, "4");
@@ -57,10 +57,9 @@ public class YzxSmsServiceImpl implements SmsService {
                     if (index != null) {
                         responseCode = index.getString("code");
                         if ("0".equals(responseCode)) {
-                            log.info("发送成功");
                             ret = true;
                             //写入缓存
-                            var cache = cacheManager.getCache("smsCache");
+                            Cache cache = cacheManager.getCache("smsCache");
                             cache.put(mobile, code);
                         }
                     }
@@ -72,18 +71,16 @@ public class YzxSmsServiceImpl implements SmsService {
 
     @Override
     public boolean checkCode(String mobile, String code) {
-        log.info("checkCode");
-        var cache = cacheManager.getCache("smsCache");
-        var ele = cache.get(mobile);
+        Cache cache = cacheManager.getCache("smsCache");
+        Cache.ValueWrapper ele = cache.get(mobile);
 
         if (null == ele) {
             throw new BusinessException(ResultCode.ERROR_VERI_CODE);
         }
 
         String output = ele.get().toString();
-        log.info("从缓存中读到" + mobile + "," + output);
 
-        var result = false;
+        boolean result = false;
 
         if (StringUtils.isEmpty(output)) {
             throw new BusinessException(ResultCode.ERROR_VERI_CODE);

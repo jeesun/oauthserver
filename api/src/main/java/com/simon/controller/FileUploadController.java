@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
+import com.simon.common.exception.BusinessException;
 import com.simon.common.plugins.qiniu.QiNiuUtil;
+import com.simon.common.utils.DateUtil;
 import com.simon.common.utils.FileUploadUtil;
+import com.simon.dto.ueditor.FileInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +17,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +34,6 @@ import java.util.Map;
  * @author simon
  * @date 2018-10-05
  **/
-
 @Api(description = "文件上传")
 @Slf4j
 @RestController
@@ -37,10 +42,21 @@ public class FileUploadController extends BaseController {
     private final ResourceLoader resourceLoader;
 
     private final String ROOT = AppConfig.FILE_UPLOAD_DIR;
-    private final String fileUploadType = AppConfig.FILE_UPLOAD_TYPE;
+
+    @Value("${file.upload.type}")
+    private String fileUploadType;
 
     @Value("${server.port}")
     private String serverPort;
+
+    /**
+     * http/https
+     */
+    @Value("${file.upload.http}")
+    private String http;
+
+    @Value("${file.upload.server-ip}")
+    private String serverIp;
 
     @Autowired
     public FileUploadController(ResourceLoader resourceLoader){
@@ -96,16 +112,37 @@ public class FileUploadController extends BaseController {
         return resultMap;
     }
 
-    /*@ApiOperation(value = "文件下载")
-    @GetMapping("/fileUpload/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        Resource file = resourceLoader.getResource("file:" + Paths.get(ROOT, filename));
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }*/
+    @RequestMapping(value = "/ueditor/upload/file", method = {RequestMethod.GET, RequestMethod.POST})
+    public FileInfo uploadFile(HttpServletRequest request){
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        if (null == files || files.size() <= 0){
+            throw new BusinessException("缺少文件");
+        }
+        if(AppConfig.FILE_UPLOAD_TYPE_QINIU.equals(fileUploadType)){
+            String originFileName = files.get(0).getOriginalFilename();
+            String fileType = originFileName.substring(originFileName.lastIndexOf("."));
+            String fileName = DateUtil.currentTimeString() + fileType;
 
-    /*@ApiOperation(value = "文件获取")
-    @GetMapping("/fileUpload/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename){
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/octet-stream").body(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
-    }*/
+            QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).uploadCommonsMultipartFile(files.get(0), ROOT + "/" + fileName, true);
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setCode(200);
+            fileInfo.setState("SUCCESS");
+            fileInfo.setOriginal(files.get(0).getOriginalFilename());
+            fileInfo.setUrl(QiNiuUtil.getInstance().setZoneType(QiNiuUtil.ZoneType.ZONE_PUBLIC).getDomainOfBucket() + "/" + ROOT + "/" + fileName);
+            fileInfo.setTitle(files.get(0).getOriginalFilename());
+            return fileInfo;
+        }else{
+            String[] savedFiles = FileUploadUtil.saveFiles(files.toArray(new MultipartFile[0]));
+            if(null == savedFiles || savedFiles.length <= 0){
+                throw new BusinessException("存储文件失败");
+            }
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setCode(200);
+            fileInfo.setState("SUCCESS");
+            fileInfo.setOriginal(files.get(0).getOriginalFilename());
+            fileInfo.setUrl(http + "://" + serverIp + ":" + serverPort + savedFiles[0]);
+            fileInfo.setTitle(savedFiles[0]);
+            return fileInfo;
+        }
+    }
 }

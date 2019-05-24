@@ -19,12 +19,13 @@ import com.simon.model.Authority;
 import com.simon.model.OauthUser;
 import com.simon.repository.AuthorityRepository;
 import com.simon.repository.OauthUserRepository;
-import com.simon.repository.VeriCodeRepository;
 import com.simon.service.OauthUserService;
+import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
@@ -55,9 +56,6 @@ public class OauthUserServiceImpl implements OauthUserService {
     private OauthUserRepository oauthUserRepository;
 
     @Autowired
-    private VeriCodeRepository veriCodeRepository;
-
-    @Autowired
     private AuthorityRepository authorityRepository;
 
     @Autowired
@@ -69,31 +67,30 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
+    private SmsService smsService;
+
     @Override
-    public void register(Integer code, String phone, String password) {
-        //加密密码
-        var encoder = new BCryptPasswordEncoder(11);
-        password = encoder.encode(password);
-        if(null != code){
-            var veriCode = veriCodeRepository.findByPhoneAndCode(phone, code);
-            if(null != veriCode){
+    public void register(String code, String phone, String password) {
+        password = passwordEncoder.encode(password);
+        if (null != code) {
+            if (smsService.checkCode(phone, code)) {
                 register(phone, password);
-            }else{
+            } else {
                 throw new CodeInvalidException();
             }
             register(phone, password);
         }
     }
 
-    @Transactional
-    @Override
-    public void register(String phone, String password){
-        if(null != oauthUserRepository.findByPhone(phone)){
+    public void register(String phone, String password) {
+        if (null != oauthUserRepository.findByPhone(phone)) {
             throw new PhoneRegisteredException();
         }
 
         var oauthUser = new OauthUser();
-        oauthUser.setUsername("user" + phone.substring(phone.length()-4, phone.length()));
+        oauthUser.setUsername("user" + phone.substring(phone.length() - 4, phone.length()));
         oauthUser.setPhone(phone);
         oauthUser.setPassword(password);
         oauthUser.setEnabled(true);
@@ -106,14 +103,11 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public int updatePwdByCode(String phone, Integer code, String newPwd) {
-        //加密密码
-        var encoder = new BCryptPasswordEncoder(11);
-        newPwd = encoder.encode(newPwd);
-        var veriCode = veriCodeRepository.findByPhoneAndCode(phone, code);
-        if(null != veriCode){
+    public int updatePwdByCode(String phone, String code, String newPwd) {
+        newPwd = passwordEncoder.encode(newPwd);
+        if (smsService.checkCode(phone, code)) {
             return oauthUserMapper.updatePwdByPhone(phone, newPwd);
-        }else{
+        } else {
             throw new CodeInvalidException();
         }
     }
@@ -121,16 +115,16 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public int updatePwdByOldPwd(String phone, String oldPwd, String newPwd) {
         var oauthUser = oauthUserRepository.findByPhone(phone);
-        if(null == oauthUser){
+        if (null == oauthUser) {
             throw new UserNotValidException();
         }
 
         var encoder = new BCryptPasswordEncoder(11);
-        if(encoder.matches(oldPwd, oauthUser.getPassword())){
+        if (encoder.matches(oldPwd, oauthUser.getPassword())) {
             oauthUser.setPassword(encoder.encode(newPwd));
             oauthUserRepository.save(oauthUser);
             return 1;
-        }else{
+        } else {
             throw new UserNotValidException();
         }
     }
@@ -145,15 +139,15 @@ public class OauthUserServiceImpl implements OauthUserService {
         oauthUser.setPassword(passwordEncoder.encode(oauthUser.getPassword()));
         oauthUserMapper.insertSelective(oauthUser);
 
-        if(StringUtils.isEmpty(oauthUser.getAuthorities())){
+        if (StringUtils.isEmpty(oauthUser.getAuthorities())) {
             Authority authority = new Authority();
             authority.setUserId(oauthUser.getId());
             authority.setAuthority(AppConfig.ROLE_USER);
             authorityMapper.insertSelective(authority);
-        }else{
+        } else {
             String[] authorities = oauthUser.getAuthorities().split(",");
             List<Authority> authorityList = new ArrayList<>();
-            for(int i = 0; i < authorities.length; i++){
+            for (int i = 0; i < authorities.length; i++) {
                 Authority authority = new Authority();
                 authority.setUserId(oauthUser.getId());
                 authority.setAuthority(authorities[i]);
@@ -172,13 +166,13 @@ public class OauthUserServiceImpl implements OauthUserService {
 
     @Override
     public PageInfo<OauthUser> findAll(Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         List<OauthUser> list = oauthUserMapper.selectAll();
@@ -200,9 +194,9 @@ public class OauthUserServiceImpl implements OauthUserService {
     public void delete(Long id) {
         OauthUser oauthUser = oauthUserRepository.getOne(id);
         oauthUserRepository.delete(id);
-        if(null != cacheManager){
+        if (null != cacheManager) {
             Cache cache = cacheManager.getCache("oauthUserCache");
-            if(null != cache){
+            if (null != cache) {
                 cache.evict(oauthUser.getUsername());
                 cache.evict(oauthUser.getEmail());
                 cache.evict(oauthUser.getPhone());
@@ -235,15 +229,15 @@ public class OauthUserServiceImpl implements OauthUserService {
         oauthUser.setPassword(passwordEncoder.encode(oauthUser.getPassword()));
         int result = oauthUserMapper.insertSelective(oauthUser);
 
-        if(StringUtils.isEmpty(oauthUser.getAuthorities())){
+        if (StringUtils.isEmpty(oauthUser.getAuthorities())) {
             Authority authority = new Authority();
             authority.setUserId(oauthUser.getId());
             authority.setAuthority(AppConfig.ROLE_USER);
             authorityMapper.insertSelective(authority);
-        }else{
+        } else {
             String[] authorities = oauthUser.getAuthorities().split(",");
             List<Authority> authorityList = new ArrayList<>();
-            for(int i = 0; i < authorities.length; i++){
+            for (int i = 0; i < authorities.length; i++) {
                 Authority authority = new Authority();
                 authority.setUserId(oauthUser.getId());
                 authority.setAuthority(authorities[i]);
@@ -259,9 +253,9 @@ public class OauthUserServiceImpl implements OauthUserService {
     public int updateByPrimaryKey(OauthUser model) {
         model.setPassword(passwordEncoder.encode(model.getPassword()));
         int affectLineNum = oauthUserMapper.updateByPrimaryKey(model);
-        if(null != cacheManager){
+        if (null != cacheManager) {
             Cache cache = cacheManager.getCache("oauthUserCache");
-            if(null != cache){
+            if (null != cache) {
                 OauthUser target = oauthUserRepository.findById(model.getId());
                 BeanUtils.copyPropertiesIgnoreNull(model, target);
 
@@ -281,9 +275,9 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public int updateByPrimaryKeySelective(OauthUser model) {
         int affectLineNum = oauthUserMapper.updateByPrimaryKeySelective(model);
-        if(null != cacheManager){
+        if (null != cacheManager) {
             Cache cache = cacheManager.getCache("oauthUserCache");
-            if(null != cache){
+            if (null != cache) {
                 OauthUser target = oauthUserRepository.findById(model.getId());
                 BeanUtils.copyPropertiesIgnoreNull(model, target);
 
@@ -300,13 +294,13 @@ public class OauthUserServiceImpl implements OauthUserService {
 
     @Override
     public PageInfo<OauthUser> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         List<OauthUser> list = oauthUserMapper.getList(params);
@@ -346,7 +340,7 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public OauthUser registerByPhone(String areaCode, String phone) {
         OauthUser oauthUser = oauthUserRepository.findByPhone(phone);
-        if (null == oauthUser){
+        if (null == oauthUser) {
             oauthUser = new OauthUser();
             oauthUser.setAreaCode(areaCode);
             oauthUser.setPhone(phone);
@@ -354,19 +348,19 @@ public class OauthUserServiceImpl implements OauthUserService {
             oauthUser.setUsername(UsernameUtil.generateByPhone(phone));
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
-        }else{
+        } else {
             throw new UserExistsException("用户已存在，请登录");
         }
     }
 
     @Override
     public OauthUser registerByAccountAndPwd(String account, String password) {
-        if(ValidUtil.isMobile(account)){
+        if (ValidUtil.isMobile(account)) {
             //account是手机号
 
-        }else if(ValidUtil.isEmail(account)){
+        } else if (ValidUtil.isEmail(account)) {
             //account是邮箱
-        }else{
+        } else {
 
         }
         return null;
@@ -375,7 +369,7 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public OauthUser registerByPhoneAndPwd(String phone, String password) {
         OauthUser oauthUser = oauthUserRepository.findByPhone(phone);
-        if (null == oauthUser){
+        if (null == oauthUser) {
             oauthUser = new OauthUser();
             oauthUser.setUsername(UsernameUtil.generateByPhone(phone));
             oauthUser.setPassword(passwordEncoder.encode(password));
@@ -383,7 +377,7 @@ public class OauthUserServiceImpl implements OauthUserService {
             oauthUser.setPhone(phone);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
-        }else{
+        } else {
             throw new UserExistsException("用户已存在，请登录");
         }
     }
@@ -391,7 +385,7 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public OauthUser registerByEmailAndPwd(String email, String password) {
         OauthUser oauthUser = oauthUserRepository.findByEmail(email);
-        if (null == oauthUser){
+        if (null == oauthUser) {
             oauthUser = new OauthUser();
             oauthUser.setUsername(UsernameUtil.generateByEmail(email));
             oauthUser.setPassword(passwordEncoder.encode(password));
@@ -399,7 +393,7 @@ public class OauthUserServiceImpl implements OauthUserService {
             oauthUser.setEmail(email);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
-        }else{
+        } else {
             throw new UserExistsException("用户已存在，请登录");
         }
     }
@@ -407,14 +401,14 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public OauthUser registerByUsernameAndPwd(String username, String password) {
         OauthUser oauthUser = oauthUserRepository.findByUsername(username);
-        if (null == oauthUser){
+        if (null == oauthUser) {
             oauthUser = new OauthUser();
             oauthUser.setUsername(username);
             oauthUser.setPassword(passwordEncoder.encode(password));
             oauthUser.setEnabled(true);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
-        }else{
+        } else {
             throw new UserExistsException("用户已存在，请登录");
         }
     }

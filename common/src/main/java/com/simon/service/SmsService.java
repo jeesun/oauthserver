@@ -10,10 +10,11 @@ package com.simon.service;
 public interface SmsService {
     /**
      * 发送短信验证码，并把验证码写入缓存
+     * @param nationCode 国家码 默认值：+86
      * @param mobile 手机号
      * @return 发送结果
      */
-    boolean sendIdentifyCode(String mobile);
+    boolean sendIdentifyCode(String nationCode, String mobile);
 
     /**
      * 校验短信验证码

@@ -16,11 +16,9 @@ import java.util.List;
  **/
 
 public interface OauthUserService extends BasicService<OauthUser, Long> {
-    void register(Integer code, String phone, String password);
+    void register(String code, String phone, String password);
 
-    void register(String phone, String password);
-
-    int updatePwdByCode(String phone, Integer code, String newPwd);
+    int updatePwdByCode(String phone, String code, String newPwd);
 
     int updatePwdByOldPwd(String username, String oldPwd, String newPwd);
 

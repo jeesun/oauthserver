@@ -47,6 +47,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     private Long createBy;
 
     @ExcelProperty(value = {TABLE_TITLE, "创建时间"}, index = 2, format = AppConfig.DATE_PATTERN_DATETIME)
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
@@ -59,6 +60,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     private Long updateBy;
 
     @ExcelProperty(value = {TABLE_TITLE, "更新时间"}, index = 4, format = AppConfig.DATE_PATTERN_DATETIME)
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
@@ -105,6 +107,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     private Integer age;
 
     @ExcelProperty(value = {TABLE_TITLE, "生日"}, index = 13, format = AppConfig.DATE_PATTERN_DAY)
+    @JSONField(format = AppConfig.DATE_PATTERN_DAY)
     @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_DAY)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "生日")
@@ -142,6 +145,7 @@ public class OauthUser extends BaseRowModel implements Serializable{
     private String loginStatus;
 
     @ExcelProperty(value = {TABLE_TITLE, "登录时间"}, index = 20, format = AppConfig.DATE_PATTERN_DATETIME)
+    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
     @ApiModelProperty(value = "登录时间")
     @Column(name = "login_date")
