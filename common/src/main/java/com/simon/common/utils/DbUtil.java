@@ -238,10 +238,19 @@ public class DbUtil {
             sql = "SELECT table_name, column_name, column_comment, column_type, data_type, column_default, is_nullable "
                     + "FROM INFORMATION_SCHEMA.COLUMNS " + "WHERE table_name = '" + tableName + "' AND table_schema = '" + con.getCatalog() + "'";
         } else if (dbType == DbType.POSTGRESQL) {
-            log.info(con.getCatalog());
-            sql = "SELECT delta.table_name, delta.column_name, alb.column_comment, alb.column_type, delta.data_type, delta.column_default, delta.is_nullable FROM information_schema.COLUMNS AS delta, ( SELECT C .relname AS table_name, A.attname AS column_name, col_description ( A.attrelid, A.attnum ) AS column_comment, format_type ( A.atttypid, A.atttypmod ) AS column_type, A.attnotnull AS NOTNULL FROM pg_class AS C, pg_attribute AS A WHERE C.relname = '" + tableName + "' AND A.attrelid = C.oid AND A.attnum > 0 ) AS alb WHERE table_schema = 'public' AND delta.TABLE_NAME = '" + tableName + "' AND delta.COLUMN_NAME = alb.column_name";
+            sql = "SELECT\n" +
+                    "delta.table_name,\n" +
+                    "delta.column_name,\n" +
+                    "alb.column_comment,\n" +
+                    "alb.column_type,\n" +
+                    "delta.data_type,\n" +
+                    "delta.column_default,\n" +
+                    "delta.is_nullable \n" +
+                    "FROM \n" +
+                    "information_schema.COLUMNS AS delta, \n" +
+                    "( SELECT C .relname AS table_name, A.attname AS column_name, col_description ( A.attrelid, A.attnum ) AS column_comment, format_type ( A.atttypid, A.atttypmod ) AS column_type, A.attnotnull AS NOTNULL FROM pg_class AS C, pg_attribute AS A WHERE C.relname = '" + tableName + "' AND A.attrelid = C.oid AND A.attnum > 0 ) AS alb \n" +
+                    "WHERE table_schema = 'public' AND delta.TABLE_NAME = '" + tableName + "' AND delta.COLUMN_NAME = alb.column_name";
         } else if (dbType == DbType.ORACLE) {
-            log.info(con.getCatalog());
             sql = "SELECT\n" +
                     "atc.table_name,\n" +
                     "atc.column_name,\n" +
@@ -249,7 +258,8 @@ public class DbUtil {
                     "atc.data_length AS column_type,\n" +
                     "atc.data_type AS data_type,\n" +
                     "atc.data_default AS column_default,\n" +
-                    "atc.NULLABLE AS is_nullable \n" +
+                    "atc.NULLABLE AS is_nullable,\n" +
+                    "atc.data_scale \n" +
                     "FROM\n" +
                     "all_tab_columns atc\n" +
                     "FULL JOIN ( SELECT column_name, COMMENTS FROM all_col_comments WHERE Table_Name = 'USERS' ) acc ON atc.column_name = acc.column_name \n" +
@@ -270,6 +280,10 @@ public class DbUtil {
             String dataType = rs.getString("data_type");
             String comment = rs.getString("column_comment");
             String isNullable = rs.getString("is_nullable");
+            String dataScale = "";
+            if (dbType == DbType.ORACLE) {
+                dataScale = rs.getString("data_scale");
+            }
 
             if (StringUtils.isEmpty(comment)) {
                 comment = name;
@@ -281,7 +295,7 @@ public class DbUtil {
             } else if (dbType == DbType.POSTGRESQL) {
                 propertyType = TypeTranslator.translatePostgreSQL(columnType, dataType);
             } else if (dbType == DbType.ORACLE) {
-                propertyType = TypeTranslator.translateOracle(columnType, dataType);
+                propertyType = TypeTranslator.translateOracle(columnType, dataType, dataScale);
             } else {
                 throw new Exception("暂不支持其他数据库");
             }
