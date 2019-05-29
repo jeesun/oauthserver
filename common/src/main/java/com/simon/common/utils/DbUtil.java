@@ -43,23 +43,12 @@ public class DbUtil {
     /**
      * 获取数据表个数
      *
-     * @param driver
-     * @param url
-     * @param user
-     * @param pwd
+     * @param con 数据库连接
      * @return
      * @throws Exception
      */
-    public static int getTableCount(String driver, String url, String user, String pwd) throws Exception {
+    public static int getTableCount(Connection con) throws Exception {
         int tableCount = 0;
-        Connection con = null;
-        //注册驱动
-        try {
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, user, pwd);
-        } catch (ClassNotFoundException | SQLException e) {
-            log.error("获取数据连接失败，{}", e.getMessage());
-        }
         int dbType = 0;
         try {
             dbType = getDataBaseType(con);
@@ -93,39 +82,26 @@ public class DbUtil {
     /**
      * 获取表信息
      *
-     * @param driver
-     * @param url
-     * @param user
-     * @param pwd
+     * @param con 数据库连接
      * @return
      * @throws Exception
      */
-    public static List<TableInfo> getTables(String driver, String url, String user, String pwd) throws Exception {
-        return getTables(driver, url, user, pwd, null, null);
+    public static List<TableInfo> getTables(Connection con) throws Exception {
+        return getTables(con, null, null);
     }
 
     /**
      * 根据条件查询表信息
      *
-     * @param driver
-     * @param url
-     * @param user
-     * @param pwd
+     * @param con 数据库连接
      * @param tableNameKey
      * @param tableCommentKey
      * @return
      * @throws Exception
      */
-    public static List<TableInfo> getTables(String driver, String url, String user, String pwd, String tableNameKey, String tableCommentKey) throws Exception {
+    public static List<TableInfo> getTables(Connection con, String tableNameKey, String tableCommentKey) throws Exception {
         List<TableInfo> tableInfoList = new ArrayList<>();
-        Connection con = null;
-        //注册驱动
-        try {
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, user, pwd);
-        } catch (ClassNotFoundException | SQLException e) {
-            log.error("获取数据连接失败，{}", e.getMessage());
-        }
+
         int dbType = 0;
         try {
             dbType = getDataBaseType(con);
@@ -136,14 +112,13 @@ public class DbUtil {
         String sql = "";
         PreparedStatement ps;
         ResultSet rs;
-
         //查询表标注
         if (dbType == DbType.MYSQL) {
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "'";
         } else if (dbType == DbType.POSTGRESQL) {
-            sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C";
+            sql = "SELECT tablename as TABLE_NAME,obj_description(relfilenode,'pg_class') as TABLE_COMMENT FROM pg_tables a, pg_class b WHERE a.tablename = b.relname and a.tablename NOT LIKE 'pg%' AND a.tablename NOT LIKE 'sql_%'";
         } else if (dbType == DbType.ORACLE) {
-            sql = "select TABLE_NAME,COMMENTS from all_tab_comments";
+            sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE OWNER='" + con.getMetaData().getUserName() + "'";
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -161,13 +136,17 @@ public class DbUtil {
                 sql += " WHERE TABLE_COMMENT LIKE '%" + tableCommentKey + "%'";
             }
         }
+        log.info(sql);
         ps = con.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next()) {
             String tableComment = rs.getString("TABLE_COMMENT");
             String tableName = rs.getString("TABLE_NAME");
+            tableName = tableName.toLowerCase();
             String entityName = tableName;
-            if (entityName.startsWith("t_")) {
+            if (entityName.startsWith("t_s_")) {
+                entityName = entityName.substring(4);
+            } else if (entityName.startsWith("t_")) {
                 entityName = entityName.substring(2);
             }
             entityName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, entityName.toLowerCase());
@@ -237,6 +216,7 @@ public class DbUtil {
         } else {
             throw new Exception("暂不支持其他数据库");
         }
+        log.info(sql);
         ps = con.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next()) {
@@ -278,8 +258,7 @@ public class DbUtil {
         } else {
             throw new Exception("暂不支持其他数据库");
         }
-
-
+        log.info(sql);
         ps = con.prepareStatement(sql);
         rs = ps.executeQuery();
 
