@@ -35,6 +35,7 @@ public class ThymeleafConfig {
             }else{
                 vars.put("filePathPrefix", "http://localhost:" + serverPort);
             }
+
             viewResolver.setStaticVariables(vars);
         }
     }

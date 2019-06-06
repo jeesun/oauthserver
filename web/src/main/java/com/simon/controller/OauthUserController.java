@@ -1,12 +1,5 @@
 package com.simon.controller;
 
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.excel.metadata.Sheet;
-import com.alibaba.excel.support.ExcelTypeEnum;
-import com.alibaba.fastjson.JSON;
 import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
@@ -39,11 +32,7 @@ import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -199,34 +188,6 @@ public class OauthUserController extends BaseController {
     @ApiOperation(value = "导出")
     @GetMapping("export")
     public void exportExcel(HttpServletRequest request, HttpServletResponse response) {
-        OutputStream out = null;
-        try {
-            String filePath = "用户信息.xlsx";
-            filePath = URLEncoder.encode(filePath, "UTF-8");
-            out = response.getOutputStream();
-            response.reset();
-            if (request.getHeader("User-Agent").toLowerCase().indexOf("firefox") > -1) {
-                //使用Content-Disposition: attachment; filename=FILENAME，在Firefox浏览器中下载文件，文件名中文乱码问题解决。
-                response.setHeader("Content-disposition", "attachment; filename*=UTF-8''" + filePath);
-            } else {
-                response.setHeader("Content-disposition", "attachment; filename=" + filePath);
-            }
-            response.setContentType("application/x-download");
-            ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
-            Sheet sheet1 = new Sheet(1, 0, OauthUser.class);
-            writer.write(oauthUserService.findAll(), sheet1);
-            writer.finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (null != out) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
     }
 
@@ -235,60 +196,7 @@ public class OauthUserController extends BaseController {
     @GetMapping("import")
     @ResponseBody
     public ResultMsg importExcel() {
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream("logs/user.xlsx");
-            //解析每行结果在listener中处理
-            ExcelListener listener = new ExcelListener();
-            ExcelReader excelReader = new ExcelReader(inputStream, null, listener);
-            excelReader.read(new Sheet(1, 2, OauthUser.class));
-            log.info(JSON.toJSONString(listener.getDataList()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != inputStream) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         return ResultMsg.success();
-    }
-
-    private class ExcelListener extends AnalysisEventListener {
-        /**
-         * 自定义用于暂时存储data
-         * 可以通过实例获取该值
-         */
-        private List<Object> dataList = new ArrayList<>();
-
-        @Override
-        public void invoke(Object object, AnalysisContext analysisContext) {
-            //数据存储到list，供批量处理，或后续自己业务逻辑处理。
-            dataList.add(object);
-            //根据自己业务做处理
-            doSomething(object);
-        }
-
-        private void doSomething(Object object) {
-            //1、入库调用接口
-        }
-
-        @Override
-        public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-            //解析结束销毁不用的资源
-            //dataList.clear();
-        }
-
-        public List<Object> getDataList() {
-            return dataList;
-        }
-
-        public void setDataList(List<Object> dataList) {
-            this.dataList = dataList;
-        }
     }
 
     @ApiIgnore

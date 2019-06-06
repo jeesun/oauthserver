@@ -416,12 +416,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--  -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
+            <groupId>com.github.liaochong</groupId>
+            <artifactId>myexcel</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>com.simon</groupId>
