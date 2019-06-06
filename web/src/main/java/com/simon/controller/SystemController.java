@@ -45,11 +45,11 @@ public class SystemController {
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response, Locale locale) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "redirect:/login?logout&locale=" + locale.toString();
     }
 }

@@ -18,9 +18,9 @@ public interface DictTypeMapper extends MyMapper<DictType> {
      * @param groupCode
      * @return
      */
-    List<DictType> getByGroupCode(@Param("groupCode") String groupCode);
+    List<DictType> getByGroupCode(@Param("groupCode") String groupCode, @Param("language") String language);
 
-    List<EasyUiTreeGridDto> getTreeGridDtos(@Param("groupCode") String groupCode);
+    List<EasyUiTreeGridDto> getTreeGridDtos(@Param("groupCode") String groupCode, @Param("language") String language);
 
     List<DictType> getList(@Param("map") Map<String, Object> map);
 
@@ -29,5 +29,5 @@ public interface DictTypeMapper extends MyMapper<DictType> {
      * @param id 子字典id
      * @return 字典dto
      */
-    DictTypeDto getDtoById(@Param("id") Long id);
+    DictTypeDto getDtoById(@Param("id") Long id, @Param("language") String language);
 }

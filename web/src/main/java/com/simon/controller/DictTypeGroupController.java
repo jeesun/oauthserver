@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
@@ -11,7 +12,6 @@ import com.simon.service.DictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,18 +20,19 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
-* @author SimonSun
-* @date 2018-09-23
-**/
+ * @author SimonSun
+ * @date 2018-09-23
+ **/
 
 @Slf4j
 @Api(description = "字典")
 @Controller
 @RequestMapping("/api/dictTypeGroups")
-public class DictTypeGroupController extends BaseController{
+public class DictTypeGroupController extends BaseController {
 
     @Autowired
     private DictTypeService dictTypeService;
@@ -44,44 +45,46 @@ public class DictTypeGroupController extends BaseController{
     @ResponseBody
     public Map<String, Object> data2(
             @RequestParam(required = false, defaultValue = "10") Integer limit,
-            @RequestParam(required = false, defaultValue = "0") Integer offset){
+            @RequestParam(required = false, defaultValue = "0") Integer offset,
+            Locale locale) {
         Map<String, Object> resultMap = new LinkedHashMap<>(2);
         resultMap.put("total", dictTypeGroupService.count());
-        resultMap.put("rows", dictTypeGroupService.getDtos(limit, offset));
+        resultMap.put("rows", dictTypeGroupService.getDtos(locale.toString(), limit, offset));
         return resultMap;
     }
 
     @ApiIgnore
     @GetMapping("list")
-    public String list(Model model){
+    public String list(Model model) {
         return "vue/dictType/list";
     }
 
     @ApiIgnore
     @GetMapping("add")
-    public String add(Model model){
+    public String add(Model model) {
         return "vue/dictType/add";
     }
 
     @ApiIgnore
     @GetMapping("edit")
-    public String edit(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id){
-        model.addAttribute("entity", entityToMap(dictTypeGroupService.getDtoById(id)));
+    public String edit(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id, Locale locale) {
+        model.addAttribute("entity", entityToMap(dictTypeGroupService.getDtoById(id, locale.toString())));
         return "vue/dictType/edit";
     }
 
     @ApiIgnore
     @GetMapping("subAdd")
-    public String subAdd(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id){
-        DictTypeDto dictTypeDto = dictTypeGroupService.getDtoById(id);
+    public String subAdd(Model model, @ApiParam(value = "字典组id", required = true) @RequestParam Long id, Locale locale) {
+        DictTypeDto dictTypeDto = dictTypeGroupService.getDtoById(id, locale.toString());
         model.addAttribute("entity", entityToMap(dictTypeDto));
         return "vue/dictType/subAdd";
     }
 
     @ApiIgnore
     @GetMapping("subEdit")
-    public String subEdit(Model model, @ApiParam(value = "子字典id", required = true) @RequestParam Long id){
-        DictTypeDto dictTypeDto = dictTypeService.getDtoById(id);
+    public String subEdit(Model model, @ApiParam(value = "子字典id", required = true) @RequestParam Long id, Locale locale) {
+        DictTypeDto dictTypeDto = dictTypeService.getDtoById(id, locale.toString());
+        log.info(id.toString());
         model.addAttribute("entity", entityToMap(dictTypeDto));
         return "vue/dictType/subEdit";
     }
@@ -93,25 +96,23 @@ public class DictTypeGroupController extends BaseController{
             @ApiParam(value = "父字典名称", required = false) @RequestParam(required = false) String name,
             @ApiParam(value = "父字典编码", required = false) @RequestParam(required = false) String code,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
-            @ApiParam(value = "每页条数", defaultValue = "10", required = true)@RequestParam Integer pageSize,
-            @ApiParam(value = "排序(eg: id desc)")@RequestParam(required = false, defaultValue = "") String orderBy){
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("name", name);
-        params.put("code", code);
-        var pageInfo = dictTypeGroupService.getTreeGridDtos(params, pageNo, pageSize, orderBy);
+            @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam Integer pageSize,
+            @ApiParam(value = "排序(eg: id desc)") @RequestParam(required = false, defaultValue = "") String orderBy,
+            Locale locale) {
+        PageInfo<EasyUiTreeGridDto> pageInfo = dictTypeGroupService.getTreeGridDtos(name, code, locale.toString(), pageNo, pageSize, orderBy);
         return new EasyUIDataGridResult<>(pageInfo);
     }
 
     @ApiIgnore
     @PostMapping("add")
     @ResponseBody
-    public ResultMsg add(@RequestBody DictTypeDto dictTypeDto){
-        if(1 == dictTypeDto.getType()){
+    public ResultMsg add(@RequestBody DictTypeDto dictTypeDto, Locale locale) {
+        if (1 == dictTypeDto.getType()) {
             //父字典
-            dictTypeGroupService.save(dictTypeDto);
-        }else if(2 == dictTypeDto.getType()){
+            dictTypeGroupService.save(dictTypeDto, locale.toString());
+        } else if (2 == dictTypeDto.getType()) {
             //子字典
-            dictTypeService.save(dictTypeDto);
+            dictTypeService.save(dictTypeDto, locale.toString());
         }
         return ResultMsg.success();
     }
@@ -119,13 +120,13 @@ public class DictTypeGroupController extends BaseController{
     @ApiIgnore
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg update(@RequestBody DictTypeDto dictTypeDto){
-        if(1 == dictTypeDto.getType()){
+    public ResultMsg update(@RequestBody DictTypeDto dictTypeDto, Locale locale) {
+        if (1 == dictTypeDto.getType()) {
             //父字典
-            dictTypeGroupService.save(dictTypeDto);
-        }else if(2 == dictTypeDto.getType()){
+            dictTypeGroupService.save(dictTypeDto, locale.toString());
+        } else if (2 == dictTypeDto.getType()) {
             //子字典
-            dictTypeService.save(dictTypeDto);
+            dictTypeService.save(dictTypeDto, locale.toString());
         }
         return ResultMsg.success();
     }
@@ -134,22 +135,22 @@ public class DictTypeGroupController extends BaseController{
     @ResponseBody
     public ResultMsg delete(
             @RequestParam Long id,
-            @ApiParam(value = "字典类型[1:父字典, 2:子字典]") @RequestParam Integer type){
-            if (1 == type) {
-                dictTypeGroupService.delete(id);
-            }else if (2 == type) {
-                dictTypeService.delete(id);
-            }
+            @ApiParam(value = "字典类型[1:父字典, 2:子字典]") @RequestParam Integer type) {
+        if (1 == type) {
+            dictTypeGroupService.delete(id);
+        } else if (2 == type) {
+            dictTypeService.delete(id);
+        }
         return ResultMsg.success();
     }
 
     @ApiIgnore
     @RequestMapping(value = "/checkCode", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public boolean checkCode(@RequestParam String typeGroupCode){
-        if(dictTypeGroupService.countByTypeGroupCode(typeGroupCode) > 0){
+    public boolean checkCode(@RequestParam String typeGroupCode) {
+        if (dictTypeGroupService.countByTypeGroupCode(typeGroupCode) > 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -158,11 +159,11 @@ public class DictTypeGroupController extends BaseController{
     @DeleteMapping("/type/{type}/id/{id}")
     @ResponseBody
     public ResultMsg delete(
-            @ApiParam(value = "字典类型[1:父字典, 2:子字典]", required = true)@PathVariable Integer type,
-            @ApiParam(value = "id", required = true)@PathVariable Long id){
-        if(1 == type){
+            @ApiParam(value = "字典类型[1:父字典, 2:子字典]", required = true) @PathVariable Integer type,
+            @ApiParam(value = "id", required = true) @PathVariable Long id) {
+        if (1 == type) {
             dictTypeGroupService.delete(id);
-        }else{
+        } else {
             dictTypeService.delete(id);
         }
         return ResultMsg.success();
@@ -170,7 +171,7 @@ public class DictTypeGroupController extends BaseController{
 
     @GetMapping("/typeGroupCode/{typeGroupCode}/dictTypes")
     @ResponseBody
-    public List<DictType> getDictTypeByGroupCode(@PathVariable String typeGroupCode){
-        return dictTypeService.getTypeByGroupCode(typeGroupCode);
+    public List<DictType> getDictTypeByGroupCode(@PathVariable String typeGroupCode, Locale locale) {
+        return dictTypeService.getTypeByGroupCode(typeGroupCode, locale.toString());
     }
 }

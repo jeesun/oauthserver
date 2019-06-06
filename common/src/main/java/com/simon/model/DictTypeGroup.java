@@ -63,7 +63,7 @@ public class DictTypeGroup implements Serializable{
     private String typeGroupCode;
 
     @ApiModelProperty(value = "字典组名称")
-    @Column(name = "type_group_name", nullable = false)
+    @Transient
     private String typeGroupName;
 
     @ApiModelProperty(value = "字典列表")

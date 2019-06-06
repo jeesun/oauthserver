@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.simon.common.handler.CurrentUserMethodArgumentResolver;
 import com.simon.common.interceptor.AuthInterceptor;
+import com.simon.common.resolver.CustomLocaleResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,11 +19,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * 静态资源拦截
@@ -80,9 +79,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
+        /*SessionLocaleResolver slr = new SessionLocaleResolver();
         slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-        return slr;
+        return slr;*/
+        return new CustomLocaleResolver();
     }
 
     @Bean
@@ -127,6 +127,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/vue/home").setViewName("vue/home");
         registry.addViewController("/vue/demo/basic").setViewName("vue/demo/basic");
         registry.addViewController("/vue/demo/ueditor").setViewName("vue/demo/ueditor");
+        registry.addViewController("/vue/demo/layer-ueditor").setViewName("vue/demo/layer-ueditor");
+        registry.addViewController("/vue/demo/vue-ueditor").setViewName("vue/demo/vue-ueditor");
     }
 
     @Override

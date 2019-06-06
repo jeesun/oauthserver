@@ -12,12 +12,29 @@
     <!--<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.min.js"></script>-->
     <!--<script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>-->
     <script th:src="@{/webjars/axios/0.19.0-beta.1/dist/axios.min.js}"></script>
+
+    <!-- element ui start -->
+
+    <!-- 最新版 start -->
     <!-- 引入样式 -->
-    <!--<link href="https://cdn.bootcss.com/element-ui/2.8.2/theme-chalk/index.css" rel="stylesheet">-->
-    <link th:href="@{/webjars/element-ui/2.7.2/lib/theme-chalk/index.css}" rel="stylesheet">
+    <link href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" rel="stylesheet">
     <!-- 引入组件库 -->
-    <!--<script src="https://cdn.bootcss.com/element-ui/2.8.2/index.js"></script>-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/zh-CN.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+    <!-- 最新版 end -->
+
+    <!-- webjar版 start -->
+    <!--&lt;!&ndash; 引入样式 &ndash;&gt;
+    <link th:href="@{/webjars/element-ui/2.7.2/lib/theme-chalk/index.css}" rel="stylesheet">
+    &lt;!&ndash; 引入组件库 &ndash;&gt;
     <script th:src="@{/webjars/element-ui/2.7.2/lib/index.js}"></script>
+    <script th:src="@{/webjars/element-ui/2.7.2/lib/umd/locale/zh-CN.js}"></script>
+    <script th:src="@{/webjars/element-ui/2.7.2/lib/umd/locale/en.js}"></script>-->
+    <!-- webjar版 end -->
+
+    <!--- element ui end  -->
+
     <!-- font awesome -->
     <!--<script src="https://cdn.bootcss.com/font-awesome/5.8.1/js/all.min.js"></script>-->
     <script th:src="@{/webjars/font-awesome/5.8.1/js/all.min.js}"></script>

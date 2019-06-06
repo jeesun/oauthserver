@@ -62,7 +62,7 @@ public class DictType implements Serializable{
     private String typeCode;
 
     @ApiModelProperty(value = "字典编码名称")
-    @Column(name = "type_name", nullable = false)
+    @Transient
     private String typeName;
 
     @JSONField(serializeUsing = ToStringSerializer.class)

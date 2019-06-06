@@ -16,7 +16,7 @@ import java.util.Map;
 **/
 public interface SideMenuService extends BasicService<SideMenu, Long> {
     PageInfo<SideMenu> getAll(Map<String, Object> params, Integer limit, Integer offset);
-    List<SideMenu> getAll();
+    List<SideMenu> getAll(String language);
 
     /**
      * 根据请求地址查询权限组
@@ -36,29 +36,28 @@ public interface SideMenuService extends BasicService<SideMenu, Long> {
     /**
      * 获取树形结构数据
      * @param typeCode 角色类型
+     * @param language 语言
      * @return 树形结构数据
      */
-    List<EasyUiTreeDto> getAuth(String typeCode);
-
-    int updateAuth(String ids);
-
-    /**
-     * 根据id返回子菜单详情
-     * @param id 子菜单id
-     * @return 子菜单详情
-     */
-    SideMenu getSubMenuDetailById(Long id);
+    List<EasyUiTreeDto> getAuth(String typeCode, String language);
 
     /**
      * 获取一级菜单
+     * @param language 语言
      * @return 一级菜单列表
      */
-    List<SideMenuDto> getLevel1();
+    List<SideMenuDto> getLevel1(String language);
 
     /**
      * 获取子菜单列表
      * @param pid 父菜单id
      * @return 子菜单列表
      */
-    List<SideMenu> selectByPid(Long pid);
+    List<SideMenu> selectByPid(Long pid, String language);
+
+    SideMenu findById(Long id, String language);
+
+    int updateByPrimaryKeySelective(SideMenu sideMenu, String language);
+
+    int save(SideMenu sideMenu, String language);
 }

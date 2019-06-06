@@ -11,10 +11,13 @@
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
         <result column="type_group_code" jdbcType="VARCHAR" property="typeGroupCode"/>
+    </resultMap>
+
+    <resultMap id="BasicResultMap" type="com.simon.model.DictTypeGroup" extends="BaseResultMap">
         <result column="type_group_name" jdbcType="VARCHAR" property="typeGroupName"/>
     </resultMap>
 
-    <resultMap id="SuperMap" type="com.simon.model.DictTypeGroup" extends="BaseResultMap">
+    <resultMap id="SuperMap" type="com.simon.model.DictTypeGroup" extends="BasicResultMap">
         <!-- 分步查询 -->
         <association property="dictTypes" javaType="java.util.List" column="type_group_code"
                      select="com.simon.mapper.DictTypeMapper.getByGroupCode"/>
@@ -26,7 +29,8 @@
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="state" jdbcType="VARCHAR" property="state"/>
-        <collection property="children" ofType="com.simon.dto.EasyUiTreeGridDto" javaType="java.util.List" column="code"
+        <collection property="children" ofType="com.simon.dto.EasyUiTreeGridDto" javaType="java.util.List"
+                    column="{groupCode=code,language=language}"
                     select="com.simon.mapper.DictTypeMapper.getTreeGridDtos"/>
     </resultMap>
 
@@ -39,29 +43,30 @@
     </resultMap>
 
     <select id="getAll" resultMap="SuperMap">
-    SELECT * FROM t_dict_type_group
+    SELECT * FROM t_dict_type_group_${language}
   </select>
 
-    <select id="getTreeGridDtos" parameterType="java.util.Map" resultMap="EasyUiTreeGridDtoMap" databaseId="mysql">
+    <select id="getTreeGridDtos" resultMap="EasyUiTreeGridDtoMap" databaseId="mysql">
         SELECT
         id,
         0 AS pid,
         type_group_code AS code,
         type_group_name AS name,
-        'closed' AS state
+        'closed' AS state,
+        #{language} AS language
         FROM
-        t_dict_type_group
+        t_dict_type_group_${language}
         <where>
-            <if test="map.name != null and map.name != ''">
-                type_group_name LIKE CONCAT('%', #{map.name}, '%')
+            <if test="name != null and name != ''">
+                type_group_name LIKE CONCAT('%', #{name}, '%')
             </if>
-            <if test="map.code != null and map.code != ''">
-                AND type_group_code LIKE CONCAT('%', #{map.code}, '%')
+            <if test="code != null and code != ''">
+                AND type_group_code LIKE CONCAT('%', #{code}, '%')
             </if>
         </where>
     </select>
 
-    <select id="getTreeGridDtos" parameterType="java.util.Map" resultMap="EasyUiTreeGridDtoMap" databaseId="postgresql">
+    <select id="getTreeGridDtos" resultMap="EasyUiTreeGridDtoMap" databaseId="postgresql">
         SELECT
         id,
         0 AS pid,
@@ -69,18 +74,18 @@
         type_group_name AS name,
         'closed' AS state
         FROM
-        t_dict_type_group
+        t_dict_type_group_${language}
         <where>
-            <if test="map.name != null and map.name != ''">
-                type_group_name LIKE CONCAT('%', #{map.name}, '%')
+            <if test="name != null and name != ''">
+                type_group_name LIKE CONCAT('%', #{name}, '%')
             </if>
-            <if test="map.code != null and map.code != ''">
-                AND type_group_code LIKE CONCAT('%', #{map.code}, '%')
+            <if test="code != null and code != ''">
+                AND type_group_code LIKE CONCAT('%', #{code}, '%')
             </if>
         </where>
     </select>
 
-    <select id="getTreeGridDtos" parameterType="java.util.Map" resultMap="EasyUiTreeGridDtoMap" databaseId="oracle">
+    <select id="getTreeGridDtos" resultMap="EasyUiTreeGridDtoMap" databaseId="oracle">
         SELECT
         id,
         0 AS pid,
@@ -88,13 +93,13 @@
         type_group_name AS name,
         'closed' AS state
         FROM
-        t_dict_type_group
+        t_dict_type_group_${language}
         <where>
-            <if test="map.name != null and map.name != ''">
-                type_group_name LIKE CONCAT(CONCAT('%', #{map.name}), '%')
+            <if test="name != null and name != ''">
+                type_group_name LIKE CONCAT(CONCAT('%', #{name}), '%')
             </if>
-            <if test="map.code != null and map.code != ''">
-                AND type_group_code LIKE CONCAT(CONCAT('%', #{map.code}), '%')
+            <if test="code != null and code != ''">
+                AND type_group_code LIKE CONCAT(CONCAT('%', #{code}), '%')
             </if>
         </where>
     </select>
@@ -107,7 +112,7 @@
             type_group_code AS code,
             1 AS type
         FROM
-            t_dict_type_group
+            t_dict_type_group_${language}
         WHERE
             id = #{id}
     </select>

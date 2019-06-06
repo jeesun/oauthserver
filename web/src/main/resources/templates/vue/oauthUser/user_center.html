@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('修改', 'commit')"></head>
+<body>
+<div id="app" style="padding-top: 10px">
+    <el-row :gutter="10" style="margin:0 10px 0 10px;">
+        <el-col :xs="24" :sm="6" :md="6" :lg="6" :xl="6">
+            <el-card>
+                <div slot="header">
+                    <span th:text="#{aboutMe}"></span>
+                    <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                </div>
+                <div>
+                    <img style="width: 100px; height: 100px; border-radius: 50px"
+                            :src="ruleForm.headPhoto"
+                            :fit="fit">
+                    <div>{{ruleForm.username}}</div>
+                </div>
+            </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="18" :md="18" :lg="18" :xl="18">
+            <el-card>
+                <el-tabs v-model="activeName">
+                    <el-tab-pane th:label="#{timeline}" name="first">
+                        <el-timeline>
+                            <el-timeline-item timestamp="2018/4/12" placement="top">
+                                <el-card>
+                                    <h4>更新 Github 模板</h4>
+                                    <p>王小虎 提交于 2018/4/12 20:46</p>
+                                </el-card>
+                            </el-timeline-item>
+                            <el-timeline-item timestamp="2018/4/3" placement="top">
+                                <el-card>
+                                    <h4>更新 Github 模板</h4>
+                                    <p>王小虎 提交于 2018/4/3 20:46</p>
+                                </el-card>
+                            </el-timeline-item>
+                            <el-timeline-item timestamp="2018/4/2" placement="top">
+                                <el-card>
+                                    <h4>更新 Github 模板</h4>
+                                    <p>王小虎 提交于 2018/4/2 20:46</p>
+                                </el-card>
+                            </el-timeline-item>
+                        </el-timeline>
+                    </el-tab-pane>
+                    <el-tab-pane th:label="#{account}" name="second">
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                            <el-form-item th:label="#{username}" prop="username">
+                                <el-input v-model="ruleForm.username" th:placeholder="#{pleaseInput} + #{username}"></el-input>
+                            </el-form-item>
+                            <!--<el-form-item label="手机区号">
+                                <el-select v-model="ruleForm.areaCode" placeholder="手机区号">
+                                    <el-option label="+86" value="+86"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="手机号" prop="phone">
+                                <el-input v-model="ruleForm.phone" placeholder="手机号" type="tel"></el-input>
+                            </el-form-item>
+                            <el-form-item label="邮箱" prop="email">
+                                <el-input v-model="ruleForm.email" placeholder="邮箱" type="email"></el-input>
+                            </el-form-item>-->
+                            <el-form-item th:label="#{address}" prop="address">
+                                <el-input v-model="ruleForm.address" th:placeholder="#{pleaseInput} + #{address}"></el-input>
+                            </el-form-item>
+                            <el-form-item th:label="#{sex}">
+                                <el-select size="small" v-model="ruleForm.sex" th:placeholder="#{pleaseChoose} + #{sex}">
+                                    <el-option th:label="#{male}" value="true"></el-option>
+                                    <el-option th:label="#{female}" value="false"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item th:label="#{age}" prop="age">
+                                <el-input v-model.number="ruleForm.age" th:placeholder="#{pleaseInput} + #{age}"></el-input>
+                            </el-form-item>
+                            <el-form-item th:label="#{birth}" prop="birth">
+                                <el-date-picker
+                                        v-model="ruleForm.birth"
+                                        type="date"
+                                        th:placeholder="#{pleaseInput} + #{birth}">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item th:label="#{headPhoto}" prop="headPhoto">
+                                <el-upload
+                                        class="avatar-uploader"
+                                        action="/fileUploads/upload"
+                                        :show-file-list="false"
+                                        :on-success="handleAvatarSuccess"
+                                        :before-upload="beforeAvatarUpload">
+                                    <img v-if="ruleForm.headPhoto" :src="ruleForm.headPhoto" class="avatar">
+                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                </el-upload>
+                            </el-form-item>
+                            <el-form-item th:label="#{brief}" prop="personBrief">
+                                <el-input
+                                        type="textarea"
+                                        :autosize="{ minRows: 2, maxRows: 4}"
+                                        th:placeholder="#{pleaseInput} + #{birth}"
+                                        v-model="ruleForm.personBrief">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{update}"></span></el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-card>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:src="@{/js/vue/validateRule.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
+
+    var requestUrls = {
+        edit: "/api/oauthUsers/userCenter"
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            fit: 'fill',
+            activeName: 'second',
+            ruleForm: {
+                id: String([[${entity.id}]]),
+                username: [[${entity.username}]],
+                areaCode: [[${entity.areaCode}]],
+                phone: [[${entity.phone}]],
+                email: [[${entity.email}]],
+                address: [[${entity.address}]],
+                sex: String([[${entity.sex}]]),
+                age: [[${entity.age}]],
+                birth: [[${entity.birth}]],
+                headPhoto: [[${entity.headPhoto}]],
+                personBrief: [[${entity.personBrief}]]
+            },
+            rules: {
+                username: [
+                    {required: true, message: [[#{username}]] + [[#{notEmpty}]], trigger: 'blur'},
+                    {min: 3, max: 20, message: [[#{lengthBetween}]] + '3' + [[#{and}]] + '20', trigger: 'blur'}
+                ],
+                age: [
+                    {required: false, validator: checkAge, trigger: 'blur'}
+                ],
+            }
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            sendMessage(event) {
+                /*console.log("sendMessage");
+                closeLayer();*/
+            },
+            submitForm(formName) {
+                parent.openLoading();
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$http.patch(requestUrls.edit, this.ruleForm).then((response) => {
+                            parent.closeLoading();
+                            parent.showSuccess([[#{updateSuccess}]]);
+                        }).catch((error) => {
+                            parent.closeLoading();
+                            let errorMessage = [[#{updateFailed}]];
+                            if (error.response) {
+                                errorMessage = error.response.data.message;
+                            }
+                            parent.showError(errorMessage);
+                        });
+                    } else {
+                        parent.closeLoading();
+                        setTimeout(()=>{
+                            let isError= document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        },100);
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            closeWindow(event) {
+                closeLayer();
+            },
+            handleAvatarSuccess(res, file) {
+                //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
+                console.log(eval(res));
+                res = eval(res);
+                this.ruleForm.headPhoto = res.data[0];
+            },
+            beforeAvatarUpload(file) {
+                console.log(file.type);
+                const isJPG = file.type === 'image/jpeg';
+                const isPNG = file.type === 'image/png';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</html>

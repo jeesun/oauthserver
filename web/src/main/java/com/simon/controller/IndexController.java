@@ -16,6 +16,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 主页
@@ -31,8 +32,8 @@ public class IndexController extends BaseController {
     private SideMenuService sideMenuService;
 
     @GetMapping(value = {"/index", "/"})
-    public String vueIndex(Model model, Authentication authentication){
-        List<SideMenu> list = sideMenuService.getAll();
+    public String vueIndex(Model model, Authentication authentication, Locale locale){
+        List<SideMenu> list = sideMenuService.getAll(locale.toString());
         List<EasyUiSideMenuDto> easyUiList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             SideMenu sideMenu = list.get(i);

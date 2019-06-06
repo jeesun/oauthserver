@@ -21,6 +21,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -44,9 +45,9 @@ public class NewsInfoController extends BaseController{
     @ApiIgnore
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
-    public String list(Model model){
-        model.addAttribute("newsStatusList", dictTypeService.getTypeByGroupCode("news_status"));
-        model.addAttribute("newsTypeList", dictTypeService.getTypeByGroupCode("news_type"));
+    public String list(Model model, Locale locale){
+        model.addAttribute("newsStatusList", dictTypeService.getTypeByGroupCode("news_status", locale.toString()));
+        model.addAttribute("newsTypeList", dictTypeService.getTypeByGroupCode("news_type", locale.toString()));
         return "vue/newsInfo/list";
     }
 

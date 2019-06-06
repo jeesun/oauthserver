@@ -7,28 +7,14 @@ import com.simon.dto.SideMenuDto;
 import com.simon.model.SideMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface SideMenuMapper extends MyMapper<SideMenu> {
-    List<SideMenu> selectByPid(@Param("pid") Long pid);
-    List<SideMenu> selectByPids(@Param("pids") String pids);
-
-    /**
-     * 查询子菜单列表
-     * @param pidArray 一级菜单id
-     * @return 子菜单列表
-     */
-    List<SideMenu> selectByPidArray(@Param("pidArray") Long[] pidArray);
-
-    /**
-     * 查询子菜单列表
-     * @param pidList 一级菜单id
-     * @return 子菜单列表
-     */
-    List<SideMenu> selectByPidList(@Param("pidList") List<Long> pidList);
+    List<SideMenu> selectByPid(@Param("pid") Long pid, @Param("language") String language);
 
     /**
      * 查询一级菜单
@@ -41,11 +27,7 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
      * 查询菜单列表（树状结构）
      * @return 菜单列表（树状结构）
      */
-    List<SideMenu> selectTreeGrid();
-
-    List<SideMenu> findAll();
-
-    List<SideMenu> getList(@Param("map") Map<String, Object> map);
+    List<SideMenu> selectTreeGrid(String language);
 
     /**
      * 根据请求地址查询权限组
@@ -58,20 +40,13 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
 
     List<ButtonAuthorityDto> findButtonAuthorityDtoByEntityName(@Param("entityName") String entityName);
 
-    List<EasyUiTreeDto> findEasyUiTreeDtoByAuthority(@Param("authority") String authority);
-
-    /**
-     * 根据id返回子菜单详情
-     * @param id 子菜单id
-     * @return 子菜单详情
-     */
-    SideMenu getSubMenuDetailById(@Param("id") Long id);
+    List<EasyUiTreeDto> findEasyUiTreeDtoByAuthority(@Param("authority") String authority, @Param("language") String language);
 
     /**
      * 获取一级菜单
      * @return 一级菜单列表
      */
-    List<SideMenuDto> getLevel1();
+    List<SideMenuDto> getLevel1(@Param("language") String language);
 
     /**
      * 根据菜单id获取关联
@@ -79,4 +54,9 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
      * @return 关联ids
      */
     List<Long> getLinkIdsByIds(@Param("ids") Long[] ids);
+
+    SideMenu findById(@Param("id") Long id, @Param("language") String language);
+
+    @Select("select id from t_side_menu where pid=#{pid}")
+    List<Long> selectIdByPid(@Param("pid") Long pid);
 }

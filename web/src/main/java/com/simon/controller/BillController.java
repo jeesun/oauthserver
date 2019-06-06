@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -40,10 +41,10 @@ public class BillController extends BaseController {
 
     @ApiIgnore
     @GetMapping("list")
-    public String list(Model model){
-        model.addAttribute("billTypeList", dictTypeService.getTypeByGroupCode("bill_type"));
-        model.addAttribute("billStatusList", dictTypeService.getTypeByGroupCode("bill_status"));
-        model.addAttribute("paymentTypeList", dictTypeService.getTypeByGroupCode("payment_type"));
+    public String list(Model model, Locale locale){
+        model.addAttribute("billTypeList", dictTypeService.getTypeByGroupCode("bill_type", locale.toString()));
+        model.addAttribute("billStatusList", dictTypeService.getTypeByGroupCode("bill_status", locale.toString()));
+        model.addAttribute("paymentTypeList", dictTypeService.getTypeByGroupCode("payment_type", locale.toString()));
         return "vue/bill/list";
     }
 

@@ -62,7 +62,7 @@ public class SideMenu implements Serializable {
     private LocalDateTime updateDate;
 
     @ApiModelProperty(value = "菜单名称")
-    @Column(name = "name")
+    @Transient
     private String name;
 
     @ApiModelProperty(value = "菜单地址")

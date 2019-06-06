@@ -3,7 +3,6 @@ package com.simon.service;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.service.BasicService;
 import com.simon.dto.AuthorityDto;
-import com.simon.dto.StatisticDto;
 import com.simon.model.OauthUser;
 
 import java.util.List;
@@ -21,8 +20,6 @@ public interface OauthUserService extends BasicService<OauthUser, Long> {
     int updatePwdByCode(String phone, String code, String newPwd);
 
     int updatePwdByOldPwd(String username, String oldPwd, String newPwd);
-
-    List<StatisticDto> sexRatio();
 
     UserEntity findEntityByPhone(String phone);
     UserEntity findEntityByUsername(String username);

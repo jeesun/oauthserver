@@ -10,4 +10,9 @@ import org.springframework.stereotype.Repository;
 **/
 @Repository
 public interface SideMenuAuthorityRepository extends JpaRepository<SideMenuAuthority, Long> {
+    /**
+     * 根据侧边栏菜单id删除记录
+     * @param sideMenuId 侧边栏菜单id
+     */
+    void deleteBySideMenuId(Long sideMenuId);
 }

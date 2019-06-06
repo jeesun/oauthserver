@@ -31,10 +31,10 @@
             <input name="user_oauth_approval" value="true" type="hidden"/>
             <div class="form-group">
                 <div class="radio">
-                    <input type="radio" name="scope.read" value="true"><span th:text="#{approve}"></span>
+                    <input type="radio" th:name="${scopes}" value="true"><span th:text="#{approve}"></span>
                 </div>
                 <div class="radio">
-                    <input type="radio" name="scope.read" value="false" checked><span th:text="#{deny}"></span>
+                    <input type="radio" th:name="${scopes}" value="false" checked><span th:text="#{deny}"></span>
                 </div>
             </div>
             <input type="submit" name="authorize" th:value="#{authorize}" class="btn btn-primary col-12" />

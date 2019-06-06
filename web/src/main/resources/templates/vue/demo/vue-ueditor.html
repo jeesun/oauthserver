@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('neditor示例', 'ueditor')"></head>
+<body>
+<div id="app">
+    <div id="edit_editor"></div>
+    <el-button type="primary" @click="getContent">获取内容</el-button>
+    <el-button type="primary" @click="setContent">写入内容</el-button>
+</div>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {};
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            editEditor: '',
+            testContent: '<p>hello, world</p>'
+        },
+        mounted: function () {
+            this.editEditor = UE.getEditor('edit_editor', {
+                initialFrameWidth: '100%',
+                initialFrameHeight: '350',
+                scaleEnabled: true,
+                autoHeight: false
+            });
+        },
+        methods: {
+            getContent() {
+                this.$alert(this.editEditor.getContent(), '标题名称', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+
+                    }
+                });
+            },
+            setContent() {
+                this.editEditor.setContent(this.testContent);
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

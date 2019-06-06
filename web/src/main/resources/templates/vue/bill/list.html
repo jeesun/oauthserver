@@ -6,8 +6,8 @@
     <template>
         <div style="margin-left: 6px;margin-bottom: 6px;">
             <el-form :inline="true" :model="searchForm" style="margin: 0; padding: 0;">
-                <el-form-item label="账单分类">
-                    <el-select size="small" v-model="searchForm.billType" placeholder="请选择">
+                <el-form-item th:label="#{bill.billType}">
+                    <el-select size="small" v-model="searchForm.billType" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in billTypeList"
                                 :key="item.typeCode"
@@ -16,8 +16,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="账单状态">
-                    <el-select size="small" v-model="searchForm.billStatus" placeholder="请选择">
+                <el-form-item th:label="#{bill.billStatus}">
+                    <el-select size="small" v-model="searchForm.billStatus" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in billStatusList"
                                 :key="item.typeCode"
@@ -30,13 +30,13 @@
                     <el-input size="small" v-model="searchForm.tags" placeholder="请输入中文标签" clearable></el-input>
                 </el-form-item>-->
                 <el-form-item>
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch">搜索</el-button>
-                    <el-button size="mini" icon="el-icon-refresh" @click="doReset">重置</el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch"><span th:text="#{search}"></span></el-button>
+                    <el-button size="mini" icon="el-icon-refresh" @click="doReset"><span th:text="#{reset}"></span></el-button>
                 </el-form-item>
             </el-form>
-            <el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd">新增</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport">导入</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>
+            <!--<el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="#{add}"></span></el-button>-->
+            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>
         </div>
         <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
                   style="font-size: 12px"
@@ -47,26 +47,26 @@
                     <el-table-column align="center" prop="createDate" label="创建时间" width="120"></el-table-column>
                     <el-table-column align="center" prop="updateBy" label="更新人id" width="120"></el-table-column>
                     <el-table-column align="center" prop="updateDate" label="更新时间" width="120"></el-table-column>-->
-                    <el-table-column align="center" prop="userId" label="用户id" width="180"></el-table-column>
-                    <el-table-column align="center" prop="billType" label="账单分类" width="120" :formatter="formatBillType"></el-table-column>
-                    <el-table-column align="center" prop="billStatus" label="账单状态" width="120" :formatter="formatBillStatus"></el-table-column>
-                    <el-table-column align="center" prop="billDesc" label="账单描述" width="120"></el-table-column>
-                    <el-table-column align="center" prop="receivingAddress" label="收货地址" width="120"></el-table-column>
-                    <el-table-column align="center" prop="logisticsInfo" label="物流信息" width="120"></el-table-column>
-                    <el-table-column align="center" prop="logisticsNo" label="物流号" width="120"></el-table-column>
-                    <el-table-column align="center" prop="logisticsStatus" label="物流状况" width="120"></el-table-column>
-                    <el-table-column align="center" prop="billDate" label="账单日期" width="160"></el-table-column>
-                    <el-table-column align="center" prop="totalAmount" label="付款金额" width="120"></el-table-column>
-                    <el-table-column align="center" prop="quantity" label="数量" width="120"></el-table-column>
-                    <el-table-column align="center" prop="outTradeNo" label="商户订单号" width="180"></el-table-column>
-                    <el-table-column align="center" prop="toMemberName" label="对方账号名称" width="120"></el-table-column>
-                    <el-table-column align="center" prop="toMemberId" label="对方账号" width="120"></el-table-column>
-                    <el-table-column align="center" prop="paymentType" label="付款方式" width="120"></el-table-column>
-                    <el-table-column align="center" prop="paymentAccountNo" label="付款账号" width="120"></el-table-column>
-                    <el-table-column align="center" prop="reason" label="理由" width="120"></el-table-column>
-                    <el-table-column align="center" prop="integralReward" label="积分奖励" width="120"></el-table-column>
-                    <el-table-column align="center" prop="remark" label="备注" width="120"></el-table-column>
-                    <el-table-column align="center" prop="billContext" label="账单内容" width="120" :formatter="formatBillStatus"></el-table-column>
+                    <el-table-column align="center" prop="userId" th:label="#{bill.userId}" width="180"></el-table-column>
+                    <el-table-column align="center" prop="billType" th:label="#{bill.billType}" width="120" :formatter="formatBillType"></el-table-column>
+                    <el-table-column align="center" prop="billStatus" th:label="#{bill.billStatus}" width="120" :formatter="formatBillStatus"></el-table-column>
+                    <el-table-column align="center" prop="billDesc" th:label="#{bill.billDesc}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="receivingAddress" th:label="#{bill.receivingAddress}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="logisticsInfo" th:label="#{bill.logisticsInfo}" width="140"></el-table-column>
+                    <el-table-column align="center" prop="logisticsNo" th:label="#{bill.logisticsNo}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="logisticsStatus" th:label="#{bill.logisticsStatus}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="billDate" th:label="#{bill.billDate}" width="160"></el-table-column>
+                    <el-table-column align="center" prop="totalAmount" th:label="#{bill.totalAmount}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="quantity" th:label="#{bill.quantity}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="outTradeNo" th:label="#{bill.outTradeNo}" width="180"></el-table-column>
+                    <el-table-column align="center" prop="toMemberName" th:label="#{bill.toMemberName}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="toMemberId" th:label="#{bill.toMemberId}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="paymentType" th:label="#{bill.paymentType}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="paymentAccountNo" th:label="#{bill.paymentAccountNo}" width="180"></el-table-column>
+                    <el-table-column align="center" prop="reason" th:label="#{bill.reason}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="integralReward" th:label="#{bill.integralReward}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="remark" th:label="#{bill.remark}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="billContext" th:label="#{bill.billContext}" width="120" :formatter="formatBillStatus"></el-table-column>
             <!--<el-table-column align="center" label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" icon="el-icon-edit"
@@ -94,6 +94,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         list: "/api/bills/data",
@@ -188,7 +191,7 @@
             },
             handleEdit(index, row) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[#{add}]],
                     content: requestUrls.edit + row.id
                 });
             },
@@ -197,7 +200,7 @@
             },
             doAdd(event) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[#{add}]],
                     content: requestUrls.add
                 });
             },
@@ -216,7 +219,7 @@
             doImport(event) {
                 this.$http.get("/api/authorities/import", {}).then(function (response) {
                     this.$notify({
-                        title: '提示',
+                        title: [[#{hint}]],
                         message: response.data.message,
                         position: 'bottom-right',
                         duration: 2000

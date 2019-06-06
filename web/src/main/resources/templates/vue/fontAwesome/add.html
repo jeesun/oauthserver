@@ -7,27 +7,27 @@
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="图标class" prop="iconClass">
-                    <el-input v-model="ruleForm.iconClass" placeholder="请输入图标class"></el-input>
+                <el-form-item th:label="#{fontAwesome.iconClass}" prop="iconClass">
+                    <el-input v-model="ruleForm.iconClass" th:placeholder="#{fontAwesome.iconClass}"></el-input>
                 </el-form-item>
-                <el-form-item label="英文标签" prop="label">
-                    <el-input v-model="ruleForm.label" placeholder="请输入英文标签"></el-input>
+                <el-form-item th:label="#{fontAwesome.label}" prop="label">
+                    <el-input v-model="ruleForm.label" th:placeholder="#{pleaseInput} + #{fontAwesome.label}"></el-input>
                 </el-form-item>
-                <el-form-item label="中文标签" prop="tags">
-                    <el-input v-model="ruleForm.tags" placeholder="请输入中文标签"></el-input>
+                <el-form-item th:label="#{fontAwesome.tags}" prop="tags">
+                    <el-input v-model="ruleForm.tags" th:placeholder="#{pleaseInput} + #{fontAwesome.tags}"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" prop="orderNum">
-                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
+                <el-form-item th:label="#{orderNum}" prop="orderNum">
+                    <el-input v-model="ruleForm.orderNum" th:placeholder="#{pleaseInput} + #{orderNum}"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" prop="status">
-                    <el-select v-model="ruleForm.status" placeholder="请输入状态">
+                <el-form-item th:label="#{status}" prop="status">
+                    <el-select v-model="ruleForm.status" th:placeholder="#{pleaseChoose}">
                         <el-option label="可用" value="1"></el-option>
                         <el-option label="不可用" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -42,6 +42,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         url: "/api/fontAwesomes/add"
@@ -84,11 +87,11 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[#{insertSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{insertFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }

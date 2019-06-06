@@ -19,6 +19,7 @@ public class UserEntity implements UserDetails, Serializable {
     private String username;
     private String password;
     private boolean enabled;
+    private String areaCode;
     private String phone;
     private String email;
     private String address;
@@ -32,12 +33,13 @@ public class UserEntity implements UserDetails, Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex) {
+    public UserEntity(Long id, String username, String password, boolean enabled, String areaCode, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
+        this.areaCode = areaCode;
         this.phone = phone;
         this.email = email;
         this.address = address;
@@ -48,12 +50,13 @@ public class UserEntity implements UserDetails, Serializable {
         this.sex = sex;
     }
 
-    public UserEntity(Long id, String username, String password, boolean enabled, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex, List<Authority> authorities) {
+    public UserEntity(Long id, String username, String password, boolean enabled, String areaCode, String phone, String email, String address, LocalDate birth, Integer age, String headPhoto, String personBrief, Boolean sex, List<Authority> authorities) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
+        this.areaCode = areaCode;
         this.phone = phone;
         this.email = email;
         this.address = address;
@@ -87,6 +90,14 @@ public class UserEntity implements UserDetails, Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 
     public String getPhone() {

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simon.common.domain.UserEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -23,7 +24,7 @@ import java.util.Map;
  * @author simon
  * @create 2018-09-06 17:49
  **/
-
+@Slf4j
 public class BaseController {
     /**
      * 字符串绑定java8时间类型

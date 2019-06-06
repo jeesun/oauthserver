@@ -26,11 +26,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Connection;
+import java.util.*;
 
 /**
  * 数据表
@@ -44,9 +41,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/api/tables")
 public class TableController extends BaseController {
-    @Autowired
-    private DataSource dataSource;
-
     @Autowired
     private DictTypeService dictTypeService;
 
@@ -71,7 +65,8 @@ public class TableController extends BaseController {
             @ApiParam(value = "模糊查询表标注") @RequestParam(required = false) String tableComment,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam Integer pageSize) throws Exception {
-        List<TableInfo> tableInfoList = DbUtil.getTables(CodeGenerator.JDBC_DIVER_CLASS_NAME, CodeGenerator.JDBC_URL, CodeGenerator.JDBC_USERNAME, CodeGenerator.JDBC_PASSWORD, tableName, tableComment);
+        Connection con = DbUtil.getConnection(CodeGenerator.JDBC_DIVER_CLASS_NAME, CodeGenerator.JDBC_URL, CodeGenerator.JDBC_USERNAME, CodeGenerator.JDBC_PASSWORD);
+        List<TableInfo> tableInfoList = DbUtil.getTables(con, tableName, tableComment);
 
         if (null != pageNo && null != pageSize) {
             Map<String, Object> resultMap = new HashMap<>(2);
@@ -109,14 +104,16 @@ public class TableController extends BaseController {
             Model model,
             @RequestParam String tableName,
             @RequestParam(required = false) String tableComment,
-            @RequestParam String entityName) {
-        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type")));
-        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1()));
+            @RequestParam String entityName,
+            Locale locale) {
+        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type", locale.toString())));
+        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
         model.addAttribute("tableName", tableName);
         model.addAttribute("tableComment", tableComment);
         model.addAttribute("entityName", entityName);
         try {
-            EntityDataModel entityDataModel = DbUtil.getEntityModel(dataSource.getConnection(), tableName, CodeGenerator.BASE_PACKAGE, entityName);
+            Connection con = DbUtil.getConnection(CodeGenerator.JDBC_DIVER_CLASS_NAME, CodeGenerator.JDBC_URL, CodeGenerator.JDBC_USERNAME, CodeGenerator.JDBC_PASSWORD);
+            EntityDataModel entityDataModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, entityName);
             List<ColumnUi> columnUiList = columnUiService.findByTableName(tableName);
 
             //想隐藏显示的列
@@ -178,7 +175,7 @@ public class TableController extends BaseController {
             e.printStackTrace();
         }
 
-        model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component"));
+        model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component", locale.toString()));
         return "vue/table/code_generate";
     }
 
@@ -201,7 +198,7 @@ public class TableController extends BaseController {
 
         //保存用户生成代码时的UI属性配置。
         //代码生成时，向t_side_menu表添加访问权限数据。
-        tableService.saveSettingsAndAuthorities(body);
+        //tableService.saveSettingsAndAuthorities(body);
         return ResultMsg.success();
     }
 }

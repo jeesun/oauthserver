@@ -1,5 +1,7 @@
 package com.simon.common.code;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 数据表列类型转换为java类型
  *
@@ -179,10 +181,15 @@ public class TypeTranslator {
      *
      * @param columnType DATA_LENGTH
      * @param dataType   DATA_TYPE
+     * @param dataScale 小数点后有几位
      * @return
      */
-    public static String translateOracle(String columnType, String dataType) {
+    public static String translateOracle(String columnType, String dataType, String dataScale) {
         Integer dataLength = Integer.parseInt(columnType);
+        int dataScaleValue = -1;
+        if (StringUtils.isNotEmpty(dataScale) && StringUtils.isNumeric(dataScale)) {
+            dataScaleValue = Integer.parseInt(dataScale);
+        }
         dataType = dataType.toUpperCase();
         if (CHAR.equals(dataType) || VARCHAR2.equals(dataType) || NVARCHAR2.equals(dataType) || LONG.equals(dataType)) {
             if (1 == dataLength) {
@@ -210,13 +217,13 @@ public class TypeTranslator {
             if (2 == dataLength) {
                 return "Byte";
             }
-            if (3 <= dataLength && dataLength <= 4) {
+            if (3 <= dataLength && dataLength <= 4 && 0 == dataScaleValue) {
                 return "Short";
             }
-            if (5 <= dataLength && dataLength <= 9) {
+            if (5 <= dataLength && dataLength <= 9 && 0 == dataScaleValue) {
                 return "Integer";
             }
-            if (10 <= dataLength && dataLength <= 18) {
+            if (10 <= dataLength && 0 == dataScaleValue) {
                 return "Long";
             } else {
                 return "BigDecimal";

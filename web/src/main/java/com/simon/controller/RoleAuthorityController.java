@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 角色权限
@@ -56,14 +57,15 @@ public class RoleAuthorityController extends BaseController {
     public EasyUIDataGridResult<DictType> data(
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-            @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy) {
-        return new EasyUIDataGridResult<>(dictTypeService.getTypeByGroupCode("role_type"));
+            @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy,
+            Locale locale) {
+        return new EasyUIDataGridResult<>(dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
     }
 
     @GetMapping("authData")
     @ResponseBody
-    public ResultMsg<List<EasyUiTreeDto>> getAuthData(@RequestParam String typeCode){
-        return ResultMsg.success(sideMenuService.getAuth(typeCode));
+    public ResultMsg<List<EasyUiTreeDto>> getAuthData(@RequestParam String typeCode, Locale locale){
+        return ResultMsg.success(sideMenuService.getAuth(typeCode, locale.toString()));
     }
 
     @PostMapping("updateAuth")

@@ -8,8 +8,8 @@
             <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                     :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
                 <template>
-                    <el-form-item label="权限">
-                        <el-select v-model="ruleForm.allowedRoles" multiple placeholder="请选择">
+                    <el-form-item th:label="#{codeGen.allowedRoles}">
+                        <el-select v-model="ruleForm.allowedRoles" multiple th:placeholder="#{pleaseChoose}">
                             <el-option
                                     v-for="item in roleTypeList"
                                     :key="item.typeCode"
@@ -18,8 +18,8 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="父菜单名称">
-                        <el-select v-model="ruleForm.pid" placeholder="请选择">
+                    <el-form-item th:label="#{codeGen.parentMenu}">
+                        <el-select v-model="ruleForm.pid" th:placeholder="#{pleaseChoose}">
                             <el-option
                                     v-for="item in parentMenus"
                                     :key="item.id"
@@ -28,39 +28,39 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="模块" prop="moduleDir">
-                        <el-select v-model="ruleForm.moduleDir" placeholder="请选择">
+                    <el-form-item th:label="#{codeGen.moduleDir}" prop="moduleDir">
+                        <el-select v-model="ruleForm.moduleDir" th:placeholder="#{pleaseChoose}">
                             <el-option label="common" value="/common"></el-option>
                             <el-option label="web" value="/web"></el-option>
                             <el-option label="api" value="/api"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="基础包名" prop="basePackage">
-                        <el-input v-model="ruleForm.basePackage" placeholder="请输入基础包名"></el-input>
+                    <el-form-item th:label="#{codeGen.basePackage}" prop="basePackage">
+                        <el-input v-model="ruleForm.basePackage" th:placeholder="#{pleaseInput} + #{codeGen.basePackage}"></el-input>
                     </el-form-item>
-                    <el-form-item label="位置" prop="mainOrTest">
-                        <el-select v-model="ruleForm.mainOrTest" placeholder="请选择">
-                            <el-option label="test目录" value="test"></el-option>
-                            <el-option label="main目录" value="main"></el-option>
+                    <el-form-item th:label="#{codeGen.location}" prop="mainOrTest">
+                        <el-select v-model="ruleForm.mainOrTest" th:placeholder="#{pleaseChoose}">
+                            <el-option th:label="#{codeGen.location.test}" value="test"></el-option>
+                            <el-option th:label="#{codeGen.location.main}" value="main"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="表名" prop="tableName" :disabled="true">
-                        <el-input v-model="ruleForm.tableName" placeholder="请输入表名"></el-input>
+                    <el-form-item th:label="#{codeGen.tableName}" prop="tableName" :disabled="true">
+                        <el-input v-model="ruleForm.tableName" th:placeholder="#{pleaseInput} + #{codeGen.tableName}"></el-input>
                     </el-form-item>
-                    <el-form-item label="实体名" prop="entityName">
-                        <el-input v-model="ruleForm.entityName" placeholder="请输入实体名"></el-input>
+                    <el-form-item th:label="#{codeGen.entityName}" prop="entityName">
+                        <el-input v-model="ruleForm.entityName" th:placeholder="#{pleaseInput} + #{codeGen.entityName}"></el-input>
                     </el-form-item>
-                    <el-form-item label="表标注" prop="tableComment">
-                        <el-input v-model="ruleForm.tableComment" placeholder="请输入表标注"></el-input>
+                    <el-form-item th:label="#{codeGen.tableComment}" prop="tableComment">
+                        <el-input v-model="ruleForm.tableComment" th:placeholder="#{pleaseInput} + #{codeGen.tableComment}"></el-input>
                     </el-form-item>
-                    <el-form-item label="id列类型" prop="idType">
-                        <el-select v-model="ruleForm.idType" placeholder="请选择">
+                    <el-form-item th:label="#{codeGen.idType}" prop="idType">
+                        <el-select v-model="ruleForm.idType" th:placeholder="#{pleaseChoose}">
                             <el-option label="Long" value="Long"></el-option>
                             <el-option label="Integer" value="Integer"></el-option>
                             <el-option label="String" value="String"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="要生成的代码" prop="genModules">
+                    <el-form-item th:label="#{codeGen.genModules}" prop="genModules">
                         <el-checkbox-group v-model="ruleForm.genModules">
                             <el-checkbox label="modelAndMapper"></el-checkbox>
                             <el-checkbox label="repository"></el-checkbox>
@@ -75,17 +75,17 @@
         <el-row>
             <el-col :xs="{span: 24, offset: 0}" :sm="{span: 24, offset: 0}" :md="{span: 24, offset: 0}"
                     :lg="{span: 24, offset: 0}" :xl="{span: 20, offset: 2}">
-                <el-form-item label="属性列表" props="columns">
+                <el-form-item th:label="#{codeGen.columns}" props="columns">
                     <elx-editable ref="editable" :data.sync="ruleForm.columns" border>
                         <elx-editable-column align="center" type="index" width="50"></elx-editable-column>
-                        <elx-editable-column align="center" prop="name" label="属性名" width="180"></elx-editable-column>
-                        <elx-editable-column align="center" prop="type" label="属性类型" width="100"></elx-editable-column>
-                        <elx-editable-column align="center" prop="comment" label="属性注释" width="180"></elx-editable-column>
-                        <elx-editable-column align="center" prop="uiType" label="Element Form组件" width="180" :edit-render="{name : 'ElSelect', options: elementComponents}"></elx-editable-column>
-                        <elx-editable-column align="center" prop="extraInfo" label="补充信息" width="160" :show-overflow-tooltip="true" :edit-render="{name: 'ElInput'}"></elx-editable-column>
-                        <elx-editable-column align="center" prop="allowSearch" label="是否允许搜索" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
-                        <elx-editable-column align="center" prop="hidden" label="是否隐藏" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
-                        <elx-editable-column align="center" prop="allowInput" label="是否允许输入" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}">
+                        <elx-editable-column align="center" prop="name" th:label="#{codeGen.columns.name}" width="180"></elx-editable-column>
+                        <elx-editable-column align="center" prop="type" th:label="#{codeGen.columns.type}" width="100"></elx-editable-column>
+                        <elx-editable-column align="center" prop="comment" th:label="#{codeGen.columns.comment}" width="180"></elx-editable-column>
+                        <elx-editable-column align="center" prop="uiType" th:label="#{codeGen.columns.uiType}" width="180" :edit-render="{name : 'ElSelect', options: elementComponents}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="extraInfo" th:label="#{codeGen.columns.extraInfo}" width="160" :show-overflow-tooltip="true" :edit-render="{name: 'ElInput'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="allowSearch" th:label="#{codeGen.columns.allowSearch}" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="hidden" th:label="#{codeGen.columns.hidden}" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="allowInput" th:label="#{codeGen.columns.allowInput}" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}">
                     </elx-editable>
                 </el-form-item>
             </el-col>
@@ -94,8 +94,8 @@
             <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                     :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -112,6 +112,9 @@
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
 
+    //国际化
+    international([[${session.locale}]]);
+
     var requestUrls = {
         url: "/api/tables/genCode"
     };
@@ -125,10 +128,10 @@
             parentMenus: [[${parentMenus}]],
             ruleForm: {
                 mainOrTest: "test",
-                basePackage: "",
+                basePackage: "com.simon",
                 allowedRoles: [],
                 pid: "",
-                moduleDir: "/web",
+                moduleDir: "/common",
                 tableName: [[${tableName}]],
                 entityName: [[${entityName}]],
                 tableComment: [[${tableComment}]],
@@ -138,14 +141,17 @@
                 columns: [[${tableEntity.columns}]]
             },
             rules: {
-                iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
+                basePackage: [
+                    {required: true, message: '基础包名不能为空', trigger: 'blur'}
                 ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
+                tableName: [
+                    {required: true, message: '表名不能为空', trigger: 'blur'}
                 ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
+                entityName: [
+                    {required: true, message: '实体名不能为空', trigger: 'blur'}
+                ],
+                tableComment: [
+                    {required: true, message: '表标注不能为空', trigger: 'blur'}
                 ]
             }
         },
@@ -172,11 +178,11 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[#{insertSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{insertFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }

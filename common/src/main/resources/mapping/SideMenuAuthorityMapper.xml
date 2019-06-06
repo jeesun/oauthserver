@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.SideMenuAuthorityMapper">
-  <resultMap id="BaseResultMap" type="com.simon.model.SideMenuAuthority">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <result column="id" jdbcType="BIGINT" property="id" />
-    <result column="create_by" jdbcType="BIGINT" property="createBy" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="side_menu_id" jdbcType="BIGINT" property="sideMenuId" />
-    <result column="authority" jdbcType="VARCHAR" property="authority" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.simon.model.SideMenuAuthority">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="side_menu_id" jdbcType="BIGINT" property="sideMenuId"/>
+        <result column="authority" jdbcType="VARCHAR" property="authority"/>
+    </resultMap>
 
-  <delete id="deleteByAuthorityAndNotIn">
-    delete from t_side_menu_authority
-    where
-    authority=#{authority}
-    <!--and
-    side_menu_id not in
-    <foreach collection="sideMenuIds.split(',')" item="sideMenuId" index="index" open="(" close=")" separator=",">
-      #{sideMenuId}
-    </foreach>-->
-  </delete>
+    <delete id="deleteByAuthorityAndNotIn">
+        delete from t_side_menu_authority
+        where
+        authority=#{authority}
+        <!--and
+        side_menu_id not in
+        <foreach collection="sideMenuIds.split(',')" item="sideMenuId" index="index" open="(" close=")" separator=",">
+          #{sideMenuId}
+        </foreach>-->
+    </delete>
 
-  <delete id="deleteByEntityName">
+    <delete id="deleteByEntityName">
     DELETE
     FROM
         t_side_menu_authority
     WHERE
         side_menu_id IN ( SELECT id FROM t_side_menu WHERE entity_name = #{entityName} )
   </delete>
+
+    <delete id="deleteBySideMenuIdIn">
+        DELETE
+        FROM
+            t_side_menu_authority
+        WHERE
+            side_menu_id IN ( SELECT id FROM t_side_menu WHERE id = #{id} OR pid = #{id} )
+    </delete>
 </mapper>

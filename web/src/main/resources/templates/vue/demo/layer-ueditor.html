@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/vue/vue-list :: head('layer-ueditor', 'ueditor')"></head>
+<body>
+<div id="app">
+    <el-button type="primary" @click="showLayer">显示弹框</el-button>
+</div>
+<script th:src="@{/js/vue/common.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    //Vue.http.options.emulateJSON = true;
+    //Vue.http.options.emulateHTTP = true;
+    var headerName = [[${_csrf.headerName}]];
+    axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    var requestUrls = {};
+
+    var app = new Vue({
+        el: '#app',
+        data: {},
+        mounted: function () {
+
+        },
+        methods: {
+            showLayer(){
+                layer.open({
+                    type: 2,
+                    title: '弹框',
+                    shadeClose: true,
+                    shade: 0.6,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: '/vue/demo/ueditor'
+                });
+            }
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
