@@ -384,3 +384,8 @@ t_s_dtg_multi_languages tddtgml ON tdtg.id=tddtgml.dict_type_group_id and tddtgm
 create view t_dict_type_group_zh_cn as
 SELECT tdtg.*,tddtgml.name as type_group_name from t_dict_type_group tdtg left join
 t_s_dtg_multi_languages tddtgml ON tdtg.id=tddtgml.dict_type_group_id and tddtgml.language='zh_CN' order by tdtg.id asc;
+
+-- 2019-06-02 by simon 删除t_log_login表和t_multi_language表
+drop table t_log_login;
+drop table t_multi_language;
+

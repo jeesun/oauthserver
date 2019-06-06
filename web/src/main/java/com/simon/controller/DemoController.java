@@ -53,5 +53,23 @@ public class DemoController {
         return ResultMsg.success(provinceService.findAll());
     }
 
+    /*@GetMapping("export")
+    public void export(HttpServletResponse response) throws IOException {
+        List<LogLogin> logLoginList = logLoginMapper.selectAll();
+        Workbook workbook = DefaultExcelBuilder.of(LogLogin.class).build(logLoginList);
+        AttachmentExportUtil.export(workbook, "登录日志信息", response);
+    }
 
+    @GetMapping("import")
+    @ResponseBody
+    public void importTe() throws Exception {
+        Resource resource = new ClassPathResource("static/1.xlsx");
+        Path path = Paths.get("D://1.xlsx");
+
+        List<LogLogin> logLoginList = DefaultExcelReader.of(LogLogin.class)
+                .sheet(0)
+                .rowFilter(row -> row.getRowNum() > 0)
+                .read(path.toFile());
+        log.info("logLoginList=" + JSON.toJSONString(logLoginList));
+    }*/
 }
