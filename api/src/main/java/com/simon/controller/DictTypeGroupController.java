@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.Locale;
+
 /**
 * @author SimonSun
 * @date 2018-09-23
@@ -33,13 +35,13 @@ public class DictTypeGroupController extends BaseController{
     @ApiIgnore
     @PostMapping
     @ResponseBody
-    public ResultMsg add(@RequestBody DictTypeDto dictTypeDto){
+    public ResultMsg add(@RequestBody DictTypeDto dictTypeDto, Locale locale){
         if(1 == dictTypeDto.getType()){
             //父字典
-            dictTypeGroupService.save(dictTypeDto);
+            dictTypeGroupService.save(dictTypeDto, locale.toString());
         }else if(2 == dictTypeDto.getType()){
             //子字典
-            dictTypeService.save(dictTypeDto);
+            dictTypeService.save(dictTypeDto, locale.toString());
         }
         return ResultMsg.success();
     }
@@ -47,13 +49,13 @@ public class DictTypeGroupController extends BaseController{
     @ApiIgnore
     @PatchMapping
     @ResponseBody
-    public ResultMsg update(@RequestBody DictTypeDto dictTypeDto){
+    public ResultMsg update(@RequestBody DictTypeDto dictTypeDto, Locale locale){
         if(1 == dictTypeDto.getType()){
             //父字典
-            dictTypeGroupService.save(dictTypeDto);
+            dictTypeGroupService.save(dictTypeDto, locale.toString());
         }else if(2 == dictTypeDto.getType()){
             //子字典
-            dictTypeService.save(dictTypeDto);
+            dictTypeService.save(dictTypeDto, locale.toString());
         }
         return ResultMsg.success();
     }

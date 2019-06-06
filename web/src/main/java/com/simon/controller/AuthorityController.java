@@ -17,8 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * 权限
@@ -42,25 +41,25 @@ public class AuthorityController extends BaseController {
     private DictTypeService dictTypeService;
 
     @GetMapping("list")
-    public String list(Model model){
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+    public String list(Model model, Locale locale) {
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/authority/list";
     }
 
     @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
-    public String add(Model model) {
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+    public String add(Model model, Locale locale) {
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/authority/add";
     }
 
     @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
-    public String edit(@RequestParam Long userId, Model model) {
-        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type")));
-        model.addAttribute("entity", entityToMap(authorityService.findDtoByUserId(userId)));
+    public String edit(@RequestParam Long userId, Model model, Locale locale) {
+        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type", locale.toString())));
+        model.addAttribute("entity", entityToMap(authorityService.findDtoByUserId(userId, locale.toString())));
         return "vue/authority/edit";
     }
 
@@ -72,19 +71,16 @@ public class AuthorityController extends BaseController {
             @ApiParam(value = "用户名(昵称)", required = false) @RequestParam(required = false) String username,
             @ApiParam(value = "权限", required = false) @RequestParam(required = false) String authority,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
-            @ApiParam(value = "每页条数", defaultValue = "10", required = true)@RequestParam Integer pageSize,
-            @ApiParam(value = "排序")@RequestParam(required = false, defaultValue = "") String orderBy){
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("userId", userId);
-        params.put("username", username);
-        params.put("authority", authority);
-        return new EasyUIDataGridResult<>(authorityService.getDtoList(params, pageNo, pageSize, orderBy));
+            @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam Integer pageSize,
+            @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy,
+            Locale locale) {
+        return new EasyUIDataGridResult<>(authorityService.getDtoList(userId, username, authority, locale.toString(), pageNo, pageSize, orderBy));
     }
 
     @ApiOperation(value = "新增")
     @PostMapping("add")
     @ResponseBody
-    public ResultMsg add(@RequestBody AuthorityDto authorityDto){
+    public ResultMsg add(@RequestBody AuthorityDto authorityDto) {
         authorityService.updateByDto(authorityDto);
         return ResultMsg.success();
     }
@@ -92,7 +88,7 @@ public class AuthorityController extends BaseController {
     @ApiOperation(value = "修改")
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg update(@RequestBody AuthorityDto authorityDto){
+    public ResultMsg update(@RequestBody AuthorityDto authorityDto) {
         authorityService.updateByDto(authorityDto);
         return ResultMsg.success();
     }
@@ -100,14 +96,14 @@ public class AuthorityController extends BaseController {
     @ApiOperation(value = "删除")
     @DeleteMapping("/userIds/{userIds}")
     @ResponseBody
-    public ResultMsg delete(@PathVariable String userIds){
+    public ResultMsg delete(@PathVariable String userIds) {
         authorityService.deleteByUserIds(userIds);
         return ResultMsg.success();
     }
 
     @GetMapping("/unauthorized")
     @ResponseBody
-    public ResultMsg getUnauthorized(){
+    public ResultMsg getUnauthorized() {
         return ResultMsg.success(oauthUserService.getUnauthorized());
     }
 }

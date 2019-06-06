@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="components/vue/vue-list :: head('介绍', 'ueditor')"></head>
+<head th:replace="components/vue/vue-list :: head('neditor示例', 'ueditor')"></head>
 <body>
 <div id="app">
-    <div id="edit_editor" type="text/plain" style="width:100%;height:300px;"></div>
+    <div id="edit_editor"></div>
     <el-button type="primary" @click="getContent">获取内容</el-button>
     <el-button type="primary" @click="setContent">写入内容</el-button>
 </div>
@@ -17,12 +17,16 @@
 
     var requestUrls = {};
 
+    var editEditor = UE.getEditor('edit_editor', {
+        initialFrameWidth: '100%',
+        initialFrameHeight: '350',
+        scaleEnabled: true,
+        autoHeight: false
+    });
+
     var app = new Vue({
         el: '#app',
         data: {
-            editEditor: UE.getEditor('edit_editor', {
-                autoHeight: false
-            }),
             testContent: '<p>hello, world</p>'
         },
         mounted: function () {
@@ -30,20 +34,25 @@
         },
         methods: {
             getContent() {
-                this.$alert(this.editEditor.getContent(), '标题名称', {
+                this.$alert(editEditor.getContent(), '标题名称', {
                     confirmButtonText: '确定',
                     callback: action => {
-                        this.$message({
-                            type: 'info',
-                            message: `action: ${action}`
-                        });
+
                     }
                 });
             },
             setContent() {
-                this.editEditor.setContent(this.testContent);
+                editEditor.setContent(this.testContent);
             }
         }
+    });
+
+    $(document).ready(function () {
+
+        editEditor.ready(function () {
+            editEditor.setContent('122');  //赋值给UEditor
+        });
+
     });
     /*]]>*/
 </script>

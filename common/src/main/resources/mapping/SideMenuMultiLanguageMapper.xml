@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simon.mapper.SideMenuMultiLanguageMapper">
+    <resultMap id="BaseResultMap" type="com.simon.model.SideMenuMultiLanguage">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="side_menu_id" jdbcType="BIGINT" property="sideMenuId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="language" jdbcType="VARCHAR" property="language"/>
+    </resultMap>
+
+    <update id="updateNameBySideMenuIdAndLanguage">
+        update t_s_side_menu_multi_languages set name=#{name} where side_menu_id=#{sideMenuId} and language=#{language}
+    </update>
+
+    <select id="countBySideMenuIdAndLanguage" resultType="int">
+        select count(0) from t_s_side_menu_multi_languages where side_menu_id=#{sideMenuId} and language=#{language}
+    </select>
+</mapper>

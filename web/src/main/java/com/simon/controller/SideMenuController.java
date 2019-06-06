@@ -49,41 +49,41 @@ public class SideMenuController extends BaseController {
     private DictTypeService dictTypeService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+    public String list(Model model, Locale locale) {
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/list";
     }
 
     @GetMapping("add")
-    public String add(Model model) {
+    public String add(Model model, Locale locale) {
         model.addAttribute("icons", fontAwesomeService.getDtos());
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/add";
     }
 
     @GetMapping("edit")
-    public String edit(Model model, @RequestParam Long id) {
+    public String edit(Model model, @RequestParam Long id, Locale locale) {
         model.addAttribute("icons", fontAwesomeService.getDtos());
-        model.addAttribute("entity", entityToMap(sideMenuService.findById(id)));
+        model.addAttribute("entity", entityToMap(sideMenuService.findById(id, locale.toString())));
         return "vue/sideMenu/edit";
     }
 
     @GetMapping("subAdd")
-    public String subAdd(Model model, @ApiParam(value = "父菜单id", required = true) @RequestParam Long id) {
+    public String subAdd(Model model, @ApiParam(value = "父菜单id", required = true) @RequestParam Long id, Locale locale) {
         model.addAttribute("entity", entityToMap(sideMenuService.findById(id)));
-        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1()));
+        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
         model.addAttribute("icons", fontAwesomeService.getDtos());
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/subAdd";
     }
 
     @GetMapping("subEdit")
-    public String subEdit(Model model, @RequestParam Long id) {
-        SideMenu sideMenu = sideMenuService.findById(id);
+    public String subEdit(Model model, @RequestParam Long id, Locale locale) {
+        SideMenu sideMenu = sideMenuService.findById(id, locale.toString());
         model.addAttribute("entity", entityToMap(sideMenu));
-        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1()));
+        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
         model.addAttribute("icons", fontAwesomeService.getDtos());
-        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type"));
+        model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/subEdit";
     }
 
@@ -111,8 +111,10 @@ public class SideMenuController extends BaseController {
     @ApiOperation(value = "侧边栏菜单数据")
     @GetMapping("/data/all")
     @ResponseBody
-    public ResultMsg<List<EasyUiSideMenuDto>> getAll() {
-        List<SideMenu> list = sideMenuService.getAll();
+    public ResultMsg<List<EasyUiSideMenuDto>> getAll(Locale locale) {
+        //en_US, zh_CN
+        String language = locale.getLanguage() + "_" + locale.getCountry();
+        List<SideMenu> list = sideMenuService.getAll(language);
         List<EasyUiSideMenuDto> easyUiList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             SideMenu sideMenu = list.get(i);
@@ -170,18 +172,18 @@ public class SideMenuController extends BaseController {
 
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg updateById(@RequestBody SideMenu body, Authentication authentication) {
+    public ResultMsg updateById(@RequestBody SideMenu body, Authentication authentication, Locale locale) {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateBy(userEntity.getId());
         body.setUpdateDate(LocalDateTime.now());
 
-        sideMenuService.updateByPrimaryKeySelective(body);
+        sideMenuService.updateByPrimaryKeySelective(body, locale.toString());
         return ResultMsg.success();
     }
 
     @PostMapping("add")
     @ResponseBody
-    public ResponseEntity<ResultMsg> add(@RequestBody SideMenu body, Authentication authentication) {
+    public ResponseEntity<ResultMsg> add(@RequestBody SideMenu body, Authentication authentication, Locale locale) {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
@@ -190,7 +192,7 @@ public class SideMenuController extends BaseController {
         if (isPidValid) {
             body.setPid(0L);
         }
-        sideMenuService.save(body);
+        sideMenuService.save(body, locale.toString());
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.CREATED);
     }
 
@@ -198,6 +200,7 @@ public class SideMenuController extends BaseController {
     @GetMapping("/data")
     @ResponseBody
     public EasyUIDataGridResult<EasyUiSideMenuDto> getEasyUiList(
+            Locale locale,
             @RequestParam(required = false) String authority,
             @RequestParam(required = false) String name,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
@@ -206,6 +209,7 @@ public class SideMenuController extends BaseController {
         Map<String, Object> params = new HashMap<>(2);
         params.put("authority", authority);
         params.put("name", name);
+        params.put("language", locale.toString());
         PageInfo<SideMenu> sideMenuPageInfo = sideMenuService.getList(params, pageSize, (pageNo - 1) * pageSize, orderBy);
         List<SideMenu> list = sideMenuPageInfo.getList();
         List<EasyUiSideMenuDto> easyUiList = new ArrayList<>();
@@ -247,7 +251,7 @@ public class SideMenuController extends BaseController {
                     child.setUrl(subSideMenu.getUrl());
 
                     List<EasyUiSideMenuDto> grandchildren = new ArrayList<>();
-                    List<SideMenu> grandchildrenMenus = sideMenuService.selectByPid(subSideMenu.getId());
+                    List<SideMenu> grandchildrenMenus = sideMenuService.selectByPid(subSideMenu.getId(), locale.toString());
                     for(int k = 0; k < grandchildrenMenus.size(); k++){
                         SideMenu grandchildMenu = grandchildrenMenus.get(k);
                         EasyUiSideMenuDto grandchild = new EasyUiSideMenuDto();

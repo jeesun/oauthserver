@@ -6,14 +6,13 @@ import com.simon.dto.AuthorityDto;
 import com.simon.model.Authority;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author SimonSun
 * @date 2018-11-14
 **/
 public interface AuthorityService extends BasicService<Authority, Long> {
-    PageInfo<AuthorityDto> getDtoList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy);
+    PageInfo<AuthorityDto> getDtoList(Long userId, String username, String authority, String language, Integer pageNo, Integer pageSize, String orderBy);
     List<Authority> findByUserId(Long userId);
 
     void updateByDto(AuthorityDto authorityDto);
@@ -23,7 +22,8 @@ public interface AuthorityService extends BasicService<Authority, Long> {
     /**
      * 根据用户id查询权限dto
      * @param userId 用户id
+     * @param language 语言
      * @return 权限dto
      */
-    AuthorityDto findDtoByUserId(Long userId);
+    AuthorityDto findDtoByUserId(Long userId, String language);
 }

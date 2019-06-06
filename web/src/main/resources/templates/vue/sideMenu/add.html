@@ -42,8 +42,8 @@
                     <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -58,6 +58,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         url: "/api/sideMenus/add"
@@ -108,12 +111,12 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("修改成功");
+                            parent.showSuccess([[#{updateSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{updateFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }

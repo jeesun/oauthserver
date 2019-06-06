@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -141,6 +142,8 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
         sideMenuIds.addAll(sideMenuMapper.getLinkIdsByIds(sideMenuIds.toArray(new Long[0])));
         //去重
         sideMenuIds = sideMenuIds.stream().distinct().collect(Collectors.toList());
+        //去空
+        sideMenuIds.removeAll(Collections.singleton(null));
 
         List<SideMenuAuthority> sideMenuAuthorityList = new ArrayList<>();
         for (Long sideMenuId : sideMenuIds) {

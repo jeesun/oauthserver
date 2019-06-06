@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,7 +130,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public PageInfo<AuthorityDto> getDtoList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
+    public PageInfo<AuthorityDto> getDtoList(Long userId, String username, String authority, String language, Integer pageNo, Integer pageSize, String orderBy) {
         if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
@@ -141,7 +140,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
-        var list = authorityMapper.getDtoList(params);
+        var list = authorityMapper.getDtoList(userId, username, authority, language);
         return new PageInfo<>(list);
     }
 
@@ -172,10 +171,8 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public AuthorityDto findDtoByUserId(Long userId) {
-        Map<String, Object> params = new HashMap<>(1);
-        params.put("userId", userId);
-        List<AuthorityDto> dtoList = authorityMapper.getDtoList(params);
+    public AuthorityDto findDtoByUserId(Long userId, String language) {
+        List<AuthorityDto> dtoList = authorityMapper.getDtoList(userId, null, null, language);
         if (null == dtoList || dtoList.size() <= 0) {
             return null;
         } else {

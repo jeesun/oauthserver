@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simon.mapper.DictTypeMapper">
-  <!--<cache eviction="FIFO" flushInterval="60000" readOnly="true" size="512" />-->
-  <resultMap id="BaseResultMap" type="com.simon.model.DictType">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="create_by" jdbcType="BIGINT" property="createBy" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
-    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="type_group_id" jdbcType="BIGINT" property="typeGroupId" />
-    <result column="type_group_code" jdbcType="VARCHAR" property="typeGroupCode" />
-    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
-  </resultMap>
+    <!--<cache eviction="FIFO" flushInterval="60000" readOnly="true" size="512" />-->
+    <resultMap id="BaseResultMap" type="com.simon.model.DictType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode"/>
+        <result column="type_group_id" jdbcType="BIGINT" property="typeGroupId"/>
+        <result column="type_group_code" jdbcType="VARCHAR" property="typeGroupCode"/>
+        <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
+    </resultMap>
+
+    <resultMap id="BasicResultMap" type="com.simon.model.DictType" extends="BaseResultMap">
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+    </resultMap>
 
     <resultMap id="EasyUiTreeGridDtoMap" type="com.simon.dto.EasyUiTreeGridDto">
-        <result column="id" jdbcType="BIGINT" property="id" />
-        <result column="pid" jdbcType="BIGINT" property="pid" />
-        <result column="code" jdbcType="VARCHAR" property="code" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="pid" jdbcType="BIGINT" property="pid"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
     </resultMap>
 
     <resultMap id="DictTypeDtoMap" type="com.simon.dto.DictTypeDto">
-        <result column="id" jdbcType="BIGINT" property="id" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="code" jdbcType="VARCHAR" property="code" />
-        <result column="pid" jdbcType="BIGINT" property="pid" />
-        <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="pid" jdbcType="BIGINT" property="pid"/>
         <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
-        <result column="type" jdbcType="INTEGER" property="type" />
-        <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+        <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
     </resultMap>
 
-  <select id="getByGroupCode" parameterType="String" resultMap="BaseResultMap" useCache="true">
+    <select id="getByGroupCode" resultMap="BasicResultMap" useCache="true">
     SELECT
-        *
+        tdt.*
     FROM
-        t_dict_type
+        t_dict_type_${language} tdt
     WHERE
-        type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
-    ORDER BY order_num ASC
+        tdt.type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
+    ORDER BY tdt.order_num ASC
   </select>
-  
-  <select id="getTreeGridDtos" parameterType="java.lang.String" resultMap="EasyUiTreeGridDtoMap">
+
+    <select id="getTreeGridDtos" resultMap="EasyUiTreeGridDtoMap">
     SELECT
-        id,
-        type_group_id AS pid,
-        type_code AS code,
-        type_name AS name,
-        order_num
+        tdt.id,
+        tdt.type_group_id AS pid,
+        tdt.type_code AS code,
+        tdt.type_name AS name,
+        tdt.order_num
     FROM
-        t_dict_type
+        t_dict_type_${language} tdt
     WHERE
         type_group_id = ( SELECT id FROM t_dict_type_group WHERE type_group_code = #{groupCode} )
     ORDER BY order_num ASC
@@ -72,9 +75,8 @@
             2 AS type,
             tdt.order_num
         FROM
-            t_dict_type tdt
-        LEFT JOIN t_dict_type_group tdtg ON tdt.type_group_id = tdtg.id
-        WHERE
-            tdt.id = #{id}
+            t_dict_type_${language} tdt
+        LEFT JOIN t_dict_type_group_${language} tdtg ON tdt.type_group_id = tdtg.id
+        WHERE tdt.id = #{id}
     </select>
 </mapper>

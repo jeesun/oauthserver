@@ -31,9 +31,10 @@ public class OauthController {
         Map<String, String> scopes = (Map<String, String>) (model.containsKey("scopes") ? model.get("scopes") : request.getAttribute("scopes"));
         Map<String, String> resultMap = new LinkedHashMap<>();
         resultMap.putAll(scopes);
+        for (Map.Entry<String, String> entry : scopes.entrySet()) {
+            resultMap.put("scopes", entry.getKey());
+        }
         resultMap.put("client_id", String.valueOf(request.getAttribute("client_id")));
-
-        log.info(JSON.toJSONString(resultMap));
         model.putAll(resultMap);
         return "oauth_approval";
     }

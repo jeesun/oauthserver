@@ -25,4 +25,11 @@ public interface SideMenuAuthorityMapper extends MyMapper<SideMenuAuthority> {
     int deleteByAuthorityAndNotIn(@Param("authority") String authority, @Param("sideMenuIds") String sideMenuIds);
 
     int deleteByEntityName(@Param("entityName") String entityName);
+
+    /**
+     * 删除所有指定菜单及其子菜单的权限记录
+     * @param id 菜单id
+     * @return 删除记录行数
+     */
+    int deleteBySideMenuIdIn(@Param("id") Long id);
 }

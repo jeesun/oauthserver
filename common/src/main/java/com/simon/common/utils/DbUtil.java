@@ -115,27 +115,34 @@ public class DbUtil {
         //查询表标注
         if (dbType == DbType.MYSQL) {
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "'";
+            if (StringUtils.isNotEmpty(tableNameKey)) {
+                //mysql查询默认是不区分大小写的
+                sql += " AND TABLE_NAME LIKE '%" + tableNameKey + "%'";
+            }
+            if (StringUtils.isNotEmpty(tableCommentKey)) {
+                sql += " AND TABLE_COMMENT LIKE '%" + tableCommentKey + "%'";
+            }
         } else if (dbType == DbType.POSTGRESQL) {
             sql = "SELECT tablename as TABLE_NAME,obj_description(relfilenode,'pg_class') as TABLE_COMMENT FROM pg_tables a, pg_class b WHERE a.tablename = b.relname and a.tablename NOT LIKE 'pg%' AND a.tablename NOT LIKE 'sql_%'";
+            if (StringUtils.isNotEmpty(tableNameKey)) {
+                //postgresql 正则，不区分大小写的模糊查询
+                sql += " AND tablename ~* '" + tableNameKey + "'";
+            }
+            if (StringUtils.isNotEmpty(tableCommentKey)) {
+                sql += " AND obj_description(relfilenode,'pg_class') LIKE '%" + tableCommentKey + "%'";
+            }
         } else if (dbType == DbType.ORACLE) {
             sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE OWNER='" + con.getMetaData().getUserName() + "'";
+            if (StringUtils.isNotEmpty(tableNameKey)) {
+                sql += " AND TABLE_NAME LIKE UPPER('%" + tableNameKey + "%')";
+            }
+            if (StringUtils.isNotEmpty(tableCommentKey)) {
+                sql += " AND COMMENTS LIKE '%" + tableCommentKey + "%'";
+            }
         } else {
             throw new Exception("暂不支持其他数据库");
         }
-        if (StringUtils.isNotEmpty(tableNameKey)) {
-            if (sql.contains("WHERE")) {
-                sql += " AND TABLE_NAME LIKE '%" + tableNameKey + "%'";
-            } else {
-                sql += " WHERE TABLE_NAME LIKE '%" + tableNameKey + "%'";
-            }
-        }
-        if (StringUtils.isNotEmpty(tableCommentKey)) {
-            if (sql.contains("WHERE")) {
-                sql += " AND TABLE_COMMENT LIKE '%" + tableCommentKey + "%'";
-            } else {
-                sql += " WHERE TABLE_COMMENT LIKE '%" + tableCommentKey + "%'";
-            }
-        }
+
         log.info(sql);
         ps = con.prepareStatement(sql);
         rs = ps.executeQuery();
@@ -164,6 +171,62 @@ public class DbUtil {
             tableInfoList.add(tableInfo);
         }
         return tableInfoList;
+    }
+
+    public static TableInfo getTableInfo(Connection con, String tableName) throws Exception {
+        int dbType = 0;
+        try {
+            dbType = getDataBaseType(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String sql = "";
+        PreparedStatement ps;
+        ResultSet rs;
+        //查询表标注
+        if (dbType == DbType.MYSQL) {
+            sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "'";
+            if (StringUtils.isNotEmpty(tableName)) {
+                //mysql查询默认是不区分大小写的
+                sql += " AND TABLE_NAME='" + tableName + "'";
+            }
+        } else if (dbType == DbType.POSTGRESQL) {
+            sql = "SELECT tablename as TABLE_NAME,obj_description(relfilenode,'pg_class') as TABLE_COMMENT FROM pg_tables a, pg_class b WHERE a.tablename = b.relname and a.tablename NOT LIKE 'pg%' AND a.tablename NOT LIKE 'sql_%'";
+            if (StringUtils.isNotEmpty(tableName)) {
+                //postgresql 正则，不区分大小写的模糊查询
+                sql += " AND tablename='" + tableName + "'";
+            }
+        } else if (dbType == DbType.ORACLE) {
+            sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE OWNER='" + con.getMetaData().getUserName() + "'";
+            if (StringUtils.isNotEmpty(tableName)) {
+                sql += " AND TABLE_NAME=UPPER('" + tableName + "')";
+            }
+        } else {
+            throw new Exception("暂不支持其他数据库");
+        }
+
+        log.info(sql);
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            String tableComment = rs.getString("TABLE_COMMENT");
+            tableName = tableName.toLowerCase();
+            String entityName = tableName;
+            if (entityName.startsWith("t_s_")) {
+                entityName = entityName.substring(4);
+            } else if (entityName.startsWith("t_")) {
+                entityName = entityName.substring(2);
+            }
+            entityName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, entityName.toLowerCase());
+
+            TableInfo tableInfo = new TableInfo();
+            tableInfo.setTableName(tableName);
+            tableInfo.setTableComment(tableComment);
+            tableInfo.setEntityName(entityName);
+            return tableInfo;
+        }
+        return null;
     }
 
     /**
@@ -207,12 +270,12 @@ public class DbUtil {
         ResultSet rs;
 
         //查询表标注
-        if (dbType == DbType.MYSQL) {
+        /*if (dbType == DbType.MYSQL) {
             sql = "SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE table_schema='" + con.getCatalog() + "' AND TABLE_NAME='" + tableName + "'";
         } else if (dbType == DbType.POSTGRESQL) {
             sql = "SELECT relname AS TABLE_NAME, CAST(obj_description(relfilenode, 'pg_class') AS VARCHAR) AS TABLE_COMMENT FROM pg_class C WHERE relname = '" + tableName + "'";
         } else if (dbType == DbType.ORACLE) {
-            sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE table_name='" + tableName.toUpperCase() + "'";
+            sql = "select TABLE_NAME,COMMENTS AS TABLE_COMMENT from all_tab_comments WHERE OWNER='" + con.getMetaData().getUserName() + "' and TABLE_NAME='" + tableName.toUpperCase() + "'";
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -229,8 +292,12 @@ public class DbUtil {
                 }
             }
             dataModel.setTableComment(tableComment);
+        }*/
+        TableInfo tableInfo = getTableInfo(con, tableName);
+        if (null == tableInfo) {
+            throw new RuntimeException("表" + tableName + "不存在");
         }
-
+        dataModel.setTableComment(StringUtils.isNotEmpty(tableInfo.getTableComment()) ? tableInfo.getTableComment() : tableInfo.getEntityName());
 
         //查询表属性,格式化生成实体所需属性
         if (dbType == DbType.MYSQL) {
@@ -262,7 +329,7 @@ public class DbUtil {
                     "atc.data_scale \n" +
                     "FROM\n" +
                     "all_tab_columns atc\n" +
-                    "FULL JOIN ( SELECT column_name, COMMENTS FROM all_col_comments WHERE Table_Name = 'USERS' ) acc ON atc.column_name = acc.column_name \n" +
+                    "FULL JOIN ( SELECT column_name, COMMENTS FROM all_col_comments WHERE Table_Name = '" + tableName.toUpperCase() + "' ) acc ON atc.column_name = acc.column_name \n" +
                     "WHERE\n" +
                     "atc.table_name = '" + tableName.toUpperCase() + "'";
         } else {

@@ -7,8 +7,11 @@ import com.simon.common.config.AppConfig;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.mapper.DictTypeGroupMapper;
+import com.simon.mapper.DictTypeGroupMultiLanguageMapper;
 import com.simon.model.DictType;
 import com.simon.model.DictTypeGroup;
+import com.simon.model.DictTypeGroupMultiLanguage;
+import com.simon.repository.DictTypeGroupMultiLanguageRepository;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.service.DictTypeGroupService;
 import lombok.var;
@@ -25,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author SimonSun
-* @date 2018-09-06 10:03:50
-**/
+ * @author SimonSun
+ * @date 2018-09-06 10:03:50
+ **/
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class DictTypeGroupServiceImpl implements DictTypeGroupService {
@@ -37,13 +40,19 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     @Autowired
     private DictTypeGroupRepository dictTypeGroupRepository;
 
+    @Autowired
+    private DictTypeGroupMultiLanguageMapper dictTypeGroupMultiLanguageMapper;
+
+    @Autowired
+    private DictTypeGroupMultiLanguageRepository dictTypeGroupMultiLanguageRepository;
+
     @Override
     public long count() {
         return dictTypeGroupRepository.count();
     }
 
     @Override
-    public DictTypeGroup save(DictTypeGroup dictTypeGroup){
+    public DictTypeGroup save(DictTypeGroup dictTypeGroup) {
         return dictTypeGroupRepository.save(dictTypeGroup);
     }
 
@@ -54,13 +63,13 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
 
     @Override
     public PageInfo<DictTypeGroup> findAll(Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
 
@@ -69,64 +78,64 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
-    public Page<DictTypeGroup> findAll(Pageable pageable){
+    public Page<DictTypeGroup> findAll(Pageable pageable) {
         return dictTypeGroupRepository.findAll(pageable);
     }
 
     @Override
-    public List<DictTypeGroup> findAll(){
+    public List<DictTypeGroup> findAll() {
         return dictTypeGroupRepository.findAll();
     }
 
     @Override
-    public void delete(Long id){
+    public void delete(Long id) {
         dictTypeGroupMapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    public int deleteByIds(String ids){
+    public int deleteByIds(String ids) {
         return dictTypeGroupMapper.deleteByIds(ids);
     }
 
     @Override
-    public DictTypeGroup findById(Long id){
+    public DictTypeGroup findById(Long id) {
         return dictTypeGroupRepository.findOne(id);
     }
 
     @Override
-    public int insertList(List<DictTypeGroup> list){
+    public int insertList(List<DictTypeGroup> list) {
         return dictTypeGroupMapper.insertList(list);
     }
 
     @Override
-    public int insert(DictTypeGroup dictTypeGroup){
+    public int insert(DictTypeGroup dictTypeGroup) {
         return dictTypeGroupMapper.insert(dictTypeGroup);
     }
 
     @Override
-    public int insertSelective(DictTypeGroup dictTypeGroup){
+    public int insertSelective(DictTypeGroup dictTypeGroup) {
         return dictTypeGroupMapper.insertSelective(dictTypeGroup);
     }
 
     @Override
-    public int updateByPrimaryKey(DictTypeGroup dictTypeGroup){
+    public int updateByPrimaryKey(DictTypeGroup dictTypeGroup) {
         return dictTypeGroupMapper.updateByPrimaryKey(dictTypeGroup);
     }
 
     @Override
-    public int updateByPrimaryKeySelective(DictTypeGroup dictTypeGroup){
+    public int updateByPrimaryKeySelective(DictTypeGroup dictTypeGroup) {
         return dictTypeGroupMapper.updateByPrimaryKeySelective(dictTypeGroup);
     }
 
     @Override
     public PageInfo<DictTypeGroup> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
         var list = dictTypeGroupMapper.getList(params);
@@ -134,14 +143,14 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
-    public List<DictTypeDto> getDtos(Integer limit, Integer offset) {
+    public List<DictTypeDto> getDtos(String language, Integer limit, Integer offset) {
         List<DictTypeDto> dtoList = new ArrayList<>();
         /*List<DictTypeGroup> groups = dictTypeGroupRepository.findAll(new PageRequest((offset/limit - 1), limit, Sort.Direction.DESC, "id")).getContent();*/
         PageHelper.startPage(offset / limit + 1, limit);
-        List<DictTypeGroup> list = dictTypeGroupMapper.getAll();
+        List<DictTypeGroup> list = dictTypeGroupMapper.getAll(language);
         PageInfo<DictTypeGroup> pageInfo = new PageInfo<>(list);
         List<DictTypeGroup> resultList = pageInfo.getList();
-        for(int i = 0; i < resultList.size(); i++){
+        for (int i = 0; i < resultList.size(); i++) {
             DictTypeGroup dictTypeGroup = resultList.get(i);
             DictTypeDto dto = new DictTypeDto();
             dto.setId(String.valueOf(dictTypeGroup.getId()));
@@ -152,8 +161,8 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
             dtoList.add(dto);
 
             List<DictType> dictTypes = dictTypeGroup.getDictTypes();
-            if (null != dictTypes && dictTypes.size() > 0){
-                for(int j = 0; j < dictTypes.size(); j++){
+            if (null != dictTypes && dictTypes.size() > 0) {
+                for (int j = 0; j < dictTypes.size(); j++) {
                     DictType dictType = dictTypes.get(j);
                     DictTypeDto subDto = new DictTypeDto();
                     subDto.setId(dictTypeGroup.getId() + "-" + dictType.getId());
@@ -172,31 +181,42 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
-    public PageInfo<EasyUiTreeGridDto> getTreeGridDtos(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
+    public PageInfo<EasyUiTreeGridDto> getTreeGridDtos(String name, String code, String language, Integer pageNo, Integer pageSize, String orderBy) {
+        if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;
         }
         orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
+        if (StringUtils.isEmpty(orderBy)) {
             PageHelper.startPage(pageNo, pageSize);
-        }else{
+        } else {
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
 
-        var list = dictTypeGroupMapper.getTreeGridDtos(params);
+        List<EasyUiTreeGridDto> list = dictTypeGroupMapper.getTreeGridDtos(name, code, language);
         return new PageInfo<>(list);
     }
 
     @Override
-    public DictTypeGroup save(DictTypeDto dictTypeDto) {
+    public DictTypeGroup save(DictTypeDto dictTypeDto, String language) {
         DictTypeGroup dictTypeGroup = new DictTypeGroup();
-        if (StringUtils.isNotEmpty(dictTypeDto.getId())){
+        if (StringUtils.isNotEmpty(dictTypeDto.getId())) {
             dictTypeGroup.setId(Long.parseLong(dictTypeDto.getId()));
         }
         dictTypeGroup.setCreateDate(LocalDateTime.now());
         dictTypeGroup.setTypeGroupName(dictTypeDto.getName());
         dictTypeGroup.setTypeGroupCode(dictTypeDto.getCode());
-        return dictTypeGroupRepository.save(dictTypeGroup);
+        dictTypeGroup = dictTypeGroupRepository.save(dictTypeGroup);
+
+        DictTypeGroupMultiLanguage dictTypeGroupMultiLanguage = dictTypeGroupMultiLanguageRepository.findByDictTypeGroupIdAndLanguage(dictTypeGroup.getId(), language);
+        if (null == dictTypeGroupMultiLanguage) {
+            dictTypeGroupMultiLanguage = new DictTypeGroupMultiLanguage();
+        }
+        dictTypeGroupMultiLanguage.setLanguage(language);
+        dictTypeGroupMultiLanguage.setDictTypeGroupId(dictTypeGroup.getId());
+        dictTypeGroupMultiLanguage.setName(dictTypeDto.getName());
+        dictTypeGroupMultiLanguageRepository.save(dictTypeGroupMultiLanguage);
+
+        return dictTypeGroup;
     }
 
     @Override
@@ -205,8 +225,8 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
-    public DictTypeDto getDtoById(Long id) {
-        return dictTypeGroupMapper.getDtoById(id);
+    public DictTypeDto getDtoById(Long id, String language) {
+        return dictTypeGroupMapper.getDtoById(id, language);
     }
 
     @Override

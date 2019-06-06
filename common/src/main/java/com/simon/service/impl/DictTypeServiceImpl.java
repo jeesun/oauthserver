@@ -6,8 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
 import com.simon.dto.DictTypeDto;
 import com.simon.mapper.DictTypeMapper;
+import com.simon.mapper.DictTypeMultiLanguageMapper;
 import com.simon.model.DictType;
+import com.simon.model.DictTypeMultiLanguage;
 import com.simon.repository.DictTypeGroupRepository;
+import com.simon.repository.DictTypeMultiLanguageRepository;
 import com.simon.repository.DictTypeRepository;
 import com.simon.service.DictTypeService;
 import lombok.var;
@@ -37,6 +40,12 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Autowired
     private DictTypeGroupRepository dictTypeGroupRepository;
+
+    @Autowired
+    private DictTypeMultiLanguageMapper dictTypeMultiLanguageMapper;
+
+    @Autowired
+    private DictTypeMultiLanguageRepository dictTypeMultiLanguageRepository;
 
     @Override
     public long count() {
@@ -134,12 +143,12 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
-    public List<DictType> getTypeByGroupCode(String groupCode) {
-        return dictTypeMapper.getByGroupCode(groupCode);
+    public List<DictType> getTypeByGroupCode(String groupCode, String language) {
+        return dictTypeMapper.getByGroupCode(groupCode, language);
     }
 
     @Override
-    public DictType save(DictTypeDto dictTypeDto) {
+    public DictType save(DictTypeDto dictTypeDto, String language) {
         DictType dictType = new DictType();
         if(StringUtils.isNotEmpty(dictTypeDto.getId())){
             dictType.setId(Long.parseLong(dictTypeDto.getId()));
@@ -150,11 +159,22 @@ public class DictTypeServiceImpl implements DictTypeService {
         dictType.setTypeName(dictTypeDto.getName());
         dictType.setTypeCode(dictTypeDto.getCode());
         dictType.setOrderNum(dictTypeDto.getOrderNum());
-        return dictTypeRepository.save(dictType);
+        dictType = dictTypeRepository.save(dictType);
+
+        DictTypeMultiLanguage dictTypeMultiLanguage = dictTypeMultiLanguageRepository.findByDictTypeIdAndLanguage(dictType.getId(), language);
+        if (null == dictTypeMultiLanguage) {
+            dictTypeMultiLanguage = new DictTypeMultiLanguage();
+        }
+        dictTypeMultiLanguage.setDictTypeId(dictType.getId());
+        dictTypeMultiLanguage.setLanguage(language);
+        dictTypeMultiLanguage.setName(dictTypeDto.getName());
+        dictTypeMultiLanguageRepository.save(dictTypeMultiLanguage);
+
+        return dictType;
     }
 
     @Override
-    public DictTypeDto getDtoById(Long id) {
-        return dictTypeMapper.getDtoById(id);
+    public DictTypeDto getDtoById(Long id, String language) {
+        return dictTypeMapper.getDtoById(id, language);
     }
 }

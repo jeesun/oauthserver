@@ -61,21 +61,6 @@
         </where>
     </select>
 
-    <select id="sexRatio" resultMap="StatisticDtoMap">
-    SELECT
-        tu.sex AS classify,
-        count( tu.id ) AS statistic,
-        tdt.type_name AS classify_name
-    FROM
-        t_users tu
-        LEFT JOIN t_dict_type tdt ON tu.sex = tdt.type_code
-        AND tdt.type_group_code = 'sex'
-    WHERE
-        tu.sex IS NOT NULL
-    GROUP BY
-        tu.sex
-  </select>
-
     <select id="getUnauthorized" resultMap="com.simon.mapper.AuthorityMapper.AuthorityDtoMap">
     SELECT
         tu.id AS user_id,

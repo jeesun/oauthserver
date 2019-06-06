@@ -27,10 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 数据表
@@ -107,9 +104,10 @@ public class TableController extends BaseController {
             Model model,
             @RequestParam String tableName,
             @RequestParam(required = false) String tableComment,
-            @RequestParam String entityName) {
-        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type")));
-        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1()));
+            @RequestParam String entityName,
+            Locale locale) {
+        model.addAttribute("roleTypeList", listToMap(dictTypeService.getTypeByGroupCode("role_type", locale.toString())));
+        model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
         model.addAttribute("tableName", tableName);
         model.addAttribute("tableComment", tableComment);
         model.addAttribute("entityName", entityName);
@@ -177,7 +175,7 @@ public class TableController extends BaseController {
             e.printStackTrace();
         }
 
-        model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component"));
+        model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component", locale.toString()));
         return "vue/table/code_generate";
     }
 
@@ -200,7 +198,7 @@ public class TableController extends BaseController {
 
         //保存用户生成代码时的UI属性配置。
         //代码生成时，向t_side_menu表添加访问权限数据。
-        tableService.saveSettingsAndAuthorities(body);
+        //tableService.saveSettingsAndAuthorities(body);
         return ResultMsg.success();
     }
 }

@@ -259,7 +259,7 @@ public class OauthUserServiceImpl implements OauthUserService {
                 OauthUser target = oauthUserRepository.findById(model.getId());
                 BeanUtils.copyPropertiesIgnoreNull(model, target);
 
-                UserEntity userEntity = new UserEntity(target.getId(), target.getUsername(), target.getPassword(), target.getEnabled(), target.getPhone(), target.getEmail(), target.getAddress(), target.getBirth(), target.getAge(), target.getHeadPhoto(), target.getPersonBrief(), target.getSex(), authorityRepository.findByUserId(target.getId()));
+                UserEntity userEntity = new UserEntity(target.getId(), target.getUsername(), target.getPassword(), target.getEnabled(), target.getAreaCode(), target.getPhone(), target.getEmail(), target.getAddress(), target.getBirth(), target.getAge(), target.getHeadPhoto(), target.getPersonBrief(), target.getSex(), authorityRepository.findByUserId(target.getId()));
 
                 //刷新缓存
                 cache.put(model.getUsername(), userEntity);
@@ -281,7 +281,7 @@ public class OauthUserServiceImpl implements OauthUserService {
                 OauthUser target = oauthUserRepository.findById(model.getId());
                 BeanUtils.copyPropertiesIgnoreNull(model, target);
 
-                UserEntity userEntity = new UserEntity(target.getId(), target.getUsername(), target.getPassword(), target.getEnabled(), target.getPhone(), target.getEmail(), target.getAddress(), target.getBirth(), target.getAge(), target.getHeadPhoto(), target.getPersonBrief(), target.getSex(), authorityRepository.findByUserId(target.getId()));
+                UserEntity userEntity = new UserEntity(target.getId(), target.getUsername(), target.getPassword(), target.getEnabled(), target.getAreaCode(), target.getPhone(), target.getEmail(), target.getAddress(), target.getBirth(), target.getAge(), target.getHeadPhoto(), target.getPersonBrief(), target.getSex(), authorityRepository.findByUserId(target.getId()));
 
                 //刷新缓存
                 cache.put(model.getUsername(), userEntity);
@@ -305,12 +305,6 @@ public class OauthUserServiceImpl implements OauthUserService {
         }
         List<OauthUser> list = oauthUserMapper.getList(params);
         return new PageInfo<>(list);
-    }
-
-    @Override
-    public List<StatisticDto> sexRatio() {
-        List<StatisticDto> statisticDtoList = oauthUserMapper.sexRatio();
-        return statisticDtoList;
     }
 
     @Override

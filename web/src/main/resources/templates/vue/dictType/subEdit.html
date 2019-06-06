@@ -7,24 +7,24 @@
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="字典组名称" prop="parentName">
-                    <el-input v-model="ruleForm.parentName" placeholder="请输入字典组名称" :disabled="true"></el-input>
+                <el-form-item th:label="#{dictType.groupName}" prop="parentName">
+                    <el-input v-model="ruleForm.parentName" th:placeholder="#{pleaseInput} + #{dictType.groupName}" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="字典组编码" prop="parentCode">
-                    <el-input v-model="ruleForm.parentCode" placeholder="请输入字典组编码" :disabled="true"></el-input>
+                <el-form-item th:label="#{dictType.groupCode}" prop="parentCode">
+                    <el-input v-model="ruleForm.parentCode" th:placeholder="#{pleaseInput} + #{dictType.groupCode}" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="字典名称" prop="name">
-                    <el-input v-model="ruleForm.name" placeholder="请输入字典名称"></el-input>
+                <el-form-item th:label="#{dictType.name}" prop="name">
+                    <el-input v-model="ruleForm.name" th:placeholder="#{pleaseInput} + #{dictType.name}"></el-input>
                 </el-form-item>
-                <el-form-item label="字典编码" prop="code">
-                    <el-input v-model="ruleForm.code" placeholder="请输入字典编码"></el-input>
+                <el-form-item th:label="#{dictType.code}" prop="code">
+                    <el-input v-model="ruleForm.code" th:placeholder="#{pleaseInput} + #{dictType.code}"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" prop="orderNum">
-                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序" type="number"></el-input>
+                <el-form-item th:label="#{orderNum}" prop="orderNum">
+                    <el-input v-model="ruleForm.orderNum" th:placeholder="#{pleaseInput} + #{orderNum}" type="number"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -39,6 +39,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         url: "/api/dictTypeGroups/edit"

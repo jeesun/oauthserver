@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface DictTypeGroupMapper extends MyMapper<DictTypeGroup> {
-    List<DictTypeGroup> getAll();
+    List<DictTypeGroup> getAll(@Param("language") String language);
 
-    List<EasyUiTreeGridDto> getTreeGridDtos(@Param("map") Map<String, Object> map);
+    List<EasyUiTreeGridDto> getTreeGridDtos(@Param("name") String name, @Param("code") String code, @Param("language") String language);
 
     List<DictTypeGroup> getList(@Param("map") Map<String, Object> map);
 
@@ -21,7 +21,7 @@ public interface DictTypeGroupMapper extends MyMapper<DictTypeGroup> {
      * @param id 字典组id
      * @return 字典dto
      */
-    DictTypeDto getDtoById(@Param("id") Long id);
+    DictTypeDto getDtoById(@Param("id") Long id, @Param("language") String language);
 
 
 }

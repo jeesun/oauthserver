@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="components/vue/vue-list :: head('新闻', 'commit')"></head>
+<head th:replace="components/vue/vue-list :: head('新闻', 'commit,ueditor')"></head>
 <body>
 <div id="app" style="padding-top: 10px">
     <el-row>
-        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
-                :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
+        <el-col :xs="{span: 24, offset: 0}" :sm="{span: 20, offset: 2}" :md="{span: 20, offset: 2}"
+                :lg="{span: 20, offset: 2}" :xl="{span: 20, offset: 2}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="标题" prop="title">
-                    <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
+                <el-form-item th:label="#{newsInfo.title}" prop="title">
+                    <el-input v-model="ruleForm.title" th:placeholder="#{pleaseInput} + #{newsInfo.title}"></el-input>
                 </el-form-item>
-                <el-form-item label="状态" prop="status">
-                    <el-input v-model="ruleForm.status" placeholder="请输入状态"></el-input>
+                <el-form-item th:label="#{newsInfo.status}" prop="status">
+                    <el-input v-model="ruleForm.status" th:placeholder="#{pleaseInput} + #{newsInfo.status}"></el-input>
                 </el-form-item>
-                <el-form-item label="新闻内容" prop="content">
-                    <el-input v-model="ruleForm.content" placeholder="请输入新闻内容"></el-input>
+                <el-form-item th:label="#{newsInfo.imageUrl}" prop="imageUrl">
+                    <el-input v-model="ruleForm.imageUrl" th:placeholder="#{pleaseInput} + #{newsInfo.imageUrl}"></el-input>
                 </el-form-item>
-                <el-form-item label="缩略图" prop="imageUrl">
-                    <el-input v-model="ruleForm.imageUrl" placeholder="请输入缩略图"></el-input>
+                <el-form-item th:label="#{newsInfo.publishDate}" prop="publishDate">
+                    <el-date-picker v-model="ruleForm.publishDate" type="datetime" th:placeholder="#{pleaseChoose}"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="发布时间" prop="publishDate">
-                    <el-input v-model="ruleForm.publishDate" placeholder="请输入发布时间"></el-input>
+                <el-form-item th:label="#{newsInfo.tags}" prop="tags">
+                    <el-input v-model="ruleForm.tags" th:placeholder="#{pleaseInput} + #{newsInfo.tags}"></el-input>
                 </el-form-item>
-                <el-form-item label="标签" prop="tags">
-                    <el-input v-model="ruleForm.tags" placeholder="请输入标签"></el-input>
+                <el-form-item th:label="#{newsInfo.newsType}" prop="newsType">
+                    <el-input v-model="ruleForm.newsType" th:placeholder="#{pleaseInput} + #{newsInfo.newsType}"></el-input>
                 </el-form-item>
-                <el-form-item label="新闻类型" prop="newsType">
-                    <el-input v-model="ruleForm.newsType" placeholder="请输入新闻类型"></el-input>
+                <el-form-item th:label="#{newsInfo.content}">
+                    <div id="content_ueditor"></div>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -46,9 +46,18 @@
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
 
+    //国际化
+    international([[${session.locale}]]);
+
     var requestUrls = {
         url: "/api/newsInfos/add"
     };
+
+    var content_ueditor = UE.getEditor('content_ueditor', {
+        initialFrameWidth: '100%',
+        initialFrameHeight: '350',
+        autoHeight: false
+    });
 
     var app = new Vue({
         el: '#app',
@@ -84,6 +93,9 @@
             },
             submitForm(formName) {
                 parent.openLoading();
+                //富文本内容
+                this.ruleForm.content = content_ueditor.getContent();
+
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {

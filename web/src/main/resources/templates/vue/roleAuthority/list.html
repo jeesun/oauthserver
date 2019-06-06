@@ -3,17 +3,17 @@
 <head th:replace="components/vue/vue-list :: head('权限列表', 'list')"></head>
 <body>
 <div id="app">
-    <el-row>
-        <el-col :span="15">
+    <el-row :gutter="10" style="margin:0 10px 0 10px;">
+        <el-col :xs="24" :sm="16" :md="16" :lg="16" :xl="16">
             <template>
                 <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
                           style="font-size: 12px"
                           v-loading="tableLoading" cell-style="padding:1px">
                     <el-table-column align="center" type="index" :index="indexSerial" width="50"></el-table-column>
                     <el-table-column align="center" prop="id" label="id" width="180"></el-table-column>
-                    <el-table-column align="center" prop="typeName" label="字典名称" width="160"></el-table-column>
-                    <el-table-column align="center" prop="typeCode" label="字典编码" width="160"></el-table-column>
-                    <el-table-column align="center" label="操作">
+                    <el-table-column align="center" prop="typeName" th:label="#{roleAuthority.typeCode}" width="160"></el-table-column>
+                    <el-table-column align="center" prop="typeCode" th:label="#{roleAuthority.typeName}" width="160"></el-table-column>
+                    <el-table-column align="center" th:label="#{operation}">
                         <template slot-scope="scope">
                             <el-button size="mini" type="primary" icon="el-icon-edit"
                                        @click="handleEdit(scope.$index, scope.row)">
@@ -32,11 +32,11 @@
                 </el-col>
             </template>
         </el-col>
-        <el-col :offset="1" :span="8">
+        <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
             <el-card shadow="never">
                 <div slot="header">
-                    <span>权限列表{{ruleForm.authority}}</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="submitForm('ruleForm')"><i class="fas fa-save" style="color: #409EFF"></i>&nbsp;保存</el-button>
+                    <span th:text="#{authority}"></span>: <span>{{ruleForm.authority}}</span>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="submitForm('ruleForm')"><i class="fas fa-save" style="color: #409EFF"></i>&nbsp;<span th:text="#{save}"></span></el-button>
                 </div>
                 <div style="height:400px;overflow-y:auto;overflow-x:hidden;">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm" height="300px">
@@ -66,6 +66,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         list: "/api/roleAuthorities/data",
@@ -121,7 +124,7 @@
                     this.setCheckedKeys();
                     this.$refs.tree.setCheckedKeys(this.checkedKeys);
                 }).catch((error) => {
-                    let errorMessage = "发生错误";
+                    let errorMessage = [[#{requestError}]];
                     if (error.response) {
                         errorMessage = error.response.data.message;
                     }
@@ -139,12 +142,12 @@
                     if (valid) {
                         this.$http.post(requestUrls.updateAuth, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("更新成功");
+                            parent.showSuccess([[#{updateSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{requestError}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
@@ -189,7 +192,7 @@
                     }
                 }).catch((error) => {
                     this.tableLoading = false;
-                    let errorMessage = "发生错误";
+                    let errorMessage = [[#{requestError}]];
                     if (error.response) {
                         errorMessage = error.response.data.message;
                     }
@@ -255,7 +258,7 @@
             },
             doAdd(event) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[#{add}]],
                     content: requestUrls.add
                 });
             },

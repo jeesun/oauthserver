@@ -65,6 +65,9 @@
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
 
+    //国际化
+    international([[${session.locale}]]);
+
     var requestUrls = {
 
     };

@@ -6,11 +6,11 @@
     <template>
         <div style="margin-left: 6px;margin-bottom: 6px;">
             <el-form :inline="true" :model="searchForm" style="margin: 0; padding: 0;">
-                <el-form-item label="标题">
-                    <el-input size="small" v-model="searchForm.title" placeholder="请输入标题" clearable></el-input>
+                <el-form-item th:label="#{newsInfo.title}">
+                    <el-input size="small" v-model="searchForm.title" th:placeholder="#{pleaseInput} + #{title}" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
-                    <el-select size="small" v-model="searchForm.status" placeholder="请选择">
+                <el-form-item th:label="#{newsInfo.status}">
+                    <el-select size="small" v-model="searchForm.status" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in newsStatusList"
                                 :key="item.typeCode"
@@ -19,8 +19,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="新闻类型">
-                    <el-select size="small" v-model="searchForm.newsType" placeholder="请选择">
+                <el-form-item th:label="#{newsInfo.newsType}">
+                    <el-select size="small" v-model="searchForm.newsType" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in newsTypeList"
                                 :key="item.typeCode"
@@ -30,13 +30,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch">搜索</el-button>
-                    <el-button size="mini" icon="el-icon-refresh" @click="doReset">重置</el-button>
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch"><span th:text="#{search}"></span></el-button>
+                    <el-button size="mini" icon="el-icon-refresh" @click="doReset"><span th:text="#{reset}"></span></el-button>
                 </el-form-item>
             </el-form>
-            <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini" icon="el-icon-plus" @click="doAdd">新增</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport">导入</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>
+            <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="#{add}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>
         </div>
         <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
                   style="font-size: 12px"
@@ -47,21 +47,21 @@
                     <el-table-column align="center" prop="createDate" label="创建时间" width="120"></el-table-column>
                     <el-table-column align="center" prop="updateBy" label="更新人id" width="120"></el-table-column>
                     <el-table-column align="center" prop="updateDate" label="更新时间" width="120"></el-table-column>-->
-                    <el-table-column align="center" prop="title" label="标题" width="120"></el-table-column>
-                    <el-table-column align="center" prop="userId" label="用户id" width="120"></el-table-column>
-                    <el-table-column align="center" prop="status" label="状态" width="120"></el-table-column>
-                    <el-table-column align="center" prop="content" label="新闻内容" width="120" :show-overflow-tooltip="true"></el-table-column>
-                    <el-table-column align="center" prop="imageUrl" label="缩略图" width="120"></el-table-column>
-                    <el-table-column align="center" prop="publishDate" label="发布时间" width="120"></el-table-column>
-                    <el-table-column align="center" prop="tags" label="标签" width="120"></el-table-column>
-                    <el-table-column align="center" prop="newsType" label="新闻类型" width="120"></el-table-column>
-            <el-table-column align="center" label="操作" width="200">
+                    <el-table-column align="center" prop="title" th:label="#{newsInfo.title}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="userId" th:label="#{newsInfo.userId}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="status" th:label="#{newsInfo.status}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="content" th:label="#{newsInfo.content}" width="120" :show-overflow-tooltip="true"></el-table-column>
+                    <el-table-column align="center" prop="imageUrl" th:label="#{newsInfo.imageUrl}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="publishDate" th:label="#{newsInfo.publishDate}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="tags" th:label="#{newsInfo.tags}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="newsType" th:label="#{newsInfo.newsType}" width="120"></el-table-column>
+            <el-table-column align="center" th:label="#{operation}" width="200">
                 <template slot-scope="scope">
                     <el-button th:if="${#authorization.expression('hasAnyRole(''__${edit}__'')')}" size="mini" type="primary" icon="el-icon-edit"
-                               @click="handleEdit(scope.$index, scope.row)">编辑
+                               @click="handleEdit(scope.$index, scope.row)">
                     </el-button>
                     <el-button th:if="${#authorization.expression('hasAnyRole(''__${delete}__'')')}" size="mini" type="danger" icon="el-icon-delete"
-                               @click="handleDelete(scope.$index, scope.row)">删除
+                               @click="handleDelete(scope.$index, scope.row)">
                     </el-button>
                 </template>
             </el-table-column>
@@ -82,6 +82,9 @@
     //Vue.http.options.emulateHTTP = true;
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
+
+    //国际化
+    international([[${session.locale}]]);
 
     var requestUrls = {
         list: "/api/newsInfos/data",
@@ -141,7 +144,7 @@
                     }
                 }).catch((error) => {
                     this.tableLoading = false;
-                    let errorMessage = "发生错误";
+                    let errorMessage = [[#{requestError}]];
                     if (error.response) {
                         errorMessage = error.response.data.message;
                     }
@@ -176,7 +179,7 @@
             },
             handleEdit(index, row) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[#{edit}]],
                     content: requestUrls.edit + row.id
                 });
             },
@@ -185,7 +188,7 @@
             },
             doAdd(event) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[#{add}]],
                     content: requestUrls.add
                 });
             },
@@ -195,7 +198,7 @@
             doDelete(index, row) {
                 this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
-                        parent.showSuccess("删除成功");
+                        parent.showSuccess([[#{delete}]]);
                         this.loadData(this.pageNo, this.pageSize);
                     }).catch((response) => {
                     console.error(response);

@@ -9,8 +9,11 @@ import com.simon.dto.EasyUiTreeDto;
 import com.simon.dto.SideMenuDto;
 import com.simon.mapper.SideMenuAuthorityMapper;
 import com.simon.mapper.SideMenuMapper;
+import com.simon.mapper.SideMenuMultiLanguageMapper;
 import com.simon.model.SideMenu;
 import com.simon.model.SideMenuAuthority;
+import com.simon.model.SideMenuMultiLanguage;
+import com.simon.repository.SideMenuAuthorityRepository;
 import com.simon.repository.SideMenuRepository;
 import com.simon.service.SideMenuService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,12 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     @Autowired
     private SideMenuAuthorityMapper sideMenuAuthorityMapper;
+
+    @Autowired
+    private SideMenuAuthorityRepository sideMenuAuthorityRepository;
+
+    @Autowired
+    private SideMenuMultiLanguageMapper sideMenuMultiLanguageMapper;
 
     @Override
     public long count() {
@@ -90,17 +99,23 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     @Override
     public List<SideMenu> findAll() {
-        return sideMenuMapper.findAll();
+        return sideMenuRepository.findAll();
     }
 
     @Override
     public void delete(Long id) {
-        sideMenuRepository.delete(id);
+        sideMenuAuthorityMapper.deleteBySideMenuIdIn(id);
+        sideMenuRepository.deleteByIdOrPid(id, id);
     }
 
     @Override
     public int deleteByIds(String ids) {
-        return sideMenuMapper.deleteByIds(ids);
+        String[] idArr = ids.split(",");
+        for (String id : idArr) {
+            sideMenuAuthorityMapper.deleteBySideMenuIdIn(Long.parseLong(id));
+            sideMenuRepository.deleteByIdOrPid(Long.parseLong(id), Long.parseLong(id));
+        }
+        return 1;
     }
 
     @Override
@@ -135,22 +150,12 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     @Override
     public PageInfo<SideMenu> getAll(Map<String, Object> params, Integer limit, Integer offset) {
-        PageHelper.startPage(offset / limit + 1, limit);
-        List<SideMenu> list = sideMenuMapper.selectLevel1(params);
-        PageInfo<SideMenu> pageInfo = new PageInfo<>(list);
-        List<Long> pids = new ArrayList<>();
-        List<SideMenu> resultList = pageInfo.getList();
-        for (SideMenu sideMenu : resultList) {
-            pids.add(sideMenu.getId());
-        }
-        resultList.addAll(sideMenuMapper.selectByPidList(pids));
-        pageInfo.setList(resultList);
-        return pageInfo;
+        return null;
     }
 
     @Override
-    public List<SideMenu> getAll() {
-        return sideMenuMapper.selectTreeGrid();
+    public List<SideMenu> getAll(String language) {
+        return sideMenuMapper.selectTreeGrid(language);
     }
 
     @Override
@@ -180,8 +185,8 @@ public class SideMenuServiceImpl implements SideMenuService {
     }
 
     @Override
-    public List<EasyUiTreeDto> getAuth(String typeCode) {
-        List<EasyUiTreeDto> easyUiTreeDtoList = sideMenuMapper.findEasyUiTreeDtoByAuthority(typeCode);
+    public List<EasyUiTreeDto> getAuth(String typeCode, String language) {
+        List<EasyUiTreeDto> easyUiTreeDtoList = sideMenuMapper.findEasyUiTreeDtoByAuthority(typeCode, language);
         if (null == easyUiTreeDtoList || easyUiTreeDtoList.size() <= 0) {
             return easyUiTreeDtoList;
         }
@@ -265,22 +270,62 @@ public class SideMenuServiceImpl implements SideMenuService {
     }
 
     @Override
-    public int updateAuth(String ids) {
-        return 0;
+    public List<SideMenuDto> getLevel1(String language) {
+        return sideMenuMapper.getLevel1(language);
     }
 
     @Override
-    public SideMenu getSubMenuDetailById(Long id) {
-        return sideMenuMapper.getSubMenuDetailById(id);
+    public List<SideMenu> selectByPid(Long pid, String language) {
+        return sideMenuMapper.selectByPid(pid, language);
     }
 
     @Override
-    public List<SideMenuDto> getLevel1() {
-        return sideMenuMapper.getLevel1();
+    public SideMenu findById(Long id, String language) {
+        return sideMenuMapper.findById(id, language);
     }
 
     @Override
-    public List<SideMenu> selectByPid(Long pid) {
-        return sideMenuMapper.selectByPid(pid);
+    public int updateByPrimaryKeySelective(SideMenu sideMenu, String language) {
+        int count = sideMenuMultiLanguageMapper.countBySideMenuIdAndLanguage(sideMenu.getId(), language);
+        int result = 0;
+        if (count > 0) {
+            result = sideMenuMultiLanguageMapper.updateNameBySideMenuIdAndLanguage(sideMenu.getName(), sideMenu.getId(), language);
+        } else {
+            SideMenuMultiLanguage sideMenuMultiLanguage = new SideMenuMultiLanguage();
+            sideMenuMultiLanguage.setCreateBy(sideMenu.getCreateBy());
+            sideMenuMultiLanguage.setCreateDate(sideMenu.getCreateDate());
+            sideMenuMultiLanguage.setSideMenuId(sideMenu.getId());
+            sideMenuMultiLanguage.setName(sideMenu.getName());
+            sideMenuMultiLanguage.setLanguage(language);
+            result = sideMenuMultiLanguageMapper.insertSelective(sideMenuMultiLanguage);
+        }
+        result += sideMenuMapper.updateByPrimaryKeySelective(sideMenu);
+        return result;
+    }
+
+    @Override
+    public int save(SideMenu sideMenu, String language) {
+        if (null == sideMenu.getAuthorities() || sideMenu.getAuthorities().length <= 0) {
+            throw new RuntimeException("缺少权限");
+        }
+        sideMenu = sideMenuRepository.save(sideMenu);
+        String[] authorityArr = sideMenu.getAuthorities();
+        List<SideMenuAuthority> sideMenuAuthorityList = new ArrayList<>();
+        for (int i = 0; i < authorityArr.length; i++) {
+            SideMenuAuthority sideMenuAuthority = new SideMenuAuthority();
+            sideMenuAuthority.setSideMenuId(sideMenu.getId());
+            sideMenuAuthority.setAuthority(authorityArr[i]);
+            sideMenuAuthorityList.add(sideMenuAuthority);
+        }
+        sideMenuAuthorityMapper.insertList(sideMenuAuthorityList);
+
+        SideMenuMultiLanguage sideMenuMultiLanguage = new SideMenuMultiLanguage();
+        sideMenuMultiLanguage.setCreateBy(sideMenu.getCreateBy());
+        sideMenuMultiLanguage.setCreateDate(sideMenu.getCreateDate());
+        sideMenuMultiLanguage.setSideMenuId(sideMenu.getId());
+        sideMenuMultiLanguage.setName(sideMenu.getName());
+        sideMenuMultiLanguage.setLanguage(language);
+        sideMenuMultiLanguageMapper.insertSelective(sideMenuMultiLanguage);
+        return 1;
     }
 }

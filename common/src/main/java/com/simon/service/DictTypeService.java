@@ -16,14 +16,14 @@ public interface DictTypeService extends BasicService<DictType, Long> {
      * @param groupCode 字典组编码
      * @return
      */
-    List<DictType> getTypeByGroupCode(String groupCode);
+    List<DictType> getTypeByGroupCode(String groupCode, String language);
 
-    DictType save(DictTypeDto dictTypeDto);
+    DictType save(DictTypeDto dictTypeDto, String language);
 
     /**
      * 根据id返回字典dto
      * @param id 子字典id
      * @return 字典dto
      */
-    DictTypeDto getDtoById(Long id);
+    DictTypeDto getDtoById(Long id, String language);
 }

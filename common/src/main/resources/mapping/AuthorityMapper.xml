@@ -28,23 +28,23 @@
         tu.username,
         tu.phone,
         GROUP_CONCAT( ta.authority SEPARATOR ',' ) authority,
-        GROUP_CONCAT(tdt.type_name SEPARATOR ',') authority_name
+        GROUP_CONCAT(vr.type_name SEPARATOR ',') authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
-        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
+        LEFT JOIN view_role_${language} vr ON ta.authority = vr.type_code
         <where>
-            <if test="map.userId != null">
-                ta.user_id=#{map.userId}
+            <if test="userId != null">
+                ta.user_id=#{userId}
             </if>
-            <if test="map.username != null and map.username != ''">
-                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            <if test="username != null and username != ''">
+                AND tu.username LIKE CONCAT('%', #{username}, '%')
             </if>
         </where>
         GROUP BY
         ta.user_id
-        <if test="map.authority != null and map.authority != ''">
-            HAVING GROUP_CONCAT( ta.authority SEPARATOR ',' ) LIKE CONCAT('%', #{map.authority}, '%')
+        <if test="authority != null and authority != ''">
+            HAVING GROUP_CONCAT( ta.authority SEPARATOR ',' ) LIKE CONCAT('%', #{authority}, '%')
         </if>
     </select>
 
@@ -54,23 +54,23 @@
         tu.username,
         tu.phone,
         string_agg( ta.authority, ',') as authority,
-        string_agg( tdt.type_name, ',') as authority_name
+        string_agg( vr.type_name, ',') as authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
-        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
+        LEFT JOIN view_role_${language} vr ON ta.authority = vr.type_code
         <where>
-            <if test="map.userId != null">
-                ta.user_id=#{map.userId}
+            <if test="userId != null">
+                ta.user_id=#{userId}
             </if>
-            <if test="map.username != null and map.username != ''">
-                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            <if test="username != null and username != ''">
+                AND tu.username LIKE CONCAT('%', #{username}, '%')
             </if>
         </where>
         GROUP BY
         ta.user_id
-        <if test="map.authority != null and map.authority != ''">
-            HAVING string_agg( ta.authority, ',') LIKE CONCAT('%', #{map.authority}, '%')
+        <if test="authority != null and authority != ''">
+            HAVING string_agg( ta.authority, ',') LIKE CONCAT('%', #{authority}, '%')
         </if>
     </select>
 
@@ -80,23 +80,23 @@
         tu.username,
         tu.phone,
         WM_CONCAT(to_char(ta.authority)) authority,
-        WM_CONCAT(to_char(tdt.type_name)) authority_name
+        WM_CONCAT(to_char(vr.type_name)) authority_name
         FROM
         t_authorities ta
         LEFT JOIN t_users tu ON ta.user_id = tu.id
-        LEFT JOIN t_dict_type tdt ON ta.authority = tdt.type_code
+        LEFT JOIN view_role_${language} vr ON ta.authority = vr.type_code
         <where>
-            <if test="map.userId != null">
-                ta.user_id=#{map.userId}
+            <if test="userId != null">
+                ta.user_id=#{userId}
             </if>
-            <if test="map.username != null and map.username != ''">
-                AND tu.username LIKE CONCAT('%', #{map.username}, '%')
+            <if test="username != null and username != ''">
+                AND tu.username LIKE CONCAT('%', #{username}, '%')
             </if>
         </where>
         GROUP BY
         ta.user_id,tu.username,tu.phone
-        <if test="map.authority != null and map.authority != ''">
-            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT(CONCAT('%', #{map.authority}), '%')
+        <if test="authority != null and authority != ''">
+            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT(CONCAT('%', #{authority}), '%')
         </if>
     </select>
 

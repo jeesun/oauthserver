@@ -10,11 +10,14 @@ import java.util.Map;
 
 public interface AuthorityMapper extends MyMapper<Authority> {
     /**
-     * 查询权限Dto
-     * @param params 查询参数
-     * @return 权限Dto
+     * 查询权限
+     * @param userId
+     * @param username
+     * @param authority
+     * @param language
+     * @return
      */
-    List<AuthorityDto> getDtoList(@Param("map") Map<String, Object> params);
+    List<AuthorityDto> getDtoList(@Param("userId") Long userId, @Param("username") String username, @Param("authority") String authority, @Param("language") String language);
 
     /**
      * 根据userIds批量删除记录

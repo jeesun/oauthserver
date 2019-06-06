@@ -23,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -48,8 +49,8 @@ public class QuartzJobController extends BaseController {
 
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
-    public String list(Model model) {
-        model.addAttribute("jobStatusList", listToMap(dictTypeService.getTypeByGroupCode("job_status")));
+    public String list(Model model, Locale locale) {
+        model.addAttribute("jobStatusList", listToMap(dictTypeService.getTypeByGroupCode("job_status", locale.toString())));
         return "vue/quartzJob/list";
     }
 

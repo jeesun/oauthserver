@@ -7,49 +7,49 @@
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户名" prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
+                <el-form-item th:label="#{oauthUser.username}" prop="username">
+                    <el-input v-model.trim="ruleForm.username" th:placeholder="#{pleaseInput} + #{oauthUser.username}"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="ruleForm.password" placeholder="密码" show-password></el-input>
+                <el-form-item th:label="#{password}" prop="password">
+                    <el-input v-model="ruleForm.password" th:placeholder="#{pleaseInput} + #{password}" show-password></el-input>
                 </el-form-item>
-                <el-form-item label="状态">
-                    <el-select v-model="ruleForm.enabled" placeholder="状态">
+                <el-form-item th:label="#{oauthUser.enabled}">
+                    <el-select v-model="ruleForm.enabled" th:placeholder="#{pleaseChoose}">
                         <el-option label="激活" value="true"></el-option>
                         <el-option label="禁用" value="false"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="手机区号">
-                    <el-select v-model="ruleForm.areaCode" placeholder="手机区号">
+                <el-form-item th:label="#{oauthUser.areaCode}">
+                    <el-select v-model="ruleForm.areaCode" th:placeholder="#{pleaseInput} + #{oauthUser.areaCode}">
                         <el-option label="+86" value="+86"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="手机号" prop="phone">
-                    <el-input v-model="ruleForm.phone" placeholder="手机号" type="tel"></el-input>
+                <el-form-item th:label="#{oauthUser.phone}" prop="phone">
+                    <el-input v-model.trim="ruleForm.phone" th:placeholder="#{pleaseInput} + #{oauthUser.phone}" type="tel"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="ruleForm.email" placeholder="邮箱" type="email"></el-input>
+                <el-form-item th:label="#{oauthUser.email}" prop="email">
+                    <el-input v-model.trim="ruleForm.email" th:placeholder="#{pleaseInput} + #{oauthUser.email}" type="email"></el-input>
                 </el-form-item>
-                <el-form-item label="地址" prop="address">
-                    <el-input v-model="ruleForm.address" placeholder="地址"></el-input>
+                <el-form-item th:label="#{oauthUser.address}" prop="address">
+                    <el-input v-model.trim="ruleForm.address" th:placeholder="#{pleaseInput} + #{oauthUser.address}"></el-input>
                 </el-form-item>
-                <el-form-item label="性别">
-                    <el-select size="small" v-model="ruleForm.sex" placeholder="请输入性别">
+                <el-form-item th:label="#{oauthUser.sex}">
+                    <el-select size="small" v-model="ruleForm.sex" th:placeholder="#{pleaseChoose} + #{oauthUser.sex}">
                         <el-option label="男" value="true"></el-option>
                         <el-option label="女" value="false"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="年龄" prop="age">
-                    <el-input v-model.number="ruleForm.age" placeholder="年龄"></el-input>
+                <el-form-item th:label="#{oauthUser.age}" prop="age">
+                    <el-input v-model.number="ruleForm.age" th:placeholder="#{pleaseInput} + #{oauthUser.age}"></el-input>
                 </el-form-item>
-                <el-form-item label="生日" prop="birth">
+                <el-form-item th:label="#{oauthUser.birth}" prop="birth">
                     <el-date-picker
                             v-model="ruleForm.birth"
                             type="date"
-                            placeholder="选择日期">
+                            th:placeholder="#{pleaseChoose}">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="头像" prop="headPhoto">
+                <el-form-item th:label="#{oauthUser.headPhoto}" prop="headPhoto">
                     <el-upload
                             class="avatar-uploader"
                             action="/fileUploads/upload"
@@ -60,17 +60,17 @@
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="简介" prop="personBrief">
+                <el-form-item th:label="#{oauthUser.personBrief}" prop="personBrief">
                     <el-input
                             type="textarea"
                             :autosize="{ minRows: 2, maxRows: 4}"
-                            placeholder="请输入简介"
-                            v-model="ruleForm.personBrief">
+                            th:placeholder="#{pleaseInput} + #{oauthUser.personBrief}"
+                            v-model.trim="ruleForm.personBrief">
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="#{close}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -86,9 +86,14 @@
     var headerName = [[${_csrf.headerName}]];
     axios.defaults.headers.common[headerName] = [[${_csrf.token}]];
 
+    //国际化
+    international([[${session.locale}]]);
+
     var requestUrls = {
         add: "/api/oauthUsers/add"
     };
+
+    /*ELEMENT.locale(ELEMENT.lang.en);*/
 
     var app = new Vue({
         el: '#app',
@@ -130,9 +135,6 @@
                 age: [
                     {required: false, validator: checkAge, trigger: 'blur'}
                 ],
-                headPhoto: [
-                    {required: false, message: '请上传头像', trigger: 'blur'}
-                ],
                 personBrief: [
                     {required: false, message: '请输入简介', trigger: 'blur'},
                     {min: 3, message: '长度超过 3 个字符', trigger: 'blur'}
@@ -153,12 +155,12 @@
                     if (valid) {
                         this.$http.post(requestUrls.add, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[#{insertSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{insertFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }

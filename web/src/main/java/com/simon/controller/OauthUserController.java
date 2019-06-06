@@ -71,11 +71,11 @@ public class OauthUserController extends BaseController {
     @ApiIgnore
     @ApiOperation(value = "vue列表页面")
     @GetMapping("list")
-    public String list(Model model) {
-        model.addAttribute("sexTypeList", listToMap(dictTypeService.getTypeByGroupCode("sex_type")));
-        model.addAttribute("loginTypeList", listToMap(dictTypeService.getTypeByGroupCode("login_type")));
-        model.addAttribute("loginStatusList", listToMap(dictTypeService.getTypeByGroupCode("login_status")));
-        model.addAttribute("enabledStatusList", listToMap(dictTypeService.getTypeByGroupCode("enabled_status")));
+    public String list(Model model, Locale locale) {
+        model.addAttribute("sexTypeList", listToMap(dictTypeService.getTypeByGroupCode("sex_type", locale.toString())));
+        model.addAttribute("loginTypeList", listToMap(dictTypeService.getTypeByGroupCode("login_type", locale.toString())));
+        model.addAttribute("loginStatusList", listToMap(dictTypeService.getTypeByGroupCode("login_status", locale.toString())));
+        model.addAttribute("enabledStatusList", listToMap(dictTypeService.getTypeByGroupCode("enabled_status", locale.toString())));
         return "vue/oauthUser/list";
     }
 
@@ -167,24 +167,20 @@ public class OauthUserController extends BaseController {
     @ApiIgnore
     @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "个人中心")
-    @GetMapping("/personalCenter")
-    public String personalCenter(Model model, Authentication authentication) {
+    @GetMapping("/userCenter")
+    public String userCenter(Model model, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         if (null != userEntity) {
-            log.info(JSON.toJSONString(userEntity));
-            model.addAttribute("user", userEntity);
+            model.addAttribute("entity", entityToMap(userEntity));
         }
-        return "easyui/personal_center";
+        return "vue/oauthUser/user_center";
     }
 
     @ApiOperation(value = "更新个人信息")
-    @PatchMapping("personalCenter/edit")
+    @PatchMapping("/userCenter")
     @ResponseBody
     public ResultMsg updatePersonInfo(@RequestBody OauthUser oauthUser, Authentication authentication) {
         oauthUserService.updateByPrimaryKeySelective(oauthUser);
-
-//        log.info("birth=" + new SimpleDateFormat("yyyy-MM-dd").format(oauthUser.getBirth()));
-        log.info(JSON.toJSONString(oauthUser));
 
         Object principal = authentication.getPrincipal();
         UserEntity userEntity = null;
