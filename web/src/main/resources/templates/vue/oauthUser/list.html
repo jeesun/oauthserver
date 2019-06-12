@@ -184,7 +184,7 @@
                     }
                 }).catch((error) => {
                     this.tableLoading = false;
-                    let errorMessage = "发生错误";
+                    let errorMessage = [[#{requestError}]];
                     if (error.response) {
                         errorMessage = error.response.data.message;
                     }
@@ -267,9 +267,12 @@
                 });
             },
             doImport(event) {
+                parent.openLoading();
                 this.$http.get(requestUrls.import, {}).then((response) => {
+                    parent.closeLoading();
                     parent.showSuccess([[#{importSuccess}]]);
                 }).catch((error) => {
+                    parent.closeLoading();
                     let errorMessage = [[#{importFailed}]];
                     if (error.response) {
                         errorMessage = error.response.data.message;
