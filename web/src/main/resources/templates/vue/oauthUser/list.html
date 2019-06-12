@@ -256,22 +256,25 @@
             doDelete(index, row) {
                 this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
-                        parent.showSuccess("删除成功");
+                        parent.showSuccess([[#{deleteSuccess}]]);
                         this.loadData(this.pageNo, this.pageSize);
-                    }).catch((response) => {
-                    console.error(response);
+                    }).catch((error) => {
+                    let errorMessage = [[#{deleteFailed}]];
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
                 });
             },
             doImport(event) {
-                this.$http.get(requestUrls.import, {}).then(function (response) {
-                    this.$notify({
-                        title: [[#{hint}]],
-                        message: response.data.message,
-                        position: 'bottom-right',
-                        duration: 2000
-                    });
-                }).catch(function (response) {
-                    console.error(response);
+                this.$http.get(requestUrls.import, {}).then((response) => {
+                    parent.showSuccess([[#{importSuccess}]]);
+                }).catch((error) => {
+                    let errorMessage = [[#{importFailed}]];
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
                 });
             },
             doExport(event) {
