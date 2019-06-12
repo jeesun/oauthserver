@@ -8,9 +8,9 @@
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item th:label="#{authority.username}" prop="username">
-                    <el-input v-model="ruleForm.username" th:placeholder="#{pleaseInput} + #{authority.username}"></el-input>
+                    <el-input v-model="ruleForm.username" th:placeholder="#{pleaseInput} + #{authority.username}" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{authority.authorityName}">
+                <el-form-item th:label="#{authority.authorityName}" prop="authorities">
                     <el-select v-model="ruleForm.authorities" multiple th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in roleTypeList"
@@ -57,7 +57,14 @@
                 authorities: [],
                 authority: [[${entity.authority}]]
             },
-            rules: {}
+            rules: {
+                userId: [
+                    {required: true, message: [[#{authority.userId}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ],
+                authorities: [
+                    {required: true, message: [[#{authority.authorityName}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ]
+            }
         },
         mounted: function () {
             this.loadUnauthorizedUsers();

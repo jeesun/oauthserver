@@ -35,8 +35,8 @@
                 </el-form-item>
             </el-form>
             <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="#{add}"></span></el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>
+            <!--<el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>-->
         </div>
         <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
                   style="font-size: 12px"

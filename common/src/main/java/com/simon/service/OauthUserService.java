@@ -87,4 +87,16 @@ public interface OauthUserService extends BasicService<OauthUser, Long> {
      * @return 影响行数
      */
     int updatePasswordByUserId(Long userId, String newPassword);
+
+    /**
+     * 批量保存
+     * @param oauthUserList
+     */
+    void batchSave(List<OauthUser> oauthUserList);
+
+    /**
+     * 批量更新
+     * @param oauthUserList
+     */
+    void batchUpdate(List<OauthUser> oauthUserList);
 }

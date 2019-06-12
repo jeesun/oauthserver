@@ -19,7 +19,8 @@ public enum ResultCode {
     FAIL_PHONE_OR_EMAIL_EXISTS(500004, "手机号或邮箱已存在"),
     FAIL_INCORRECT_PASSWORD(500005, "密码错误"),
     ERROR_VERI_CODE(404001, "验证码错误"),
-    ERROR_INVALID_PHONE(404002, "手机号格式不正确");
+    ERROR_INVALID_PHONE(404002, "手机号格式不正确"),
+    ERROR_FILE_NOT_FOUND(404003, "文件不存在");
 
     private final int code;
     private final String msg;
