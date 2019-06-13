@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-<head th:replace="components/vue/vue-list :: head('权限列表', 'list')"></head>
+<head th:replace="components/vue/vue-list :: head('侧边栏菜单', 'list')"></head>
 <body>
 <div id="app">
     <template>
@@ -203,13 +203,13 @@
                 if ("0" === pid) {
                     type = 1;
                     parent.showWindow({
-                        title: '编辑',
+                        title: [[#{edit}]],
                         content: requestUrls.edit + row.id
                     });
                 } else {
                     type = 2;
                     parent.showWindow({
-                        title: '编辑',
+                        title: [[#{edit}]],
                         content: requestUrls.subEdit + row.id
                     });
                 }
@@ -219,7 +219,7 @@
             },
             handleSubAdd(index, row) {
                 parent.showWindow({
-                    title: '新增子菜单',
+                    title: [[#{sideMenu.addChildMenu}]],
                     content: requestUrls.subAdd + row.id
                 });
             },

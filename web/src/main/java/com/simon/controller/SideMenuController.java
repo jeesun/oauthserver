@@ -156,17 +156,10 @@ public class SideMenuController extends BaseController {
         return ResultMsg.success(easyUiList);
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/delete")
     @ResponseBody
-    public ResultMsg deleteById(@PathVariable Long id) {
+    public ResultMsg deleteByIds(@RequestParam Long id) {
         sideMenuService.delete(id);
-        return ResultMsg.success();
-    }
-
-    @DeleteMapping("/ids/{ids}")
-    @ResponseBody
-    public ResultMsg deleteByIds(@PathVariable String ids) {
-        sideMenuService.deleteByIds(ids);
         return ResultMsg.success();
     }
 

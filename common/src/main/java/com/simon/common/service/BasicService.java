@@ -33,6 +33,7 @@ public interface BasicService<T, ID> {
      * @param modelList 记录列表
      * @return 保存后的记录列表
      */
+    @Deprecated
     List<T> save(List<T> modelList);
 
     /**

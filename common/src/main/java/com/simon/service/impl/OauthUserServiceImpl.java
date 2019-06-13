@@ -12,7 +12,6 @@ import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.UsernameUtil;
 import com.simon.common.utils.ValidUtil;
 import com.simon.dto.AuthorityDto;
-import com.simon.dto.StatisticDto;
 import com.simon.mapper.AuthorityMapper;
 import com.simon.mapper.OauthUserMapper;
 import com.simon.model.Authority;
@@ -24,6 +23,9 @@ import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
@@ -49,6 +51,9 @@ import java.util.Map;
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class OauthUserServiceImpl implements OauthUserService {
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     @Autowired
     private OauthUserMapper oauthUserMapper;
 
@@ -420,5 +425,25 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public int updatePasswordByUserId(Long userId, String newPassword) {
         return oauthUserMapper.updatePasswordByUserId(userId, newPassword);
+    }
+
+    @Override
+    public void batchSave(List<OauthUser> oauthUserList) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        OauthUserMapper mapper = sqlSession.getMapper(OauthUserMapper.class);
+        for (OauthUser oauthUser : oauthUserList) {
+            mapper.insert(oauthUser);
+        }
+        sqlSession.commit();
+    }
+
+    @Override
+    public void batchUpdate(List<OauthUser> oauthUserList) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        OauthUserMapper mapper = sqlSession.getMapper(OauthUserMapper.class);
+        for (OauthUser oauthUser : oauthUserList) {
+            mapper.updateByPrimaryKeySelective(oauthUser);
+        }
+        sqlSession.commit();
     }
 }

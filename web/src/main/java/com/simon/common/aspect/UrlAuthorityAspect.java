@@ -45,23 +45,63 @@ public class UrlAuthorityAspect {
     /**
      * 创建Pointcut表示式，表示所有controller请求
      */
-    @Pointcut("execution(* com..*.controller..*(..)) && (@annotation(org.springframework.web.bind.annotation.GetMapping))")
+    @Pointcut("execution(* com..*.controller..*(..))" +
+            " && (@annotation(org.springframework.web.bind.annotation.GetMapping))" +
+            " && (!@annotation(javax.annotation.security.PermitAll))" +
+            " && (!@annotation(javax.annotation.security.RolesAllowed))" +
+            " && (!@annotation(javax.annotation.security.DenyAll))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PostAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreFilter))" +
+            " && (!@annotation(org.springframework.security.access.annotation.Secured))")
     private void getMappingAspect() {
     }// 请求method前打印内容
 
-    @Pointcut("execution(* com..*.controller..*(..)) && (@annotation(org.springframework.web.bind.annotation.PostMapping))")
+    @Pointcut("execution(* com..*.controller..*(..))" +
+            " && (@annotation(org.springframework.web.bind.annotation.PostMapping))" +
+            " && (!@annotation(javax.annotation.security.PermitAll))" +
+            " && (!@annotation(javax.annotation.security.RolesAllowed))" +
+            " && (!@annotation(javax.annotation.security.DenyAll))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PostAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreFilter))" +
+            " && (!@annotation(org.springframework.security.access.annotation.Secured))")
     private void postMappingAspect() {
     }
 
-    @Pointcut("execution(* com..*.controller..*(..)) && (@annotation(org.springframework.web.bind.annotation.DeleteMapping))")
+    @Pointcut("execution(* com..*.controller..*(..))" +
+            " && (@annotation(org.springframework.web.bind.annotation.DeleteMapping))" +
+            " && (!@annotation(javax.annotation.security.PermitAll))" +
+            " && (!@annotation(javax.annotation.security.RolesAllowed))" +
+            " && (!@annotation(javax.annotation.security.DenyAll))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PostAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreFilter))" +
+            " && (!@annotation(org.springframework.security.access.annotation.Secured))")
     private void deleteMappingAspect() {
     }
 
-    @Pointcut("execution(* com..*.controller..*(..)) && (@annotation(org.springframework.web.bind.annotation.PatchMapping))")
+    @Pointcut("execution(* com..*.controller..*(..))" +
+            " && (@annotation(org.springframework.web.bind.annotation.PatchMapping))" +
+            " && (!@annotation(javax.annotation.security.PermitAll))" +
+            " && (!@annotation(javax.annotation.security.RolesAllowed))" +
+            " && (!@annotation(javax.annotation.security.DenyAll))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PostAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreFilter))" +
+            " && (!@annotation(org.springframework.security.access.annotation.Secured))")
     private void patchMappingAspect() {
     }
 
-    @Pointcut("execution(* com..*.controller..*(..)) && (@annotation(org.springframework.web.bind.annotation.RequestMapping))")
+    @Pointcut("execution(* com..*.controller..*(..))" +
+            " && (@annotation(org.springframework.web.bind.annotation.RequestMapping))" +
+            " && (!@annotation(javax.annotation.security.PermitAll))" +
+            " && (!@annotation(javax.annotation.security.RolesAllowed))" +
+            " && (!@annotation(javax.annotation.security.DenyAll))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PostAuthorize))" +
+            " && (!@annotation(org.springframework.security.access.prepost.PreFilter))" +
+            " && (!@annotation(org.springframework.security.access.annotation.Secured))")
     private void requestMappingAspect() {
     }
 

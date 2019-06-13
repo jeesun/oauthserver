@@ -1,5 +1,8 @@
 package com.simon.controller;
 
+import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
+import com.github.liaochong.myexcel.core.DefaultExcelReader;
+import com.github.liaochong.myexcel.utils.AttachmentExportUtil;
 import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
@@ -17,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +37,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * 用户表
@@ -187,16 +196,30 @@ public class OauthUserController extends BaseController {
     @ApiIgnore
     @ApiOperation(value = "导出")
     @GetMapping("export")
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response) {
-
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<OauthUser> oauthUsers = oauthUserService.findAll();
+        Workbook workbook = DefaultExcelBuilder.of(OauthUser.class)
+                .build(oauthUsers);
+        AttachmentExportUtil.export(workbook, "用户信息", response);
     }
 
     @ApiIgnore
     @ApiOperation(value = "导入")
     @GetMapping("import")
     @ResponseBody
-    public ResultMsg importExcel() {
-        return ResultMsg.success();
+    public ResponseEntity<ResultMsg> importExcel() throws Exception {
+        /*Resource resource = new ClassPathResource("static/1.xlsx");
+        if (!resource.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResultMsg.fail(ResultCode.ERROR_FILE_NOT_FOUND));
+        }
+        Path path = Paths.get(resource.getURI());*/
+        Path path = Paths.get("D:\\1.xlsx");
+        List<OauthUser> result = DefaultExcelReader.of(OauthUser.class)
+                .sheet(0)
+                .rowFilter(row -> row.getRowNum() > 0)
+                .read(path.toFile());
+        oauthUserService.batchUpdate(result);
+        return ResponseEntity.ok(ResultMsg.success());
     }
 
     @ApiIgnore

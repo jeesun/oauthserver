@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.security.PermitAll;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -48,6 +49,7 @@ public class BillController extends BaseController {
         return "vue/bill/list";
     }
 
+    @PermitAll
     @ApiIgnore
     @ApiOperation(value = "列表数据")
     @GetMapping("data")

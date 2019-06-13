@@ -10,8 +10,8 @@
                 <!--<el-form-item label="id" prop="id">
                     <el-input v-model="ruleForm.id" placeholder="请输入id" :disabled="true"></el-input>
                 </el-form-item>-->
-                <el-form-item th:if="${entity.menuType} eq '2'" label="父菜单名称" v-if="showSelectIcon">
-                    <el-select v-model="ruleForm.pid" placeholder="请选择">
+                <el-form-item th:if="${entity.menuType} eq '2'" th:label="#{sideMenu.parentMenuName}" v-if="showSelectIcon">
+                    <el-select v-model="ruleForm.pid" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in parentMenus"
                                 :key="item.id"
@@ -20,11 +20,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="菜单名称" prop="name">
-                    <el-input v-model="ruleForm.name" placeholder="请输入菜单名称"></el-input>
+                <el-form-item th:label="#{sideMenu.name}" prop="name">
+                    <el-input v-model="ruleForm.name" th:placeholder="#{pleaseInput} + #{sideMenu.name}"></el-input>
                 </el-form-item>
-                <el-form-item label="菜单图标" prop="icon" v-if="showSelectIcon">
-                    <el-select v-model="ruleForm.icon" filterable placeholder="请选择菜单图标">
+                <el-form-item th:label="#{sideMenu.icon}" prop="icon" v-if="showSelectIcon">
+                    <el-select v-model="ruleForm.icon" filterable th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in icons"
                                 :key="item.iconClass"
@@ -35,11 +35,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="菜单地址" prop="url">
-                    <el-input v-model="ruleForm.url" placeholder="请输入菜单地址"></el-input>
+                <el-form-item th:label="#{sideMenu.url}" prop="url">
+                    <el-input v-model="ruleForm.url" th:placeholder="#{pleaseInput} + #{sideMenu.url}"></el-input>
                 </el-form-item>
-                <el-form-item label="请求方式" prop="requestMethod">
-                    <el-select size="small" v-model="ruleForm.requestMethod" placeholder="请选择">
+                <el-form-item th:label="#{sideMenu.requestMethod}" prop="requestMethod">
+                    <el-select size="small" v-model="ruleForm.requestMethod" th:placeholder="#{pleaseChoose}">
                         <el-option label="*" value="*"></el-option>
                         <el-option label="GET" value="GET"></el-option>
                         <el-option label="POST" value="POST"></el-option>
@@ -49,11 +49,11 @@
                         <el-option label="GET,POST" value="GET,POST"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="备注" prop="remark">
-                    <el-input v-model="ruleForm.remark" placeholder="请输入备注"></el-input>
+                <el-form-item th:label="#{sideMenu.remark}" prop="remark">
+                    <el-input v-model="ruleForm.remark" th:placeholder="#{pleaseInput} + #{sideMenu.remark}"></el-input>
                 </el-form-item>
-                <el-form-item label="排序" prop="orderNum" v-if="showSelectIcon">
-                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
+                <el-form-item th:label="#{orderNum}" prop="orderNum" v-if="showSelectIcon">
+                    <el-input v-model="ruleForm.orderNum" th:placeholder="#{pleaseInput} + #{orderNum}"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
@@ -99,16 +99,16 @@
             },
             rules: {
                 name: [
-                    {required: true, message: '菜单名称不能为空', trigger: 'blur'}
-                ],
-                orderNum: [
-
-                ],
-                icon: [
-
+                    {required: true, message: [[#{sideMenu.name}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
                 url: [
-                    {required: true, message: '菜单地址不能为空', trigger: 'blur'}
+                    {required: true, message: [[#{sideMenu.url}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ],
+                orderNum: [
+                    {required: true, message: [[#{orderNum}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ],
+                icon: [
+                    {required: true, message: [[#{sideMenu.icon}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ]
             }
         },
