@@ -133,11 +133,6 @@ public class FontAwesomeServiceImpl implements FontAwesomeService {
 
     @Override
     public List<FontAwesomeDto> getDtos(String language) {
-        if (language.equalsIgnoreCase("zh_CN")) {
-
-        } else {
-            language = "";
-        }
         return fontAwesomeMapper.getDtos(language);
     }
 

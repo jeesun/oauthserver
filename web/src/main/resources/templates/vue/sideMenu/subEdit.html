@@ -28,10 +28,10 @@
                         <el-option
                                 v-for="item in icons"
                                 :key="item.iconClass"
-                                :label="item.tags"
+                                :label="item.label"
                                 :value="item.iconClass">
                             <span style="float: left"><i v-bind:class="item.iconClass" style="font-size: 1.2em"></i></span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.tags }}</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
                         </el-option>
                     </el-select>
                 </el-form-item>
