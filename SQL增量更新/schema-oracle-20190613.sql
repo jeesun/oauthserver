@@ -432,3 +432,6 @@ t_s_dtg_multi_languages tddtgml ON tdtg.id=tddtgml.dict_type_group_id and tddtgm
 drop table t_log_login;
 drop table t_multi_language;
 
+-- 2019-06-13 by simon 重命名t_s_font_awesome字段
+ALTER TABLE t_s_font_awesome rename column label to label_en_us;
+ALTER TABLE t_s_font_awesome rename column tags to label_zh_cn;

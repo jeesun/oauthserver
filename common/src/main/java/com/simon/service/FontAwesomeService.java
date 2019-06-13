@@ -13,9 +13,10 @@ import java.util.List;
 public interface FontAwesomeService extends BasicService<FontAwesome, Integer> {
     /**
      * 获取Font Awesome字体dto列表
+     * @param language 语言
      * @return Font Awesome字体dto列表
      */
-    List<FontAwesomeDto> getDtos();
+    List<FontAwesomeDto> getDtos(String language);
 
     /**
      * 根据图标class统计记录个数

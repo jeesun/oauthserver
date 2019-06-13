@@ -56,14 +56,14 @@ public class SideMenuController extends BaseController {
 
     @GetMapping("add")
     public String add(Model model, Locale locale) {
-        model.addAttribute("icons", fontAwesomeService.getDtos());
+        model.addAttribute("icons", fontAwesomeService.getDtos(locale.toString()));
         model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/add";
     }
 
     @GetMapping("edit")
     public String edit(Model model, @RequestParam Long id, Locale locale) {
-        model.addAttribute("icons", fontAwesomeService.getDtos());
+        model.addAttribute("icons", fontAwesomeService.getDtos(locale.toString()));
         model.addAttribute("entity", entityToMap(sideMenuService.findById(id, locale.toString())));
         return "vue/sideMenu/edit";
     }
@@ -72,7 +72,7 @@ public class SideMenuController extends BaseController {
     public String subAdd(Model model, @ApiParam(value = "父菜单id", required = true) @RequestParam Long id, Locale locale) {
         model.addAttribute("entity", entityToMap(sideMenuService.findById(id)));
         model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
-        model.addAttribute("icons", fontAwesomeService.getDtos());
+        model.addAttribute("icons", fontAwesomeService.getDtos(locale.toString()));
         model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/subAdd";
     }
@@ -82,7 +82,7 @@ public class SideMenuController extends BaseController {
         SideMenu sideMenu = sideMenuService.findById(id, locale.toString());
         model.addAttribute("entity", entityToMap(sideMenu));
         model.addAttribute("parentMenus", listToMap(sideMenuService.getLevel1(locale.toString())));
-        model.addAttribute("icons", fontAwesomeService.getDtos());
+        model.addAttribute("icons", fontAwesomeService.getDtos(locale.toString()));
         model.addAttribute("roleTypeList", dictTypeService.getTypeByGroupCode("role_type", locale.toString()));
         return "vue/sideMenu/subEdit";
     }

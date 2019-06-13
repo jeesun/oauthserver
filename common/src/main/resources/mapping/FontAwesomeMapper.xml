@@ -11,8 +11,8 @@
     <result column="update_by" jdbcType="BIGINT" property="updateBy" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="icon_class" jdbcType="VARCHAR" property="iconClass" />
-    <result column="label" jdbcType="VARCHAR" property="label" />
-    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="label_en_us" jdbcType="VARCHAR" property="labelEnUs" />
+    <result column="label_zh_cn" jdbcType="VARCHAR" property="labelZhCn" />
     <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
@@ -20,21 +20,16 @@
   <resultMap id="FontAwesomeDtoMap" type="com.simon.dto.FontAwesomeDto">
     <result column="icon_class" jdbcType="VARCHAR" property="iconClass" />
     <result column="label" jdbcType="VARCHAR" property="label" />
-    <result column="tags" jdbcType="VARCHAR" property="tags" />
   </resultMap>
-
-  <sql id="base_columns">
-    icon_class, label, tags
-  </sql>
 
   <select id="getList" resultMap="BaseResultMap" databaseId="mysql">
     select * from t_s_font_awesome
     <where>
-      <if test="map.label != null and map.label != ''">
-        label like CONCAT('%', #{map.label}, '%')
+      <if test="labelEnUs != null and labelEnUs != ''">
+        label_en_us like CONCAT('%', #{labelEnUs}, '%')
       </if>
-      <if test="map.tags != null and map.tags != ''">
-        tags like CONCAT('%', #{map.tags}, '%')
+      <if test="labelZhCn != null and labelZhCn != ''">
+        and label_zh_cn like CONCAT('%', #{labelZhCn}, '%')
       </if>
     </where>
   </select>
@@ -42,11 +37,11 @@
   <select id="getList" resultMap="BaseResultMap" databaseId="postgresql">
     select * from t_s_font_awesome
     <where>
-      <if test="map.label != null and map.label != ''">
-        label like CONCAT('%', #{map.label}, '%')
+      <if test="labelEnUs != null and labelEnUs != ''">
+        label_en_us like CONCAT('%', #{labelEnUs}, '%')
       </if>
-      <if test="map.tags != null and map.tags != ''">
-        tags like CONCAT('%', #{map.tags}, '%')
+      <if test="labelZhCn != null and labelZhCn != ''">
+        and label_zh_cn like CONCAT('%', #{labelZhCn}, '%')
       </if>
     </where>
   </select>
@@ -54,17 +49,20 @@
   <select id="getList" resultMap="BaseResultMap" databaseId="oracle">
     select * from t_s_font_awesome
     <where>
-      <if test="map.label != null and map.label != ''">
-        label like CONCAT(CONCAT('%', #{map.label}), '%')
+      <if test="labelEnUs != null and labelEnUs != ''">
+        label_en_us like CONCAT(CONCAT('%', #{labelEnUs}), '%')
       </if>
-      <if test="map.tags != null and map.tags != ''">
-        and tags like CONCAT(CONCAT('%', #{map.tags}), '%')
+      <if test="labelZhCn != null and labelZhCn != ''">
+        and label_zh_cn like CONCAT(CONCAT('%', #{labelZhCn}), '%')
       </if>
     </where>
   </select>
 
   <select id="getDtos" resultMap="FontAwesomeDtoMap">
-    select <include refid="base_columns" /> from t_s_font_awesome where status = 1 order by order_num
+    select
+    icon_class,
+    label_${language} as label
+     from t_s_font_awesome where status = 1 order by order_num
   </select>
 
   <select id="countByIconClass" parameterType="string" resultType="int">

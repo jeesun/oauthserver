@@ -58,12 +58,12 @@ public class FontAwesome implements Serializable{
     private String iconClass;
 
     @ApiModelProperty(value = "英文标签")
-    @Column(name = "label", nullable = false)
-    private String label;
+    @Column(name = "label_en_us", nullable = false)
+    private String labelEnUs;
 
     @ApiModelProperty(value = "中文标签")
-    @Column(name = "tags")
-    private String tags;
+    @Column(name = "label_zh_cn", nullable = false)
+    private String labelZhCn;
 
     @ApiModelProperty(value = "排序")
     @Column(name = "order_num")

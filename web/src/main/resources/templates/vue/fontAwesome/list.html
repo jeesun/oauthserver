@@ -6,11 +6,11 @@
     <template>
         <div style="margin-left: 6px;margin-bottom: 6px;">
             <el-form :inline="true" :model="searchForm" style="margin: 0; padding: 0;">
-                <el-form-item th:label="#{fontAwesome.label}">
-                    <el-input size="small" v-model="searchForm.label" th:placeholder="#{pleaseInput} + #{fontAwesome.label}" clearable></el-input>
+                <el-form-item th:label="#{fontAwesome.labelEnUs}">
+                    <el-input size="small" v-model="searchForm.labelEnUs" th:placeholder="#{pleaseInput} + #{fontAwesome.labelEnUs}" clearable></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{fontAwesome.tags}">
-                    <el-input size="small" v-model="searchForm.tags" th:placeholder="#{pleaseInput} + #{fontAwesome.tags}" clearable></el-input>
+                <el-form-item th:label="#{fontAwesome.labelZhCn}">
+                    <el-input size="small" v-model="searchForm.labelZhCn" th:placeholder="#{pleaseInput} + #{fontAwesome.labelZhCn}" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch"><span th:text="#{search}"></span></el-button>
@@ -18,8 +18,8 @@
                 </el-form-item>
             </el-form>
             <el-button th:if="${#authorization.expression('hasAnyRole(''__${add}__'')')}" type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="#{add}"></span></el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>
+            <!--<el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="#{import}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="#{export}"></span></el-button>-->
         </div>
         <el-table border stripe size="medium" height="356" :data="tableData" highlight-current-row
                   style="font-size: 12px"
@@ -32,8 +32,8 @@
                     <i :class="scope.row.iconClass" style="font-size: 1.2em"></i>
                 </template>
             </el-table-column>
-            <el-table-column align="center" prop="label" th:label="#{fontAwesome.label}" width="160" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="tags" th:label="#{fontAwesome.tags}" width="160" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="labelEnUs" th:label="#{fontAwesome.labelEnUs}" width="160" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="labelZhCn" th:label="#{fontAwesome.labelZhCn}" width="160" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="orderNum" th:label="#{orderNum}" width="100"></el-table-column>
             <el-table-column align="center" prop="status" th:label="#{status}" width="100"></el-table-column>
             <el-table-column align="center" th:label="#{operation}" width="200">
@@ -83,8 +83,8 @@
             total: 1000,
             tableLoading: true,
             searchForm: {
-                label: "",
-                tags: ""
+                labelEnUs: "",
+                labelZhCn: ""
             }
         },
         mounted: function () {
@@ -183,7 +183,7 @@
             },
             handleEdit(index, row) {
                 parent.showWindow({
-                    title: [[#{add}]],
+                    title: [[#{edit}]],
                     content: requestUrls.edit + row.id
                 });
             },

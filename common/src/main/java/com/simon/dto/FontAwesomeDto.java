@@ -22,9 +22,6 @@ public class FontAwesomeDto implements Serializable {
     @ApiModelProperty(value = "图标class")
     private String iconClass;
 
-    @ApiModelProperty(value = "英文标签")
+    @ApiModelProperty(value = "标签")
     private String label;
-
-    @ApiModelProperty(value = "中文标签")
-    private String tags;
 }
