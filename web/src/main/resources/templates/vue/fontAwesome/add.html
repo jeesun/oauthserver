@@ -20,10 +20,12 @@
                     <el-input v-model="ruleForm.orderNum" th:placeholder="#{pleaseInput} + #{orderNum}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{status}" prop="status">
-                    <el-select v-model="ruleForm.status" th:placeholder="#{pleaseChoose}">
-                        <el-option label="可用" value="1"></el-option>
-                        <el-option label="不可用" value="0"></el-option>
-                    </el-select>
+                    <el-option
+                            v-for="item in statusList"
+                            :key="item.iconClass"
+                            :label="item.typeName"
+                            :value="item.typeCode">
+                    </el-option>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="#{submit}"></span></el-button>
@@ -53,6 +55,7 @@
     var app = new Vue({
         el: '#app',
         data: {
+            statusList: [[${statusList}]],
             ruleForm: {
                 id: "",
                 iconClass: "fas fa-",
