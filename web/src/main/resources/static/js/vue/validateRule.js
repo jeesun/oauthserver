@@ -4,7 +4,9 @@ var checkAge = (rule, value, callback) => {
         callback();
     }
     setTimeout(() => {
-        if (!Number.isInteger(value)) {
+        // Number.isInteger是es6验证数字是否为整数的方法,但是我实际用的时候输入的数字总是识别成字符串
+        // 所以我就在前面加了一个+实现隐式转换
+        if (!Number.isInteger(+value)) {
             callback(new Error('请输入数字值'));
         } else {
             if (value < 18) {
@@ -17,7 +19,7 @@ var checkAge = (rule, value, callback) => {
 };
 
 var checkPhone = (rule, value, callback) => {
-    const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+    const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/;
     if (!value) {
         //return callback(new Error('电话号码不能为空'))
         callback();
@@ -39,7 +41,7 @@ var checkPhone = (rule, value, callback) => {
 };
 
 var checkEmail = (rule, value, callback) => {
-    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+    const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
     if (!value) {
         //return callback(new Error('邮箱不能为空'));
         callback();
@@ -51,4 +53,33 @@ var checkEmail = (rule, value, callback) => {
             callback(new Error('请输入正确的邮箱格式'));
         }
     }, 100)
+};
+
+var checkChinese = (rule, value, callback) => {
+    const reg = /^[\u4E00-\u9FA5]+$/;
+    if (!value) {
+        callback();
+    }
+    setTimeout(() => {
+        if (reg.test(value)) {
+            callback();
+        } else {
+            callback(new Error('只支持汉字'));
+        }
+    }, 100);
+};
+
+var checkSpecialChar = (rule, value, callback) => {
+    const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+    if (!value) {
+        callback();
+    }
+    setTimeout(() => {
+        if (pattern.test(value)) {
+            //包含特殊字符
+            callback(new Error('只支持数字、字母、汉字'));
+        } else {
+            callback();
+        }
+    }, 100);
 };

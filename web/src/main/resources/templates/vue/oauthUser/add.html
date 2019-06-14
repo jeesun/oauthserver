@@ -15,8 +15,12 @@
                 </el-form-item>
                 <el-form-item th:label="#{oauthUser.enabled}">
                     <el-select v-model="ruleForm.enabled" th:placeholder="#{pleaseChoose}">
-                        <el-option label="激活" value="true"></el-option>
-                        <el-option label="禁用" value="false"></el-option>
+                        <el-option
+                                v-for="item in enabledStatusList"
+                                :key="item.iconClass"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{oauthUser.areaCode}">
@@ -35,8 +39,12 @@
                 </el-form-item>
                 <el-form-item th:label="#{oauthUser.sex}">
                     <el-select size="small" v-model="ruleForm.sex" th:placeholder="#{pleaseChoose} + #{oauthUser.sex}">
-                        <el-option label="男" value="true"></el-option>
-                        <el-option label="女" value="false"></el-option>
+                        <el-option
+                                v-for="item in sexTypeList"
+                                :key="item.iconClass"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{oauthUser.age}" prop="age">
@@ -98,6 +106,8 @@
     var app = new Vue({
         el: '#app',
         data: {
+            sexTypeList: [[${sexTypeList}]],
+            enabledStatusList: [[${enabledStatusList}]],
             ruleForm: {
                 username: '',
                 password: '',
@@ -115,6 +125,7 @@
             rules: {
                 username: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {validator: checkSpecialChar, trigger: 'blur'},
                     {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'}
                 ],
                 password: [
@@ -127,10 +138,6 @@
                 ],
                 email: [
                     {required: false, validator: checkEmail, trigger: 'blur'}
-                ],
-                address: [
-                    {required: false, message: '请输入地址', trigger: 'blur'},
-                    {min: 3, message: '长度超过 3 个字符', trigger: 'blur'}
                 ],
                 age: [
                     {required: false, validator: checkAge, trigger: 'blur'}
