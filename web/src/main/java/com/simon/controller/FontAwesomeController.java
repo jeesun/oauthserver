@@ -1,5 +1,6 @@
 package com.simon.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultCode;
@@ -23,6 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -59,21 +61,21 @@ public class FontAwesomeController extends BaseController {
     @GetMapping("data")
     @ResponseBody
     public EasyUIDataGridResult<FontAwesome> data(
-            @ApiParam(value = "英文标签") @RequestParam(required = false) String label,
-            @ApiParam(value = "中文标签") @RequestParam(required = false) String tags,
+            @ApiParam(value = "英文标签") @RequestParam(required = false) String labelEnUs,
+            @ApiParam(value = "中文标签") @RequestParam(required = false) String labelZhCn,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam Integer pageSize,
             @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy) {
         Map<String, Object> params = new LinkedHashMap<>();
-        params.put("label", label);
-        params.put("tags", tags);
+        params.put("labelEnUs", labelEnUs);
+        params.put("labelZhCn", labelZhCn);
         return new EasyUIDataGridResult<>(fontAwesomeService.getList(params, pageNo, pageSize, orderBy));
     }
 
     @GetMapping("dtoData")
     @ResponseBody
-    public ResultMsg<List<FontAwesomeDto>> dtoData() {
-        return ResultMsg.success(fontAwesomeService.getDtos());
+    public ResultMsg<List<FontAwesomeDto>> dtoData(Locale locale) {
+        return ResultMsg.success(fontAwesomeService.getDtos(locale.toString()));
     }
 
     @PostMapping("add")
@@ -97,6 +99,7 @@ public class FontAwesomeController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
+        log.info(JSON.toJSONString(body));
         fontAwesomeService.updateByPrimaryKeySelective(body);
         return new ResponseEntity<>(ResultMsg.success(), HttpStatus.OK);
     }

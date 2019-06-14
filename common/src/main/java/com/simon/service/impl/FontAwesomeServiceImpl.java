@@ -125,13 +125,15 @@ public class FontAwesomeServiceImpl implements FontAwesomeService {
         }else{
             PageHelper.startPage(pageNo, pageSize, orderBy);
         }
-        List<FontAwesome> list = fontAwesomeMapper.getList(params);
+        Object labelEnUs = params.getOrDefault("labelEnUs", "");
+        Object labelZhCn = params.getOrDefault("labelZhCn", "");
+        List<FontAwesome> list = fontAwesomeMapper.getList(null == labelEnUs ? "" : labelEnUs.toString(), null == labelZhCn ? "" : labelZhCn.toString());
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<FontAwesomeDto> getDtos() {
-        return fontAwesomeMapper.getDtos();
+    public List<FontAwesomeDto> getDtos(String language) {
+        return fontAwesomeMapper.getDtos(language);
     }
 
     @Override

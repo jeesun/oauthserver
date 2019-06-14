@@ -6,7 +6,6 @@ import com.simon.model.FontAwesome;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author SimonSun
@@ -18,9 +17,9 @@ public interface FontAwesomeMapper extends MyMapper<FontAwesome> {
      * @param map 查询条件
      * @return 结果列表
      */
-    List<FontAwesome> getList(@Param("map") Map<String, Object> map);
+    List<FontAwesome> getList(@Param("labelEnUs") String labelEnUs, @Param("labelZhCn") String labelZhCn);
 
-    List<FontAwesomeDto> getDtos();
+    List<FontAwesomeDto> getDtos(@Param("language") String language);
 
     int countByIconClass(@Param("iconClass") String iconClass);
 }

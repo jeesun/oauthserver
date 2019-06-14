@@ -17,20 +17,21 @@ public class AppConfig {
     public static final String MESSAGE = "message";
     public static final String DATA = "data";
 
-    //private static Locale locale = LocaleContextHolder.getLocale();
-    //messages国际化语言指定
-    private static Locale locale = LocaleContextHolder.getLocale();
-
     public static Locale getLocale(){
+        Locale locale = LocaleContextHolder.getLocale();
         return locale;
     }
 
     public final static int DEFAULT_PAGE_SIZE = 10;
     public final static int DEFAULT_PAGE_NO = 1;
 
-    //一级菜单
+    /**
+     * 一级菜单
+     */
     public static final Integer MENU_LEVEL_1 = 1;
-    //二级菜单
+    /**
+     * 二级菜单
+     */
     public static final Integer MENU_LEVEL_2 = 2;
 
     public static final String DATE_PATTERN_DATETIME = "yyyy-MM-dd HH:mm:ss";
@@ -76,4 +77,9 @@ public class AppConfig {
      * 存储在session中的验证码key
      */
     public static final String SESSION_VERI_CODE = "code";
+
+    /**
+     * 默认密码
+     */
+    public static final String DEFAULT_PASSWORD = "1234567890c";
 }

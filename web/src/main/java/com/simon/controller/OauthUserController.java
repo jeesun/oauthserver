@@ -80,14 +80,18 @@ public class OauthUserController extends BaseController {
     @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
-    public String add() {
+    public String add(Model model, Locale locale) {
+        model.addAttribute("sexTypeList", listToMap(dictTypeService.getTypeByGroupCode("sex_type", locale.toString())));
+        model.addAttribute("enabledStatusList", listToMap(dictTypeService.getTypeByGroupCode("enabled_status", locale.toString())));
         return "vue/oauthUser/add";
     }
 
     @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
-    public String edit(@RequestParam Long id, Model model) {
+    public String edit(@RequestParam Long id, Model model, Locale locale) {
+        model.addAttribute("sexTypeList", listToMap(dictTypeService.getTypeByGroupCode("sex_type", locale.toString())));
+        model.addAttribute("enabledStatusList", listToMap(dictTypeService.getTypeByGroupCode("enabled_status", locale.toString())));
         model.addAttribute("entity", entityToMap(oauthUserService.findById(id)));
         return "vue/oauthUser/edit";
     }

@@ -10,11 +10,11 @@
                 <el-form-item th:label="#{fontAwesome.iconClass}" prop="iconClass">
                     <el-input v-model="ruleForm.iconClass" th:placeholder="#{fontAwesome.iconClass}"></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{fontAwesome.label}" prop="label">
-                    <el-input v-model="ruleForm.label" th:placeholder="#{pleaseInput} + #{fontAwesome.label}"></el-input>
+                <el-form-item th:label="#{fontAwesome.labelEnUs}" prop="label">
+                    <el-input v-model="ruleForm.labelEnUs" th:placeholder="#{pleaseInput} + #{fontAwesome.labelEnUs}"></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{fontAwesome.tags}" prop="tags">
-                    <el-input v-model="ruleForm.tags" th:placeholder="#{pleaseInput} + #{fontAwesome.tags}"></el-input>
+                <el-form-item th:label="#{fontAwesome.labelZhCn}" prop="tags">
+                    <el-input v-model="ruleForm.labelZhCn" th:placeholder="#{pleaseInput} + #{fontAwesome.labelZhCn}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{orderNum}" prop="orderNum">
                     <el-input v-model="ruleForm.orderNum" th:placeholder="#{pleaseInput} + #{orderNum}"></el-input>
@@ -56,20 +56,20 @@
             ruleForm: {
                 id: "",
                 iconClass: "fas fa-",
-                label: "",
-                tags: "",
+                labelEnUs: "",
+                labelZhCn: "",
                 orderNum: "1",
                 status: "1"
             },
             rules: {
                 iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
+                    {required: true, message: [[#{fontAwesome.iconClass}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
+                labelEnUs: [
+                    {required: true, message: [[#{fontAwesome.labelEnUs}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
+                labelZhCn: [
+                    {required: true, message: [[#{fontAwesome.labelZhCn}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ]
             }
         },
