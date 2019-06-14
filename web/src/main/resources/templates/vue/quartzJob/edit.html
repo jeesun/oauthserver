@@ -6,7 +6,7 @@
     <el-row>
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
                 <el-form-item th:label="#{quartzJob.jobName}" prop="jobName">
                     <el-input v-model="ruleForm.jobName" th:placeholder="#{pleaseInput} + #{quartzJob.jobName}" :disabled="true"></el-input>
                 </el-form-item>
