@@ -66,4 +66,7 @@ public class EasyUiSideMenuDto implements Serializable {
 
     @ApiModelProperty(value = "请求方式")
     private String requestMethod;
+
+    @ApiModelProperty(value = "备注")
+    private String remark;
 }

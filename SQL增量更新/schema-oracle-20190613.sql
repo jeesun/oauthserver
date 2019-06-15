@@ -435,3 +435,6 @@ drop table t_multi_language;
 -- 2019-06-13 by simon 重命名t_s_font_awesome字段
 ALTER TABLE t_s_font_awesome rename column label to label_en_us;
 ALTER TABLE t_s_font_awesome rename column tags to label_zh_cn;
+
+-- 2019-06-14 by simon 修改t_side_menu数据
+UPDATE t_side_menu SET request_method='GET' WHERE remark='list';
