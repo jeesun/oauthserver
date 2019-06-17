@@ -51,31 +51,24 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 2.0.20190617-alpha
+1. 更新代码生成器生成的entity模板，添加excel导入导出注解；
+2. 升级myexcel 2.5.0->2.5.1，升级element-ui 2.7.2->2.9.1；
+3. 菜单管理页面优化；
+4. 修复quartzJob form label过长换行bug；
+5. 图标管理页面国际化bug修复；
+6. 修复一些国际化细节bug。
+
 ### 2.0.20190613-alpha
 1. 重写导入导出功能；
 2. 删除无用页面代码；
-3. 一些细节。
+3. 图标选择框bug修复；
+4. 重命名表t_s_font_awesome的部分字段；
+5. 一些细节。
 
 ### 2.0.20190521-alpha
 1. 更新角色管理页面；
 2. 解决角色已拥有页面权限，页面依然不显示的bug，需要重新保存一次权限。
-
-### 2.0.20190517-alpha
-1. 修复quartz定时任务bug；
-2. 移除api模块的代码生成器，统一使用web模块的生成器，代码生成器位置允许选择common模块；
-3. 省市区信息添加缓存；
-4. 重写home页面；
-5. 使用java8时间类型代替Date类型，并解决序列化问题；
-6. 合并model、service、serviceImpl、repository、mapper到common模块；
-7. 增加登录失败原因提示；
-8. Spring Boot 1.5.20->1.5.21；
-9. 动态计算iframe高度；
-10. 其他bug修复。
-
-### 2.0.20190506-alpha
-1. 新增了很多功能；
-2. 修复了很多bug；
-3. 管理端页面重构，使用Vue + Element UI代替JQuery + EasyUI。
 
 **更多历史更新日志查看[CHANGE_LOG.md](tutorial/CHANGE_LOG.md)**
 
