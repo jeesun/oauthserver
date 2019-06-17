@@ -1,6 +1,7 @@
 package com.simon.common.code;
 
 import com.google.common.base.CaseFormat;
+import com.simon.common.utils.DbUtil;
 import freemarker.template.TemplateExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -324,14 +325,11 @@ public class CodeGenerator {
         log.info(modelName + "Mapper.xml 生成成功");
 
         FreeMarkerGeneratorUtil.generatorMvcCode(
-                JDBC_DIVER_CLASS_NAME,
-                JDBC_URL,
-                JDBC_USERNAME,
-                JDBC_PASSWORD,
+                DbUtil.getConnection(JDBC_DIVER_CLASS_NAME, JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD),
                 tableName,
                 modelName,
                 MODEL_PACKAGE);
-
+        //重新生成Mapper.java，覆盖自动生成的。
         reGenMapper(tableName, tableComment, modelName, idType);
     }
 
@@ -362,7 +360,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("mapper.ftl").process(data,
                     new FileWriter(file));
-            log.info(modelNameUpperCamel + "Mapper.java 重新生成成功");
+            log.info(modelNameUpperCamel + "Mapper.java 重新生成成功，文件位置{}", file.getPath());
 
 
         } catch (Exception e) {
@@ -389,7 +387,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("repository.ftl").process(data,
                     new FileWriter(file));
-            log.info(modelNameUpperCamel + "Repository.java 生成成功");
+            log.info(modelNameUpperCamel + "Repository.java 生成成功，文件位置：{}", file.getPath());
 
         } catch (Exception e) {
             throw new RuntimeException("生成repository失败", e);
@@ -415,7 +413,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("service.ftl").process(data,
                     new FileWriter(file));
-            log.info(modelNameUpperCamel + "Service.java 生成成功");
+            log.info(modelNameUpperCamel + "Service.java 生成成功，文件位置：{}", file.getPath());
 
             File file1 = new File(PROJECT_PATH + JAVA_PATH + PACKAGE_PATH_SERVICE_IMPL + modelNameUpperCamel + "ServiceImpl.java");
             if (!file1.getParentFile().exists()) {
@@ -423,7 +421,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("service-impl.ftl").process(data,
                     new FileWriter(file1));
-            log.info(modelNameUpperCamel + "ServiceImpl.java 生成成功");
+            log.info(modelNameUpperCamel + "ServiceImpl.java 生成成功，文件位置：{}", file1.getPath());
         } catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
         }

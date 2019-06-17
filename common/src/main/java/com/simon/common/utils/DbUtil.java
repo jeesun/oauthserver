@@ -340,6 +340,7 @@ public class DbUtil {
         rs = ps.executeQuery();
 
         List<Column> columns = new ArrayList<>();
+        int index = 0;
         while (rs.next()) {
             Column col = new Column();
             String name = rs.getString("column_name");
@@ -371,46 +372,61 @@ public class DbUtil {
             if ("id".equalsIgnoreCase(name)) {
                 if ("Long".equalsIgnoreCase(propertyType)) {
                     //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
-                    annotation = "@JSONField(serializeUsing = ToStringSerializer.class)\n" +
+                    annotation = "@ExcelColumn(title = \"id\", index = " + index + ", convertToString = true)\n" +
+                            "    @JSONField(serializeUsing = ToStringSerializer.class)\n" +
                             "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
                             "    @KeySql(genId = SnowflakeGenId.class)\n" +
                             "    @GeneratedValue(generator = \"sequenceId\")\n" +
                             "    @GenericGenerator(name = \"sequenceId\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.snowflake.SequenceId\")";
                 } else if ("String".equalsIgnoreCase(propertyType)) {
-                    annotation = "@Id\n" +
+                    annotation = "@ExcelColumn(title = \"id\", index = " + index + ")\n" +
+                            "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
                             "    @KeySql(genId = UUIdGenId.class)\n" +
                             "    @GeneratedValue(generator = \"uuid\")\n" +
                             "    @GenericGenerator(name = \"uuid\", strategy = \"" + CodeGenerator.BASE_PACKAGE + ".common.utils.UuidGenerator\")";
                 } else if ("Integer".equalsIgnoreCase(propertyType)) {
-                    annotation = "@Id\n" +
+                    annotation = "@ExcelColumn(title = \"id\", index = " + index + ")\n" +
+                            "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 } else {
-                    annotation = "@Id\n" +
+                    annotation = "@ExcelColumn(title = \"id\", index = " + index + ")\n" +
+                            "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }
             } else {
                 if ("Date".equalsIgnoreCase(propertyType)) {
-                    annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
+                            "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_TIME)\n" +
+                            "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
                             "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n";
                 } else if ("Long".equalsIgnoreCase(propertyType)) {
                     //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
-                    annotation = "@JSONField(serializeUsing = ToStringSerializer.class)\n";
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", convertToString = true)\n" +
+                            "    @JSONField(serializeUsing = ToStringSerializer.class)\n";
                 } else if ("LocalDateTime".equalsIgnoreCase(propertyType)) {
-                    annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
+                            "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
+                            "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
                             "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n";
                 } else if ("LocalDate".equalsIgnoreCase(propertyType)) {
-                    annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)\n" +
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DAY)\n" +
+                            "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_DAY)\n" +
+                            "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)\n" +
                             "    @JSONField(format = AppConfig.DATE_PATTERN_DAY)\n";
                 } else if ("LocalTime".equalsIgnoreCase(propertyType)) {
-                    annotation = "@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_TIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_TIME)\n" +
+                            "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_TIME)\n" +
+                            "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_TIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
                             "    @JSONField(format = AppConfig.DATE_PATTERN_TIME)\n";
+                } else {
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ")\n";
                 }
 
-                if (!"".equals(annotation)) {
+                if (StringUtils.isNotEmpty(annotation)) {
                     annotation += "    ";
                 }
 
@@ -452,7 +468,9 @@ public class DbUtil {
             col.setAnnotation(annotation);
             col.setComment(comment);
             columns.add(col);
-        }
+
+            index++;
+        }//while
 
         dataModel.setBasePackage(basePackage);
         //dataModel.setEntityPackage(basePackage);
