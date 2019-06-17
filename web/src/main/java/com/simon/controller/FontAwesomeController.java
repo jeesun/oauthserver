@@ -8,6 +8,7 @@ import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
 import com.simon.dto.FontAwesomeDto;
 import com.simon.model.FontAwesome;
+import com.simon.service.DictTypeService;
 import com.simon.service.FontAwesomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -42,19 +43,24 @@ public class FontAwesomeController extends BaseController {
     @Autowired
     private FontAwesomeService fontAwesomeService;
 
+    @Autowired
+    private DictTypeService dictTypeService;
+
     @GetMapping("list")
     public String list(Model model) {
         return "vue/fontAwesome/list";
     }
 
     @GetMapping("add")
-    public String add(Model model) {
+    public String add(Model model, Locale locale) {
+        model.addAttribute("statusList", listToMap(dictTypeService.getTypeByGroupCode("status", locale.toString())));
         return "vue/fontAwesome/add";
     }
 
     @GetMapping("edit")
-    public String edit(Model model, @RequestParam Integer id) {
+    public String edit(Model model, Locale locale, @RequestParam Integer id) {
         model.addAttribute("entity", entityToMap(fontAwesomeService.findById(id)));
+        model.addAttribute("statusList", listToMap(dictTypeService.getTypeByGroupCode("status", locale.toString())));
         return "vue/fontAwesome/edit";
     }
 

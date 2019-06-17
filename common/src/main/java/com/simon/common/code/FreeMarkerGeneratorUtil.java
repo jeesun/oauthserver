@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 /**
  * 代码生成器工具类
@@ -26,27 +25,13 @@ public class FreeMarkerGeneratorUtil {
 
     /**
      * 仅生成dao层
-     * @param driver
-     * @param url
-     * @param user
-     * @param pwd
+     * @param con
      * @param tableName
      * @param modelName
      * @param basePackage
      */
-    public static void generatorMvcCode(String driver, String url, String user, String pwd, String tableName,
+    public static void generatorMvcCode(Connection con, String tableName,
                                         String modelName, String basePackage) {
-
-        Connection con = null;
-        //注册驱动
-        try {
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, user, pwd);
-        } catch (Exception e) {
-            log.error("获取数据连接失败，{}", e.getMessage());
-            return;
-        }
-
         //获取模板路径
         String templatePath = CodeGenerator.TEMPLATE_FILE_PATH;
         //log.info("当前模板路径为：{}", templatePath);
@@ -130,6 +115,6 @@ public class FreeMarkerGeneratorUtil {
         //填充数据模型
         template.process(dataModel, writer);
         writer.close();
-        log.info("代码生成成功，文件位置：{}",file);
+        log.info("{} 生成成功，文件位置：{}", targetFile.getName(), targetFile.getPath());
     }
 }

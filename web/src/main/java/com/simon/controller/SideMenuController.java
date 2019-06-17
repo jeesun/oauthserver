@@ -222,6 +222,7 @@ public class SideMenuController extends BaseController {
             dto.setOrderNum(sideMenu.getOrderNum());
             dto.setPid(sideMenu.getPid());
             dto.setRequestMethod(sideMenu.getRequestMethod());
+            dto.setRemark(sideMenu.getRemark());
 
             List<SideMenu> subSideMenus = sideMenu.getSubSideMenus();
             if (null != subSideMenus && subSideMenus.size() > 0) {
@@ -242,6 +243,7 @@ public class SideMenuController extends BaseController {
                     child.setOrderNum(subSideMenu.getOrderNum());
                     child.setPid(subSideMenu.getPid());
                     child.setUrl(subSideMenu.getUrl());
+                    child.setRemark(subSideMenu.getRemark());
 
                     List<EasyUiSideMenuDto> grandchildren = new ArrayList<>();
                     List<SideMenu> grandchildrenMenus = sideMenuService.selectByPid(subSideMenu.getId(), locale.toString());
@@ -262,6 +264,7 @@ public class SideMenuController extends BaseController {
                         grandchild.setPid(grandchildMenu.getPid());
                         grandchild.setUrl(grandchildMenu.getUrl());
                         grandchild.setRequestMethod(grandchildMenu.getRequestMethod());
+                        grandchild.setRemark(grandchildMenu.getRemark());
                         grandchildren.add(grandchild);
                     }
                     child.setChildren(grandchildren);

@@ -7,9 +7,6 @@
         <el-col :xs="{span: 24, offset: 0}" :sm="{span: 12, offset: 6}" :md="{span: 8, offset: 8}"
                 :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <!--<el-form-item label="id" prop="id">
-                    <el-input v-model="ruleForm.id" placeholder="请输入id" :disabled="true"></el-input>
-                </el-form-item>-->
                 <el-form-item th:if="${entity.menuType} eq '1'" th:label="#{sideMenu.parentMenuName}">
                     <el-select v-model="ruleForm.pid" th:placeholder="#{pleaseChoose}" disabled>
                         <el-option
@@ -39,7 +36,7 @@
                     <el-input v-model="ruleForm.url" th:placeholder="#{pleaseInput} + #{sideMenu.url}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{sideMenu.requestMethod}" prop="requestMethod">
-                    <el-select size="small" v-model="ruleForm.requestMethod" th:placeholder="#{pleaseChoose}">
+                    <el-select v-model="ruleForm.requestMethod" th:placeholder="#{pleaseChoose}">
                         <el-option label="*" value="*"></el-option>
                         <el-option label="GET" value="GET"></el-option>
                         <el-option label="POST" value="POST"></el-option>
@@ -53,7 +50,14 @@
                     <el-input v-model="ruleForm.entityName" th:placeholder="#{pleaseInput} + #{entityName}" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{sideMenu.remark}" prop="remark">
-                    <el-input v-model="ruleForm.remark" th:placeholder="#{pleaseInput} + #{sideMenu.remark}"></el-input>
+                    <!--<el-input v-model="ruleForm.remark" th:placeholder="#{pleaseInput} + #{sideMenu.remark}"></el-input>-->
+                    <el-select v-model="ruleForm.remark" th:pleaseholder="#{pleaseChoose}">
+                        <el-option th:label="#{sideMenu.remark.list}" value="list"></el-option>
+                        <el-option th:label="#{sideMenu.remark.data}" value="data"></el-option>
+                        <el-option th:label="#{add}" value="add"></el-option>
+                        <el-option th:label="#{edit}" value="edit"></el-option>
+                        <el-option th:label="#{delete}" value="delete"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{sideMenu.authorityName}" prop="authorities">
                     <el-select v-model="ruleForm.authorities" multiple th:placeholder="#{pleaseChoose}">
