@@ -17,6 +17,96 @@
                     <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
                 </el-form-item>
                 <#break>
+            <#case "Radio">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "Checkbox">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-checkbox v-model="ruleForm.${column.name}">${column.comment}</el-checkbox>
+                </el-form-item>
+                <#break>
+            <#case "InputNumber">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input-number v-model="ruleForm.${column.name}"></el-input-number>
+                </el-form-item>
+                <#break>
+            <#case "Select">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-select v-model="ruleForm.${column.name}" placeholder="请选择${column.comment}">
+                        <el-option
+                                v-for="item in ${column.extraInfo}"
+                                :key="item.typeCode"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <#break>
+            <#case "Cascader">
+                <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                <#break>
+            <#case "Switch">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-switch
+                            v-model="ruleForm.${column.name}"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                    </el-switch>
+                </el-form-item>
+                <#break>
+            <#case "Slider">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-slider v-model="ruleForm.${column.name}"></el-slider>
+                </el-form-item>
+                <#break>
+            <#case "TimePicker">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-time-picker
+                            v-model="ruleForm.${column.name}"
+                            :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                            placeholder="请选择${column.comment}">
+                    </el-time-picker>
+                </el-form-item>
+                <#break>
+            <#case "DatePicker">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-date-picker
+                            v-model="ruleForm.${column.name}"
+                            type="date"
+                            placeholder="请选择${column.comment}">
+                    </el-date-picker>
+                </el-form-item>
+                <#break>
+            <#case "Upload">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "Rate">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-rate
+                            v-model="ruleForm.${column.name}"
+                            show-text>
+                    </el-rate>
+                </el-form-item>
+                <#break>
+            <#case "ColorPicker">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-color-picker v-model="ruleForm.${column.name}"></el-color-picker>
+                </el-form-item>
+                <#break>
+            <#case "Transfer">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "neditor">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
             <#default>
                 <el-form-item label="${column.comment}" prop="${column.name}">
                     <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
@@ -25,24 +115,6 @@
     </#if>
     </#if>
 </#list>
-                <#--<el-form-item label="图标class" prop="iconClass">
-                    <el-input v-model="ruleForm.iconClass" placeholder="请输入图标class"></el-input>
-                </el-form-item>
-                <el-form-item label="英文标签" prop="label">
-                    <el-input v-model="ruleForm.label" placeholder="请输入英文标签"></el-input>
-                </el-form-item>
-                <el-form-item label="中文标签" prop="tags">
-                    <el-input v-model="ruleForm.tags" placeholder="请输入中文标签"></el-input>
-                </el-form-item>
-                <el-form-item label="排序" prop="orderNum">
-                    <el-input v-model="ruleForm.orderNum" placeholder="请输入排序"></el-input>
-                </el-form-item>
-                <el-form-item label="状态" prop="status">
-                    <el-select v-model="ruleForm.status" placeholder="请输入状态">
-                        <el-option label="可用" value="1"></el-option>
-                        <el-option label="不可用" value="0"></el-option>
-                    </el-select>
-                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                     <el-button @click="closeWindow">关闭</el-button>
@@ -108,11 +180,11 @@
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            parent.closeLoading();
                             let errorMessage = "发生错误";
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
+                            parent.closeLoading();
                             parent.showError(errorMessage);
                         });
                     } else {

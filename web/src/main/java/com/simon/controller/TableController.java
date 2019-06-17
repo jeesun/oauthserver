@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -185,6 +187,8 @@ public class TableController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         List<Column> columnList = body.getColumns();
         EntityDataModel entityDataModel = new EntityDataModel();
+        entityDataModel.setAUTHOR(userEntity.getUsername());
+        entityDataModel.setCREATE(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         entityDataModel.setBasePackage(body.getBasePackage());
         entityDataModel.setEntityPackage(body.getBasePackage() + ".entity");
         entityDataModel.setFileSuffix(".java");

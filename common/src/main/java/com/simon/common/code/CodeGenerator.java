@@ -457,10 +457,7 @@ public class CodeGenerator {
 
     private static void genControllerAndPage(String tableName, String tableComment, String modelName, String idType){
         PageGeneratorUtil.generatorPage(
-                JDBC_DIVER_CLASS_NAME,
-                JDBC_URL,
-                JDBC_USERNAME,
-                JDBC_PASSWORD,
+                DbUtil.getConnection(JDBC_DIVER_CLASS_NAME, JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD),
                 tableName,
                 modelName,
                 CONTROLLER_PACKAGE);
@@ -468,10 +465,7 @@ public class CodeGenerator {
 
     private static void genControllerAndPage(String tableName, String tableComment, String modelName, String idType, EntityDataModel entityDataModel){
         PageGeneratorUtil.generatorPage(
-                JDBC_DIVER_CLASS_NAME,
-                JDBC_URL,
-                JDBC_USERNAME,
-                JDBC_PASSWORD,
+                DbUtil.getConnection(JDBC_DIVER_CLASS_NAME, JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD),
                 tableName,
                 modelName,
                 CONTROLLER_PACKAGE, entityDataModel);

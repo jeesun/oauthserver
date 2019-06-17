@@ -17,7 +17,7 @@
                     <el-select v-model="ruleForm.enabled" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in enabledStatusList"
-                                :key="item.iconClass"
+                                :key="item.typeCode"
                                 :label="item.typeName"
                                 :value="item.typeCode">
                         </el-option>
@@ -41,7 +41,7 @@
                     <el-select size="small" v-model="ruleForm.sex" th:placeholder="#{pleaseChoose} + #{oauthUser.sex}">
                         <el-option
                                 v-for="item in sexTypeList"
-                                :key="item.iconClass"
+                                :key="item.typeCode"
                                 :label="item.typeName"
                                 :value="item.typeCode">
                         </el-option>
