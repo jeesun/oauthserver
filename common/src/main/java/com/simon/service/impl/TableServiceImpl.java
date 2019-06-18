@@ -24,6 +24,7 @@ import java.util.List;
 
 /**
  * 数据表
+ *
  * @author simon
  * @date 2019-05-04
  */
@@ -46,23 +47,20 @@ public class TableServiceImpl implements TableService {
     @Override
     public void saveSettingsAndAuthorities(GenCodeDto body) {
         saveSettings(body);
-        saveAuthorities(body);
+        //saveAuthorities(body);
     }
 
     /**
      * 保存用户生成代码时的UI属性配置
+     *
      * @param body
      */
-    private void saveSettings(GenCodeDto body){
+    private void saveSettings(GenCodeDto body) {
         String tableName = body.getTableName();
-        String entityName = body.getEntityName();
-        String tableComment = body.getTableComment();
-        Long pid = body.getPid();
         List<Column> columnList = body.getColumns();
-        String allowedRoles = StringUtils.join(body.getAllowedRoles(), ",");
 
         List<ColumnUi> columnUiList = new ArrayList<>();
-        for (Column column : columnList){
+        for (Column column : columnList) {
             ColumnUi columnUi = new ColumnUi();
             BeanUtils.copyProperties(column, columnUi);
             columnUi.setTableName(tableName);
@@ -76,9 +74,10 @@ public class TableServiceImpl implements TableService {
 
     /**
      * 代码生成时，向t_side_menu表添加访问权限数据
+     *
      * @param body
      */
-    private void saveAuthorities(GenCodeDto body){
+    private void saveAuthorities(GenCodeDto body) {
         if (null == body.getPid() || null == body.getAllowedRoles() || body.getAllowedRoles().length <= 0) {
             return;
         }

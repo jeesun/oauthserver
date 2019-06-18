@@ -400,3 +400,11 @@ UPDATE t_side_menu SET request_method='GET' WHERE remark='list';
 INSERT INTO t_dict_type(id, create_by, create_date, update_by, update_date, type_code, type_group_id, type_group_code, order_num) VALUES (155566122928701441, NULL, '2019-06-04 17:21:11', NULL, NULL, 'DateTimePicker', 155564655257845760, 'element_component', 10);
 INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (115, NULL, NULL, NULL, NULL, 155566122928701441, 'DateTimePicker', 'en_US');
 INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (116, NULL, NULL, NULL, NULL, 155566122928701441, '日期时间选择器', 'zh_CN');
+
+-- 2019-06-18 by simon t_s_column_ui表修改
+ALTER TABLE t_s_column_ui MODIFY COLUMN id bigint(20) NOT NULL;
+ALTER TABLE t_s_column_ui ADD extra_info VARCHAR ( 50 );
+ALTER TABLE t_s_column_ui MODIFY COLUMN extra_info VARCHAR ( 50 ) COMMENT '补充信息';
+ALTER TABLE t_s_column_ui ADD allow_search TINYINT ( 1 ) DEFAULT 0 COMMENT '允许搜索';
+ALTER TABLE t_s_column_ui ADD hidden TINYINT ( 1 ) DEFAULT 0 COMMENT '是否隐藏';
+ALTER TABLE t_s_column_ui ADD allow_input TINYINT ( 1 ) DEFAULT 1 COMMENT '允许输入';

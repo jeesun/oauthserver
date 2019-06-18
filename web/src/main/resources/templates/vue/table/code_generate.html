@@ -183,10 +183,21 @@
                 parent.openLoading();
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        // 遍历ruleForm.columns，如果是uiType是Select选择器，extraInfo必须有值。
+                        for(let i = 0, len = this.ruleForm.columns.length; i < len; i++) {
+                            if (this.ruleForm.columns[i].uiType === 'Select' && !this.ruleForm.columns[i].extraInfo) {
+                                parent.closeLoading();
+                                this.$message.error(this.ruleForm.columns[i].name + "属性UI是选择器，但未设置选择器数据");
+                                return false;
+                            }
+                        }
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
                             parent.showSuccess([[#{codeGen.success}]]);
-                            parent.updateListData();
+                            /*this.$message({
+                                message: [[#{codeGen.success}]],
+                                type: 'success'
+                            });*/
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
