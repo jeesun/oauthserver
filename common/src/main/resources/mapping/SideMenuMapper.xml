@@ -109,7 +109,7 @@
         LEFT JOIN view_role_${language} vr ON tsma.authority = vr.type_code
         WHERE pid=#{pid}
         GROUP BY
-        tsm.id
+        <include refid="t_side_menu_Column_List"/>
         ORDER BY order_num ASC
     </select>
 
@@ -174,7 +174,7 @@
             AND name LIKE CONCAT('%', #{map.name}, '%')
         </if>
         GROUP BY
-        tsm.id
+        <include refid="t_side_menu_Column_List"/>
         ORDER BY
         order_num ASC
     </select>
@@ -252,7 +252,7 @@
         WHERE
         ( tsm.pid IS NULL OR tsm.pid = 0 )
         GROUP BY
-        tsm.id
+        <include refid="t_side_menu_Column_List"/>
         ORDER BY
         tsm.order_num ASC
 
