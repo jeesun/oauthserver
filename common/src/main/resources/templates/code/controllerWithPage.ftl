@@ -51,6 +51,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 /**
 * ${tableComment}
@@ -62,7 +63,7 @@ import java.time.LocalDateTime;
 @Api(description = "${tableComment}")
 @Controller
 @RequestMapping("/api/${entityName?uncap_first}s")
-public class ${entityName}Controller extends BaseController{
+public class ${entityName}Controller extends BaseController {
 
     @Autowired
     private ${entityName}Service ${entityName?uncap_first}Service;
@@ -73,14 +74,14 @@ public class ${entityName}Controller extends BaseController{
     @ApiIgnore
     @ApiOperation(value = "列表页面")
     @GetMapping("list")
-    public String list(Model model){
+    public String list(Model model, Locale locale) {
 <#list columns as column>
-    <#switch column.uiType>
-        <#case "t:dict">
-        model.addAttribute("${dashedToCamel(column.extraInfo)}List", dictTypeService.getTypeByGroupCode("${column.extraInfo}"));
-        <#break>
-        <#default>
-    </#switch>
+    <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+    <#else>
+        <#if (column.allowInput?string('yes', 'no'))=='yes' && (column.extraInfo)??>
+        model.addAttribute("${column.extraInfo}", dictTypeService.getTypeByGroupCode("${column.extraInfo}", locale.toString()));
+        </#if>
+    </#if>
 </#list>
         return "vue/${entityName?uncap_first}/list";
     }
@@ -88,15 +89,31 @@ public class ${entityName}Controller extends BaseController{
     @ApiIgnore
     @ApiOperation(value = "新增页面")
     @GetMapping("add")
-    public String add(){
+    public String add(Model model, Locale locale) {
+<#list columns as column>
+    <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+    <#else>
+        <#if (column.allowInput?string('yes', 'no'))=='yes' && (column.extraInfo)??>
+        model.addAttribute("${column.extraInfo}", dictTypeService.getTypeByGroupCode("${column.extraInfo}", locale.toString()));
+        </#if>
+    </#if>
+</#list>
         return "vue/${entityName?uncap_first}/add";
     }
 
     @ApiIgnore
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
-    public String edit(@RequestParam ${idType} id, Model model){
+    public String edit(@RequestParam ${idType} id, Model model, Locale locale) {
         model.addAttribute("entity", ${entityName?uncap_first}Service.findById(id));
+<#list columns as column>
+    <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+    <#else>
+        <#if (column.allowInput?string('yes', 'no'))=='yes' && (column.extraInfo)??>
+        model.addAttribute("${column.extraInfo}", dictTypeService.getTypeByGroupCode("${column.extraInfo}", locale.toString()));
+        </#if>
+    </#if>
+</#list>
         return "vue/${entityName?uncap_first}/edit";
     }
 
@@ -104,7 +121,7 @@ public class ${entityName}Controller extends BaseController{
     @ApiOperation(value = "列表数据")
     @GetMapping("data")
     @ResponseBody
-    public EasyUIDataGridResult<${entityName}> data(
+    public EasyUIDataGridResult<${entityName}> data (
 <#list columns as column>
     <#if column.allowSearch>
         <#switch column.type>
@@ -139,7 +156,7 @@ public class ${entityName}Controller extends BaseController{
     @ApiOperation(value = "新增")
     @PostMapping("add")
     @ResponseBody
-    public ResultMsg add(@RequestBody ${entityName} body, Authentication authentication){
+    public ResultMsg add(@RequestBody ${entityName} body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
@@ -155,7 +172,7 @@ public class ${entityName}Controller extends BaseController{
     @ApiOperation(value = "修改")
     @PatchMapping("edit")
     @ResponseBody
-    public ResultMsg update(@RequestBody ${entityName} body, Authentication authentication){
+    public ResultMsg update(@RequestBody ${entityName} body, Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
@@ -166,7 +183,7 @@ public class ${entityName}Controller extends BaseController{
     @ApiOperation(value = "删除")
     @DeleteMapping("/ids/{ids}")
     @ResponseBody
-    public ResultMsg delete(@PathVariable String ids){
+    public ResultMsg delete(@PathVariable String ids) {
         ${entityName?uncap_first}Service.deleteByIds(ids);
         return ResultMsg.success();
     }

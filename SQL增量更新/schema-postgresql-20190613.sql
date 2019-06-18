@@ -424,3 +424,13 @@ UPDATE t_side_menu SET request_method='GET' WHERE remark='list';
 INSERT INTO t_dict_type(id, create_by, create_date, update_by, update_date, type_code, type_group_id, type_group_code, order_num) VALUES (155566122928701441, NULL, '2019-06-04 17:21:11', NULL, NULL, 'DateTimePicker', 155564655257845760, 'element_component', 10);
 INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (115, NULL, NULL, NULL, NULL, 155566122928701441, 'DateTimePicker', 'en_US');
 INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (116, NULL, NULL, NULL, NULL, 155566122928701441, '日期时间选择器', 'zh_CN');
+
+-- 2019-06-18 by simon t_s_column_ui表修改
+alter table t_s_column_ui add extra_info varchar(50);
+COMMENT ON COLUMN t_s_column_ui.extra_info IS '补充信息';
+ALTER TABLE t_s_column_ui ADD allow_search BOOLEAN DEFAULT FALSE;
+COMMENT ON COLUMN t_s_column_ui.allow_search IS '允许搜索';
+ALTER TABLE t_s_column_ui ADD hidden BOOLEAN DEFAULT FALSE;
+COMMENT ON COLUMN t_s_column_ui.hidden IS '是否隐藏';
+ALTER TABLE t_s_column_ui ADD allow_input BOOLEAN DEFAULT TRUE;
+COMMENT ON COLUMN t_s_column_ui.allow_input IS '允许输入';

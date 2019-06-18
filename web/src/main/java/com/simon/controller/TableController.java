@@ -8,6 +8,7 @@ import com.simon.common.code.TableInfo;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
+import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.DbUtil;
 import com.simon.dto.GenCodeDto;
 import com.simon.model.ColumnUi;
@@ -148,30 +149,34 @@ public class TableController extends BaseController {
                 }
                 switch (column.getType()) {
                     case "Date":
-                        //日期选择器
+                        //日期时间选择器
                         column.setUiType("DateTimePicker");
                         break;
                     case "LocalDateTime":
+                        //日期时间选择器
                         column.setUiType("DateTimePicker");
                         break;
                     case "LocalDate":
+                        //日期选择器
                         column.setUiType("DatePicker");
                         break;
                     case "LocalTime":
+                        //时间选择器
                         column.setUiType("TimePicker");
                         break;
                     case "Boolean":
-                        //开关
-                        column.setUiType("Switch");
+                        //选择器
+                        column.setUiType("Select");
                         break;
                     default:
+                        //输入框
                         column.setUiType("Input");
                         break;
                 }
                 //加载用户上次生成代码时的配置
                 for (ColumnUi columnUi : columnUiList) {
                     if (column.getName().equalsIgnoreCase(columnUi.getName())) {
-                        column.setUiType(columnUi.getUiType());
+                        BeanUtils.copyPropertiesIgnoreNull(columnUi, column);
                     }
                 }
             }
@@ -215,7 +220,7 @@ public class TableController extends BaseController {
 
         //保存用户生成代码时的UI属性配置。
         //代码生成时，向t_side_menu表添加访问权限数据。
-        //tableService.saveSettingsAndAuthorities(body);
+        tableService.saveSettingsAndAuthorities(body);
         return ResultMsg.success();
     }
 }

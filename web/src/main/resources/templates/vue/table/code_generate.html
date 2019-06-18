@@ -40,6 +40,15 @@
                             <el-option label="api" value="/api"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item th:label="#{codeGen.genModules}" prop="genModules">
+                        <el-checkbox-group v-model="ruleForm.genModules">
+                            <el-checkbox label="modelAndMapper"></el-checkbox>
+                            <el-checkbox label="repository"></el-checkbox>
+                            <el-checkbox label="service"></el-checkbox>
+                            <el-checkbox label="controller"></el-checkbox>
+                            <el-checkbox label="controllerAndPage"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
                     <el-form-item th:label="#{codeGen.basePackage}" prop="basePackage">
                         <el-input v-model="ruleForm.basePackage" th:placeholder="#{pleaseInput} + #{codeGen.basePackage}"></el-input>
                     </el-form-item>
@@ -64,15 +73,6 @@
                             <el-option label="Integer" value="Integer"></el-option>
                             <el-option label="String" value="String"></el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item th:label="#{codeGen.genModules}" prop="genModules">
-                        <el-checkbox-group v-model="ruleForm.genModules">
-                            <el-checkbox label="modelAndMapper"></el-checkbox>
-                            <el-checkbox label="repository"></el-checkbox>
-                            <el-checkbox label="service"></el-checkbox>
-                            <el-checkbox label="controller"></el-checkbox>
-                            <el-checkbox label="controllerAndPage"></el-checkbox>
-                        </el-checkbox-group>
                     </el-form-item>
                 </template>
             </el-col>
@@ -183,25 +183,36 @@
                 parent.openLoading();
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        // 遍历ruleForm.columns，如果是uiType是Select选择器，extraInfo必须有值。
+                        for(let i = 0, len = this.ruleForm.columns.length; i < len; i++) {
+                            if (this.ruleForm.columns[i].uiType === 'Select' && !this.ruleForm.columns[i].extraInfo) {
+                                parent.closeLoading();
+                                this.$message.error(this.ruleForm.columns[i].name + "属性UI是选择器，但未设置选择器数据");
+                                return false;
+                            }
+                        }
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess([[#{insertSuccess}]]);
-                            parent.updateListData();
+                            parent.showSuccess([[#{codeGen.success}]]);
+                            /*this.$message({
+                                message: [[#{codeGen.success}]],
+                                type: 'success'
+                            });*/
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = [[#{insertFailed}]];
+                            parent.closeLoading();
+                            let errorMessage = [[#{codeGen.failed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.closeLoading();
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             let isError= document.getElementsByClassName("is-error");
                             isError[0].querySelector('input').focus();
-                        },100);
+                        }, 100);
                         return false;
                     }
                 });
