@@ -40,6 +40,15 @@
                             <el-option label="api" value="/api"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item th:label="#{codeGen.genModules}" prop="genModules">
+                        <el-checkbox-group v-model="ruleForm.genModules">
+                            <el-checkbox label="modelAndMapper"></el-checkbox>
+                            <el-checkbox label="repository"></el-checkbox>
+                            <el-checkbox label="service"></el-checkbox>
+                            <el-checkbox label="controller"></el-checkbox>
+                            <el-checkbox label="controllerAndPage"></el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
                     <el-form-item th:label="#{codeGen.basePackage}" prop="basePackage">
                         <el-input v-model="ruleForm.basePackage" th:placeholder="#{pleaseInput} + #{codeGen.basePackage}"></el-input>
                     </el-form-item>
@@ -64,15 +73,6 @@
                             <el-option label="Integer" value="Integer"></el-option>
                             <el-option label="String" value="String"></el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item th:label="#{codeGen.genModules}" prop="genModules">
-                        <el-checkbox-group v-model="ruleForm.genModules">
-                            <el-checkbox label="modelAndMapper"></el-checkbox>
-                            <el-checkbox label="repository"></el-checkbox>
-                            <el-checkbox label="service"></el-checkbox>
-                            <el-checkbox label="controller"></el-checkbox>
-                            <el-checkbox label="controllerAndPage"></el-checkbox>
-                        </el-checkbox-group>
                     </el-form-item>
                 </template>
             </el-col>
@@ -185,23 +185,23 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess([[#{insertSuccess}]]);
+                            parent.showSuccess([[#{codeGen.success}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = [[#{insertFailed}]];
+                            parent.closeLoading();
+                            let errorMessage = [[#{codeGen.failed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.closeLoading();
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             let isError= document.getElementsByClassName("is-error");
                             isError[0].querySelector('input').focus();
-                        },100);
+                        }, 100);
                         return false;
                     }
                 });

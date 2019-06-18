@@ -70,11 +70,11 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
         return ResultMsg.fail(response.getStatus(), e.getMessage());
     }
 
-    /*@ExceptionHandler(value = {RuntimeException.class, Exception.class})
+    @ExceptionHandler(value = {RuntimeException.class, Exception.class})
     public ResultMsg grantRuntimeError(HttpServletRequest request, HttpServletResponse response, RuntimeException e){
         log.error("grantRuntimeError");
         log.error(e.getMessage());
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResultMsg.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-    }*/
+    }
 }
