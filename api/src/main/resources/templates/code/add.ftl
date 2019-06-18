@@ -79,6 +79,15 @@
                     </el-date-picker>
                 </el-form-item>
                 <#break>
+            <#case "DateTimePicker">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-date-picker
+                            v-model="ruleForm.${column.name}"
+                            type="datetime"
+                            placeholder="请选择${column.comment}">
+                    </el-date-picker>
+                </el-form-item>
+                <#break>
             <#case "Upload">
                 <el-form-item label="${column.comment}" prop="${column.name}">
                     <el-input v-model="ruleForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
@@ -140,6 +149,14 @@
     var app = new Vue({
         el: '#app',
         data: {
+    <#list columns as column>
+        <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+        <#else>
+        <#if (column.allowInput?string('yes', 'no'))=='yes' && (column.extraInfo)??>
+            ${column.extraInfo}: [[${r'${' + column.extraInfo + r'}'}]],
+        </#if>
+        </#if>
+    </#list>
             ruleForm: {
     <#list columns as column>
         <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">

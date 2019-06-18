@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
+import com.simon.dto.SelectDto;
 import com.simon.mapper.DictTypeGroupMapper;
 import com.simon.mapper.DictTypeGroupMultiLanguageMapper;
 import com.simon.model.DictType;
@@ -232,5 +233,10 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     @Override
     public int deleteById(Long id) {
         return 0;
+    }
+
+    @Override
+    public List<SelectDto> getSelectDtos(String language) {
+        return dictTypeGroupMapper.getSelectDtos(language);
     }
 }

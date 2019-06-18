@@ -419,3 +419,8 @@ ALTER TABLE t_s_font_awesome rename column tags to label_zh_cn;
 
 -- 2019-06-14 by simon 修改t_side_menu数据
 UPDATE t_side_menu SET request_method='GET' WHERE remark='list';
+
+-- 2019-06-18 by simon 饿了么组件字典添加DateTimePicker
+INSERT INTO t_dict_type(id, create_by, create_date, update_by, update_date, type_code, type_group_id, type_group_code, order_num) VALUES (155566122928701441, NULL, '2019-06-04 17:21:11', NULL, NULL, 'DateTimePicker', 155564655257845760, 'element_component', 10);
+INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (115, NULL, NULL, NULL, NULL, 155566122928701441, 'DateTimePicker', 'en_US');
+INSERT INTO t_s_dt_multi_languages(id, create_by, create_date, update_by, update_date, dict_type_id, name, language) VALUES (116, NULL, NULL, NULL, NULL, 155566122928701441, '日期时间选择器', 'zh_CN');

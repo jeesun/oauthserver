@@ -28,6 +28,11 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-alert
+                            th:title="#{codeGen.recommendModuleDir}"
+                            type="info"
+                            th:close-text="#{iKnow}">
+                    </el-alert>
                     <el-form-item th:label="#{codeGen.moduleDir}" prop="moduleDir">
                         <el-select v-model="ruleForm.moduleDir" th:placeholder="#{pleaseChoose}">
                             <el-option label="common" value="/common"></el-option>
@@ -82,7 +87,7 @@
                         <elx-editable-column align="center" prop="type" th:label="#{codeGen.columns.type}" width="100"></elx-editable-column>
                         <elx-editable-column align="center" prop="comment" th:label="#{codeGen.columns.comment}" width="180"></elx-editable-column>
                         <elx-editable-column align="center" prop="uiType" th:label="#{codeGen.columns.uiType}" width="180" :edit-render="{name : 'ElSelect', options: elementComponents}"></elx-editable-column>
-                        <elx-editable-column align="center" prop="extraInfo" th:label="#{codeGen.columns.extraInfo}" width="160" :show-overflow-tooltip="true" :edit-render="{name: 'ElInput'}"></elx-editable-column>
+                        <elx-editable-column align="center" prop="extraInfo" th:label="#{codeGen.columns.extraInfo}" width="160" :show-overflow-tooltip="true" :edit-render="{name: 'ElSelect', options: typeGroups}"></elx-editable-column>
                         <elx-editable-column align="center" prop="allowSearch" th:label="#{codeGen.columns.allowSearch}" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
                         <elx-editable-column align="center" prop="hidden" th:label="#{codeGen.columns.hidden}" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></elx-editable-column>
                         <elx-editable-column align="center" prop="allowInput" th:label="#{codeGen.columns.allowInput}" width="160" :edit-render="{name: 'ElSwitch', type: 'visible'}">
@@ -123,6 +128,7 @@
         el: '#app',
         data: {
             elementComponents: [],
+            typeGroups: [[${typeGroups}]],
             tableLoading: false,
             roleTypeList: [[${roleTypeList}]],
             parentMenus: [[${parentMenus}]],
@@ -157,6 +163,7 @@
         },
         mounted: function () {
             this.initElementComponents();
+
         },
         methods: {
             initElementComponents(){
