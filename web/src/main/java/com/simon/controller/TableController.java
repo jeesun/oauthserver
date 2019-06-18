@@ -11,10 +11,7 @@ import com.simon.common.domain.UserEntity;
 import com.simon.common.utils.DbUtil;
 import com.simon.dto.GenCodeDto;
 import com.simon.model.ColumnUi;
-import com.simon.service.ColumnUiService;
-import com.simon.service.DictTypeService;
-import com.simon.service.SideMenuService;
-import com.simon.service.TableService;
+import com.simon.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -43,6 +42,9 @@ import java.util.*;
 public class TableController extends BaseController {
     @Autowired
     private DictTypeService dictTypeService;
+
+    @Autowired
+    private DictTypeGroupService dictTypeGroupService;
 
     @Autowired
     private SideMenuService sideMenuService;
@@ -118,6 +120,7 @@ public class TableController extends BaseController {
 
             //想隐藏显示的列
             List<String> hiddenColumns = new ArrayList<>();
+            hiddenColumns.add("id");
             hiddenColumns.add("createDate");
             hiddenColumns.add("createBy");
             hiddenColumns.add("updateDate");
@@ -125,6 +128,7 @@ public class TableController extends BaseController {
 
             //想不在页面上输入的列
             List<String> denyInputColumns = new ArrayList<>();
+            denyInputColumns.add("id");
             denyInputColumns.add("createDate");
             denyInputColumns.add("createBy");
             denyInputColumns.add("updateDate");
@@ -145,13 +149,23 @@ public class TableController extends BaseController {
                 switch (column.getType()) {
                     case "Date":
                         //日期选择器
+                        column.setUiType("DateTimePicker");
+                        break;
+                    case "LocalDateTime":
+                        column.setUiType("DateTimePicker");
+                        break;
+                    case "LocalDate":
                         column.setUiType("DatePicker");
+                        break;
+                    case "LocalTime":
+                        column.setUiType("TimePicker");
                         break;
                     case "Boolean":
                         //开关
                         column.setUiType("Switch");
                         break;
                     default:
+                        column.setUiType("Input");
                         break;
                 }
                 //加载用户上次生成代码时的配置
@@ -176,6 +190,7 @@ public class TableController extends BaseController {
         }
 
         model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component", locale.toString()));
+        model.addAttribute("typeGroups", dictTypeGroupService.getSelectDtos(locale.toString()));
         return "vue/table/code_generate";
     }
 
@@ -185,6 +200,8 @@ public class TableController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         List<Column> columnList = body.getColumns();
         EntityDataModel entityDataModel = new EntityDataModel();
+        entityDataModel.setAUTHOR(userEntity.getUsername());
+        entityDataModel.setCREATE(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         entityDataModel.setBasePackage(body.getBasePackage());
         entityDataModel.setEntityPackage(body.getBasePackage() + ".entity");
         entityDataModel.setFileSuffix(".java");

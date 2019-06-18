@@ -42,6 +42,11 @@
         <result column="type" jdbcType="INTEGER" property="type"/>
     </resultMap>
 
+    <resultMap id="SelectDtoMap" type="com.simon.dto.SelectDto">
+        <result column="label" jdbcType="VARCHAR" property="label"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+    </resultMap>
+
     <select id="getAll" resultMap="SuperMap">
     SELECT * FROM t_dict_type_group_${language}
   </select>
@@ -115,5 +120,13 @@
             t_dict_type_group_${language}
         WHERE
             id = #{id}
+    </select>
+
+    <select id="getSelectDtos" resultMap="SelectDtoMap">
+        SELECT
+            type_group_name AS label,
+            type_group_code AS value
+        FROM
+            t_dict_type_group_${language}
     </select>
 </mapper>

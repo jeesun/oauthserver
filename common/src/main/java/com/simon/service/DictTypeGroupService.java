@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.simon.common.service.BasicService;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
+import com.simon.dto.SelectDto;
 import com.simon.model.DictTypeGroup;
 
 import java.util.List;
@@ -35,4 +36,10 @@ public interface DictTypeGroupService extends BasicService<DictTypeGroup, Long> 
      * @return
      */
     int deleteById(Long id);
+
+    /**
+     * 查询适用于Vue选择框的字典类型数据
+     * @return 适用于Vue选择框的字典类型数据
+     */
+    List<SelectDto> getSelectDtos(String language);
 }

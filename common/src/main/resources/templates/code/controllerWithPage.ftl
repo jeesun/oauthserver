@@ -141,7 +141,7 @@ public class ${entityName}Controller extends BaseController{
     @ResponseBody
     public ResultMsg add(@RequestBody ${entityName} body, Authentication authentication){
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(new Date());
+        body.setCreateDate(LocalDateTime.now());
         body.setCreateBy(userEntity.getId());
 <#list columns as column>
     <#if column.name == "userId">
@@ -157,7 +157,7 @@ public class ${entityName}Controller extends BaseController{
     @ResponseBody
     public ResultMsg update(@RequestBody ${entityName} body, Authentication authentication){
         UserEntity userEntity = getCurrentUser(authentication);
-        body.setUpdateDate(new Date());
+        body.setUpdateDate(LocalDateTime.now());
         body.setUpdateBy(userEntity.getId());
         ${entityName?uncap_first}Service.updateByPrimaryKeySelective(body);
         return ResultMsg.success();
