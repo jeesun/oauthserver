@@ -12,7 +12,7 @@
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="news_status" jdbcType="INTEGER" property="newsStatus"/>
         <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
         <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate"/>
         <result column="tags" jdbcType="VARCHAR" property="tags"/>

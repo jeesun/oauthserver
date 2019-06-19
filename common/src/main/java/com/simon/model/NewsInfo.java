@@ -69,8 +69,8 @@ public class NewsInfo implements Serializable{
     private Long userId;
 
     @ApiModelProperty(value = "状态")
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "news_status")
+    private Integer newsStatus;
 
     @ApiModelProperty(value = "新闻内容")
     @Column(name = "content", columnDefinition = "TEXT")

@@ -453,3 +453,6 @@ ALTER TABLE t_s_column_ui ADD ( hidden CHAR ( 1 ) DEFAULT '0' );
 COMMENT ON COLUMN t_s_column_ui.hidden IS '是否隐藏';
 ALTER TABLE t_s_column_ui ADD ( allow_input CHAR ( 1 ) DEFAULT '1' );
 COMMENT ON COLUMN t_s_column_ui.allow_input IS '允许输入';
+
+-- 2019-06-18 by simon t_news_info表修改字段名
+ALTER TABLE T_NEWS_INFO rename column status to news_status;

@@ -49,12 +49,22 @@
                     <el-table-column align="center" prop="updateDate" label="更新时间" width="120"></el-table-column>-->
                     <el-table-column align="center" prop="title" th:label="#{newsInfo.title}" width="120"></el-table-column>
                     <el-table-column align="center" prop="userId" th:label="#{newsInfo.userId}" width="120"></el-table-column>
-                    <el-table-column align="center" prop="status" th:label="#{newsInfo.status}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="newsStatus" th:label="#{newsInfo.newsStatus}" width="120" :formatter="formatNewsStatus"></el-table-column>
                     <el-table-column align="center" prop="content" th:label="#{newsInfo.content}" width="120" :show-overflow-tooltip="true"></el-table-column>
-                    <el-table-column align="center" prop="imageUrl" th:label="#{newsInfo.imageUrl}" width="120"></el-table-column>
-                    <el-table-column align="center" prop="publishDate" th:label="#{newsInfo.publishDate}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="imageUrl" th:label="#{newsInfo.imageUrl}" width="120">
+                        <template slot-scope="scope">
+                            <el-popover trigger="hover" placement="right">
+                                <img :src="scope.row.imageUrl" th:alt="#{loading}" style="width: 120px; height: 120px;">
+                                <div slot="reference" class="name-wrapper">
+                                    <img :src="scope.row.imageUrl" th:alt="#{loading}"
+                                         style="width: 24px; height: 24px;padding: 0; margin: 0">
+                                </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="center" prop="publishDate" th:label="#{newsInfo.publishDate}" width="140"></el-table-column>
                     <el-table-column align="center" prop="tags" th:label="#{newsInfo.tags}" width="120"></el-table-column>
-                    <el-table-column align="center" prop="newsType" th:label="#{newsInfo.newsType}" width="120"></el-table-column>
+                    <el-table-column align="center" prop="newsType" th:label="#{newsInfo.newsType}" width="120" :formatter="formatNewsType"></el-table-column>
             <el-table-column align="center" th:label="#{operation}" width="200">
                 <template slot-scope="scope">
                     <el-button th:if="${#authorization.expression('hasAnyRole(''__${edit}__'')')}" size="mini" type="primary" icon="el-icon-edit"
@@ -112,6 +122,24 @@
             this.loadData(this.pageNo, this.pageSize);
         },
         methods: {
+            formatNewsStatus(row, column) {
+                let list = [[${newsStatusList}]];
+                for (let i = 0; i < list.length; i++) {
+                    if (String(row.newsStatus) === String(list[i]["typeCode"])) {
+                        return list[i]["typeName"];
+                    }
+                }
+                return row.sex;
+            },
+            formatNewsType(row, column) {
+                let list = [[${newsTypeList}]];
+                for (let i = 0; i < list.length; i++) {
+                    if (String(row.newsType) === String(list[i]["typeCode"])) {
+                        return list[i]["typeName"];
+                    }
+                }
+                return row.sex;
+            },
             indexSerial(index) {
                 return index + 1 + (this.pageNo - 1) * this.pageSize;
             },
