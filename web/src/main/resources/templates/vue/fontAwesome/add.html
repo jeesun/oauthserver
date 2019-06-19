@@ -99,7 +99,7 @@
                                 errorMessage = error.response.data.message;
                             }
                             parent.closeLoading();
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();

@@ -66,6 +66,8 @@
                     <el-time-picker
                             v-model="ruleForm.${column.name}"
                             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             placeholder="请选择${column.comment}">
                     </el-time-picker>
                 </el-form-item>
@@ -75,6 +77,8 @@
                     <el-date-picker
                             v-model="ruleForm.${column.name}"
                             type="date"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
                             placeholder="请选择${column.comment}">
                     </el-date-picker>
                 </el-form-item>
@@ -84,6 +88,8 @@
                     <el-date-picker
                             v-model="ruleForm.${column.name}"
                             type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="请选择${column.comment}">
                     </el-date-picker>
                 </el-form-item>

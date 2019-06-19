@@ -144,7 +144,7 @@
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();

@@ -17,7 +17,7 @@
                     <el-input v-model="ruleForm.imageUrl" th:placeholder="#{pleaseInput} + #{newsInfo.imageUrl}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.publishDate}" prop="publishDate">
-                    <el-date-picker v-model="ruleForm.publishDate" type="datetime" th:placeholder="#{pleaseChoose}"></el-date-picker>
+                    <el-date-picker v-model="ruleForm.publishDate" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" th:placeholder="#{pleaseChoose}"></el-date-picker>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.tags}" prop="tags">
                     <el-input v-model="ruleForm.tags" th:placeholder="#{pleaseInput} + #{newsInfo.tags}"></el-input>
@@ -105,16 +105,16 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[#{updateSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{updateFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();
