@@ -168,21 +168,19 @@
         <#if column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
         <#else>
             <#if (column.allowInput?string('yes', 'no'))=='yes'>
+            <#switch column.uiType>
+            <#case "Select">
+                ${column.name}: String([[${r'${entity.' + column.name + '}'}]]),
+            <#break>
+            <#default>
                 ${column.name}: [[${r'${entity.' + column.name + '}'}]],
+            </#switch>
             </#if>
         </#if>
     </#list>
             },
             rules: {
-                iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
-                ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
-                ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
-                ]
+
             }
         },
         mounted: function () {

@@ -174,15 +174,7 @@
     </#list>
             },
             rules: {
-                iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
-                ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
-                ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
-                ]
+
             }
         },
         mounted: function () {
