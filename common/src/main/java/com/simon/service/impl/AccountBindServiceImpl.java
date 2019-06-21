@@ -125,4 +125,14 @@ public class AccountBindServiceImpl implements AccountBindService {
         List<AccountBind> list = accountBindMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<AccountBind> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<AccountBind> list) {
+
+    }
 }

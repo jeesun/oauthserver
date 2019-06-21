@@ -132,4 +132,14 @@ public class SideMenuMultiLanguageServiceImpl implements SideMenuMultiLanguageSe
         List<SideMenuMultiLanguage> list = sideMenuMultiLanguageMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<SideMenuMultiLanguage> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<SideMenuMultiLanguage> list) {
+
+    }
 }

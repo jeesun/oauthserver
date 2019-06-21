@@ -54,6 +54,8 @@
                         <el-option th:label="#{add}" value="add"></el-option>
                         <el-option th:label="#{edit}" value="edit"></el-option>
                         <el-option th:label="#{delete}" value="delete"></el-option>
+                        <el-option th:label="#{import}" value="import"></el-option>
+                        <el-option th:label="#{export}" value="export"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{sideMenu.entityName}" prop="entityName">
@@ -144,7 +146,7 @@
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();

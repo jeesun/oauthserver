@@ -66,6 +66,8 @@
                     <el-time-picker
                             v-model="ruleForm.${column.name}"
                             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
                             placeholder="请选择${column.comment}">
                     </el-time-picker>
                 </el-form-item>
@@ -75,6 +77,8 @@
                     <el-date-picker
                             v-model="ruleForm.${column.name}"
                             type="date"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
                             placeholder="请选择${column.comment}">
                     </el-date-picker>
                 </el-form-item>
@@ -84,6 +88,8 @@
                     <el-date-picker
                             v-model="ruleForm.${column.name}"
                             type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             placeholder="请选择${column.comment}">
                     </el-date-picker>
                 </el-form-item>
@@ -125,8 +131,8 @@
     </#if>
 </#list>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="${r'#{submit}'}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="${r'#{cancel}'}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -168,15 +174,7 @@
     </#list>
             },
             rules: {
-                iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
-                ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
-                ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
-                ]
+
             }
         },
         mounted: function () {
@@ -193,11 +191,11 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[${r'#{insertSuccess}'}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[${r'#{insertFailed}'}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
@@ -233,10 +231,10 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG && !isPNG) {
-                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                    this.$message.error('上传图片只能是 JPG/PNG 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
             }

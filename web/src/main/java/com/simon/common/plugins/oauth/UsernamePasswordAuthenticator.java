@@ -15,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -67,6 +68,9 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
         log.info("password authenticate");
         try {
             UserEntity userFromQuery = null;
+            if (StringUtils.isEmpty(integrationAuthentication.getUsername())) {
+                throw new UsernameNotFoundException(messageSource.getMessage("usernameNotFound", null, locale));
+            }
             if (ValidUtil.isEmail(integrationAuthentication.getUsername())) {
                 userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByEmail, myUserDetailsRowMapper, integrationAuthentication.getUsername());
             } else if (ValidUtil.isMobile(integrationAuthentication.getUsername())) {

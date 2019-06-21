@@ -408,3 +408,11 @@ ALTER TABLE t_s_column_ui MODIFY COLUMN extra_info VARCHAR ( 50 ) COMMENT '补�
 ALTER TABLE t_s_column_ui ADD allow_search TINYINT ( 1 ) DEFAULT 0 COMMENT '允许搜索';
 ALTER TABLE t_s_column_ui ADD hidden TINYINT ( 1 ) DEFAULT 0 COMMENT '是否隐藏';
 ALTER TABLE t_s_column_ui ADD allow_input TINYINT ( 1 ) DEFAULT 1 COMMENT '允许输入';
+
+-- 2019-06-18 by simon t_news_info表修改字段名
+ALTER TABLE t_news_info CHANGE status news_status int4;
+
+-- 2019-06-18 by simon t_users创建唯一键。
+update t_users set email='18800000003@163.com' where id=1000000001;
+ALTER TABLE t_users RENAME INDEX phone TO uk_t_users_phone;
+alter table t_users drop index email,add unique index uk_t_users_email(email) USING BTREE;

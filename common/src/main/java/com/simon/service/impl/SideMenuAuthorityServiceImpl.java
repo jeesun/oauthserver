@@ -11,6 +11,9 @@ import com.simon.repository.SideMenuAuthorityRepository;
 import com.simon.service.SideMenuAuthorityService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +34,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     @Autowired
     private SideMenuAuthorityMapper sideMenuAuthorityMapper;
 
@@ -153,5 +159,25 @@ public class SideMenuAuthorityServiceImpl implements SideMenuAuthorityService {
             sideMenuAuthorityList.add(sideMenuAuthority);
         }
         sideMenuAuthorityMapper.insertList(sideMenuAuthorityList);
+    }
+
+    @Override
+    public void batchSave(List<SideMenuAuthority> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        SideMenuAuthorityMapper mapper = sqlSession.getMapper(SideMenuAuthorityMapper.class);
+        for (SideMenuAuthority item : list) {
+            mapper.insert(item);
+        }
+        sqlSession.commit();
+    }
+
+    @Override
+    public void batchUpdate(List<SideMenuAuthority> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        SideMenuAuthorityMapper mapper = sqlSession.getMapper(SideMenuAuthorityMapper.class);
+        for (SideMenuAuthority item : list) {
+            mapper.updateByPrimaryKeySelective(item);
+        }
+        sqlSession.commit();
     }
 }

@@ -131,6 +131,16 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public void batchSave(List<Country> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Country> list) {
+
+    }
+
+    @Override
     public List<Country> findByCityId(String cityId) {
         return countryMapper.findByCityId(cityId);
     }

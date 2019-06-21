@@ -127,4 +127,14 @@ public class TownServiceImpl implements TownService {
         List<Town> list = townMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<Town> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Town> list) {
+
+    }
 }

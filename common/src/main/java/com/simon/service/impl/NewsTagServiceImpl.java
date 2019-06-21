@@ -126,4 +126,14 @@ public class NewsTagServiceImpl implements NewsTagService {
         var list = newsTagMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<NewsTag> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<NewsTag> list) {
+
+    }
 }

@@ -127,4 +127,14 @@ public class VillageServiceImpl implements VillageService {
         List<Village> list = villageMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<Village> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Village> list) {
+
+    }
 }

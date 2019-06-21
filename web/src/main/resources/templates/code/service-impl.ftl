@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
@@ -32,6 +35,9 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}Service {
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     @Autowired
     private ${modelNameUpperCamel}Mapper ${modelNameLowerCamel}Mapper;
 
@@ -131,5 +137,25 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
         }
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.getList(params);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public void batchSave(List<${modelNameUpperCamel}> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        ${modelNameUpperCamel}Mapper mapper = sqlSession.getMapper(${modelNameUpperCamel}Mapper.class);
+        for (${modelNameUpperCamel} item : list) {
+        mapper.insert(item);
+        }
+        sqlSession.commit();
+    }
+
+    @Override
+    public void batchUpdate(List<${modelNameUpperCamel}> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        ${modelNameUpperCamel}Mapper mapper = sqlSession.getMapper(${modelNameUpperCamel}Mapper.class);
+        for (${modelNameUpperCamel} item : list) {
+        mapper.updateByPrimaryKeySelective(item);
+        }
+        sqlSession.commit();
     }
 }

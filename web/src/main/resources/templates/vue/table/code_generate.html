@@ -54,8 +54,8 @@
                     </el-form-item>
                     <el-form-item th:label="#{codeGen.location}" prop="mainOrTest">
                         <el-select v-model="ruleForm.mainOrTest" th:placeholder="#{pleaseChoose}">
-                            <el-option th:label="#{codeGen.location.test}" value="test"></el-option>
-                            <el-option th:label="#{codeGen.location.main}" value="main"></el-option>
+                            <el-option label="/src/test" value="test"></el-option>
+                            <el-option label="/src/main" value="main"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item th:label="#{codeGen.tableName}" prop="tableName" :disabled="true">
@@ -166,6 +166,15 @@
 
         },
         methods: {
+            changeGenModules(moduleDir) {
+                if ('/common' === moduleDir) {
+                    this.ruleForm.genModules = ["modelAndMapper", "repository", "service"];
+                } else if ('/api' === moduleDir) {
+                    this.ruleForm.genModules = ["controller"];
+                } else if ('/web' === moduleDir) {
+                    this.ruleForm.genModules = ["controllerAndPage"];
+                }
+            },
             initElementComponents(){
                 let list = [[${elementComponents}]];
                 for(let i = 0; i < list.length; i++){
@@ -242,6 +251,17 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            }
+        },//method
+        watch: {
+            'ruleForm.moduleDir':function(moduleDir) {
+                if ('/common' === moduleDir) {
+                    this.ruleForm.genModules = ["modelAndMapper", "repository", "service"];
+                } else if ('/api' === moduleDir) {
+                    this.ruleForm.genModules = ["controller"];
+                } else if ('/web' === moduleDir) {
+                    this.ruleForm.genModules = ["controllerAndPage"];
+                }
             }
         }
     });

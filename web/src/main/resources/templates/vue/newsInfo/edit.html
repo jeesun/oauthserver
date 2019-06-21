@@ -10,20 +10,45 @@
                 <el-form-item th:label="#{newsInfo.title}" prop="title">
                     <el-input v-model="ruleForm.title" th:placeholder="#{pleaseInput} + #{newsInfo.title}"></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{newsInfo.status}" prop="status">
-                    <el-input v-model="ruleForm.status" th:placeholder="#{pleaseInput} + #{newsInfo.status}"></el-input>
+                <el-form-item th:label="#{newsInfo.newsStatus}" prop="newsStatus">
+                    <el-select v-model="ruleForm.newsStatus" th:placeholder="#{pleaseChoose} + #{newsInfo.newsStatus}">
+                        <el-option
+                                v-for="item in newsStatusList"
+                                :key="item.typeCode"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.imageUrl}" prop="imageUrl">
-                    <el-input v-model="ruleForm.imageUrl" th:placeholder="#{pleaseInput} + #{newsInfo.imageUrl}"></el-input>
+                    <el-upload
+                            class="upload-demo"
+                            action="/fileUploads/upload"
+                            :on-success="handleAvatarSuccess"
+                            :on-remove="handleRemove"
+                            :before-upload="beforeAvatarUpload"
+                            :file-list="imageUrlList"
+                            list-type="picture"
+                            limit="1">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.publishDate}" prop="publishDate">
-                    <el-date-picker v-model="ruleForm.publishDate" type="datetime" th:placeholder="#{pleaseChoose}"></el-date-picker>
+                    <el-date-picker v-model="ruleForm.publishDate" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" th:placeholder="#{pleaseChoose}"></el-date-picker>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.tags}" prop="tags">
                     <el-input v-model="ruleForm.tags" th:placeholder="#{pleaseInput} + #{newsInfo.tags}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.newsType}" prop="newsType">
-                    <el-input v-model="ruleForm.newsType" th:placeholder="#{pleaseInput} + #{newsInfo.newsType}"></el-input>
+                    <el-select size="small" v-model="ruleForm.newsType" th:placeholder="#{pleaseChoose}">
+                        <el-option
+                                v-for="item in newsTypeList"
+                                :key="item.typeCode"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item th:label="#{newsInfo.content}">
                     <div id="content_ueditor"></div>
@@ -62,26 +87,38 @@
     var app = new Vue({
         el: '#app',
         data: {
+            newsTypeList: [[${newsTypeList}]],
+            newsStatusList: [[${newsStatusList}]],
+            imageUrlList: [{
+                name: [[${entity.imageUrl}]],
+                url: [[${entity.imageUrl}]]
+            }],
             content_ueditor: '',
             ruleForm: {
                 id: [[${entity.id}]],
                 title: [[${entity.title}]],
-                status: [[${entity.status}]],
+                newsStatus: String([[${entity.newsStatus}]]),
                 content: [[${entity.content}]],
                 imageUrl: [[${entity.imageUrl}]],
                 publishDate: [[${entity.publishDate}]],
                 tags: [[${entity.tags}]],
-                newsType: [[${entity.newsType}]],
+                newsType: String([[${entity.newsType}]]),
             },
             rules: {
-                iconClass: [
-                    {required: true, message: '图标class不能为空', trigger: 'blur'}
+                title: [
+                    {required: true, message: [[#{newsInfo.title}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
-                label: [
-                    {required: true, message: '英文标签不能为空', trigger: 'blur'}
+                imageUrl: [
+                    {required: true, message: [[#{newsInfo.imageUrl}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
-                tags: [
-                    {required: true, message: '中文标签不能为空', trigger: 'blur'}
+                content: [
+                    {required: true, message: [[#{newsInfo.content}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ],
+                newsStatus: [
+                    {required: true, message: [[#{newsInfo.newsStatus}]] + [[#{notEmpty}]], trigger: 'blur'}
+                ],
+                newsType: [
+                    {required: true, message: [[#{newsInfo.newsType}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ]
             }
         },
@@ -105,16 +142,16 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[#{updateSuccess}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[#{updateFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();
@@ -136,7 +173,7 @@
                 //this.ruleForm.headPhoto = URL.createObjectURL(file.raw);
                 console.log(eval(res));
                 res = eval(res);
-                this.ruleForm.headPhoto = res.data[0];
+                this.ruleForm.imageUrl = res.data[0];
             },
             beforeAvatarUpload(file) {
                 console.log(file.type);
@@ -145,12 +182,15 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG && !isPNG) {
-                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                    this.$message.error('上传图片只能是 JPG/PNG 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            handleRemove(file, fileList) {
+                this.ruleForm.imageUrl = '';
             }
         }
     });

@@ -144,6 +144,16 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
     }
 
     @Override
+    public void batchSave(List<DictTypeGroup> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<DictTypeGroup> list) {
+
+    }
+
+    @Override
     public List<DictTypeDto> getDtos(String language, Integer limit, Integer offset) {
         List<DictTypeDto> dtoList = new ArrayList<>();
         /*List<DictTypeGroup> groups = dictTypeGroupRepository.findAll(new PageRequest((offset/limit - 1), limit, Sort.Direction.DESC, "id")).getContent();*/

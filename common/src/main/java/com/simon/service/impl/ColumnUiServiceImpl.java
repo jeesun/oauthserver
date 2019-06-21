@@ -129,6 +129,16 @@ public class ColumnUiServiceImpl implements ColumnUiService {
     }
 
     @Override
+    public void batchSave(List<ColumnUi> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<ColumnUi> list) {
+
+    }
+
+    @Override
     public List<ColumnUi> findByTableName(String tableName) {
         return columnUiRepository.findByTableName(tableName);
     }

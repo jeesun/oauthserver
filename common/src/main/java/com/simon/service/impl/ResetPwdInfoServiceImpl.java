@@ -126,4 +126,14 @@ public class ResetPwdInfoServiceImpl implements ResetPwdInfoService {
         var list = resetPwdInfoMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<ResetPwdInfo> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<ResetPwdInfo> list) {
+
+    }
 }

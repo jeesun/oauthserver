@@ -130,6 +130,16 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
+    public void batchSave(List<Authority> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Authority> list) {
+
+    }
+
+    @Override
     public PageInfo<AuthorityDto> getDtoList(Long userId, String username, String authority, String language, Integer pageNo, Integer pageSize, String orderBy) {
         if (null == pageSize) {
             pageSize = AppConfig.DEFAULT_PAGE_SIZE;

@@ -122,4 +122,17 @@ public interface BasicService<T, ID> {
      * @return 分页数据
      */
     PageInfo<T> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy);
+
+
+    /**
+     * 批量保存
+     * @param list 要保存的数据
+     */
+    void batchSave(List<T> list);
+
+    /**
+     * 批量更新
+     * @param list 要更新的数据
+     */
+    void batchUpdate(List<T> list);
 }

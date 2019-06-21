@@ -114,7 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .and()
-                .csrf().ignoringAntMatchers("/druid/*", "/register", "/users/register", "/users/forgetPwd", "/fileUploads/**", "/api/fileUploads/**", "/api/aliPays/**", "/api/wxPays/**")
+                .csrf().ignoringAntMatchers("/druid/*", "/register", "/users/register", "/users/forgetPwd", "/fileUploads/**", "/api/fileUploads/**", "/api/aliPays/**", "/api/wxPays/**", "/api/oauthUsers/import")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**").permitAll()

@@ -89,12 +89,12 @@
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
+                            parent.closeLoading();
                             let errorMessage = [[#{updateFailed}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
-                            parent.closeLoading();
-                            parent.showError(errorMessage);
+                            this.$message.error(errorMessage);
                         });
                     } else {
                         parent.closeLoading();
