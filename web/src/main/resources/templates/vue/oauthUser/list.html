@@ -184,7 +184,7 @@
                 let filename = file.name;
                 let fileSuffix = filename.substr(filename.lastIndexOf("."));
                 if(".xls" != fileSuffix && ".xlsx" != fileSuffix) {
-                    this.$message.error('请选择excel文件');
+                    this.$message.error([[#{pleaseChooseExcelFile}]]);
                     return false;
                 }
                 parent.openLoading();

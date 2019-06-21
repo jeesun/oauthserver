@@ -134,6 +134,16 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
+    public void batchSave(List<QuartzJob> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<QuartzJob> list) {
+
+    }
+
+    @Override
     public void runJobsOnStart() throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
         List<QuartzJob> quartzJobs = quartzJobMapper.selectAll();
         for (QuartzJob quartzJob : quartzJobs) {

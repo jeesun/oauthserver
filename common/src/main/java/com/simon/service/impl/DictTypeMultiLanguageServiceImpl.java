@@ -132,4 +132,14 @@ public class DictTypeMultiLanguageServiceImpl implements DictTypeMultiLanguageSe
         List<DictTypeMultiLanguage> list = dictTypeMultiLanguageMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<DictTypeMultiLanguage> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<DictTypeMultiLanguage> list) {
+
+    }
 }

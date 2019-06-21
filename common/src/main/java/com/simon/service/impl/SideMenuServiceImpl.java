@@ -185,6 +185,16 @@ public class SideMenuServiceImpl implements SideMenuService {
     }
 
     @Override
+    public void batchSave(List<SideMenu> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<SideMenu> list) {
+
+    }
+
+    @Override
     public List<EasyUiTreeDto> getAuth(String typeCode, String language) {
         List<EasyUiTreeDto> easyUiTreeDtoList = sideMenuMapper.findEasyUiTreeDtoByAuthority(typeCode, language);
         if (null == easyUiTreeDtoList || easyUiTreeDtoList.size() <= 0) {

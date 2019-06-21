@@ -147,7 +147,16 @@
                 </el-form-item>
             </el-form>
             <el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="${r'#{add}'}"></span></el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="${r'#{import}'}"></span></el-button>
+            <el-upload
+                    class="upload-demo"
+                    action="/api/${entityName?uncap_first}s/import"
+                    :show-file-list="false"
+                    :on-success="handleImportSuccess"
+                    :on-error="handleImportError"
+                    :before-upload="beforeImportUpload"
+                    :file-list="importList">
+                <el-button type="primary" size="mini" icon="el-icon-upload2"><span th:text="${r'#{import}'}"></span></el-button>
+            </el-upload>
             <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="${r'#{export}'}"></span></el-button>
         </div>
         <el-table border stripe size="medium" height="320" :data="tableData" highlight-current-row
@@ -219,6 +228,7 @@
             </#if>
         </#if>
     </#list>
+            importList: [],
             tableData: [],
             pageNo: 1,
             pageSize: 10,
@@ -239,6 +249,34 @@
             this.loadData(this.pageNo, this.pageSize);
         },
         methods: {
+            handleImportPreview(file) {
+                console.log(file);
+            },
+            handleImportSuccess(res, file) {
+                parent.closeLoading();
+                this.$message({
+                    message: [[${r'#{importSuccess}'}]],
+                    type: 'success'
+                });
+            },
+            handleImportError(error, file, fileList) {
+                parent.closeLoading();
+                let errorMessage = [[${r'#{requestError}'}]];
+                if (error.response) {
+                    errorMessage = error.response.data.message;
+                }
+                this.$message.error(errorMessage);
+            },
+            beforeImportUpload(file) {
+                let filename = file.name;
+                let fileSuffix = filename.substr(filename.lastIndexOf("."));
+                if(".xls" != fileSuffix && ".xlsx" != fileSuffix) {
+                    this.$message.error([[${r'#{pleaseChooseExcelFile}'}]]);
+                    return false;
+                }
+                parent.openLoading();
+                return true;
+            },
             indexSerial(index) {
                 return index + 1 + (this.pageNo - 1) * this.pageSize;
             },

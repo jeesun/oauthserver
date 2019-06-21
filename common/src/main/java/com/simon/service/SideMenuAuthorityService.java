@@ -16,16 +16,4 @@ public interface SideMenuAuthorityService extends BasicService<SideMenuAuthority
      * @param authority 权限，如ROLE_USER
      */
     void updateAuth(List<Long> sideMenuIds, String authority);
-
-    /**
-     * 批量保存
-     * @param list
-     */
-    void batchSave(List<SideMenuAuthority> list);
-
-    /**
-     * 批量更新
-     * @param list
-     */
-    void batchUpdate(List<SideMenuAuthority> list);
 }

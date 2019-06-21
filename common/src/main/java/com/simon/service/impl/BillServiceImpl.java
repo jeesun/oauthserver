@@ -133,6 +133,16 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public void batchSave(List<Bill> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Bill> list) {
+
+    }
+
+    @Override
     public Bill createBill(BillRequest billRequest) {
         Bill bill = new Bill();
         BeanUtils.copyPropertiesIgnoreNull(billRequest, bill);

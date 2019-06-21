@@ -130,6 +130,16 @@ public class ProvinceServiceImpl implements ProvinceService {
         return new PageInfo<>(list);
     }
 
+    @Override
+    public void batchSave(List<Province> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<Province> list) {
+
+    }
+
     @Cacheable(value = "chinaRegionCache", key = "'provinces'")
     @Override
     public List<CascaderOptionDto> getCascaderOptionDtos() {

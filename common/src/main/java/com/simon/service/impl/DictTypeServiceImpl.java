@@ -143,6 +143,16 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
+    public void batchSave(List<DictType> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<DictType> list) {
+
+    }
+
+    @Override
     public List<DictType> getTypeByGroupCode(String groupCode, String language) {
         return dictTypeMapper.getByGroupCode(groupCode, language);
     }

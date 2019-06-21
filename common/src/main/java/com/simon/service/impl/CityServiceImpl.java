@@ -131,6 +131,16 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    public void batchSave(List<City> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<City> list) {
+
+    }
+
+    @Override
     public List<City> findByProvinceId(String provinceId) {
         return cityMapper.findByProvinceId(provinceId);
     }

@@ -126,6 +126,16 @@ public class LoggingEventServiceImpl implements LoggingEventService {
     }
 
     @Override
+    public void batchSave(List<LoggingEvent> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<LoggingEvent> list) {
+
+    }
+
+    @Override
     public void deleteAll() {
         loggingEventRepository.deleteAll();
     }

@@ -127,4 +127,14 @@ public class NewsInfoServiceImpl implements NewsInfoService {
         List<NewsInfo> list = newsInfoMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<NewsInfo> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<NewsInfo> list) {
+
+    }
 }

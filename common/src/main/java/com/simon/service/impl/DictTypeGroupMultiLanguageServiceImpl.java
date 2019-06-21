@@ -1,28 +1,23 @@
 
 package com.simon.service.impl;
 
-import com.simon.mapper.DictTypeGroupMultiLanguageMapper;
-import com.simon.model.DictTypeGroupMultiLanguage;
-import com.simon.service.DictTypeGroupMultiLanguageService;
-import com.simon.repository.DictTypeGroupMultiLanguageRepository;
-import com.simon.common.config.AppConfig;
-import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.simon.common.config.AppConfig;
+import com.simon.mapper.DictTypeGroupMultiLanguageMapper;
+import com.simon.model.DictTypeGroupMultiLanguage;
+import com.simon.repository.DictTypeGroupMultiLanguageRepository;
+import com.simon.service.DictTypeGroupMultiLanguageService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
 * @author jeesun
@@ -131,5 +126,15 @@ public class DictTypeGroupMultiLanguageServiceImpl implements DictTypeGroupMulti
         }
         List<DictTypeGroupMultiLanguage> list = dictTypeGroupMultiLanguageMapper.getList(params);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public void batchSave(List<DictTypeGroupMultiLanguage> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<DictTypeGroupMultiLanguage> list) {
+
     }
 }

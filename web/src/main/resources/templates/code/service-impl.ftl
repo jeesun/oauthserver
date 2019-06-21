@@ -138,4 +138,24 @@ public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Mapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<${modelNameUpperCamel}> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        ${modelNameUpperCamel}Mapper mapper = sqlSession.getMapper(${modelNameUpperCamel}Mapper.class);
+        for (${modelNameUpperCamel} item : list) {
+        mapper.insert(item);
+        }
+        sqlSession.commit();
+    }
+
+    @Override
+    public void batchUpdate(List<${modelNameUpperCamel}> list) {
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        ${modelNameUpperCamel}Mapper mapper = sqlSession.getMapper(${modelNameUpperCamel}Mapper.class);
+        for (${modelNameUpperCamel} item : list) {
+        mapper.updateByPrimaryKeySelective(item);
+        }
+        sqlSession.commit();
+    }
 }

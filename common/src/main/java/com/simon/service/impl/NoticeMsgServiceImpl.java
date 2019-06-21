@@ -126,4 +126,14 @@ public class NoticeMsgServiceImpl implements NoticeMsgService {
         var list = noticeMsgMapper.getList(params);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public void batchSave(List<NoticeMsg> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<NoticeMsg> list) {
+
+    }
 }

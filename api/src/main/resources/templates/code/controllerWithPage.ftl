@@ -10,6 +10,9 @@
 </#function>
 package ${basePackage}.controller;
 
+import com.github.liaochong.myexcel.core.DefaultExcelBuilder;
+import com.github.liaochong.myexcel.core.DefaultExcelReader;
+import com.github.liaochong.myexcel.utils.AttachmentExportUtil;
 import ${basePackage}.common.controller.BaseController;
 import ${basePackage}.model.${modelNameUpperCamel};
 import ${basePackage}.service.DictTypeService;
@@ -23,13 +26,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import org.springframework.data.domain.Page;
@@ -41,6 +48,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Date;
 import java.util.Map;
@@ -51,7 +59,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Locale;
+import java.util.List;
 
 /**
 * ${tableComment}
@@ -181,10 +189,33 @@ public class ${entityName}Controller extends BaseController {
     }
 
     @ApiOperation(value = "删除")
-    @DeleteMapping("/ids/{ids}")
+    @DeleteMapping("delete")
     @ResponseBody
-    public ResultMsg delete(@PathVariable String ids) {
+    public ResultMsg delete(@RequestParam String ids) {
         ${entityName?uncap_first}Service.deleteByIds(ids);
         return ResultMsg.success();
+    }
+
+    @ApiIgnore
+    @ApiOperation(value = "导出")
+    @GetMapping("export")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<${entityName}> list =  ${entityName?uncap_first}Service.findAll();
+        Workbook workbook = DefaultExcelBuilder.of(${entityName}.class)
+        .build(list);
+        AttachmentExportUtil.export(workbook, "${tableComment}", response);
+    }
+
+    @ApiIgnore
+    @ApiOperation(value = "导入")
+    @PostMapping("import")
+    @ResponseBody
+    public ResponseEntity<ResultMsg> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
+        List<${entityName}> result = DefaultExcelReader.of(${entityName}.class)
+            .sheet(0)
+            .rowFilter(row -> row.getRowNum() > 0)
+            .read(file.getInputStream());
+        ${entityName?uncap_first}Service.batchUpdate(result);
+        return ResponseEntity.ok(ResultMsg.success());
     }
 }

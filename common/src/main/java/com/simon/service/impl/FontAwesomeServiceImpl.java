@@ -132,6 +132,16 @@ public class FontAwesomeServiceImpl implements FontAwesomeService {
     }
 
     @Override
+    public void batchSave(List<FontAwesome> list) {
+
+    }
+
+    @Override
+    public void batchUpdate(List<FontAwesome> list) {
+
+    }
+
+    @Override
     public List<FontAwesomeDto> getDtos(String language) {
         return fontAwesomeMapper.getDtos(language);
     }
