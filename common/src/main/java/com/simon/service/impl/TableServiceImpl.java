@@ -13,10 +13,14 @@ import com.simon.repository.SideMenuRepository;
 import com.simon.service.TableService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +37,9 @@ import java.util.List;
 @Transactional(rollbackFor = {Exception.class})
 public class TableServiceImpl implements TableService {
     @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
+    @Autowired
     private ColumnUiRepository columnUiRepository;
 
     @Autowired
@@ -47,7 +54,7 @@ public class TableServiceImpl implements TableService {
     @Override
     public void saveSettingsAndAuthorities(GenCodeDto body) {
         saveSettings(body);
-        //saveAuthorities(body);
+        saveAuthorities(body);
     }
 
     /**
@@ -78,9 +85,20 @@ public class TableServiceImpl implements TableService {
      * @param body
      */
     private void saveAuthorities(GenCodeDto body) {
-        if (null == body.getPid() || null == body.getAllowedRoles() || body.getAllowedRoles().length <= 0) {
+        if (null == body.getPid() || null == body.getAllowedRoles() || body.getAllowedRoles().length <= 0 || null == body.getGenModules() || body.getGenModules().length <= 0) {
             return;
         }
+        //只有当生成controllerAndPage时，才添加访问权限数据。
+        boolean hasPage = false;
+        for (int i = 0, len = body.getGenModules().length; i < len; i++) {
+            if ("controllerAndPage".equalsIgnoreCase(body.getGenModules()[i])) {
+                hasPage = true;
+            }
+        }
+        if (!hasPage) {
+            return;
+        }
+
         String tableName = body.getTableName();
         String entityName = body.getEntityName();
         String tableComment = body.getTableComment();
@@ -99,7 +117,7 @@ public class TableServiceImpl implements TableService {
         //首字母小写
         entityName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName);
         String baseUrl = "/api/" + entityName + "s/";
-        //期望结果：baseUrl下面，有查看、新增、修改、删除权限控制
+        //期望结果：baseUrl下面，有查看、新增、修改、删除、导入、导出权限控制
 
         //列表页面
         SideMenu listSideMenu = new SideMenu();
@@ -111,6 +129,8 @@ public class TableServiceImpl implements TableService {
         listSideMenu.setShowInMenu(true);
         listSideMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
         listSideMenu.setRemark("list");
+        //2级菜单
+        listSideMenu.setMenuType(2);
         sideMenuMapper.insertSelective(listSideMenu);
 
         //列表数据
@@ -126,6 +146,8 @@ public class TableServiceImpl implements TableService {
         dataSideMenu.setLinkId(listSideMenu.getId());
         dataSideMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
         dataSideMenu.setRemark("data");
+        //3级菜单
+        dataSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(dataSideMenu);
 
         //新增页面和新增操作
@@ -138,6 +160,8 @@ public class TableServiceImpl implements TableService {
         addSideMenu.setShowInMenu(false);
         addSideMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
         addSideMenu.setRemark("add");
+        //3级菜单
+        addSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(addSideMenu);
 
         //编辑页面和编辑操作
@@ -150,6 +174,8 @@ public class TableServiceImpl implements TableService {
         editSideMenu.setShowInMenu(false);
         editSideMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
         editSideMenu.setRemark("edit");
+        //3级菜单
+        editSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(editSideMenu);
 
         //删除操作
@@ -157,12 +183,42 @@ public class TableServiceImpl implements TableService {
         deleteSideMenu.setCreateDate(createDate);
         deleteSideMenu.setPid(listSideMenu.getId());
         deleteSideMenu.setName("删除");
-        deleteSideMenu.setUrl(baseUrl + "ids");
+        deleteSideMenu.setUrl(baseUrl + "delete");
         deleteSideMenu.setRequestMethod("DELETE");
         deleteSideMenu.setShowInMenu(false);
         deleteSideMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
         deleteSideMenu.setRemark("delete");
+        //3级菜单
+        deleteSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(deleteSideMenu);
+
+        //导入操作
+        SideMenu importMenu = new SideMenu();
+        importMenu.setCreateDate(createDate);
+        importMenu.setPid(listSideMenu.getId());
+        importMenu.setName("导入");
+        importMenu.setUrl(baseUrl + "import");
+        importMenu.setRequestMethod("POST");
+        importMenu.setShowInMenu(false);
+        importMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
+        importMenu.setRemark("import");
+        //3级菜单
+        importMenu.setMenuType(3);
+        sideMenuMapper.insertSelective(importMenu);
+
+        //导出操作
+        SideMenu exportMenu = new SideMenu();
+        exportMenu.setCreateDate(createDate);
+        exportMenu.setPid(listSideMenu.getId());
+        exportMenu.setName("导出");
+        exportMenu.setUrl(baseUrl + "export");
+        exportMenu.setRequestMethod("GET");
+        exportMenu.setShowInMenu(false);
+        exportMenu.setEntityName(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, entityName));
+        exportMenu.setRemark("export");
+        //3级菜单
+        exportMenu.setMenuType(3);
+        sideMenuMapper.insertSelective(exportMenu);
 
         //准备添加url权限数据
         if (StringUtils.isEmpty(allowedRoles)) {
@@ -171,31 +227,59 @@ public class TableServiceImpl implements TableService {
         allowedRoles = allowedRoles.replace(" ", "");
 
         String[] allowedRoleArr = allowedRoles.split(",");
+        List<SideMenuAuthority> sideMenuAuthorityList = new ArrayList<>();
         for (int i = 0; i < allowedRoleArr.length; i++) {
             SideMenuAuthority listAuthority = new SideMenuAuthority();
+            listAuthority.setCreateDate(createDate);
             listAuthority.setSideMenuId(listSideMenu.getId());
             listAuthority.setAuthority(allowedRoleArr[i]);
-            sideMenuAuthorityMapper.insertSelective(listAuthority);
+            sideMenuAuthorityList.add(listAuthority);
 
             SideMenuAuthority dataAuthority = new SideMenuAuthority();
+            dataAuthority.setCreateDate(createDate);
             dataAuthority.setSideMenuId(dataSideMenu.getId());
             dataAuthority.setAuthority(allowedRoleArr[i]);
-            sideMenuAuthorityMapper.insertSelective(dataAuthority);
+            sideMenuAuthorityList.add(dataAuthority);
 
             SideMenuAuthority addAuthority = new SideMenuAuthority();
+            addAuthority.setCreateDate(createDate);
             addAuthority.setSideMenuId(addSideMenu.getId());
             addAuthority.setAuthority(allowedRoleArr[i]);
-            sideMenuAuthorityMapper.insertSelective(addAuthority);
+            sideMenuAuthorityList.add(addAuthority);
 
             SideMenuAuthority editAuthority = new SideMenuAuthority();
+            editAuthority.setCreateDate(createDate);
             editAuthority.setSideMenuId(editSideMenu.getId());
             editAuthority.setAuthority(allowedRoleArr[i]);
-            sideMenuAuthorityMapper.insertSelective(editAuthority);
+            sideMenuAuthorityList.add(editAuthority);
 
             SideMenuAuthority deleteAuthority = new SideMenuAuthority();
+            deleteAuthority.setCreateDate(createDate);
             deleteAuthority.setSideMenuId(deleteSideMenu.getId());
             deleteAuthority.setAuthority(allowedRoleArr[i]);
-            sideMenuAuthorityMapper.insertSelective(deleteAuthority);
+            sideMenuAuthorityList.add(deleteAuthority);
+
+            SideMenuAuthority importAuthority = new SideMenuAuthority();
+            importAuthority.setCreateDate(createDate);
+            importAuthority.setSideMenuId(importMenu.getId());
+            importAuthority.setAuthority(allowedRoleArr[i]);
+            sideMenuAuthorityList.add(importAuthority);
+
+            SideMenuAuthority exportAuthority = new SideMenuAuthority();
+            exportAuthority.setCreateDate(createDate);
+            exportAuthority.setSideMenuId(exportMenu.getId());
+            exportAuthority.setAuthority(allowedRoleArr[i]);
+            sideMenuAuthorityList.add(exportAuthority);
         }
+
+        //批量保存
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+        SideMenuAuthorityMapper smaMapper = sqlSession.getMapper(SideMenuAuthorityMapper.class);
+        if (!CollectionUtils.isEmpty(sideMenuAuthorityList)) {
+            for (SideMenuAuthority item : sideMenuAuthorityList) {
+                smaMapper.insert(item);
+            }
+        }
+        sqlSession.commit();
     }
 }

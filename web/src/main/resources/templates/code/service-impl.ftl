@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Resource;
@@ -32,6 +35,9 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(rollbackFor = {Exception.class})
 public class ${modelNameUpperCamel}ServiceImpl implements ${modelNameUpperCamel}Service {
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     @Autowired
     private ${modelNameUpperCamel}Mapper ${modelNameLowerCamel}Mapper;
 

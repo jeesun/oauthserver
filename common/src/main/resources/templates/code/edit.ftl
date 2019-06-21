@@ -197,12 +197,12 @@
                     if (valid) {
                         this.$http.patch(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[${r'#{updateSuccess}'}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
                             parent.closeLoading();
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[${r'#{updateFailed}'}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
@@ -237,10 +237,10 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG && !isPNG) {
-                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                    this.$message.error('上传图片只能是 JPG/PNG 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
             }

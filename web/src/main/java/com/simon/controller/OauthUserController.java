@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.security.PermitAll;
@@ -37,8 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -209,19 +208,19 @@ public class OauthUserController extends BaseController {
 
     @ApiIgnore
     @ApiOperation(value = "导入")
-    @GetMapping("import")
+    @PostMapping("import")
     @ResponseBody
-    public ResponseEntity<ResultMsg> importExcel() throws Exception {
+    public ResponseEntity<ResultMsg> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
         /*Resource resource = new ClassPathResource("static/1.xlsx");
         if (!resource.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResultMsg.fail(ResultCode.ERROR_FILE_NOT_FOUND));
         }
         Path path = Paths.get(resource.getURI());*/
-        Path path = Paths.get("D:\\1.xlsx");
+        //Path path = Paths.get("D:\\1.xlsx");
         List<OauthUser> result = DefaultExcelReader.of(OauthUser.class)
                 .sheet(0)
                 .rowFilter(row -> row.getRowNum() > 0)
-                .read(path.toFile());
+                .read(file.getInputStream());
         oauthUserService.batchUpdate(result);
         return ResponseEntity.ok(ResultMsg.success());
     }

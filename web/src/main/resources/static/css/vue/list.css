@@ -38,3 +38,7 @@ body {
 .el-cascader{
     width: 222px;
 }
+
+.upload-demo{
+    display: inline-block;
+}

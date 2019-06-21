@@ -16,20 +16,139 @@
     <template>
         <div style="margin-left: 6px;margin-bottom: 6px;">
             <el-form :inline="true" :model="searchForm" style="margin: 0; padding: 0;">
-                <el-form-item label="英文标签">
-                    <el-input size="small" v-model="searchForm.label" placeholder="请输入英文标签" clearable></el-input>
+<#list columns as column>
+    <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+    <#else>
+        <#if (column.allowSearch?string('yes', 'no'))=='yes'>
+        <#switch column.uiType>
+            <#case "Input">
+                <el-form-item label="${column.comment}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
                 </el-form-item>
-                <el-form-item label="中文标签">
-                    <el-input size="small" v-model="searchForm.tags" placeholder="请输入中文标签" clearable></el-input>
+                <#break>
+            <#case "Radio">
+                <el-form-item label="${column.comment}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
                 </el-form-item>
+                <#break>
+            <#case "Checkbox">
+                <el-form-item label="${column.comment}">
+                    <el-checkbox v-model="searchForm.${column.name}">${column.comment}</el-checkbox>
+                </el-form-item>
+                <#break>
+            <#case "InputNumber">
+                <el-form-item label="${column.comment}">
+                    <el-input-number v-model="searchForm.${column.name}"></el-input-number>
+                </el-form-item>
+                <#break>
+            <#case "Select">
+                <el-form-item label="${column.comment}">
+                    <el-select v-model="searchForm.${column.name}" placeholder="请选择${column.comment}">
+                        <el-option
+                                v-for="item in ${column.extraInfo}"
+                                :key="item.typeCode"
+                                :label="item.typeName"
+                                :value="item.typeCode">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <#break>
+            <#case "Cascader">
+                <el-form-item label="${column.comment}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "Switch">
+                <el-form-item label="${column.comment}">
+                    <el-switch
+                            v-model="searchForm.${column.name}"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                    </el-switch>
+                </el-form-item>
+                <#break>
+            <#case "Slider">
+                <el-form-item label="${column.comment}">
+                    <el-slider v-model="searchForm.${column.name}"></el-slider>
+                </el-form-item>
+                <#break>
+            <#case "TimePicker">
+                <el-form-item label="${column.comment}">
+                    <el-time-picker
+                            v-model="searchForm.${column.name}"
+                            :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+                            format="HH:mm:ss"
+                            value-format="HH:mm:ss"
+                            placeholder="请选择${column.comment}">
+                    </el-time-picker>
+                </el-form-item>
+                <#break>
+            <#case "DatePicker">
+                <el-form-item label="${column.comment}">
+                    <el-date-picker
+                            v-model="searchForm.${column.name}"
+                            type="date"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
+                            placeholder="请选择${column.comment}">
+                    </el-date-picker>
+                </el-form-item>
+                <#break>
+            <#case "DateTimePicker">
+                <el-form-item label="${column.comment}">
+                    <el-date-picker
+                            v-model="searchForm.${column.name}"
+                            type="datetime"
+                            format="yyyy-MM-dd HH:mm:ss"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择${column.comment}">
+                    </el-date-picker>
+                </el-form-item>
+                <#break>
+            <#case "Upload">
                 <el-form-item>
-                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch">搜索</el-button>
-                    <el-button size="mini" icon="el-icon-refresh" @click="doReset">重置</el-button>
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "Rate">
+                <el-form-item label="${column.comment}">
+                    <el-rate
+                            v-model="searchForm.${column.name}"
+                            show-text>
+                    </el-rate>
+                </el-form-item>
+                <#break>
+            <#case "ColorPicker">
+                <el-form-item label="${column.comment}">
+                    <el-color-picker v-model="searchForm.${column.name}"></el-color-picker>
+                </el-form-item>
+                <#break>
+            <#case "Transfer">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#case "neditor">
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+                <#break>
+            <#default>
+                <el-form-item label="${column.comment}" prop="${column.name}">
+                    <el-input v-model="searchForm.${column.name}" placeholder="请输入${column.comment}"></el-input>
+                </el-form-item>
+        </#switch>
+        </#if>
+    </#if>
+</#list>
+                <el-form-item>
+                    <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch"><span th:text="${r'#{search}'}"></span></el-button>
+                    <el-button size="mini" icon="el-icon-refresh" @click="doReset"><span th:text="${r'#{reset}'}"></span></el-button>
                 </el-form-item>
             </el-form>
-            <el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd">新增</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport">导入</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport">导出</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-plus" @click="doAdd"><span th:text="${r'#{add}'}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-upload2" @click="doImport"><span th:text="${r'#{import}'}"></span></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-download" @click="doExport"><span th:text="${r'#{export}'}"></span></el-button>
         </div>
         <el-table border stripe size="medium" height="320" :data="tableData" highlight-current-row
                   style="font-size: 12px"
@@ -52,13 +171,13 @@
             <el-table-column align="center" prop="tags" label="中文标签" width="160" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="center" prop="orderNum" label="排序" width="100"></el-table-column>
             <el-table-column align="center" prop="status" label="状态" width="100"></el-table-column>-->
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" th:label="${r'#{operation}'}" width="200">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" icon="el-icon-edit"
-                               @click="handleEdit(scope.$index, scope.row)">编辑
+                               @click="handleEdit(scope.$index, scope.row)"><span th:text="${r'#{edit}'}"></span>
                     </el-button>
                     <el-button size="mini" type="danger" icon="el-icon-delete"
-                               @click="handleDelete(scope.$index, scope.row)">删除
+                               @click="handleDelete(scope.$index, scope.row)"><span th:text="${r'#{delete}'}"></span>
                     </el-button>
                 </template>
             </el-table-column>
@@ -84,20 +203,36 @@
         list: "/api/${entityName?uncap_first}s/data",
         add: "/api/${entityName?uncap_first}s/add",
         edit: "/api/${entityName?uncap_first}s/edit?id=",
-        delete: "/api/${entityName?uncap_first}s/ids/"
+        delete: "/api/${entityName?uncap_first}s/delete?ids=",
+        import: "/api/${entityName?uncap_first}s/import",
+        export: "/api/${entityName?uncap_first}s/export"
     };
 
     var app = new Vue({
         el: '#app',
         data: {
+    <#list columns as column>
+        <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+        <#else>
+            <#if (column.allowInput?string('yes', 'no'))=='yes' && (column.extraInfo)??>
+            ${column.extraInfo}: [[${r'${' + column.extraInfo + r'}'}]],
+            </#if>
+        </#if>
+    </#list>
             tableData: [],
             pageNo: 1,
             pageSize: 10,
             total: 1000,
             tableLoading: true,
             searchForm: {
-                label: "",
-                tags: ""
+    <#list columns as column>
+        <#if column.name == "id" || column.name == "createDate" || column.name == "createBy" || column.name == "updateDate" || column.name == "updateBy" || column.name == "userId">
+        <#else>
+            <#if (column.allowSearch?string('yes', 'no'))=='yes'>
+                ${column.name}: "",
+            </#if>
+        </#if>
+    </#list>
             }
         },
         mounted: function () {
@@ -137,7 +272,7 @@
                 }).catch((response) => {
                     this.tableLoading = false;
                     console.error(response);
-                    parent.showSuccess("发生错误");
+                    parent.showSuccess([[${r'#{requestError}'}]]);
                 });
             },
             //每页显示数据量变更
@@ -168,7 +303,7 @@
             },
             handleEdit(index, row) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[${r'#{add}'}]],
                     content: requestUrls.edit + row.id
                 });
             },
@@ -177,7 +312,7 @@
             },
             doAdd(event) {
                 parent.showWindow({
-                    title: '新增',
+                    title: [[${r'#{add}'}]],
                     content: requestUrls.add
                 });
             },
@@ -187,26 +322,34 @@
             doDelete(index, row) {
                 this.$http.delete(requestUrls.delete + row.id)
                     .then((response) => {
-                        parent.showSuccess("删除成功");
+                        parent.showSuccess([[${r'#{deleteSuccess}'}]]);
                         this.loadData(this.pageNo, this.pageSize);
-                    }).catch((response) => {
-                    console.error(response);
+                    }).catch((error) => {
+                    let errorMessage = [[${r'#{deleteFailed}'}]];
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
                 });
             },
             doImport(event) {
-                this.$http.get("/api/authorities/import", {}).then(function (response) {
+                this.$http.get(requestUrls.import, {}).then(function (response) {
                     this.$notify({
-                        title: '提示',
+                        title: [[${r'#{hint}'}]],
                         message: response.data.message,
                         position: 'bottom-right',
                         duration: 2000
                     });
-                }).catch(function (response) {
-                    console.error(response);
+                }).catch(function (error) {
+                    let errorMessage = [[${r'#{importFailed}'}]];
+                    if (error.response) {
+                        errorMessage = error.response.data.message;
+                    }
+                    parent.showError(errorMessage);
                 });
             },
             doExport(event) {
-                window.open("/api/authorities/export");
+                window.open(requestUrls.export);
             }
         }
     });

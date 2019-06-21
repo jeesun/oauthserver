@@ -131,8 +131,8 @@
     </#if>
 </#list>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                    <el-button @click="closeWindow">关闭</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')"><span th:text="${r'#{submit}'}"></span></el-button>
+                    <el-button @click="closeWindow"><span th:text="${r'#{cancel}'}"></span></el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -191,11 +191,11 @@
                     if (valid) {
                         this.$http.post(requestUrls.url, this.ruleForm).then((response) => {
                             parent.closeLoading();
-                            parent.showSuccess("新增成功");
+                            parent.showSuccess([[${r'#{insertSuccess}'}]]);
                             parent.updateListData();
                             closeLayer();
                         }).catch((error) => {
-                            let errorMessage = "发生错误";
+                            let errorMessage = [[${r'#{insertFailed}'}]];
                             if (error.response) {
                                 errorMessage = error.response.data.message;
                             }
@@ -231,10 +231,10 @@
                 const isLt2M = file.size / 1024 / 1024 < 2;
 
                 if (!isJPG && !isPNG) {
-                    this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                    this.$message.error('上传图片只能是 JPG/PNG 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
             }
