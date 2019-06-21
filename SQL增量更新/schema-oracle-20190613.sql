@@ -456,3 +456,8 @@ COMMENT ON COLUMN t_s_column_ui.allow_input IS '允许输入';
 
 -- 2019-06-18 by simon t_news_info表修改字段名
 ALTER TABLE T_NEWS_INFO rename column status to news_status;
+
+-- 2019-06-18 by simon t_users创建唯一键。
+update t_users set email='18800000003@163.com' where id=1000000001;
+CREATE UNIQUE INDEX uk_t_users_phone ON T_USERS ("PHONE");
+CREATE UNIQUE INDEX uk_t_useers_email ON T_USERS ("EMAIL");
