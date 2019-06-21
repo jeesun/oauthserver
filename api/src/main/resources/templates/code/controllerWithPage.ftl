@@ -207,7 +207,7 @@ public class ${entityName}Controller extends BaseController {
     }
 
     @ApiIgnore
-    @ApiOperation(value = "导入")
+    @ApiOperation(value = "导入", notes = "该请求路径必须添加到WebSecurityConfig的csrf忽略列表里。")
     @PostMapping("import")
     @ResponseBody
     public ResponseEntity<ResultMsg> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
