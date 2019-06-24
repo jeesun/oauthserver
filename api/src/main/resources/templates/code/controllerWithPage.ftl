@@ -134,8 +134,16 @@ public class ${entityName}Controller extends BaseController {
     <#if column.allowSearch>
         <#switch column.type>
             <#case "Date">
-            @ApiParam(value = "${(column.comment)}-开始时间")@RequestParam(required = false) Date ${column.name}Start,
-            @ApiParam(value = "${(column.comment)}-结束时间")@RequestParam(required = false) Date ${column.name}End,
+            @ApiParam(value = "${(column.comment)}")@RequestParam(required = false) String[] ${column.name},
+            <#break>
+            <#case "LocalTime">
+            @ApiParam(value = "${(column.comment)}")@RequestParam(required = false) String[] ${column.name},
+            <#break>
+            <#case "LocalDate">
+            @ApiParam(value = "${(column.comment)}")@RequestParam(required = false) String[] ${column.name},
+            <#break>
+            <#case "LocalDateTime">
+            @ApiParam(value = "${(column.comment)}")@RequestParam(required = false) String[] ${column.name},
             <#break>
             <#default>
             @ApiParam(value= "${(column.comment)}")@RequestParam(required = false) ${column.type} ${column.name},
@@ -150,8 +158,28 @@ public class ${entityName}Controller extends BaseController {
 <#if column.allowSearch>
     <#switch column.type>
         <#case "Date">
-        params.put("${column.name}Start", ${column.name}Start);
-        params.put("${column.name}End", ${column.name}End);
+        if(null != ${column.name} && ${column.name}.length == 2) {
+            params.put("${column.name}Start", ${column.name}[0]);
+            params.put("${column.name}End", ${column.name}[1]);
+        }
+        <#break>
+        <#case "LocalTime">
+        if(null != ${column.name} && ${column.name}.length == 2) {
+            params.put("${column.name}Start", ${column.name}[0]);
+            params.put("${column.name}End", ${column.name}[1]);
+        }
+        <#break>
+        <#case "LocalDate">
+        if(null != ${column.name} && ${column.name}.length == 2) {
+            params.put("${column.name}Start", ${column.name}[0]);
+            params.put("${column.name}End", ${column.name}[1]);
+        }
+        <#break>
+        <#case "LocalDateTime">
+        if(null != ${column.name} && ${column.name}.length == 2) {
+            params.put("${column.name}Start", ${column.name}[0]);
+            params.put("${column.name}End", ${column.name}[1]);
+        }
         <#break>
         <#default>
         params.put("${column.name}", ${column.name});

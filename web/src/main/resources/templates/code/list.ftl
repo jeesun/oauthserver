@@ -79,7 +79,10 @@
                             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                             format="HH:mm:ss"
                             value-format="HH:mm:ss"
-                            placeholder="请选择${column.comment}">
+                            is-range
+                            range-separator="-"
+                            th:start-placeholder="${r'#{startTime}'}"
+                            th:end-placeholder="${r'#{endTime}'}">
                     </el-time-picker>
                 </el-form-item>
                 <#break>
@@ -87,10 +90,13 @@
                 <el-form-item label="${column.comment}">
                     <el-date-picker
                             v-model="searchForm.${column.name}"
-                            type="date"
+                            type="daterange"
                             format="yyyy-MM-dd"
                             value-format="yyyy-MM-dd"
-                            placeholder="请选择${column.comment}">
+                            unlink-panels
+                            range-separator="-"
+                            th:start-placeholder="${r'#{startDate}'}"
+                            th:end-placeholder="${r'#{endDate}'}">
                     </el-date-picker>
                 </el-form-item>
                 <#break>
@@ -98,10 +104,12 @@
                 <el-form-item label="${column.comment}">
                     <el-date-picker
                             v-model="searchForm.${column.name}"
-                            type="datetime"
+                            type="datetimerange"
                             format="yyyy-MM-dd HH:mm:ss"
                             value-format="yyyy-MM-dd HH:mm:ss"
-                            placeholder="请选择${column.comment}">
+                            range-separator="-"
+                            th:start-placeholder="${r'#{startDate}'}"
+                            th:end-placeholder="${r'#{endDate}'}">
                     </el-date-picker>
                 </el-form-item>
                 <#break>
@@ -291,9 +299,10 @@
                     pageNo: this.pageNo,
                     pageSize: this.pageSize
                 };
-                for (let i in this.searchForm) {
-                    if (this.searchForm[i] && this.searchForm[i].trim() != "") {
-                        params_[i] = this.searchForm[i];
+                Object.assign(params_, this.searchForm);
+                for (let key in params_) {
+                    if (isArray(params_[key])) {
+                        params_[key] = params_[key].join(',');
                     }
                 }
 

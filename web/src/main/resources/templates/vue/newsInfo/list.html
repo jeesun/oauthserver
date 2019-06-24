@@ -9,7 +9,7 @@
                 <el-form-item th:label="#{newsInfo.title}">
                     <el-input size="small" v-model="searchForm.title" th:placeholder="#{pleaseInput} + #{title}" clearable></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{newsInfo.status}">
+                <el-form-item th:label="#{newsInfo.newsStatus}">
                     <el-select size="small" v-model="searchForm.status" th:placeholder="#{pleaseChoose}">
                         <el-option
                                 v-for="item in newsStatusList"
@@ -28,6 +28,18 @@
                                 :value="item.typeCode">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item th:label="#{newsInfo.publishDate}">
+                    <el-date-picker size="small"
+                            v-model="searchForm.publishDate"
+                            type="daterange"
+                            format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd"
+                            unlink-panels
+                            range-separator="-"
+                            th:start-placeholder="#{startDate}"
+                            th:end-placeholder="#{endDate}">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="mini" icon="el-icon-search" @click="doSearch"><span th:text="#{search}"></span></el-button>
@@ -115,7 +127,8 @@
             tableLoading: true,
             searchForm: {
                 title: "",
-                status: ""
+                status: "",
+                publishDate: ""
             }
         },
         mounted: function () {
@@ -154,9 +167,11 @@
                     pageNo: this.pageNo,
                     pageSize: this.pageSize
                 };
-                for (let i in this.searchForm) {
-                    if (this.searchForm[i] && this.searchForm[i].trim() != "") {
-                        params_[i] = this.searchForm[i];
+
+                Object.assign(params_, this.searchForm);
+                for (let key in params_) {
+                    if (isArray(params_[key])) {
+                        params_[key] = params_[key].join(',');
                     }
                 }
 
