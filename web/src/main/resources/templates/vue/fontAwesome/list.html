@@ -105,9 +105,10 @@
                     pageNo: this.pageNo,
                     pageSize: this.pageSize
                 };
-                for (let i in this.searchForm) {
-                    if (this.searchForm[i] && this.searchForm[i].trim() != "") {
-                        params_[i] = this.searchForm[i];
+                Object.assign(params_, this.searchForm);
+                for (let key in params_) {
+                    if (isArray(params_[key])) {
+                        params_[key] = params_[key].join(',');
                     }
                 }
 

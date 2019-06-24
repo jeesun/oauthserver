@@ -17,3 +17,11 @@ function international(locale) {
         ELEMENT.locale(ELEMENT.lang.zhCN);
     }
 }
+
+function isArray(obj) {
+    return (typeof obj == 'object') && obj && obj.constructor === Array;
+}
+
+function isString(str){
+    return (typeof str == 'string') && str.constructor === String;
+}

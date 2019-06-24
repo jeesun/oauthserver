@@ -16,7 +16,7 @@
 oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。项目的目的是，仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
 为了开发方便，项目拆分成三个模块，api、web和common：
 1. api运行在8181端口，api模块是提供api服务的，主要是oauth token等其他业务接口；
-2. web运行在8182端口，是一个简单的管理后台；
+2. web运行在8182端口，是一个基于Element UI的管理后台；
 3. common是公共工具模块。
 
 支持的关系型数据库：
