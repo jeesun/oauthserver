@@ -173,7 +173,7 @@
             },
             handleCodeGen(index, row) {
                 parent.showWindow({
-                    title: '代码生成',
+                    title: [[#{codeGenerator}]],
                     content: '/api/tables/codeGenerate?tableName=' + row.tableName + '&entityName=' + row.entityName + '&tableComment=' + row.tableComment
                 });
             },

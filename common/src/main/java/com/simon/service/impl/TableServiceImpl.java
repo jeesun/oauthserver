@@ -5,10 +5,13 @@ import com.simon.common.code.Column;
 import com.simon.dto.GenCodeDto;
 import com.simon.mapper.SideMenuAuthorityMapper;
 import com.simon.mapper.SideMenuMapper;
+import com.simon.mapper.SideMenuMultiLanguageMapper;
 import com.simon.model.ColumnUi;
 import com.simon.model.SideMenu;
 import com.simon.model.SideMenuAuthority;
+import com.simon.model.SideMenuMultiLanguage;
 import com.simon.repository.ColumnUiRepository;
+import com.simon.repository.SideMenuMultiLanguageRepository;
 import com.simon.repository.SideMenuRepository;
 import com.simon.service.TableService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +53,12 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     private SideMenuAuthorityMapper sideMenuAuthorityMapper;
+
+    @Autowired
+    private SideMenuMultiLanguageMapper sideMenuMultiLanguageMapper;
+
+    @Autowired
+    private SideMenuMultiLanguageRepository sideMenuMultiLanguageRepository;
 
     @Override
     public void saveSettingsAndAuthorities(GenCodeDto body) {
@@ -109,6 +118,9 @@ public class TableServiceImpl implements TableService {
         //先从菜单权限表删除之前的权限信息
         sideMenuAuthorityMapper.deleteByEntityName(entityName);
 
+        //从菜单多语言表删除多语言信息
+        sideMenuMultiLanguageRepository.deleteBySideMenuIdIn(sideMenuMapper.selectIdByEntityName(entityName));
+
         //再从菜单表删除之前的配置信息
         sideMenuMapper.deleteByEntityName(entityName);
 
@@ -131,7 +143,22 @@ public class TableServiceImpl implements TableService {
         listSideMenu.setRemark("list");
         //2级菜单
         listSideMenu.setMenuType(2);
+        listSideMenu.setIcon(body.getIcon());
         sideMenuMapper.insertSelective(listSideMenu);
+
+        //列表页面多语言
+        //中文
+        SideMenuMultiLanguage listMenuZh = new SideMenuMultiLanguage();
+        listMenuZh.setSideMenuId(listSideMenu.getId());
+        listMenuZh.setLanguage("zh_CN");
+        listMenuZh.setName(tableComment + "管理");
+        sideMenuMultiLanguageMapper.insertSelective(listMenuZh);
+        //英文
+        SideMenuMultiLanguage listMenuEn = new SideMenuMultiLanguage();
+        listMenuEn.setSideMenuId(listSideMenu.getId());
+        listMenuEn.setLanguage("en_US");
+        listMenuEn.setName(entityName);
+        sideMenuMultiLanguageMapper.insertSelective(listMenuEn);
 
         //列表数据
         SideMenu dataSideMenu = new SideMenu();
@@ -149,6 +176,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         dataSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(dataSideMenu);
+        //列表数据多语言
+        //中文
+        SideMenuMultiLanguage dataMenuZh = new SideMenuMultiLanguage();
+        dataMenuZh.setSideMenuId(dataSideMenu.getId());
+        dataMenuZh.setLanguage("zh_CN");
+        dataMenuZh.setName("查看");
+        sideMenuMultiLanguageMapper.insertSelective(dataMenuZh);
+        //英文
+        SideMenuMultiLanguage dataMenuEn = new SideMenuMultiLanguage();
+        dataMenuEn.setSideMenuId(dataSideMenu.getId());
+        dataMenuEn.setLanguage("en_US");
+        dataMenuEn.setName("view");
+        sideMenuMultiLanguageMapper.insertSelective(dataMenuEn);
 
         //新增页面和新增操作
         SideMenu addSideMenu = new SideMenu();
@@ -163,6 +203,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         addSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(addSideMenu);
+        //新增页面和编辑操作多语言
+        //中文
+        SideMenuMultiLanguage addMenuZh = new SideMenuMultiLanguage();
+        addMenuZh.setSideMenuId(addSideMenu.getId());
+        addMenuZh.setLanguage("zh_CN");
+        addMenuZh.setName("新增");
+        sideMenuMultiLanguageMapper.insertSelective(addMenuZh);
+        //英文
+        SideMenuMultiLanguage addMenuEn = new SideMenuMultiLanguage();
+        addMenuEn.setSideMenuId(addSideMenu.getId());
+        addMenuEn.setLanguage("en_US");
+        addMenuEn.setName("add");
+        sideMenuMultiLanguageMapper.insertSelective(addMenuEn);
 
         //编辑页面和编辑操作
         SideMenu editSideMenu = new SideMenu();
@@ -177,6 +230,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         editSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(editSideMenu);
+        //编辑页面和编辑操作多语言
+        //中文
+        SideMenuMultiLanguage editMenuZh = new SideMenuMultiLanguage();
+        editMenuZh.setSideMenuId(editSideMenu.getId());
+        editMenuZh.setLanguage("zh_CN");
+        editMenuZh.setName("修改");
+        sideMenuMultiLanguageMapper.insertSelective(editMenuZh);
+        //英文
+        SideMenuMultiLanguage editMenuEn = new SideMenuMultiLanguage();
+        editMenuEn.setSideMenuId(editSideMenu.getId());
+        editMenuEn.setLanguage("en_US");
+        editMenuEn.setName("edit");
+        sideMenuMultiLanguageMapper.insertSelective(editMenuEn);
 
         //删除操作
         SideMenu deleteSideMenu = new SideMenu();
@@ -191,6 +257,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         deleteSideMenu.setMenuType(3);
         sideMenuMapper.insertSelective(deleteSideMenu);
+        //删除操作多语言
+        //中文
+        SideMenuMultiLanguage deleteMenuZh = new SideMenuMultiLanguage();
+        deleteMenuZh.setSideMenuId(deleteSideMenu.getId());
+        deleteMenuZh.setLanguage("zh_CN");
+        deleteMenuZh.setName("删除");
+        sideMenuMultiLanguageMapper.insertSelective(deleteMenuZh);
+        //英文
+        SideMenuMultiLanguage deleteMenuEn = new SideMenuMultiLanguage();
+        deleteMenuEn.setSideMenuId(deleteSideMenu.getId());
+        deleteMenuEn.setLanguage("en_US");
+        deleteMenuEn.setName("delete");
+        sideMenuMultiLanguageMapper.insertSelective(deleteMenuEn);
 
         //导入操作
         SideMenu importMenu = new SideMenu();
@@ -205,6 +284,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         importMenu.setMenuType(3);
         sideMenuMapper.insertSelective(importMenu);
+        //导入操作多语言
+        //中文
+        SideMenuMultiLanguage importMenuZh = new SideMenuMultiLanguage();
+        importMenuZh.setSideMenuId(importMenu.getId());
+        importMenuZh.setLanguage("zh_CN");
+        importMenuZh.setName("导入");
+        sideMenuMultiLanguageMapper.insertSelective(importMenuZh);
+        //英文
+        SideMenuMultiLanguage importMenuEn = new SideMenuMultiLanguage();
+        importMenuEn.setSideMenuId(importMenu.getId());
+        importMenuEn.setLanguage("en_US");
+        importMenuEn.setName("import");
+        sideMenuMultiLanguageMapper.insertSelective(importMenuEn);
 
         //导出操作
         SideMenu exportMenu = new SideMenu();
@@ -219,6 +311,19 @@ public class TableServiceImpl implements TableService {
         //3级菜单
         exportMenu.setMenuType(3);
         sideMenuMapper.insertSelective(exportMenu);
+        //导出操作多语言
+        //中文
+        SideMenuMultiLanguage exportMenuZh = new SideMenuMultiLanguage();
+        exportMenuZh.setSideMenuId(exportMenu.getId());
+        exportMenuZh.setLanguage("zh_CN");
+        exportMenuZh.setName("导出");
+        sideMenuMultiLanguageMapper.insertSelective(exportMenuZh);
+        //英文
+        SideMenuMultiLanguage exportMenuEn = new SideMenuMultiLanguage();
+        exportMenuEn.setSideMenuId(exportMenu.getId());
+        exportMenuEn.setLanguage("en_US");
+        exportMenuEn.setName("export");
+        sideMenuMultiLanguageMapper.insertSelective(exportMenuEn);
 
         //准备添加url权限数据
         if (StringUtils.isEmpty(allowedRoles)) {

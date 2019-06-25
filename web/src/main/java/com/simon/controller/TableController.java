@@ -56,6 +56,9 @@ public class TableController extends BaseController {
     @Autowired
     private TableService tableService;
 
+    @Autowired
+    private FontAwesomeService fontAwesomeService;
+
     @GetMapping("list")
     public String list(Model model) {
         return "vue/table/list";
@@ -194,6 +197,7 @@ public class TableController extends BaseController {
             e.printStackTrace();
         }
 
+        model.addAttribute("icons", fontAwesomeService.getDtos(locale.toString()));
         model.addAttribute("elementComponents", dictTypeService.getTypeByGroupCode("element_component", locale.toString()));
         model.addAttribute("typeGroups", dictTypeGroupService.getSelectDtos(locale.toString()));
         return "vue/table/code_generate";
@@ -202,6 +206,12 @@ public class TableController extends BaseController {
     @RequestMapping(value = "genCode", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResultMsg genCode(@RequestBody GenCodeDto body, Authentication authentication) {
+        String tableComment = body.getTableComment();
+        //去掉最后一个“表”字
+        if (tableComment.lastIndexOf("表") > 0) {
+            tableComment = tableComment.substring(0, tableComment.lastIndexOf("表"));
+            body.setTableComment(tableComment);
+        }
         UserEntity userEntity = getCurrentUser(authentication);
         List<Column> columnList = body.getColumns();
         EntityDataModel entityDataModel = new EntityDataModel();
@@ -212,11 +222,11 @@ public class TableController extends BaseController {
         entityDataModel.setFileSuffix(".java");
         entityDataModel.setEntityName(body.getEntityName());
         entityDataModel.setTableName(body.getTableName());
-        entityDataModel.setTableComment(body.getTableComment());
+        entityDataModel.setTableComment(tableComment);
         entityDataModel.setColumns(columnList);
         entityDataModel.setModelNameUpperCamel(body.getEntityName());
         entityDataModel.setModelNameLowerCamel(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityDataModel.getEntityName()));
-        CodeGenerator.genCodeByCustomModelName(body.getMainOrTest(), body.getBasePackage(), body.getModuleDir(), body.getTableName(), body.getTableComment(), body.getEntityName(), body.getIdType(), StringUtils.join(body.getGenModules(), ","), userEntity.getUsername(), entityDataModel);
+        CodeGenerator.genCodeByCustomModelName(body.getMainOrTest(), body.getBasePackage(), body.getModuleDir(), body.getTableName(), tableComment, body.getEntityName(), body.getIdType(), StringUtils.join(body.getGenModules(), ","), userEntity.getUsername(), entityDataModel);
 
         //保存用户生成代码时的UI属性配置。
         //代码生成时，向t_side_menu表添加访问权限数据。
