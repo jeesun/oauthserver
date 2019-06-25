@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head th:replace="components/vue/vue-list :: head('新增', 'commit')"></head>
 <body>
 <div id="app" style="padding-top: 10px">
@@ -25,6 +25,18 @@
                                     :key="item.id"
                                     :label="item.name"
                                     :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item th:label="#{codeGen.icon}">
+                        <el-select v-model="ruleForm.icon" filterable th:placeholder="#{pleaseChoose}">
+                            <el-option
+                                    v-for="item in icons"
+                                    :key="item.iconClass"
+                                    :label="item.label"
+                                    :value="item.iconClass">
+                                <span style="float: left"><i v-bind:class="item.iconClass" style="font-size: 1.2em"></i></span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -132,11 +144,13 @@
             tableLoading: false,
             roleTypeList: [[${roleTypeList}]],
             parentMenus: [[${parentMenus}]],
+            icons: [[${icons}]],
             ruleForm: {
                 mainOrTest: "test",
                 basePackage: "com.simon",
                 allowedRoles: [],
                 pid: "",
+                icon: "",
                 moduleDir: "/common",
                 tableName: [[${tableName}]],
                 entityName: [[${entityName}]],

@@ -59,4 +59,7 @@ public interface SideMenuMapper extends MyMapper<SideMenu> {
 
     @Select("select id from t_side_menu where pid=#{pid}")
     List<Long> selectIdByPid(@Param("pid") Long pid);
+
+    @Select("select id from t_side_menu where entity_name = #{entityName} ")
+    List<Long> selectIdByEntityName(@Param("entityName") String entityName);
 }

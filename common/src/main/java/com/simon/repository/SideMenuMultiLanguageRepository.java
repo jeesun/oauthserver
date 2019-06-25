@@ -1,15 +1,10 @@
 package com.simon.repository;
 
 import com.simon.model.SideMenuMultiLanguage;
-import java.math.BigDecimal;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
 * @author jeesun
@@ -17,4 +12,9 @@ import java.time.LocalDateTime;
 **/
 @Repository
 public interface SideMenuMultiLanguageRepository extends JpaRepository<SideMenuMultiLanguage, Long> {
+    /**
+     * 根据侧边栏菜单id列表删除多语言信息
+     * @param sideMenuIds 侧边栏菜单id列表
+     */
+    void deleteBySideMenuIdIn(List<Long> sideMenuIds);
 }
