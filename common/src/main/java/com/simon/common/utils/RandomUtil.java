@@ -1,6 +1,7 @@
 package com.simon.common.utils;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 随机工具
@@ -19,8 +20,8 @@ public class RandomUtil {
     public static String randomCharAndNum(int length) {
         StringBuilder sb = new StringBuilder();
         //随机用以下三个随机生成器
-        Random rand = new Random();
-        Random randData = new Random();
+        Random rand = ThreadLocalRandom.current();
+        Random randData = ThreadLocalRandom.current();
         int data;
         for (int i = 0; i < length; i++) {
             int index = rand.nextInt(3);

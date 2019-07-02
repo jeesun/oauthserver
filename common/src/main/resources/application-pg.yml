@@ -7,6 +7,8 @@ spring:
     password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
     druid:
       validation-query: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 #pagehelper分页插件
 pagehelper:

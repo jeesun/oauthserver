@@ -44,17 +44,14 @@
 		<lombok.version>1.18.8</lombok.version>
 		<fastjson.version>1.2.57</fastjson.version>
 		<qcloudsms.version>1.0.6</qcloudsms.version>
-		<hibernate.version>5.4.2.Final</hibernate.version>
+		<hibernate.version>5.4.3.Final</hibernate.version>
+		<myexcel.version>2.7.0</myexcel.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-			<!--<dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-eureka</artifactId>
-            </dependency>-->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-oauth2</artifactId>
@@ -65,16 +62,11 @@
 				<artifactId>spring-cloud-starter-security</artifactId>
 				<version>1.2.4.RELEASE</version>
 			</dependency>
-            <!--<dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-jwt</artifactId>
-				<version>1.0.9.RELEASE</version>
-            </dependency>-->
-			<dependency>
+			<!--<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-zuul</artifactId>
 				<version>1.4.6.RELEASE</version>
-			</dependency>
+			</dependency>-->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -99,12 +91,12 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>5.4.2.Final</version>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>5.4.2.Final</version>
+				<version>${hibernate.version}</version>
 			</dependency>
             <!-- 解决hibernate低版本java8时间类型序列化失败的bug end -->
 			<dependency>
@@ -123,11 +115,6 @@
 				<artifactId>spring-boot-starter-jetty</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
-			<!--<dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-jetty</artifactId>
-				<version>${spring-boot.version}</version>
-            </dependency>-->
 			<dependency>
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-spring-boot-starter</artifactId>
@@ -215,21 +202,6 @@
 				<artifactId>spring-boot-starter-actuator</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-hateoas</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.webjars</groupId>
-				<artifactId>hal-browser</artifactId>
-				<version>ad9b865</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-actuator-docs</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
 			<!--actuator end-->
 
 			<dependency>
@@ -246,7 +218,7 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid-spring-boot-starter</artifactId>
-				<version>1.1.16</version>
+				<version>1.1.18</version>
 			</dependency>
 			<dependency>
 				<groupId>mysql</groupId>
@@ -264,6 +236,7 @@
 				<groupId>ojdbc14</groupId>
 				<artifactId>ojdbc14</artifactId>
 				<version>10.2.0.3.0</version>
+				<scope>runtime</scope>
 			</dependency>
 
 			<dependency>
@@ -465,7 +438,7 @@
 			<dependency>
 				<groupId>com.github.liaochong</groupId>
 				<artifactId>myexcel</artifactId>
-				<version>2.6.1</version>
+				<version>${myexcel.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

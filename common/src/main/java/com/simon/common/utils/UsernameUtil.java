@@ -1,6 +1,6 @@
 package com.simon.common.utils;
 
-import org.apache.commons.lang3.RandomUtils;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 用户名工具
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class UsernameUtil {
     public static String generateByPhone(String phone){
-        return RandomUtils.nextInt(1000000, 9999999) + "" + phone.substring(phone.length() - 4);
+        return ThreadLocalRandom.current().nextInt(1000000, 9999999) + "" + phone.substring(phone.length() - 4);
     }
 
     public static String generateByEmail(String email){
