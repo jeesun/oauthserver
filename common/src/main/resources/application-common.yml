@@ -168,3 +168,5 @@ server:
   max-http-header-size: 1048576
   tomcat:
     max-http-post-size: 2097152
+  session:
+    timeout: 1800 #会话超时（秒）。
