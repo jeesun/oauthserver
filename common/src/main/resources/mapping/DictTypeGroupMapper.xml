@@ -77,7 +77,8 @@
         0 AS pid,
         type_group_code AS code,
         type_group_name AS name,
-        'closed' AS state
+        'closed' AS state,
+        #{language} AS language
         FROM
         t_dict_type_group_${language}
         <where>
@@ -96,7 +97,8 @@
         0 AS pid,
         type_group_code AS code,
         type_group_name AS name,
-        'closed' AS state
+        'closed' AS state,
+        #{language} AS language
         FROM
         t_dict_type_group_${language}
         <where>

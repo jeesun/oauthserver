@@ -3,8 +3,8 @@ spring:
     # PostgreSQL连接信息
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://127.0.0.1:5432/thymelte?useUnicode=true&amp;characterEncoding=UTF-8
-    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres
-    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120
+    username: ENC(hTpbG9fq+7P3SntmXuNtDxbtWDqRuPV+) #明文postgres，可以直接用username: postgres
+    password: ENC(abdq6LyOspryFQHCqzEMTxRozyJVjIA4) #明文19961120，可以直接用password: 19961120
     druid:
       validation-query: SELECT 1
   jpa:

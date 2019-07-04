@@ -4,12 +4,14 @@ spring:
       init-s-q-l: SET NAMES utf8mb4
 # MySQL连接信息
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
-    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root
-    password: ENC(BZUIhx1tIC75T4JTYROwbsPIRuhrPQMx) #明文19941017
+    url: jdbc:mysql://127.0.0.1:3306/thymelte?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
+    username: ENC(YiYjVwTulDGN//YaB3KbuA==) #明文root，可以直接用username: root
+    password: ENC(BZUIhx1tIC75T4JTYROwbsPIRuhrPQMx) #明文19941017，可以直接用password: 19941017
     druid:
       validation-query: SELECT 1
       connection-init-sqls: SET NAMES utf8mb4
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
 
 #pagehelper分页插件
 pagehelper:

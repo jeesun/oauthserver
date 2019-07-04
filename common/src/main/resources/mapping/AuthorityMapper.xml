@@ -68,7 +68,7 @@
             </if>
         </where>
         GROUP BY
-        ta.user_id
+        ta.user_id,tu.username,tu.phone
         <if test="authority != null and authority != ''">
             HAVING string_agg( ta.authority, ',') LIKE CONCAT('%', #{authority}, '%')
         </if>
