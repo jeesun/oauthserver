@@ -26,10 +26,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -52,12 +52,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.2.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.4.2.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
         <!-- 解决hibernate低版本java8时间类型序列化失败的bug end -->
         <dependency>
@@ -150,32 +150,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.github.xiaoymin</groupId>-->
-        <!--<artifactId>swagger-bootstrap-ui</artifactId>-->
-        <!--<version>1.8.7</version>-->
-        <!--</dependency>-->
-        <!-- swagger依赖end -->
-
-        <!--actuator是spring boot提供的对应用系统的自省和监控的集成功能，可以对应用系统进行配置查看、相关功能统计等。-->
-        <!--actuator start-->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>hal-browser</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator-docs</artifactId>
-        </dependency>-->
-        <!--actuator end-->
 
         <!-- 解决jackson java8时间类型格式化问题 start -->
         <dependency>
@@ -205,7 +179,7 @@
         <dependency>
             <groupId>ojdbc14</groupId>
             <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.3.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>

@@ -68,6 +68,7 @@
     </appender>-->
 
     <!-- additivity属性为false，表示此logger的打印信息不再向上级传递。 -->
+    <logger name="org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport" level="ERROR" additivity="false" />
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="ERROR" additivity="false" />
     <logger name="org.springframework.security.oauth2.provider.endpoint.FrameworkEndpointHandlerMapping" level="ERROR" additivity="false" />
     <logger name="org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping" level="ERROR" additivity="false" />

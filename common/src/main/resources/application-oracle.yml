@@ -3,10 +3,12 @@ spring:
     # Oracle连接信息
     driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:orcl
-    username: yuhang #明文thymelte
-    password: yuhang #明文thymelte123456
+    username: yuhang
+    password: yuhang
     druid:
       validation-query: select 1 from dual
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
 
 #pagehelper分页插件
 pagehelper:

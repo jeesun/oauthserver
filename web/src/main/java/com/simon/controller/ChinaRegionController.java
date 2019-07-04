@@ -63,4 +63,10 @@ public class ChinaRegionController extends BaseController {
     public ResultMsg<List<CascaderOptionDto>> getCountries(@PathVariable String provinceId, @PathVariable String cityId){
         return ResultMsg.success(countryService.getCascaderOptionDtos(cityId));
     }
+
+    /*@PermitAll
+    @GetMapping("/")
+    public ResultMsg<List<AreaVo>> getArea() {
+
+    }*/
 }
