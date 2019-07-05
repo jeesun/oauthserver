@@ -2,11 +2,11 @@ package com.simon.common.plugins.oauth;
 
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
+import com.simon.common.factory.SmsServiceFactory;
+import com.simon.service.BaseSmsService;
 import com.simon.service.OauthUserService;
-import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,10 +25,6 @@ public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAu
     @Autowired
     private OauthUserService oauthUserService;
 
-    @Autowired
-    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
-    private SmsService smsService;
-
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 
     private ApplicationEventPublisher applicationEventPublisher;
@@ -46,6 +42,7 @@ public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAu
         //this.applicationEventPublisher.publishEvent(new SmsAuthenticateBeforeEvent(integrationAuthentication));
 
         UserEntity userVo = null;
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
         //校验验证码
         if(smsService.checkCode(username, password)){
             log.info("验证码正确");

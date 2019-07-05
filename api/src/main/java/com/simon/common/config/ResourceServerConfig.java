@@ -5,9 +5,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 /**
  * Created by simon on 2017/2/25.
@@ -30,7 +27,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .csrf().disable()
                 .formLogin().loginPage("/login").permitAll()
                 .and()
-                .requestMatchers()
+                /*.requestMatchers()
                 // For org.springframework.security.web.SecurityFilterChain.matches(HttpServletRequest)
                 .requestMatchers(
                         new NegatedRequestMatcher(
@@ -44,7 +41,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                                 )
                         )
                 )
-                .and()
+                .and()*/
                 .authorizeRequests()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
                 .anyRequest().permitAll();

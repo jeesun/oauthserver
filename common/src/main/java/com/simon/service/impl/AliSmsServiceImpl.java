@@ -1,8 +1,7 @@
 package com.simon.service.impl;
 
-import com.simon.common.domain.ResultCode;
-import com.simon.common.exception.BusinessException;
-import com.simon.service.SmsService;
+import com.simon.dto.SmsResultDto;
+import com.simon.service.BaseSmsService;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.domain.BizResult;
@@ -10,12 +9,9 @@ import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 /**
  * 阿里大于短信验证码服务
@@ -24,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2019-01-02
  **/
 @Slf4j
-@Service(value = "aliSmsServiceImpl")
-@Transactional(rollbackFor = {Exception.class})
-public class AliSmsServiceImpl implements SmsService {
+@Component
+public class AliSmsServiceImpl extends BaseSmsService {
+    @Autowired
+    protected org.springframework.cache.CacheManager cacheManager;
+
     @Value("${com.alibaba.dayu.url.sandbox}")
     private String DAYU_URL_SANDBOX;
 
@@ -48,68 +46,35 @@ public class AliSmsServiceImpl implements SmsService {
     @Value("${com.alibaba.dayu.sms-template-code}")
     private String DAYU_SMS_TEMPLATE_CODE;
 
-    @Autowired
-    private org.springframework.cache.CacheManager cacheManager;
-
     @Override
-    public boolean sendIdentifyCode(String nationCode, String mobile) {
+    public SmsResultDto sendSms(String nationCode, String mobile) {
+        SmsResultDto smsResultDto = new SmsResultDto();
         int code = RandomUtils.nextInt(100000, 999999);
+        smsResultDto.setCode(String.valueOf(code));
         DefaultTaobaoClient client = new DefaultTaobaoClient(
                 DAYU_URL_REAL, DAYU_APP_KEY, DAYU_APP_SECRET);
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("");
         req.setSmsType(DAYU_SMS_TYPE);
         req.setSmsFreeSignName(DAYU_SMS_FREE_SIGN_NAME);
-        req.setSmsParamString("{veriCode:'"+code+"'}");
+        req.setSmsParamString("{veriCode:'" + code + "'}");
         req.setRecNum(mobile);
         req.setSmsTemplateCode(DAYU_SMS_TEMPLATE_CODE);
         try {
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             BizResult bizResult = rsp.getResult();
-            if (null != bizResult && bizResult.getSuccess()){
-                //写入缓存
-                Cache cache = cacheManager.getCache("smsCache");
-                cache.put(mobile, code);
-
-                return true;
-            }else{
-                log.error("请确认阿里大于账号还有余额");
-                return false;
+            if (null != bizResult && bizResult.getSuccess()) {
+                smsResultDto.setResult(true);
+            } else {
+                smsResultDto.setResult(false);
+                smsResultDto.setErrMsg("请确认大鱼还有余额");
             }
         } catch (ApiException e) {
             e.printStackTrace();
             log.error(e.getErrMsg());
-            return false;
+            smsResultDto.setResult(false);
+            smsResultDto.setErrMsg(e.getErrMsg());
         }
-    }
-
-    @Override
-    public boolean checkCode(String mobile, String code) {
-        Cache cache = cacheManager.getCache("smsCache");
-        Cache.ValueWrapper ele = cache.get(mobile);
-
-        if (null == ele) {
-            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
-        }
-
-        String output = ele.get().toString();
-
-        boolean result = false;
-
-        if (StringUtils.isEmpty(output)) {
-            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
-        }
-
-        if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(output)) {
-            if (code.equals(output)) {
-                result = true;
-                //cache.evict(mobile);//删除
-            }
-        }
-
-        //删除缓存
-        cache.evict(mobile);
-
-        return result;
+        return smsResultDto;
     }
 }

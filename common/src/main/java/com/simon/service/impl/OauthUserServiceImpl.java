@@ -8,6 +8,7 @@ import com.simon.common.exception.CodeInvalidException;
 import com.simon.common.exception.PhoneRegisteredException;
 import com.simon.common.exception.UserExistsException;
 import com.simon.common.exception.UserNotValidException;
+import com.simon.common.factory.SmsServiceFactory;
 import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.UsernameUtil;
 import com.simon.common.utils.ValidUtil;
@@ -18,8 +19,8 @@ import com.simon.model.Authority;
 import com.simon.model.OauthUser;
 import com.simon.repository.AuthorityRepository;
 import com.simon.repository.OauthUserRepository;
+import com.simon.service.BaseSmsService;
 import com.simon.service.OauthUserService;
-import com.simon.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +28,6 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
@@ -72,14 +72,11 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
-    private SmsService smsService;
-
     @Override
     public void register(String code, String phone, String password) {
         password = passwordEncoder.encode(password);
         if (null != code) {
+            BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
             if (smsService.checkCode(phone, code)) {
                 register(phone, password);
             } else {
@@ -110,6 +107,7 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Override
     public int updatePwdByCode(String phone, String code, String newPwd) {
         newPwd = passwordEncoder.encode(newPwd);
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
         if (smsService.checkCode(phone, code)) {
             return oauthUserMapper.updatePwdByPhone(phone, newPwd);
         } else {
