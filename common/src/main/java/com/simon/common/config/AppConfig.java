@@ -58,7 +58,7 @@ public class AppConfig {
     /**
      * 可选值{"云之讯": "yzxSmsServiceImpl"，"阿里大鱼": "aliSmsServiceImpl", "腾讯云": "txSmsServiceImpl"}
      */
-    public static final String SMS_SERVICE_IMPL = "yzxSmsServiceImpl";
+    public static final String SMS_SERVICE_IMPL = "txSmsServiceImpl";
 
     public static String SERVER_PORT;
     static {

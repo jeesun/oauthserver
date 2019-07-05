@@ -4,14 +4,14 @@ import com.simon.common.config.AppConfig;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.ResultCode;
 import com.simon.common.domain.ResultMsg;
+import com.simon.common.factory.SmsServiceFactory;
 import com.simon.common.utils.ValidUtil;
-import com.simon.service.SmsService;
+import com.simon.service.BaseSmsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SmsController extends BaseController {
     @Autowired
     private org.springframework.cache.CacheManager cacheManager;
-
-    @Autowired
-    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
-    private SmsService smsService;
 
     @ApiOperation(value = "获取验证码")
     @GetMapping("/verifyCode")
@@ -57,6 +53,7 @@ public class SmsController extends BaseController {
             return ResultMsg.success();
         }*/
 
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
         if (smsService.sendIdentifyCode(nationCode, mobile)) {
             return ResponseEntity.ok(ResultMsg.success());
         } else {

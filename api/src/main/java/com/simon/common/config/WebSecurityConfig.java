@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -67,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().permitAll()
                 .and()
-                .requestMatchers()
+                /*.requestMatchers()
                 // For org.springframework.security.web.SecurityFilterChain.matches(HttpServletRequest)
                 .requestMatchers(
                         new OrRequestMatcher(
@@ -79,13 +77,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 new AntPathRequestMatcher("/oauth/my_error_page")
                         )
                 )
-                .and()
+                .and()*/
                 .authorizeRequests()
                 .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**", "/fonts/**", "/json/**", "/fileUpload/**")
                 .permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs")
                 .permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/sms/**")
+                .permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .rememberMe();
 

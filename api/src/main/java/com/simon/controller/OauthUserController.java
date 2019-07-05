@@ -6,16 +6,16 @@ import com.simon.common.domain.ResultCode;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.exception.RegisterException;
+import com.simon.common.factory.SmsServiceFactory;
 import com.simon.common.utils.BeanUtils;
 import com.simon.model.OauthUser;
+import com.simon.service.BaseSmsService;
 import com.simon.service.OauthUserService;
-import com.simon.service.SmsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,10 +40,6 @@ public class OauthUserController extends BaseController {
     private OauthUserService oauthUserService;
 
     @Autowired
-    @Qualifier(value = AppConfig.SMS_SERVICE_IMPL)
-    private SmsService smsService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @ApiOperation("获取用户信息")
@@ -65,6 +61,7 @@ public class OauthUserController extends BaseController {
             @ApiParam(value = "区号", required = true, defaultValue = "+86") @RequestParam String areaCode,
             @ApiParam(value = "手机号", required = true) @RequestParam String phone,
             @ApiParam(value = "验证码", required = true) @RequestParam String code) {
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
         if (smsService.checkCode(phone, code)) {
             //手机号验证码正确，注册账号
             OauthUser oauthUser = oauthUserService.registerByPhone(areaCode, phone);

@@ -2,18 +2,15 @@ package com.simon.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simon.common.domain.ResultCode;
-import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.SmsUtil;
-import com.simon.service.SmsService;
+import com.simon.dto.SmsResultDto;
+import com.simon.service.BaseSmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 /**
  * 云之讯短信服务
@@ -23,9 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 
 @Slf4j
-@Service(value = "yzxSmsServiceImpl")
-@Transactional(rollbackFor = {Exception.class})
-public class YzxSmsServiceImpl implements SmsService {
+@Component
+public class YzxSmsServiceImpl extends BaseSmsService {
+    @Autowired
+    protected org.springframework.cache.CacheManager cacheManager;
 
     private static final long EXPIRE_SECONDS = 300 * 1000;
 
@@ -38,64 +36,32 @@ public class YzxSmsServiceImpl implements SmsService {
     @Value("${sms.identity-code-msg-template}")
     private String identityCodeMsgTemplate;
 
-    @Autowired
-    private org.springframework.cache.CacheManager cacheManager;
-
     @Override
-    public boolean sendIdentifyCode(String nationCode, String mobile) {
+    public SmsResultDto sendSms(String nationCode, String mobile) {
+        SmsResultDto smsResultDto = new SmsResultDto();
         int code = RandomUtils.nextInt(100000, 999999);
+        smsResultDto.setCode(String.valueOf(code));
         String content = String.format(identityCodeMsgTemplate, code);
         String result = SmsUtil.getInstance().sendSMS(clientid, password, mobile, content, "4");
-        boolean ret = false;
+        log.error(result);
         String responseCode = null;
-        if (result != null) {
+        if (StringUtils.isNotEmpty(result)) {
             JSONObject obj = JSONObject.parseObject(result);
-            if (obj != null) {
+            if (null != obj) {
                 JSONArray jsonArray = obj.getJSONArray("data");
                 if (jsonArray != null && !jsonArray.isEmpty()) {
                     JSONObject index = jsonArray.getJSONObject(0);
                     if (index != null) {
                         responseCode = index.getString("code");
                         if ("0".equals(responseCode)) {
-                            ret = true;
-                            //写入缓存
-                            Cache cache = cacheManager.getCache("smsCache");
-                            cache.put(mobile, code);
+                            smsResultDto.setResult(true);
+                        } else {
+                            smsResultDto.setResult(false);
                         }
                     }
                 }
             }
         }
-        return ret;
-    }
-
-    @Override
-    public boolean checkCode(String mobile, String code) {
-        Cache cache = cacheManager.getCache("smsCache");
-        Cache.ValueWrapper ele = cache.get(mobile);
-
-        if (null == ele) {
-            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
-        }
-
-        String output = ele.get().toString();
-
-        boolean result = false;
-
-        if (StringUtils.isEmpty(output)) {
-            throw new BusinessException(ResultCode.ERROR_VERI_CODE);
-        }
-
-        if (StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(output)) {
-            if (code.equals(output)) {
-                result = true;
-                //cache.evict(mobile);//删除
-            }
-        }
-
-        //删除缓存
-        cache.evict(mobile);
-
-        return result;
+        return smsResultDto;
     }
 }
