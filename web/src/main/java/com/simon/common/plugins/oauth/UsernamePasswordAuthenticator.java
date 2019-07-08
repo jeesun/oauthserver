@@ -2,7 +2,6 @@ package com.simon.common.plugins.oauth;
 
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.exception.BusinessException;
 import com.simon.common.utils.DateUtil;
 import com.simon.common.utils.ValidUtil;
 import com.simon.model.Authority;
@@ -15,7 +14,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -76,8 +74,7 @@ public class UsernamePasswordAuthenticator extends AbstractPreparableIntegration
             } else if (ValidUtil.isMobile(integrationAuthentication.getUsername())) {
                 userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByPhone, myUserDetailsRowMapper, integrationAuthentication.getUsername());
             } else {
-                //userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByName, myUserDetailsRowMapper, integrationAuthentication.getUsername());
-                throw new BusinessException("不支持的登录方式");
+                userFromQuery = jdbcTemplate.queryForObject(sqlLoadUserByName, myUserDetailsRowMapper, integrationAuthentication.getUsername());
             }
 
             log.info("查询得到用户：{}", userFromQuery);
