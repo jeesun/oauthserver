@@ -15,15 +15,12 @@ import java.util.List;
  **/
 
 public interface OauthUserService extends BasicService<OauthUser, Long> {
-    void register(String code, String phone, String password);
-
-    int updatePwdByCode(String phone, String code, String newPwd);
-
-    int updatePwdByOldPwd(String username, String oldPwd, String newPwd);
-
+    /**
+     * 根据手机号查询用户
+     * @param phone 手机号
+     * @return UserEntity实体
+     */
     UserEntity findEntityByPhone(String phone);
-    UserEntity findEntityByUsername(String username);
-    UserEntity findEntityByEmail(String email);
 
     /**
      * 根据手机号注册
@@ -34,37 +31,47 @@ public interface OauthUserService extends BasicService<OauthUser, Long> {
     OauthUser registerByPhone(String areaCode, String phone);
 
     /**
-     * 根据账号(用户名、手机号、邮箱)+密码注册
-     * @param account
-     * @param password
-     * @return
-     */
-    OauthUser registerByAccountAndPwd(String account, String password);
-
-    /**
-     * 根据手机号+密码注册
+     * 根据手机号和密码注册
+     * @param areaCode 手机区号
      * @param phone 手机号
      * @param password 密码
-     * @return 注册账号信息
+     * @return 注册信息
      */
-    OauthUser registerByPhoneAndPwd(String phone, String password);
+    OauthUser registerByPhoneAndPassword(String areaCode, String phone, String password);
 
     /**
-     * 根据邮箱+密码注册
+     * 根据邮箱和密码注册
      * @param email 邮箱
      * @param password 密码
-     * @return 注册账号信息
+     * @return 注册信息
      */
-    OauthUser registerByEmailAndPwd(String email, String password);
+    OauthUser registerByEmailAndPassword(String email, String password);
 
     /**
-     * 根据用户名+密码注册
+     * 根据用户名和密码注册
      * @param username 用户名
      * @param password 密码
-     * @return 注册账号信息
+     * @return 注册信息
      */
-    OauthUser registerByUsernameAndPwd(String username, String password);
+    OauthUser registerByUsernameAndPassword(String username, String password);
 
+    /**
+     * 根据手机号和验证码重置密码
+     * @param phone 手机号
+     * @param code 验证码
+     * @param password 新密码
+     * @return 影响行数
+     */
+    int updatePwdByPhoneAndCode(String phone, String code, String password);
+
+    /**
+     * 根据用户名和旧密码更新密码
+     * @param username 用户名
+     * @param oldPwd 旧密码
+     * @param newPwd 新密码
+     * @return 影响行数
+     */
+    int updatePwdByOldPwd(String username, String oldPwd, String newPwd);
 
     /**
      * 获取未配置角色的用户

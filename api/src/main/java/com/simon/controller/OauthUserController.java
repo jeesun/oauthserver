@@ -17,10 +17,12 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.security.PermitAll;
 
@@ -39,25 +41,22 @@ public class OauthUserController extends BaseController {
     @Autowired
     private OauthUserService oauthUserService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @ApiOperation("获取用户信息")
     @GetMapping("/userInfo")
     @ResponseBody
-    public ResultMsg getUserInfo(Authentication authentication) {
+    public ResponseEntity<ResultMsg> getUserInfo(@ApiIgnore @ApiParam(hidden = true) Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         if (null != userEntity) {
-            return ResultMsg.success(userEntity);
+            return ResponseEntity.ok(ResultMsg.success(userEntity));
         }
-        return ResultMsg.fail(ResultCode.FAIL);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMsg.fail(ResultCode.FAIL));
     }
 
     @ApiOperation(value = "注册：手机号+验证码")
     @PermitAll
     @PostMapping("/register/phoneAndCode")
     @ResponseBody
-    public ResultMsg register(
+    public ResponseEntity<ResultMsg> register(
             @ApiParam(value = "区号", required = true, defaultValue = "+86") @RequestParam String areaCode,
             @ApiParam(value = "手机号", required = true) @RequestParam String phone,
             @ApiParam(value = "验证码", required = true) @RequestParam String code) {
@@ -68,41 +67,50 @@ public class OauthUserController extends BaseController {
             if (null == oauthUser) {
                 throw new RegisterException("注册失败，请稍后重试");
             }
-            return ResultMsg.success();
+            return ResponseEntity.ok(ResultMsg.success());
         } else {
-            return ResultMsg.fail(ResultCode.ERROR_VERI_CODE);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResultMsg.fail(ResultCode.ERROR_VERI_CODE));
         }
     }
 
-    @ApiOperation(value = "注册: (手机号、邮箱、用户名)+密码")
+    @ApiOperation(value = "注册: 手机号+密码")
     @PermitAll
-    @PostMapping("/register/accountAndCode")
+    @PostMapping("/register/phoneAndPassword")
     @ResponseBody
-    public ResultMsg register(
-            @ApiParam(value = "账号（手机号、邮箱、用户名）", required = true) @RequestParam String account,
+    public ResponseEntity<ResultMsg> registerByPhoneAndPassword(
+            @ApiParam(value = "区号", required = true, defaultValue = "+86") @RequestParam String areaCode,
+            @ApiParam(value = "手机号", required = true) @RequestParam String phone,
             @ApiParam(value = "密码", required = true) @RequestParam String password) {
-        return ResultMsg.success();
+        oauthUserService.registerByPhoneAndPassword(areaCode, phone, password);
+        return ResponseEntity.ok(ResultMsg.success());
     }
 
-    @PostMapping(value = "")
+    @ApiOperation(value = "注册：邮箱+密码")
+    @PermitAll
+    @PostMapping("register/emailAndPassword")
     @ResponseBody
-    public ResultMsg add(@RequestBody OauthUser body) {
-        body.setPassword(passwordEncoder.encode(body.getPassword()));
-        oauthUserService.save(body);
-        return ResultMsg.success();
+    public ResponseEntity<ResultMsg> registerByEmailAndPassword(
+            @ApiParam(value = "邮箱", required = true) @RequestParam String email,
+            @ApiParam(value = "密码", required = true) @RequestParam String password) {
+        oauthUserService.registerByEmailAndPassword(email, password);
+        return ResponseEntity.ok(ResultMsg.success());
     }
 
-    @DeleteMapping("/ids/{ids}")
+    @ApiOperation(value = "注册：用户名+密码")
+    @PermitAll
+    @PostMapping("register/usernameAndPassword")
     @ResponseBody
-    public ResultMsg delete(@PathVariable String ids) {
-        oauthUserService.deleteByIds(ids);
-        return ResultMsg.success();
+    public ResponseEntity<ResultMsg> registerByUsernameAndPassword(
+            @ApiParam(value = "用户名", required = true) @RequestParam String username,
+            @ApiParam(value = "密码", required = true) @RequestParam String password) {
+        oauthUserService.registerByUsernameAndPassword(username, password);
+        return ResponseEntity.ok(ResultMsg.success());
     }
 
     @ApiOperation(value = "更新个人信息")
     @PatchMapping
     @ResponseBody
-    public ResultMsg update(@RequestBody OauthUser oauthUser, Authentication authentication) {
+    public ResultMsg update(@RequestBody OauthUser oauthUser, @ApiIgnore @ApiParam(hidden = true) Authentication authentication) {
         oauthUserService.updateByPrimaryKeySelective(oauthUser);
         UserEntity userEntity = getCurrentUser(authentication);
         if (null != userEntity) {
@@ -113,4 +121,26 @@ public class OauthUserController extends BaseController {
         return ResultMsg.success();
     }
 
+    @ApiOperation(value = "根据手机号和验证码重置密码")
+    @PatchMapping("/updatePwd/phoneAndCode")
+    @ResponseBody
+    public ResponseEntity<ResultMsg> updatePwdByPhoneAndCode(
+            @ApiParam(value = "手机号", required = true) @RequestParam String phone,
+            @ApiParam(value = "验证码", required = true) @RequestParam String code,
+            @ApiParam(value = "密码", required = true) @RequestParam String password) {
+        oauthUserService.updatePwdByPhoneAndCode(phone, code, password);
+        return ResponseEntity.ok(ResultMsg.success());
+    }
+
+    @ApiOperation(value = "根据旧密码更新密码")
+    @PatchMapping("/updatePwd/oldPwd")
+    @ResponseBody
+    public ResponseEntity<ResultMsg> updatePwdByOldPwd(
+            @ApiIgnore @ApiParam(hidden = true) Authentication authentication,
+            @ApiParam(value = "旧密码", required = true) @RequestParam String oldPwd,
+            @ApiParam(value = "新密码", required = true) @RequestParam String newPwd) {
+        UserEntity userEntity = getCurrentUser(authentication);
+        oauthUserService.updatePwdByOldPwd(userEntity.getUsername(), oldPwd, newPwd);
+        return ResponseEntity.ok(ResultMsg.success());
+    }
 }

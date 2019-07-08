@@ -46,6 +46,10 @@
     update t_users set password=#{password} where phone=#{phone}
   </update>
 
+    <update id="updatePwdByUsername">
+        update t_users set password=#{password} where username=#{username}
+    </update>
+
     <select id="findByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT * FROM t_users
         <where>
