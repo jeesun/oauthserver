@@ -4,14 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.exception.CodeInvalidException;
+import com.simon.common.exception.BusinessException;
 import com.simon.common.exception.PhoneRegisteredException;
 import com.simon.common.exception.UserExistsException;
-import com.simon.common.exception.UserNotValidException;
 import com.simon.common.factory.SmsServiceFactory;
 import com.simon.common.utils.BeanUtils;
 import com.simon.common.utils.UsernameUtil;
-import com.simon.common.utils.ValidUtil;
 import com.simon.dto.AuthorityDto;
 import com.simon.mapper.AuthorityMapper;
 import com.simon.mapper.OauthUserMapper;
@@ -32,7 +30,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,20 +70,6 @@ public class OauthUserServiceImpl implements OauthUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    public void register(String code, String phone, String password) {
-        password = passwordEncoder.encode(password);
-        if (null != code) {
-            BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
-            if (smsService.checkCode(phone, code)) {
-                register(phone, password);
-            } else {
-                throw new CodeInvalidException();
-            }
-            register(phone, password);
-        }
-    }
-
     public void register(String phone, String password) {
         if (null != oauthUserRepository.findByPhone(phone)) {
             throw new PhoneRegisteredException();
@@ -102,34 +86,6 @@ public class OauthUserServiceImpl implements OauthUserService {
         authority.setUserId(oauthUser.getId());
         authority.setAuthority("ROLE_USER");
         authority = authorityRepository.save(authority);
-    }
-
-    @Override
-    public int updatePwdByCode(String phone, String code, String newPwd) {
-        newPwd = passwordEncoder.encode(newPwd);
-        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
-        if (smsService.checkCode(phone, code)) {
-            return oauthUserMapper.updatePwdByPhone(phone, newPwd);
-        } else {
-            throw new CodeInvalidException();
-        }
-    }
-
-    @Override
-    public int updatePwdByOldPwd(String phone, String oldPwd, String newPwd) {
-        var oauthUser = oauthUserRepository.findByPhone(phone);
-        if (null == oauthUser) {
-            throw new UserNotValidException();
-        }
-
-        var encoder = new BCryptPasswordEncoder(11);
-        if (encoder.matches(oldPwd, oauthUser.getPassword())) {
-            oauthUser.setPassword(encoder.encode(newPwd));
-            oauthUserRepository.save(oauthUser);
-            return 1;
-        } else {
-            throw new UserNotValidException();
-        }
     }
 
     @Override
@@ -319,22 +275,6 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public UserEntity findEntityByUsername(String username) {
-        OauthUser oauthUser = oauthUserRepository.findByUsername(username);
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(oauthUser, userEntity);
-        return userEntity;
-    }
-
-    @Override
-    public UserEntity findEntityByEmail(String email) {
-        OauthUser oauthUser = oauthUserRepository.findByEmail(email);
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(oauthUser, userEntity);
-        return userEntity;
-    }
-
-    @Override
     public OauthUser registerByPhone(String areaCode, String phone) {
         OauthUser oauthUser = oauthUserRepository.findByPhone(phone);
         if (null == oauthUser) {
@@ -351,27 +291,15 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public OauthUser registerByAccountAndPwd(String account, String password) {
-        if (ValidUtil.isMobile(account)) {
-            //account是手机号
-
-        } else if (ValidUtil.isEmail(account)) {
-            //account是邮箱
-        } else {
-
-        }
-        return null;
-    }
-
-    @Override
-    public OauthUser registerByPhoneAndPwd(String phone, String password) {
+    public OauthUser registerByPhoneAndPassword(String areaCode, String phone, String password) {
         OauthUser oauthUser = oauthUserRepository.findByPhone(phone);
         if (null == oauthUser) {
             oauthUser = new OauthUser();
+            oauthUser.setAreaCode(areaCode);
+            oauthUser.setPhone(phone);
+            oauthUser.setEnabled(true);
             oauthUser.setUsername(UsernameUtil.generateByPhone(phone));
             oauthUser.setPassword(passwordEncoder.encode(password));
-            oauthUser.setEnabled(true);
-            oauthUser.setPhone(phone);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
         } else {
@@ -380,14 +308,14 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public OauthUser registerByEmailAndPwd(String email, String password) {
+    public OauthUser registerByEmailAndPassword(String email, String password) {
         OauthUser oauthUser = oauthUserRepository.findByEmail(email);
         if (null == oauthUser) {
             oauthUser = new OauthUser();
+            oauthUser.setEmail(email);
+            oauthUser.setEnabled(true);
             oauthUser.setUsername(UsernameUtil.generateByEmail(email));
             oauthUser.setPassword(passwordEncoder.encode(password));
-            oauthUser.setEnabled(true);
-            oauthUser.setEmail(email);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
         } else {
@@ -396,17 +324,41 @@ public class OauthUserServiceImpl implements OauthUserService {
     }
 
     @Override
-    public OauthUser registerByUsernameAndPwd(String username, String password) {
+    public OauthUser registerByUsernameAndPassword(String username, String password) {
         OauthUser oauthUser = oauthUserRepository.findByUsername(username);
         if (null == oauthUser) {
             oauthUser = new OauthUser();
+            oauthUser.setEnabled(true);
             oauthUser.setUsername(username);
             oauthUser.setPassword(passwordEncoder.encode(password));
-            oauthUser.setEnabled(true);
             oauthUser = oauthUserRepository.save(oauthUser);
             return oauthUser;
         } else {
             throw new UserExistsException("用户已存在，请登录");
+        }
+    }
+
+    @Override
+    public int updatePwdByPhoneAndCode(String phone, String code, String password) {
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
+        if (smsService.checkCode(phone, code)) {
+            return oauthUserMapper.updatePwdByPhone(phone, passwordEncoder.encode(password));
+        } else {
+            throw new BusinessException("验证码错误");
+        }
+    }
+
+    @Override
+    public int updatePwdByOldPwd(String username, String oldPwd, String newPwd) {
+        OauthUser oauthUser = oauthUserRepository.findByUsername(username);
+        if (null != oauthUser) {
+            if (passwordEncoder.matches(oldPwd, oauthUser.getPassword())) {
+                return oauthUserMapper.updatePwdByUsername(username, newPwd);
+            } else {
+                throw new BusinessException("旧密码错误");
+            }
+        } else {
+            throw new UsernameNotFoundException("用户不存在");
         }
     }
 

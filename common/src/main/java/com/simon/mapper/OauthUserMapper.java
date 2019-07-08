@@ -14,6 +14,14 @@ import java.util.Map;
 public interface OauthUserMapper extends MyMapper<OauthUser> {
     int updatePwdByPhone(@Param("phone") String phone, @Param("password") String password);
 
+    /**
+     * 根据用户名修改密码
+     * @param username 用户名
+     * @param password 新密码
+     * @return 影响行数
+     */
+    int updatePwdByUsername(@Param("username") String username, @Param("password") String password);
+
     List<OauthUser> findByMap(@Param("map") Map<String, Object> map);
 
     /**
@@ -49,4 +57,6 @@ public interface OauthUserMapper extends MyMapper<OauthUser> {
      * @return 影响行数
      */
     int updatePasswordByUserId(@Param("id") Long id, @Param("password") String password);
+
+
 }
