@@ -22,10 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.security.PermitAll;
@@ -81,7 +78,7 @@ public class AliPayController extends BaseController {
     }
 
     @ApiOperation(value = "下单（app原生）")
-    @RequestMapping(value = "createAppOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("createAppOrder")
     @ResponseBody
     public ResultMsg createOrder(@RequestBody BillRequest billRequest){
         Bill bill = billService.createBill(billRequest);
@@ -127,7 +124,7 @@ public class AliPayController extends BaseController {
 
     @PermitAll
     @ApiOperation(value = "下单（web）")
-    @RequestMapping(value = "createWebOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping("createWebOrder")
     public void createWebOrder(
             HttpServletRequest request,
             HttpServletResponse response,
