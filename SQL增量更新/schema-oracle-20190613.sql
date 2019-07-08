@@ -461,3 +461,6 @@ ALTER TABLE T_NEWS_INFO rename column status to news_status;
 update t_users set email='18800000003@163.com' where id=1000000001;
 CREATE UNIQUE INDEX uk_t_users_phone ON T_USERS ("PHONE");
 CREATE UNIQUE INDEX uk_t_useers_email ON T_USERS ("EMAIL");
+
+-- 2019-07-08 by simon t_users给username列创建唯一键。
+create unique index uk_t_users_username on T_USERS("USERNAME");
