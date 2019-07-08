@@ -64,4 +64,13 @@ public class SmsController extends BaseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMsg.fail(ResultCode.FAIL_SEND_SMS));
         }
     }
+
+    @ApiOperation(value = "校验验证码，仅用于测试")
+    @GetMapping("checkCode")
+    public ResponseEntity<ResultMsg> checkCode(
+            @ApiParam(value = "手机号", required = true) @RequestParam String mobile,
+            @ApiParam(value = "验证码", required = true) @RequestParam String code) {
+        BaseSmsService smsService = SmsServiceFactory.getInstance().getSmsService(AppConfig.SMS_SERVICE_IMPL);
+        return ResponseEntity.ok(ResultMsg.success(smsService.checkCode(mobile, code)));
+    }
 }

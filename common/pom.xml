@@ -43,6 +43,7 @@
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
 
+        <!-- 解决hibernate低版本java8时间类型序列化失败的bug start -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -67,6 +68,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+        <!-- 解决hibernate低版本java8时间类型序列化失败的bug end -->
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -85,7 +87,7 @@
         <dependency>
             <groupId>ojdbc14</groupId>
             <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.3.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -126,6 +128,17 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+
+        <!-- 解决jackson java8时间类型格式化问题 start -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <!-- 解决jackson java8时间类型格式化问题 end -->
         <!-- MyBatis end -->
 
         <dependency>

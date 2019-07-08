@@ -45,7 +45,7 @@
 		<fastjson.version>1.2.57</fastjson.version>
 		<qcloudsms.version>1.0.6</qcloudsms.version>
 		<hibernate.version>5.4.3.Final</hibernate.version>
-		<myexcel.version>2.7.0</myexcel.version>
+		<myexcel.version>2.7.1</myexcel.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -126,6 +126,12 @@
 				<artifactId>spring-boot-starter-test</artifactId>
 				<version>${spring-boot.version}</version>
 				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vaadin.external.google</groupId>
+						<artifactId>android-json</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<!-- caching start -->
@@ -348,7 +354,7 @@
 				<version>1.10</version>
 			</dependency>
 			<!-- logback输出日志到数据库 start -->
-			<dependency>
+			<!--<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
 				<version>1.4</version>
@@ -357,7 +363,7 @@
 				<groupId>commons-pool</groupId>
 				<artifactId>commons-pool</artifactId>
 				<version>1.6</version>
-			</dependency>
+			</dependency>-->
 			<!-- logback输出日志到数据库 end -->
 
 			<!-- 七牛云 start -->
