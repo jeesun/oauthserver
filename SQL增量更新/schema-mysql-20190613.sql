@@ -416,3 +416,6 @@ ALTER TABLE t_news_info CHANGE status news_status int4;
 update t_users set email='18800000003@163.com' where id=1000000001;
 ALTER TABLE t_users RENAME INDEX phone TO uk_t_users_phone;
 alter table t_users drop index email,add unique index uk_t_users_email(email) USING BTREE;
+
+-- 2019-07-08 by simon t_users给username列创建唯一键。
+create unique index uk_t_users_username on t_users(username);

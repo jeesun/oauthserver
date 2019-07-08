@@ -445,3 +445,6 @@ CREATE UNIQUE INDEX uk_t_users_email ON t_users USING btree (
   "email" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
 ALTER INDEX "public"."phone" RENAME TO "uk_t_users_phone";
+
+-- 2019-07-08 by simon t_users给username列创建唯一键。
+create unique index uk_t_users_username on t_users(username);
