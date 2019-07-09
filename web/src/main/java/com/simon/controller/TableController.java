@@ -88,23 +88,6 @@ public class TableController extends BaseController {
         }
     }
 
-    /*@RequestMapping(value = "generate", method = RequestMethod.GET)
-    @ResponseBody
-    public ResultMsg generate(
-            @RequestParam String tableName,
-            @RequestParam String entityName,
-            @ApiParam(value = "表id列类型", required = false, example = "Long") @RequestParam(required = false, defaultValue = "Long") String idType,
-            @RequestParam(required = false) String genModules,
-            Authentication authentication) {
-        if (null != authentication) {
-            UserEntity userEntity = getCurrentUser(authentication);
-            CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules, userEntity.getUsername());
-        } else {
-            CodeGenerator.genCodeByCustomModelName(tableName, entityName, idType, genModules);
-        }
-        return ResultMsg.success();
-    }*/
-
     @GetMapping(value = "codeGenerate")
     public String codeGenerate(
             Model model,
