@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class IndexController extends BaseController {
     @Autowired
     private SideMenuService sideMenuService;
 
-    @GetMapping(value = {"/index", "/"})
+    @RequestMapping(value = {"/index", "/"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String vueIndex(Model model, Authentication authentication, Locale locale){
         List<SideMenu> list = sideMenuService.getAll(locale.toString());
         List<EasyUiSideMenuDto> easyUiList = new ArrayList<>();
