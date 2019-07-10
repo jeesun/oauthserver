@@ -3,7 +3,6 @@ package com.simon.common.handler;
 import com.simon.common.domain.UserEntity;
 import com.simon.common.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -24,18 +23,16 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-    private static Logger logger = Logger.getLogger(AuthSuccessHandler.class);
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserEntity userDetails = (UserEntity) authentication.getPrincipal();
 
-        logger.info("authentication.isAuthenticated()=" + authentication.isAuthenticated());
+        log.info("authentication.isAuthenticated()=" + authentication.isAuthenticated());
 
         HttpSession httpSession = request.getSession();
-        logger.info("session create time = " + DateUtil.format(httpSession.getCreationTime(), "yyyy-MM-dd HH:mm:ss"));
+        log.info("session create time = " + DateUtil.format(httpSession.getCreationTime(), "yyyy-MM-dd HH:mm:ss"));
 
-        super.onAuthenticationSuccess(request, response, authentication);
+        response.sendRedirect(request.getContextPath() + "/index");
     }
 }
 

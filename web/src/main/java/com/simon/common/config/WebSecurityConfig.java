@@ -1,6 +1,7 @@
 package com.simon.common.config;
 
 import com.simon.common.handler.AuthSuccessHandler;
+import com.simon.common.handler.CustomAuthenticationFailureHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.sql.DataSource;
 import java.net.URLEncoder;
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthSuccessHandler authSuccessHandler;
 
     @Autowired
-    private AuthenticationFailureHandler customAuthenticationFailureHandler;
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Override
     @Bean
@@ -57,47 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*//logoutSuccessUrl如果设为/login，那么退出后，
-        //会重新自动创建session，触发OnLineCountListener的sessionCreated方法，造成在线人数不准。
-        http
-                .headers().frameOptions().sameOrigin()
-                .httpStrictTransportSecurity().disable()
-                .and()
-                .csrf().disable()
-                .formLogin()
-                .successHandler(authSuccessHandler)
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/index/index_v1")
-                .and()
-                .logout().permitAll()
-                .and()
-                .requestMatchers()
-                // For org.springframework.security.web.SecurityFilterChain.matches(HttpServletRequest)
-                .requestMatchers(
-                        new OrRequestMatcher(
-                                new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/logout"),
-                                new AntPathRequestMatcher("/oauth/authorize"),
-                                new AntPathRequestMatcher("/oauth/confirm_access"),
-                                new AntPathRequestMatcher("/oauth/my_approval_page"),
-                                new AntPathRequestMatcher("/oauth/my_error_page")
-                        )
-                )
-                .and()
-                .authorizeRequests()
-                .antMatchers("/img/**", "/js/**", "/css/**", "/webjars/**", "/video/**", "/plug-in/**", "/font/**", "/fonts/**", "/json/**", "/fileUpload/**")
-                .permitAll()
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs")
-                .permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .rememberMe();
-
-        http
-                .sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/login?result=loginAnotherLocation");*/
-
         //logoutSuccessUrl如果设为/login，那么退出后，
         //会重新自动创建session，触发OnLineCountListener的sessionCreated方法，造成在线人数不准。
         http
@@ -106,9 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .successHandler(authSuccessHandler)
-                .failureHandler(customAuthenticationFailureHandler)
                 .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/index")
+                .failureHandler(customAuthenticationFailureHandler)
                 .and()
                 .logout().permitAll()
                 .logoutUrl("/logout")
