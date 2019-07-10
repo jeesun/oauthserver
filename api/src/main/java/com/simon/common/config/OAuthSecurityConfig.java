@@ -84,11 +84,11 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .checkTokenAccess("isAuthenticated()")
                 //client password加密即oauth_client_details表的client_secret字段
                 .passwordEncoder(passwordEncoder())
-        .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);
+                .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
 
@@ -102,7 +102,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     private AuthorizationEndpoint authorizationEndpoint;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         authorizationEndpoint.setUserApprovalPage("forward:/oauth/my_approval_page");
         authorizationEndpoint.setErrorPage("forward:/oauth/my_error_page");
     }
