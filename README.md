@@ -118,5 +118,4 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 ![管理端主页](tutorial/screenshots/index.png)
 
 ## 分享交流
-在使用过程中有任何疑问或者问题，可以微信扫码询问。  
-![author](tutorial/screenshots/author.jpg)
+在使用过程中有任何疑问或者问题，请提交issue，我会在收到的第一时间予以回复。  

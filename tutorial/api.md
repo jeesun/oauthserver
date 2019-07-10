@@ -156,4 +156,9 @@ status=200，返回的json数据：
 
 ## app实践指南
 app获取到token信息后，需要保存token信息和请求时间。在传access_token之前，需要检查access_token是否过期。为了减少后台压力，检查access_token是否过期应该是在app本地完成。通过token的key`expires_in`（剩余有效期）的值，以及本地记录的请求时间，和当前时间做对比，可以很方便地判断出access_token是否过期。如果过期了，需要通过refresh_token获取新的access_token。因为access_token的有效期只有2个小时，这个验证是必须的。    
-refresh_token同理。
+refresh_token同理。  
+但是，Spring Security Oauth2授权框架没有解决一个账号多端登录的问题。账号和token是一对一的关系，如果系统允许一个账号多端登录，那么必然出现以下这种情况。用户在客户端A和客户端B同时登录，客户端A的access_token过期了，客户端A选择刷新access_token；在客户端A刷新了access_token之后，客户端B发现自己手上的access_token不可用了，也选择刷新access_token，造成客户端A手上的access_token不可用了，循环反复，客户端A和客户端B一直在疯狂刷新access_token。  
+如何解决上面的问题呢？此处提供三种解决方案以供参考。  
+1. 设置access_token永不失效，不去刷新access_token；
+2. 自定义刷新access_token的请求接口，在接口里判断access_token是否过期，过期了就刷新并返回access_token，没过期就直接返回access_token。
+3. 记录每次刷新token的设备，如果这一次刷新的设备和上一次一致就返回新token，如果设备不一致就返回上一次的token，如果上一次的token已过期就返回新token，这样让两台设备的token保持一样就不会出现问题。

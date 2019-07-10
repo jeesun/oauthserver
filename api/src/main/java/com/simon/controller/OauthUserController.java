@@ -8,6 +8,7 @@ import com.simon.common.domain.UserEntity;
 import com.simon.common.exception.RegisterException;
 import com.simon.common.factory.SmsServiceFactory;
 import com.simon.common.utils.BeanUtils;
+import com.simon.dto.OauthUserDto;
 import com.simon.model.OauthUser;
 import com.simon.service.BaseSmsService;
 import com.simon.service.OauthUserService;
@@ -110,14 +111,16 @@ public class OauthUserController extends BaseController {
     @ApiOperation(value = "更新个人信息")
     @PatchMapping
     @ResponseBody
-    public ResultMsg update(@RequestBody OauthUser oauthUser, @ApiIgnore @ApiParam(hidden = true) Authentication authentication) {
-        oauthUserService.updateByPrimaryKeySelective(oauthUser);
+    public ResultMsg update(@RequestBody OauthUserDto oauthUserDto, @ApiIgnore @ApiParam(hidden = true) Authentication authentication) {
         UserEntity userEntity = getCurrentUser(authentication);
         if (null != userEntity) {
             //更新session中的principal
-            BeanUtils.copyPropertiesIgnoreNull(oauthUser, userEntity);
+            BeanUtils.copyPropertiesIgnoreNull(oauthUserDto, userEntity);
         }
-
+        OauthUser oauthUser = new OauthUser();
+        oauthUser.setId(userEntity.getId());
+        BeanUtils.copyPropertiesIgnoreNull(oauthUserDto, oauthUser);
+        oauthUserService.updateByPrimaryKeySelective(oauthUser);
         return ResultMsg.success();
     }
 

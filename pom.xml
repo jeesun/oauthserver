@@ -184,6 +184,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-devtools</artifactId>
 				<version>${spring-boot.version}</version>
+				<scope>runtime</scope>
 				<optional>true</optional>
 			</dependency>
 			<!-- Spring Boot 热部署 end -->
