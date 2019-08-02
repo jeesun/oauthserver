@@ -17,6 +17,6 @@
         <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate"/>
         <result column="tags" jdbcType="VARCHAR" property="tags"/>
         <result column="news_type" jdbcType="INTEGER" property="newsType"/>
-        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
     </resultMap>
 </mapper>
