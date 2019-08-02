@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.ButtonAuthorityDto;
 import com.simon.dto.EasyUiTreeDto;
 import com.simon.dto.SideMenuDto;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface SideMenuMapper extends MyMapper<SideMenu> {
+public interface SideMenuMapper extends CrudMapper<SideMenu> {
     List<SideMenu> selectByPid(@Param("pid") Long pid, @Param("language") String language);
 
     /**

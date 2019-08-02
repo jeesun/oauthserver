@@ -3,7 +3,7 @@ package com.simon.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.simon.common.config.AppConfig;
+import com.simon.common.service.impl.CrudServiceImpl;
 import com.simon.dto.ButtonAuthorityDto;
 import com.simon.dto.EasyUiTreeDto;
 import com.simon.dto.SideMenuDto;
@@ -19,8 +19,6 @@ import com.simon.service.SideMenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +31,7 @@ import java.util.*;
 @Slf4j
 @Service
 @Transactional(rollbackFor = {Exception.class})
-public class SideMenuServiceImpl implements SideMenuService {
+public class SideMenuServiceImpl extends CrudServiceImpl<SideMenu, Long> implements SideMenuService {
     @Autowired
     private SideMenuMapper sideMenuMapper;
 
@@ -48,11 +46,6 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     @Autowired
     private SideMenuMultiLanguageMapper sideMenuMultiLanguageMapper;
-
-    @Override
-    public long count() {
-        return sideMenuRepository.count();
-    }
 
     @Override
     public SideMenu save(SideMenu sideMenu) {
@@ -73,36 +66,6 @@ public class SideMenuServiceImpl implements SideMenuService {
     }
 
     @Override
-    public List<SideMenu> save(List<SideMenu> sideMenuList) {
-        return sideMenuRepository.save(sideMenuList);
-    }
-
-    @Override
-    public PageInfo<SideMenu> findAll(Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize) {
-            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
-        }
-        orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)) {
-            PageHelper.startPage(pageNo, pageSize);
-        } else {
-            PageHelper.startPage(pageNo, pageSize, orderBy);
-        }
-        List<SideMenu> list = sideMenuMapper.selectAll();
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public Page<SideMenu> findAll(Pageable pageable) {
-        return sideMenuRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<SideMenu> findAll() {
-        return sideMenuRepository.findAll();
-    }
-
-    @Override
     public void delete(Long id) {
         sideMenuAuthorityMapper.deleteBySideMenuIdIn(id);
         sideMenuRepository.deleteByIdOrPid(id, id);
@@ -118,35 +81,6 @@ public class SideMenuServiceImpl implements SideMenuService {
         return 1;
     }
 
-    @Override
-    public SideMenu findById(Long id) {
-        return sideMenuRepository.findOne(id);
-    }
-
-    @Override
-    public int insertList(List<SideMenu> list) {
-        return sideMenuMapper.insertList(list);
-    }
-
-    @Override
-    public int insert(SideMenu sideMenu) {
-        return sideMenuMapper.insert(sideMenu);
-    }
-
-    @Override
-    public int insertSelective(SideMenu sideMenu) {
-        return sideMenuMapper.insertSelective(sideMenu);
-    }
-
-    @Override
-    public int updateByPrimaryKey(SideMenu sideMenu) {
-        return sideMenuMapper.updateByPrimaryKey(sideMenu);
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(SideMenu sideMenu) {
-        return sideMenuMapper.updateByPrimaryKeySelective(sideMenu);
-    }
 
     @Override
     public PageInfo<SideMenu> getAll(Map<String, Object> params, Integer limit, Integer offset) {
@@ -182,16 +116,6 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         List<SideMenu> list = sideMenuMapper.selectLevel1(params);
         return new PageInfo<>(list);
-    }
-
-    @Override
-    public void batchSave(List<SideMenu> list) {
-
-    }
-
-    @Override
-    public void batchUpdate(List<SideMenu> list) {
-
     }
 
     @Override

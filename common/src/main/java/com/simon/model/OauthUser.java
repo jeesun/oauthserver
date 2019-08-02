@@ -8,6 +8,7 @@ import com.github.liaochong.myexcel.core.annotation.ExcelColumn;
 import com.github.liaochong.myexcel.core.annotation.ExcelTable;
 import com.github.liaochong.myexcel.core.annotation.ExcludeColumn;
 import com.simon.common.config.AppConfig;
+import com.simon.common.domain.BasePo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,7 +31,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_users")
-public class OauthUser implements Serializable{
+public class OauthUser extends BasePo<Long> implements Serializable{
     @ExcludeColumn
     private static final long serialVersionUID = 4898481229724057581L;
 

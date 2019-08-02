@@ -189,6 +189,9 @@ public class TableController extends BaseController {
     @RequestMapping(value = "genCode", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResultMsg genCode(@RequestBody GenCodeDto body, Authentication authentication) {
+        body.setTableName(StringUtils.deleteWhitespace(body.getTableName()));
+        body.setEntityName(StringUtils.deleteWhitespace(body.getEntityName()));
+        body.setTableComment(StringUtils.deleteWhitespace(body.getTableComment()));
         String tableComment = body.getTableComment();
         //去掉最后一个“表”字
         if (tableComment.lastIndexOf("表") > 0) {

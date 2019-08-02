@@ -67,6 +67,8 @@ public class DbUtil {
             sql = "SELECT COUNT(*) FROM pg_class C";
         } else if (dbType == DbType.ORACLE) {
             sql = "select COUNT(*) from all_tab_comments";
+        } else if (dbType == DbType.SQL_SERVER) {
+            sql = "SELECT COUNT(*) FROM sys.tables";
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -139,6 +141,14 @@ public class DbUtil {
             if (StringUtils.isNotEmpty(tableCommentKey)) {
                 sql += " AND COMMENTS LIKE '%" + tableCommentKey + "%'";
             }
+        } else if (dbType == DbType.SQL_SERVER) {
+            sql = "SELECT a.name AS TABLE_NAME, CONVERT ( NVARCHAR ( 100 ), isnull( g.[value], '' )) AS TABLE_COMMENT FROM sys.tables a LEFT JOIN sys.extended_properties g ON ( a.object_id = g.major_id AND g.minor_id = 0 ) WHERE 1=1";
+            if (StringUtils.isNotEmpty(tableNameKey)) {
+                sql += " AND a.name LIKE '%" + tableNameKey + "%'";
+            }
+            if (StringUtils.isNotEmpty(tableCommentKey)) {
+                sql += " AND COMMENTS LIKE '%" + tableCommentKey + "%'";
+            }
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -202,6 +212,11 @@ public class DbUtil {
             if (StringUtils.isNotEmpty(tableName)) {
                 sql += " AND TABLE_NAME=UPPER('" + tableName + "')";
             }
+        } else if (dbType == DbType.SQL_SERVER) {
+            sql = "SELECT a.name AS TABLE_NAME, CONVERT ( NVARCHAR ( 100 ), isnull( g.[value], '' )) AS TABLE_COMMENT FROM sys.tables a LEFT JOIN sys.extended_properties g ON ( a.object_id = g.major_id AND g.minor_id = 0 ) ";
+            if (StringUtils.isNotEmpty(tableName)) {
+                sql += " AND a.name='" + tableName + "'";
+            }
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -246,6 +261,8 @@ public class DbUtil {
             return 2;
         } else if (driverName.contains("oracle")) {
             return 3;
+        } else if (driverName.contains("sql server")) {
+            return 4;
         }
         return -1;
     }
@@ -332,6 +349,32 @@ public class DbUtil {
                     "FULL JOIN ( SELECT column_name, COMMENTS FROM all_col_comments WHERE Table_Name = '" + tableName.toUpperCase() + "' ) acc ON atc.column_name = acc.column_name \n" +
                     "WHERE\n" +
                     "atc.table_name = '" + tableName.toUpperCase() + "'";
+        } else if (dbType == DbType.SQL_SERVER) {
+            sql = "SELECT\n" +
+                    "\t* \n" +
+                    "FROM\n" +
+                    "\t(\n" +
+                    "\tSELECT\n" +
+                    "\t\td.name AS TABLE_NAME,\n" +
+                    "\t\ta.name AS COLUMN_NAME,\n" +
+                    "\t\tisnull( g.[value], '' ) AS COLUMN_COMMENT,\n" +
+                    "\t\tb.name AS DATA_TYPE,\n" +
+                    "\t\tCOLUMNPROPERTY( a.id, a.name, 'PRECISION' ) AS COLUMN_TYPE,\n" +
+                    "\t\tCOLUMNPROPERTY( a.id, a.name, 'PRECISION' ) AS DATA_LENGTH,\n" +
+                    "\t\tisnull( COLUMNPROPERTY( a.id, a.name, 'Scale' ), 0 ) AS DATA_SCALE,\n" +
+                    "\t\ta.isnullable AS IS_NULLABLE \n" +
+                    "\tFROM\n" +
+                    "\t\tsyscolumns a\n" +
+                    "\t\tLEFT JOIN systypes b ON a.xtype= b.xusertype\n" +
+                    "\t\tINNER JOIN sysobjects d ON a.id= d.id \n" +
+                    "\t\tAND d.xtype= 'U' \n" +
+                    "\t\tAND d.name<> 'dtproperties'\n" +
+                    "\t\tLEFT JOIN syscomments e ON a.cdefault= e.id\n" +
+                    "\t\tLEFT JOIN sys.extended_properties g ON a.id= g.major_id \n" +
+                    "\t\tAND a.colid = g.minor_id \n" +
+                    "\t) t \n" +
+                    "WHERE\n" +
+                    "\tTABLE_NAME LIKE '%" + tableName + "%'";
         } else {
             throw new Exception("暂不支持其他数据库");
         }
@@ -349,8 +392,13 @@ public class DbUtil {
             String comment = rs.getString("column_comment");
             String isNullable = rs.getString("is_nullable");
             String dataScale = "";
+            String dataLength = "";
             if (dbType == DbType.ORACLE) {
                 dataScale = rs.getString("data_scale");
+            }
+            if (dbType == DbType.SQL_SERVER) {
+                dataScale = rs.getString("data_scale");
+                dataLength = rs.getString("data_length");
             }
 
             if (StringUtils.isEmpty(comment)) {
@@ -364,6 +412,8 @@ public class DbUtil {
                 propertyType = TypeTranslator.translatePostgreSQL(columnType, dataType);
             } else if (dbType == DbType.ORACLE) {
                 propertyType = TypeTranslator.translateOracle(columnType, dataType, dataScale);
+            } else if (dbType == DbType.SQL_SERVER) {
+                propertyType = TypeTranslator.translateSqlServer(dataLength, dataType, dataScale);
             } else {
                 throw new Exception("暂不支持其他数据库");
             }

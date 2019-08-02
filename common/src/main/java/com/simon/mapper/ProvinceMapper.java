@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.vue.CascaderOptionDto;
 import com.simon.model.Province;
 import com.simon.provider.ProvinceProvider;
@@ -14,7 +14,7 @@ import java.util.Map;
 * @author SimonSun
 * @date 2019-04-24
 **/
-public interface ProvinceMapper extends MyMapper<Province> {
+public interface ProvinceMapper extends CrudMapper<Province> {
     /**
      * 使用Map查询
      * @param map 查询条件

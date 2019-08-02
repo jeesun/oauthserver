@@ -1,5 +1,6 @@
 package com.simon.model;
 
+import com.simon.common.domain.BasePo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_s_province")
-public class Province implements Serializable{
+public class Province extends BasePo<Integer> implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id

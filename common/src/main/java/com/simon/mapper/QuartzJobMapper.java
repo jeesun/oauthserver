@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.model.QuartzJob;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 * @author SimonSun
 * @date 2018-12-22
 **/
-public interface QuartzJobMapper extends MyMapper<QuartzJob> {
+public interface QuartzJobMapper extends CrudMapper<QuartzJob> {
     /**
      * 使用Map查询
      * @param map map查询条件

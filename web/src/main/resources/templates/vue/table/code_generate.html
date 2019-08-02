@@ -68,6 +68,7 @@
                         <el-select v-model="ruleForm.mainOrTest" th:placeholder="#{pleaseChoose}">
                             <el-option label="/src/test" value="test"></el-option>
                             <el-option label="/src/main" value="main"></el-option>
+                            <el-option label="/src/codeGenerate" value="codeGenerate"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item th:label="#{codeGen.tableName}" prop="tableName" :disabled="true">

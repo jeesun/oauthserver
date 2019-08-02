@@ -9,7 +9,7 @@ import java.util.List;
  * @date 2018-08-02
  **/
 
-public interface BasicService<T, ID> extends InsertService<T, ID>, UpdateService<T, ID>, DeleteService<T, ID>, SelectService<T, ID> {
+public interface CrudService<T, ID> extends InsertService<T, ID>, UpdateService<T, ID>, DeleteService<T, ID>, SelectService<T, ID> {
 
     /**
      * 新建或更新记录

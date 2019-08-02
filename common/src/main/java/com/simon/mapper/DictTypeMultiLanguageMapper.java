@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.model.DictTypeMultiLanguage;
 import com.simon.provider.DictTypeMultiLanguageProvider;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +15,7 @@ import java.util.Map;
 * @date 2019-06-03
 **/
 @Mapper
-public interface DictTypeMultiLanguageMapper extends MyMapper<DictTypeMultiLanguage> {
+public interface DictTypeMultiLanguageMapper extends CrudMapper<DictTypeMultiLanguage> {
     /**
      * 使用Map查询
      * @param map 查询条件

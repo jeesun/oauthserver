@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.model.SideMenuMultiLanguage;
 import com.simon.provider.SideMenuMultiLanguageProvider;
 import org.apache.ibatis.annotations.*;
@@ -13,7 +13,7 @@ import java.util.Map;
 * @date 2019-05-30
 **/
 @Mapper
-public interface SideMenuMultiLanguageMapper extends MyMapper<SideMenuMultiLanguage> {
+public interface SideMenuMultiLanguageMapper extends CrudMapper<SideMenuMultiLanguage> {
     /**
      * 使用Map查询
      * @param map 查询条件

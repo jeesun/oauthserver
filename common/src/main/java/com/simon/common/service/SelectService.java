@@ -56,6 +56,7 @@ public interface SelectService<T, ID> {
      * @param orderBy 排序
      * @return 分页数据
      */
+    @Deprecated
     PageInfo<T> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy);
 
 }

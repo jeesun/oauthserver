@@ -1,6 +1,6 @@
 package com.simon.service;
 
-import com.simon.common.service.BasicService;
+import com.simon.common.service.CrudService;
 import com.simon.dto.FontAwesomeDto;
 import com.simon.model.FontAwesome;
 
@@ -10,7 +10,7 @@ import java.util.List;
 * @author SimonSun
 * @date 2019-04-29
 **/
-public interface FontAwesomeService extends BasicService<FontAwesome, Integer> {
+public interface FontAwesomeService extends CrudService<FontAwesome, Integer> {
     /**
      * 获取Font Awesome字体dto列表
      * @param language 语言

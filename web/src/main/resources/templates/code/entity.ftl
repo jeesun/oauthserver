@@ -1,5 +1,6 @@
 package ${basePackage}.model;
 
+import com.simon.common.domain.BasePo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,10 +35,10 @@ import java.time.LocalDateTime;
 @ExcelTable(sheetName = "${tableComment}", workbookType = WorkbookType.SXLSX, rowAccessWindowSize = 100, useFieldNameAsTitle = true)
 @ApiModel(description = "${tableComment}")
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name="${tableName}")
-public class ${entityName} implements Serializable {
+public class ${entityName} extends BasePo<${idType}> implements Serializable {
     @ExcludeColumn
     private static final long serialVersionUID = 1L;
 <#list columns as column>
