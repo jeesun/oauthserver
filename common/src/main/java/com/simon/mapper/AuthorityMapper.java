@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.AuthorityDto;
 import com.simon.model.Authority;
 import org.apache.ibatis.annotations.Param;
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 
-public interface AuthorityMapper extends MyMapper<Authority> {
+public interface AuthorityMapper extends CrudMapper<Authority> {
     /**
      * 查询权限
      * @param userId

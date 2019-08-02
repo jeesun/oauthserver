@@ -45,7 +45,7 @@
 		<fastjson.version>1.2.57</fastjson.version>
 		<qcloudsms.version>1.0.6</qcloudsms.version>
 		<hibernate.version>5.4.3.Final</hibernate.version>
-		<myexcel.version>2.7.1</myexcel.version>
+		<myexcel.version>2.7.4</myexcel.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -245,6 +245,16 @@
 				<version>10.2.0.3.0</version>
 				<scope>runtime</scope>
 			</dependency>
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>7.2.2.jre8</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>sqljdbc4</artifactId>
+                <version>4.0</version>
+            </dependency>
 
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>

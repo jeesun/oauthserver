@@ -1,7 +1,7 @@
 package com.simon.service;
 
 import com.simon.common.domain.UserEntity;
-import com.simon.common.service.BasicService;
+import com.simon.common.service.CrudService;
 import com.simon.dto.AuthorityDto;
 import com.simon.model.OauthUser;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @create 2018-07-31 19:55
  **/
 
-public interface OauthUserService extends BasicService<OauthUser, Long> {
+public interface OauthUserService extends CrudService<OauthUser, Long> {
     /**
      * 根据手机号查询用户
      * @param phone 手机号

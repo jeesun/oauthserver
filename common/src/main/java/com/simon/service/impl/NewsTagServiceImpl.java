@@ -4,6 +4,7 @@ package com.simon.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
+import com.simon.common.service.impl.CrudServiceImpl;
 import com.simon.mapper.NewsTagMapper;
 import com.simon.model.NewsTag;
 import com.simon.repository.NewsTagRepository;
@@ -25,115 +26,11 @@ import java.util.Map;
 **/
 @Service
 @Transactional(rollbackFor = {Exception.class})
-public class NewsTagServiceImpl implements NewsTagService {
+public class NewsTagServiceImpl extends CrudServiceImpl<NewsTag, Long> implements NewsTagService {
     @Autowired
     private NewsTagMapper newsTagMapper;
 
     @Autowired
     private NewsTagRepository newsTagRepository;
 
-    @Override
-    public long count() {
-        return newsTagRepository.count();
-    }
-
-    @Override
-    public NewsTag save(NewsTag newsTag){
-        return newsTagRepository.save(newsTag);
-    }
-
-    @Override
-    public List<NewsTag> save(List<NewsTag> newsTagList) {
-        return newsTagRepository.save(newsTagList);
-    }
-
-    @Override
-    public PageInfo<NewsTag> findAll(Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
-            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
-        }
-        orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
-            PageHelper.startPage(pageNo, pageSize);
-        }else{
-            PageHelper.startPage(pageNo, pageSize, orderBy);
-        }
-        List<NewsTag> list = newsTagMapper.selectAll();
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public Page<NewsTag> findAll(Pageable pageable){
-        return newsTagRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<NewsTag> findAll(){
-        return newsTagRepository.findAll();
-    }
-
-    @Override
-    public void delete(Long id){
-        newsTagRepository.delete(id);
-    }
-
-    @Override
-    public int deleteByIds(String ids){
-        return newsTagMapper.deleteByIds(ids);
-    }
-
-    @Override
-    public NewsTag findById(Long id){
-        return newsTagRepository.findOne(id);
-    }
-
-    @Override
-    public int insertList(List<NewsTag> list){
-        return newsTagMapper.insertList(list);
-    }
-
-    @Override
-    public int insert(NewsTag newsTag){
-        return newsTagMapper.insert(newsTag);
-    }
-
-    @Override
-    public int insertSelective(NewsTag newsTag){
-        return newsTagMapper.insertSelective(newsTag);
-    }
-
-    @Override
-    public int updateByPrimaryKey(NewsTag newsTag) {
-        return newsTagMapper.updateByPrimaryKey(newsTag);
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(NewsTag newsTag) {
-        return newsTagMapper.updateByPrimaryKeySelective(newsTag);
-    }
-
-    @Override
-    public PageInfo<NewsTag> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize){
-            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
-        }
-        orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)){
-            PageHelper.startPage(pageNo, pageSize);
-        }else{
-            PageHelper.startPage(pageNo, pageSize, orderBy);
-        }
-        var list = newsTagMapper.getList(params);
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public void batchSave(List<NewsTag> list) {
-
-    }
-
-    @Override
-    public void batchUpdate(List<NewsTag> list) {
-
-    }
 }

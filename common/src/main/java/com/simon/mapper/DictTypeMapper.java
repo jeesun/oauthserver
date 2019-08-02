@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.model.DictType;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author simon
  */
-public interface DictTypeMapper extends MyMapper<DictType> {
+public interface DictTypeMapper extends CrudMapper<DictType> {
     /**
      * 根据字典组编码查询字典列表
      * @param groupCode

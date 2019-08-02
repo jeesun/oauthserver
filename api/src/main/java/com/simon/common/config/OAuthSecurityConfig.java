@@ -24,7 +24,8 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 /**
- * Created by simon on 2017/2/18.
+ * @author simon
+ * @date 2017/2/18
  */
 @Configuration
 @EnableAuthorizationServer
@@ -56,12 +57,15 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
         clients.inMemory()
                 .withClient("clientIdPassword")
                 .redirectUris("http://www.baidu.com")
-                .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6") //明文secret
+                //明文secret
+                .secret("$2a$11$uBcjOC6qWFpxkQJtPyMhPOweH.8gP3Ig1mt27mGDpBncR7gErOuF6")
                 .scopes("read,write,trust")
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password", "client_credentials")
                 .authorities("ROLE_ADMIN", "ROLE_USER")
-                .accessTokenValiditySeconds(7200)//access_token有效期为2小时
-                .refreshTokenValiditySeconds(5184000)//refresh_token有效期为2个月60天
+                //access_token有效期为2小时
+                .accessTokenValiditySeconds(7200)
+                //refresh_token有效期为2个月60天
+                .refreshTokenValiditySeconds(5184000)
                 .autoApprove(false);
         //clients.jdbc(dataSource);
     }
@@ -84,11 +88,11 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
                 .checkTokenAccess("isAuthenticated()")
                 //client password加密即oauth_client_details表的client_secret字段
                 .passwordEncoder(passwordEncoder())
-        .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);
+                .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
 
@@ -102,7 +106,7 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     private AuthorizationEndpoint authorizationEndpoint;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         authorizationEndpoint.setUserApprovalPage("forward:/oauth/my_approval_page");
         authorizationEndpoint.setErrorPage("forward:/oauth/my_error_page");
     }

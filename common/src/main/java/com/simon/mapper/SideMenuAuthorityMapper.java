@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.model.SideMenuAuthority;
 import com.simon.provider.SideMenuAuthorityProvider;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +13,7 @@ import java.util.Map;
 * @author SimonSun
 * @date 2019-01-14
 **/
-public interface SideMenuAuthorityMapper extends MyMapper<SideMenuAuthority> {
+public interface SideMenuAuthorityMapper extends CrudMapper<SideMenuAuthority> {
     /**
      * 使用Map查询
      * @param map 查询条件

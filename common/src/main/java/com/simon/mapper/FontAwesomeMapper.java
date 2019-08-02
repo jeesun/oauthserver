@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.FontAwesomeDto;
 import com.simon.model.FontAwesome;
 import org.apache.ibatis.annotations.Param;
@@ -11,7 +11,7 @@ import java.util.List;
 * @author SimonSun
 * @date 2019-04-29
 **/
-public interface FontAwesomeMapper extends MyMapper<FontAwesome> {
+public interface FontAwesomeMapper extends CrudMapper<FontAwesome> {
     /**
      * 使用Map查询
      * @param map 查询条件

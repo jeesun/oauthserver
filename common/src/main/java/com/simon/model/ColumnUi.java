@@ -1,5 +1,6 @@
 package com.simon.model;
 
+import com.simon.common.domain.BasePo;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +23,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "t_s_column_ui")
-public class ColumnUi implements Serializable {
+public class ColumnUi extends BasePo<Long> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

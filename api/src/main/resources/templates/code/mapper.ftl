@@ -1,6 +1,6 @@
 package ${basePackage}.mapper;
 
-import ${basePackage}.common.mapper.MyMapper;
+import ${basePackage}.common.mapper.CrudMapper;
 import ${basePackage}.model.${modelNameUpperCamel};
 import ${basePackage}.provider.${modelNameUpperCamel}Provider;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 * @date ${CREATE}
 **/
 @Mapper
-public interface ${modelNameUpperCamel}Mapper extends MyMapper<${modelNameUpperCamel}> {
+public interface ${modelNameUpperCamel}Mapper extends CrudMapper<${modelNameUpperCamel}> {
     /**
      * 使用Map查询
      * @param map 查询条件

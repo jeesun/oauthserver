@@ -4,6 +4,7 @@ package com.simon.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.simon.common.config.AppConfig;
+import com.simon.common.service.impl.CrudServiceImpl;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.dto.SelectDto;
@@ -15,18 +16,14 @@ import com.simon.model.DictTypeGroupMultiLanguage;
 import com.simon.repository.DictTypeGroupMultiLanguageRepository;
 import com.simon.repository.DictTypeGroupRepository;
 import com.simon.service.DictTypeGroupService;
-import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author SimonSun
@@ -34,7 +31,7 @@ import java.util.Map;
  **/
 @Service
 @Transactional(rollbackFor = {Exception.class})
-public class DictTypeGroupServiceImpl implements DictTypeGroupService {
+public class DictTypeGroupServiceImpl extends CrudServiceImpl<DictTypeGroup, Long> implements DictTypeGroupService {
     @Autowired
     private DictTypeGroupMapper dictTypeGroupMapper;
 
@@ -46,112 +43,6 @@ public class DictTypeGroupServiceImpl implements DictTypeGroupService {
 
     @Autowired
     private DictTypeGroupMultiLanguageRepository dictTypeGroupMultiLanguageRepository;
-
-    @Override
-    public long count() {
-        return dictTypeGroupRepository.count();
-    }
-
-    @Override
-    public DictTypeGroup save(DictTypeGroup dictTypeGroup) {
-        return dictTypeGroupRepository.save(dictTypeGroup);
-    }
-
-    @Override
-    public List<DictTypeGroup> save(List<DictTypeGroup> dictTypeGroupList) {
-        return dictTypeGroupRepository.save(dictTypeGroupList);
-    }
-
-    @Override
-    public PageInfo<DictTypeGroup> findAll(Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize) {
-            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
-        }
-        orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)) {
-            PageHelper.startPage(pageNo, pageSize);
-        } else {
-            PageHelper.startPage(pageNo, pageSize, orderBy);
-        }
-
-        List<DictTypeGroup> list = dictTypeGroupMapper.selectAll();
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public Page<DictTypeGroup> findAll(Pageable pageable) {
-        return dictTypeGroupRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<DictTypeGroup> findAll() {
-        return dictTypeGroupRepository.findAll();
-    }
-
-    @Override
-    public void delete(Long id) {
-        dictTypeGroupMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int deleteByIds(String ids) {
-        return dictTypeGroupMapper.deleteByIds(ids);
-    }
-
-    @Override
-    public DictTypeGroup findById(Long id) {
-        return dictTypeGroupRepository.findOne(id);
-    }
-
-    @Override
-    public int insertList(List<DictTypeGroup> list) {
-        return dictTypeGroupMapper.insertList(list);
-    }
-
-    @Override
-    public int insert(DictTypeGroup dictTypeGroup) {
-        return dictTypeGroupMapper.insert(dictTypeGroup);
-    }
-
-    @Override
-    public int insertSelective(DictTypeGroup dictTypeGroup) {
-        return dictTypeGroupMapper.insertSelective(dictTypeGroup);
-    }
-
-    @Override
-    public int updateByPrimaryKey(DictTypeGroup dictTypeGroup) {
-        return dictTypeGroupMapper.updateByPrimaryKey(dictTypeGroup);
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(DictTypeGroup dictTypeGroup) {
-        return dictTypeGroupMapper.updateByPrimaryKeySelective(dictTypeGroup);
-    }
-
-    @Override
-    public PageInfo<DictTypeGroup> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy) {
-        if (null == pageSize) {
-            pageSize = AppConfig.DEFAULT_PAGE_SIZE;
-        }
-        orderBy = orderBy.trim();
-        if (StringUtils.isEmpty(orderBy)) {
-            PageHelper.startPage(pageNo, pageSize);
-        } else {
-            PageHelper.startPage(pageNo, pageSize, orderBy);
-        }
-        var list = dictTypeGroupMapper.getList(params);
-        return new PageInfo<>(list);
-    }
-
-    @Override
-    public void batchSave(List<DictTypeGroup> list) {
-
-    }
-
-    @Override
-    public void batchUpdate(List<DictTypeGroup> list) {
-
-    }
 
     @Override
     public List<DictTypeDto> getDtos(String language, Integer limit, Integer offset) {

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.simon.common.config.AppConfig;
+import com.simon.common.domain.BasePo;
 import com.simon.common.utils.SnowflakeGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,7 +27,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_s_dt_multi_languages")
-public class DictTypeMultiLanguage implements Serializable{
+public class DictTypeMultiLanguage extends BasePo<Long> implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @JSONField(serializeUsing = ToStringSerializer.class)

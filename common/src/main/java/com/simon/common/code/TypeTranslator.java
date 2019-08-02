@@ -52,11 +52,18 @@ public class TypeTranslator {
 
     private static String CLOB = "CLOB";
 
+    private static String NCHAR = "NCHAR";
+    private static String NVARCHAR = "NVARCHAR";
+    private static String DATETIME2 = "DATETIME2";
+    private static String SMALLDATETIME = "SMALLDATETIME";
+    private static String DATETIMEOFFSET = "DATETIMEOFFSET";
+    private static String NTEXT = "NTEXT";
+
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries%2Fmysql-data-types.html%23
      *
-     * @param columnType 列类型
-     * @param dataType   数据类型
+     * @param columnType 列类型，例如varchar(25)
+     * @param dataType   数据类型，例如varchar
      * @return java数据类型
      */
     public static String translateMySQL(String columnType, String dataType) {
@@ -128,8 +135,8 @@ public class TypeTranslator {
     /**
      * 参考https://documentation.progress.com/output/DataDirect/DataDirectCloud/index.html#page/queries/postgresql-data-types.html
      *
-     * @param columnType 列类型
-     * @param dataType   数据类型
+     * @param columnType 列类型，例如varchar(25)
+     * @param dataType   数据类型，例如varchar
      * @return java数据类型
      */
     public static String translatePostgreSQL(String columnType, String dataType) {
@@ -180,7 +187,7 @@ public class TypeTranslator {
      * Oracle数据类型转java类型
      *
      * @param columnType DATA_LENGTH
-     * @param dataType   DATA_TYPE
+     * @param dataType   数据类型，例如varchar
      * @param dataScale 小数点后有几位
      * @return
      */
@@ -231,6 +238,58 @@ public class TypeTranslator {
         }
         if (BLOB.equals(dataType)) {
             return "Byte[]";
+        }
+        return "Object";
+    }
+
+    /**
+     * SQL Server
+     * @param columnType DATA_LENGTH，如果是小数，指整数位数
+     * @param dataType 数据类型，例如varchar
+     * @param dataScale 小数点后有几位
+     * @return java数据类型
+     */
+    public static String translateSqlServer(String columnType, String dataType, String dataScale) {
+        Integer dataLength = Integer.parseInt(columnType);
+        int dataScaleValue = -1;
+        if (StringUtils.isNotEmpty(dataScale) && StringUtils.isNumeric(dataScale)) {
+            dataScaleValue = Integer.parseInt(dataScale);
+        }
+        dataType = dataType.toUpperCase();
+        if (CHAR.equals(dataType) || VARCHAR.equals(dataType) || NCHAR.equals(dataType) || NVARCHAR.equals(dataType) || TEXT.equals(dataType) || NTEXT.equals(dataType)) {
+            return "String";
+        }
+        if (NUMERIC.equals(dataType) || DECIMAL.equals(dataType)) {
+            if (dataScaleValue <= 0) {
+                if (dataLength <= 10) {
+                    return "Integer";
+                } else {
+                    return "Long";
+                }
+            } else {
+                return "BigDecimal";
+            }
+        }
+        if (INT.equals(dataType) || SMALLINT.equals(dataType)) {
+            return "Integer";
+        }
+        if (BIGINT.equals(dataType)) {
+            return "Long";
+        }
+        if (FLOAT.equals(dataType) || REAL.equals(dataType)) {
+            return "Float";
+        }
+        if (DATETIME.equals(dataType) || DATETIME2.equals(dataType) || SMALLDATETIME.equals(dataType) || DATETIMEOFFSET.equals(dataType)) {
+            return "LocalDateTime";
+        }
+        if (DATE.equals(dataType)) {
+            return "LocalDate";
+        }
+        if (TIME.equals(dataType)) {
+            return "LocalTime";
+        }
+        if (BIT.equals(dataType)) {
+            return "Boolean";
         }
         return "Object";
     }

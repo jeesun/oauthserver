@@ -11,4 +11,5 @@ public class DbType {
     public static final int MYSQL = 1;
     public static final int POSTGRESQL = 2;
     public static final int ORACLE = 3;
+    public static final int SQL_SERVER = 4;
 }

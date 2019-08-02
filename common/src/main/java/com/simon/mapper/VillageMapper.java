@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.model.Village;
 import com.simon.provider.VillageProvider;
 import org.apache.ibatis.annotations.ResultMap;
@@ -13,7 +13,7 @@ import java.util.Map;
 * @author SimonSun
 * @date 2019-04-24
 **/
-public interface VillageMapper extends MyMapper<Village> {
+public interface VillageMapper extends CrudMapper<Village> {
     /**
      * 使用Map查询
      * @param map 查询条件

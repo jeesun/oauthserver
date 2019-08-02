@@ -1,7 +1,7 @@
 package com.simon.service;
 
 import com.github.pagehelper.PageInfo;
-import com.simon.common.service.BasicService;
+import com.simon.common.service.CrudService;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.dto.SelectDto;
@@ -13,7 +13,7 @@ import java.util.List;
 * @author SimonSun
 * @date 2018-09-06 10:03:50
 **/
-public interface DictTypeGroupService extends BasicService<DictTypeGroup, Long> {
+public interface DictTypeGroupService extends CrudService<DictTypeGroup, Long> {
     List<DictTypeDto> getDtos(String language, Integer limit, Integer offset);
 
     PageInfo<EasyUiTreeGridDto> getTreeGridDtos(String name, String code, String language, Integer pageNo, Integer pageSize, String orderBy);

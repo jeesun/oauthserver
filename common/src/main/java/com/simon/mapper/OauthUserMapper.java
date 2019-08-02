@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.AuthorityDto;
 import com.simon.model.OauthUser;
 import com.simon.provider.OauthUserProvider;
@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import java.util.List;
 import java.util.Map;
 
-public interface OauthUserMapper extends MyMapper<OauthUser> {
+public interface OauthUserMapper extends CrudMapper<OauthUser> {
     int updatePwdByPhone(@Param("phone") String phone, @Param("password") String password);
 
     /**

@@ -59,8 +59,10 @@ public class TxSmsServiceImpl extends BaseSmsService {
         SmsSingleSender sender = new SmsSingleSender(appId, appKey);
         int code = RandomUtils.nextInt(100000, 999999);
         smsResultDto.setCode(String.valueOf(code));
+        log.info("code=" + code);
         try {
-            SmsSingleSenderResult result = sender.sendWithParam(nationCode, mobile, templateId, new String[]{String.valueOf(code)}, sign, "", "");
+            //SmsSingleSenderResult result = sender.sendWithParam(nationCode, mobile, templateId, new String[]{String.valueOf(code)}, sign, "", "");
+            SmsSingleSenderResult result = sender.send(0, "86", mobile, "欢迎成为开药用户！您的初始密码：12345678，您可用此密码登录开药APP，并在“设置”中进行密码修改，谢谢！", "", "");
             if (0 == result.result) {
                 smsResultDto.setResult(true);
             } else {

@@ -1,6 +1,6 @@
 package com.simon.mapper;
 
-import com.simon.common.mapper.MyMapper;
+import com.simon.common.mapper.CrudMapper;
 import com.simon.dto.DictTypeDto;
 import com.simon.dto.EasyUiTreeGridDto;
 import com.simon.dto.SelectDto;
@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 
-public interface DictTypeGroupMapper extends MyMapper<DictTypeGroup> {
+public interface DictTypeGroupMapper extends CrudMapper<DictTypeGroup> {
     List<DictTypeGroup> getAll(@Param("language") String language);
 
     List<EasyUiTreeGridDto> getTreeGridDtos(@Param("name") String name, @Param("code") String code, @Param("language") String language);
