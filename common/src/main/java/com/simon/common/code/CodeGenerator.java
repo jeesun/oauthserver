@@ -12,6 +12,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -204,6 +205,34 @@ public class CodeGenerator {
         String resourcesPathPattern = "/src/{0}/resources";
         JAVA_PATH = MessageFormat.format(javaPathPattern, mainOrTest);
         RESOURCES_PATH = MessageFormat.format(resourcesPathPattern, mainOrTest);
+
+        File javaDir = Paths.get(PROJECT_PATH + JAVA_PATH + "/").toFile();
+        File resourceDir = Paths.get(PROJECT_PATH + RESOURCES_PATH + "/").toFile();
+        File mappingDir = Paths.get(PROJECT_PATH + RESOURCES_PATH + "/mapping/").toFile();
+        if (!javaDir.exists()) {
+            log.error("目录" + javaDir.getPath() + "不存在");
+            if (javaDir.mkdirs()) {
+                log.info("创建目录" + javaDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + javaDir.getPath() + "失败！");
+            }
+        }
+        if (!resourceDir.exists()) {
+            log.error("目录" + resourceDir.getPath() + "不存在");
+            if (resourceDir.mkdirs()) {
+                log.info("创建目录" + resourceDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + resourceDir.getPath() + "失败！");
+            }
+        }
+        if (!mappingDir.exists()) {
+            log.error("目录" + mappingDir.getPath() + "不存在");
+            if (mappingDir.mkdirs()) {
+                log.info("创建目录" + mappingDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + mappingDir.getPath() + "失败！");
+            }
+        }
 
         if(StringUtils.isEmpty(genModules)){
             genModelAndMapper(tableName, tableComment, modelName, idType);
