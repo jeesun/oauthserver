@@ -100,6 +100,42 @@
         </if>
     </select>
 
+    <select id="getDtoList" resultMap="AuthorityDtoMap" databaseId="sqlserver">
+        SELECT
+        ta.user_id,
+        tu.username,
+        tu.phone,
+        STUFF(
+        (
+        SELECT
+        ',' + tab.authority
+        FROM
+        t_authorities tab
+        WHERE
+        tab.user_id = tu.id FOR XML PATH ( '' )),
+        1,
+        1,
+        ''
+        ) authority
+        FROM
+        t_authorities ta
+        LEFT JOIN t_users tu ON ta.user_id = tu.id
+        LEFT JOIN view_role_${language} vr ON ta.authority = vr.type_code
+        <where>
+            <if test="userId != null">
+                ta.user_id=#{userId}
+            </if>
+            <if test="username != null and username != ''">
+                AND tu.username LIKE CONCAT('%', #{username}, '%')
+            </if>
+        </where>
+        GROUP BY
+        ta.user_id,tu.id,tu.username,tu.phone
+        <if test="authority != null and authority != ''">
+            HAVING WM_CONCAT(to_char(ta.authority)) LIKE CONCAT(CONCAT('%', #{authority}), '%')
+        </if>
+    </select>
+
     <delete id="deleteByUserIds" parameterType="String">
         DELETE
         FROM

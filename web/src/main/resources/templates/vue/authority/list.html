@@ -30,8 +30,15 @@
             <el-table-column align="center" prop="phone" th:label="#{authority.phone}" width="180"></el-table-column>
             <el-table-column align="center" prop="authorityName" th:label="#{authority.authorityName}" width="240" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    <template v-for="item in scope.row.authorityName.split(',')">
-                        <el-tag size="mini">{{ item }}</el-tag>&nbsp;
+                    <template v-if="scope.row.authorityName">
+                        <template v-for="item in scope.row.authorityName.split(',')">
+                            <el-tag size="mini">{{ item }}</el-tag>&nbsp;
+                        </template>
+                    </template>
+                    <template v-else>
+                        <template v-for="item in scope.row.authority.split(',')">
+                            <el-tag size="mini">{{ item }}</el-tag>&nbsp;
+                        </template>
                     </template>
                 </template>
             </el-table-column>
