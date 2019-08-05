@@ -206,16 +206,31 @@ public class CodeGenerator {
         JAVA_PATH = MessageFormat.format(javaPathPattern, mainOrTest);
         RESOURCES_PATH = MessageFormat.format(resourcesPathPattern, mainOrTest);
 
-        File javaDir = Paths.get(PROJECT_PATH + JAVA_PATH).toFile();
-        File resourceDir = Paths.get(PROJECT_PATH + RESOURCES_PATH).toFile();
+        File javaDir = Paths.get(PROJECT_PATH + JAVA_PATH + "/").toFile();
+        File resourceDir = Paths.get(PROJECT_PATH + RESOURCES_PATH + "/").toFile();
+        File mappingDir = Paths.get(PROJECT_PATH + RESOURCES_PATH + "/mapping/").toFile();
         if (!javaDir.exists()) {
-            if (javaDir.isDirectory() && javaDir.mkdirs()) {
+            log.error("目录" + javaDir.getPath() + "不存在");
+            if (javaDir.mkdirs()) {
                 log.info("创建目录" + javaDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + javaDir.getPath() + "失败！");
             }
         }
         if (!resourceDir.exists()) {
-            if (resourceDir.isDirectory() && resourceDir.mkdirs()) {
+            log.error("目录" + resourceDir.getPath() + "不存在");
+            if (resourceDir.mkdirs()) {
                 log.info("创建目录" + resourceDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + resourceDir.getPath() + "失败！");
+            }
+        }
+        if (!mappingDir.exists()) {
+            log.error("目录" + mappingDir.getPath() + "不存在");
+            if (mappingDir.mkdirs()) {
+                log.info("创建目录" + mappingDir.getPath() + "成功！");
+            } else {
+                log.error("创建目录" + mappingDir.getPath() + "失败！");
             }
         }
 
