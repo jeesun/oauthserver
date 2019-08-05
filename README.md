@@ -2,7 +2,7 @@
 <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html"><img src="https://img.shields.io/badge/language-java%208.0-orange.svg"></a>
 <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/platform-jetbrains-green.svg"></a>
 <a href="http://projects.spring.io/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-1.5.21-990066.svg"></a>
-<img src="https://img.shields.io/badge/Database-MySQL%7COracle%7CPostgreSQL-brightgreen.svg">
+<img src="https://img.shields.io/badge/Database-MySQL%7COracle%7CPostgreSQL%7CSQLServer-brightgreen.svg">
 <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg">
 <img src="https://img.shields.io/badge/release-1.3.0-brightgreen.svg">
 
@@ -23,6 +23,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 - MySQL
 - Oracle
 - PostgreSQL
+- SQL Server
 
 ## 功能概览
 ### api
@@ -51,6 +52,9 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 2.0.20190805-alpha
+1. 支持SQL Server。
+
 ### 2.0.20190802-alpha
 1. 代码生成器支持sql server；
 2. service通用实现，减少大量冗余serviceImpl代码。
@@ -68,24 +72,6 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 10. web模块支持用户名登录；
 11. api模块新增常用用户相关接口。
 
-### 2.0.20190621-alpha
-1. 代码生成器bug修复；
-2. t_s_column_ui添加字段；
-3. 修复postgresql下的登录问题。
-4. 修复用户管理页面导入功能；
-5. BasicService添加批量保存和批量更新接口方法；
-6. 代码生成器生成的导入接口代码，添加提示“该请求路径必须添加到WebSecurityConfig的csrf忽略列表里”；
-7. 修复新增和编辑页面错误提示不显示的bug。
-
-### 2.0.20190617-alpha
-1. 更新代码生成器生成的entity模板，添加excel导入导出注解；
-2. 升级myexcel 2.5.0->2.5.1，升级element-ui 2.7.2->2.9.1；
-3. 菜单管理页面优化；
-4. 修复quartzJob form label过长换行bug；
-5. 图标管理页面国际化bug修复；
-6. 修复一些国际化细节bug。
-
-
 **更多历史更新日志查看[CHANGE_LOG.md](tutorial/CHANGE_LOG.md)**
 
 ## 使用流程
@@ -102,6 +88,8 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
 - PostgreSQL  
 请执行`schema-postgresql.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
+- SQL Server  
+请执行`schema-sqlserver.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
 ### 3. 修改数据库连接信息
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=mysql`。    
@@ -109,6 +97,8 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 连接信息在`application-oracle.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=oracle`。  
 - PostgreSQL  
 连接信息在`application-pg.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=pg`。  
+- SQL Server  
+连接信息在`application-sqlserver.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=sqlserver`。  
 ### 4. 运行
 现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
 
