@@ -12,6 +12,7 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -204,6 +205,19 @@ public class CodeGenerator {
         String resourcesPathPattern = "/src/{0}/resources";
         JAVA_PATH = MessageFormat.format(javaPathPattern, mainOrTest);
         RESOURCES_PATH = MessageFormat.format(resourcesPathPattern, mainOrTest);
+
+        File javaDir = Paths.get(PROJECT_PATH + JAVA_PATH).toFile();
+        File resourceDir = Paths.get(PROJECT_PATH + RESOURCES_PATH).toFile();
+        if (!javaDir.exists()) {
+            if (javaDir.isDirectory() && javaDir.mkdirs()) {
+                log.info("创建目录" + javaDir.getPath() + "成功！");
+            }
+        }
+        if (!resourceDir.exists()) {
+            if (resourceDir.isDirectory() && resourceDir.mkdirs()) {
+                log.info("创建目录" + resourceDir.getPath() + "成功！");
+            }
+        }
 
         if(StringUtils.isEmpty(genModules)){
             genModelAndMapper(tableName, tableComment, modelName, idType);
