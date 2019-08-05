@@ -129,6 +129,36 @@
         ORDER BY order_num ASC
     </select>
 
+    <select id="selectByPid" resultMap="SuperResultMap" databaseId="sqlserver">
+        SELECT DISTINCT
+            <include refid="t_side_menu_Column_List"/>,
+            STUFF(
+            (
+            SELECT
+            ',' + tsmab.authority
+            FROM
+            t_side_menu_authority tsmab
+            WHERE
+            tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+            1,
+            1,
+            ''
+            ) authority
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id= tsmml.side_menu_id
+            AND tsmml.language =#{language}
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+            LEFT JOIN view_role_${language} vr ON tsma.authority = vr.type_code
+        WHERE
+            pid = #{pid}
+        GROUP BY
+            <include refid="t_side_menu_Column_List"/>,
+            tsma.authority
+        ORDER BY
+            order_num ASC
+    </select>
+
     <select id="selectLevel1" resultMap="SuperMap" databaseId="mysql">
         SELECT
         <include refid="t_side_menu_Column_List"/>,
@@ -151,7 +181,7 @@
         GROUP BY
         tsm.id
         ORDER BY
-        order_num ASC
+        tsm.order_num ASC
     </select>
 
     <select id="selectLevel1" resultMap="SuperMap" databaseId="postgresql">
@@ -176,7 +206,42 @@
         GROUP BY
         <include refid="t_side_menu_Column_List"/>
         ORDER BY
-        order_num ASC
+        tsm.order_num ASC
+    </select>
+
+    <select id="selectLevel1" resultMap="SuperMap" databaseId="sqlserver">
+        SELECT DISTINCT
+        <include refid="t_side_menu_Column_List"/>,
+            STUFF(
+            (
+            SELECT
+            ',' + tsmab.authority
+            FROM
+            t_side_menu_authority tsmab
+            WHERE
+            tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+            1,
+            1,
+            ''
+            ) authority,
+            #{map.language} as language
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id=tsmml.side_menu_id AND tsmml.language=#{map.language}
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+            LEFT JOIN view_role_${map.language} vr ON tsma.authority = vr.type_code
+        WHERE
+            ( pid IS NULL OR pid = 0 )
+            <if test="map.authority != null and map.authority != ''">
+                AND authority=#{map.authority}
+            </if>
+            <if test="map.name != null and map.name != ''">
+                AND name LIKE CONCAT('%', #{map.name}, '%')
+            </if>
+        GROUP BY
+            <include refid="t_side_menu_Column_List"/>
+        ORDER BY
+            tsm.order_num ASC
     </select>
 
     <select id="selectLevel1" resultMap="SuperMap" databaseId="oracle">
@@ -242,20 +307,49 @@
 
     <select id="selectTreeGrid" parameterType="string" resultMap="SuperMap" databaseId="postgresql">
         SELECT
-        <include refid="t_side_menu_Column_List"/>,
-        string_agg( tsma.authority, ',') as authority,
-        #{language} AS language
+            <include refid="t_side_menu_Column_List"/>,
+            string_agg( tsma.authority, ',') as authority,
+            #{language} AS language
         FROM
-        t_side_menu tsm
-        LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id=tsmml.side_menu_id AND tsmml.language=#{language}
-        LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+            t_side_menu tsm
+            LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id=tsmml.side_menu_id AND tsmml.language=#{language}
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
         WHERE
-        ( tsm.pid IS NULL OR tsm.pid = 0 )
+            ( tsm.pid IS NULL OR tsm.pid = 0 )
         GROUP BY
-        <include refid="t_side_menu_Column_List"/>
+            <include refid="t_side_menu_Column_List"/>
         ORDER BY
         tsm.order_num ASC
 
+    </select>
+
+    <select id="selectTreeGrid" parameterType="string" resultMap="SuperMap" databaseId="sqlserver">
+        SELECT
+            <include refid = "t_side_menu_Column_List" />,
+            STUFF(
+            (
+            SELECT
+            ',' + tsmab.authority
+            FROM
+            t_side_menu_authority tsmab
+            WHERE
+            tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+            1,
+            1,
+            ''
+            ) authority,
+            #{language} AS language
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id= tsmml.side_menu_id
+            AND tsmml.language =#{language}
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+            ( tsm.pid IS NULL OR tsm.pid = 0 )
+        GROUP BY
+            <include refid = "t_side_menu_Column_List" />
+        ORDER BY
+            tsm.order_num ASC
     </select>
 
     <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="mysql">
@@ -292,6 +386,29 @@
         tsm.url = #{url}
     GROUP BY
         tsm.id
+  </select>
+
+    <select id="findAuthorityByUrl" resultType="java.lang.String" databaseId="sqlserver">
+        SELECT
+            STUFF(
+                (
+                SELECT
+                    ',' + tsmab.authority
+                FROM
+                    t_side_menu_authority tsmab
+                WHERE
+                tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+                1,
+                1,
+                ''
+            ) authority
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+            tsm.url = #{url}
+        GROUP BY
+            tsm.id
   </select>
 
     <delete id="deleteByEntityName" parameterType="java.lang.String">
@@ -339,6 +456,33 @@
         GROUP BY
         tsm.id,tsm.remark
     </select>
+
+    <select id="findButtonAuthorityDtoByEntityName" parameterType="java.lang.String" resultMap="ButtonAuthorityDtoMap"
+            databaseId="sqlserver">
+        SELECT
+            STUFF(
+                (
+                SELECT
+                    ',' + tsmab.authority
+                FROM
+                    t_side_menu_authority tsmab
+                WHERE
+                tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+                1,
+                1,
+                ''
+            ) authority,
+            tsm.remark
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        WHERE
+            entity_name = #{entityName}
+            AND tsm.remark IS NOT NULL
+        GROUP BY
+            tsm.id,
+            tsm.remark
+  </select>
 
     <select id="findEasyUiTreeDtoByAuthority" resultMap="EasyUiTreeDtoMap"
             databaseId="mysql">
@@ -390,6 +534,39 @@
         GROUP BY
         tsm.id,tsm.pid,tsmml.name,tsm.order_num,tsm.link_id
     </select>
+
+    <select id="findEasyUiTreeDtoByAuthority" resultMap="EasyUiTreeDtoMap"
+            databaseId="sqlserver">
+        SELECT
+            tsm.id,
+            tsm.pid,
+            tsmml.name AS text,
+            STUFF(
+                (
+                SELECT
+                    ',' + tsmab.authority
+                FROM
+                    t_side_menu_authority tsmab
+                WHERE
+                tsmab.side_menu_id = tsm.id FOR XML PATH ( '' )),
+                1,
+                1,
+                ''
+            ) authority,
+            tsm.order_num,
+            tsm.link_id
+        FROM
+            t_side_menu tsm
+            LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id= tsmml.side_menu_id
+            AND tsmml.language = 'zh_cn'
+            LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
+        GROUP BY
+            tsm.id,
+            tsm.pid,
+            tsmml.name,
+            tsm.order_num,
+            tsm.link_id
+  </select>
 
     <select id="getLevel1" resultMap="SimpleMap">
         SELECT

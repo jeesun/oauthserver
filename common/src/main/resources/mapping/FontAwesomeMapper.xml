@@ -58,6 +58,18 @@
     </where>
   </select>
 
+  <select id="getList" resultMap="BaseResultMap" databaseId="sqlserver">
+    select * from t_s_font_awesome
+    <where>
+      <if test="labelEnUs != null and labelEnUs != ''">
+        label_en_us like CONCAT('%', #{labelEnUs}, '%')
+      </if>
+      <if test="labelZhCn != null and labelZhCn != ''">
+        and label_zh_cn like CONCAT('%', #{labelZhCn}, '%')
+      </if>
+    </where>
+  </select>
+
   <select id="getDtos" resultMap="FontAwesomeDtoMap">
     select
     icon_class,
