@@ -374,7 +374,7 @@ public class DbUtil {
                     "\t\tAND a.colid = g.minor_id \n" +
                     "\t) t \n" +
                     "WHERE\n" +
-                    "\tTABLE_NAME LIKE '%" + tableName + "%'";
+                    "\tTABLE_NAME = '" + tableName + "'";
         } else {
             throw new Exception("暂不支持其他数据库");
         }
