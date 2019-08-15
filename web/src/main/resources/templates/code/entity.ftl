@@ -47,7 +47,7 @@ public class ${entityName} extends BasePo<${idType}> implements Serializable {
     private ${column.type} ${column.name};
 </#list>
 
-    @ExcludeColumn
+    /**@ExcludeColumn
     @ApiModelProperty(value = "创建人名称")
     @Transient
     private String createUser;
@@ -55,5 +55,5 @@ public class ${entityName} extends BasePo<${idType}> implements Serializable {
     @ExcludeColumn
     @ApiModelProperty(value = "更新人名称")
     @Transient
-    private String updateUser;
+    private String updateUser;**/
 }
