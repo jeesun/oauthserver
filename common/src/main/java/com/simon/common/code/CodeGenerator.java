@@ -357,7 +357,7 @@ public class CodeGenerator {
                 DbUtil.getConnection(JDBC_DIVER_CLASS_NAME, JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD),
                 tableName,
                 modelName,
-                MODEL_PACKAGE);
+                BASE_PACKAGE);
         //重新生成Mapper.java，覆盖自动生成的。
         reGenMapper(tableName, tableComment, modelName, idType);
     }

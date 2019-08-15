@@ -17,6 +17,7 @@ import java.sql.Connection;
 
 /**
  * 代码生成器工具类
+ *
  * @author simon
  * @date 2018-08-07
  **/
@@ -25,6 +26,7 @@ public class FreeMarkerGeneratorUtil {
 
     /**
      * 仅生成dao层
+     *
      * @param con
      * @param tableName
      * @param modelName
@@ -45,33 +47,32 @@ public class FreeMarkerGeneratorUtil {
                 throw new IOException("Path " + CodeGenerator.PROJECT_PATH + " is not directory!");
             }
             File[] ls = projectPathFile.listFiles();
-            for (File f: ls) {
+            for (File f : ls) {
                 String currModule = f.toString();
                 boolean matches = currModule.matches("(.*?pojo.*?)|(.*?domain.*?)|(.*?entity.*?)");
-                if (f.isDirectory()&&matches){
-                    entityDir = f.toString()+ CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/");
+                if (f.isDirectory() && matches) {
+                    entityDir = f.toString() + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/") + "/model";
                     break;
                 }
             }
-            if (StringUtils.isBlank(entityDir)){
-                entityDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/");
+            if (StringUtils.isBlank(entityDir)) {
+                entityDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/") + "/model";
             }
             File entityDirFile = new File(entityDir);
             if (!entityDirFile.exists()) {
                 entityDirFile.mkdirs();
-                log.info("创建目录：{} 成功！ ",entityDir);
+                log.info("创建目录：{} 成功！ ", entityDir);
             }
             EntityDataModel entityModel = DbUtil.getEntityModel(con, tableName, CodeGenerator.BASE_PACKAGE, modelName);
             //生成每个表实体
             generateCode(entityModel, templatePath, "entity.ftl", entityDir);
 
-            String providerPackage = "com.simon.provider";
             //检查provider文件夹是否存在，不存在就创建
-            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + providerPackage.replace(".", "/");
+            String providerDir = CodeGenerator.PROJECT_PATH + CodeGenerator.JAVA_PATH + "/" + basePackage.replace(".", "/") + "/provider";
             File providerDirFile = new File(providerDir);
             if (!providerDirFile.exists()) {
                 providerDirFile.mkdirs();
-                log.info("创建目录：{} 成功！ ",providerDir);
+                log.info("创建目录：{} 成功！ ", providerDir);
             }
             //生成Provider
             generateCode(entityModel, templatePath, "provider.ftl", providerDir);
@@ -82,7 +83,6 @@ public class FreeMarkerGeneratorUtil {
     }
 
     /**
-     *
      * @param dataModel
      * @param templatePath
      * @param templateName
@@ -95,15 +95,15 @@ public class FreeMarkerGeneratorUtil {
 
         //String file = outDir +"/"+ dataModel.getEntityName() + dataModel.getFileSuffix();
         String file;
-        if(templateName.contains("entity")){
-            file = outDir +"/"+ dataModel.getEntityName() + dataModel.getFileSuffix();
-        }else if(templateName.contains("provider")){
+        if (templateName.contains("entity")) {
+            file = outDir + "/" + dataModel.getEntityName() + dataModel.getFileSuffix();
+        } else if (templateName.contains("provider")) {
             file = outDir + "/" + dataModel.getEntityName() + "Provider" + dataModel.getFileSuffix();
-        }else{
+        } else {
             throw new BusinessException("不支持的模板");
         }
         File targetFile = new File(file);
-        if (targetFile.exists()){
+        if (targetFile.exists()) {
             Files.delete(targetFile.toPath());
         }
         //获取模板对象
