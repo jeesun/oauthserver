@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.21.RELEASE</version>
+		<version>1.5.22.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -32,20 +32,27 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<spring-boot.version>1.5.21.RELEASE</spring-boot.version>
+		<spring-boot.version>${parent.version}</spring-boot.version>
 		<docker.registry>127.0.0.1:5000</docker.registry>
 		<swagger2.version>2.9.2</swagger2.version>
-		<spring-cloud.version>Edgware.RELEASE</spring-cloud.version>
-		<thymeleaf.version>3.0.3.RELEASE</thymeleaf.version>
+		<spring-cloud.version>1.2.4.RELEASE</spring-cloud.version>
+		<spring-cloud-dependencies.version>Edgware.RELEASE</spring-cloud-dependencies.version>
+		<thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
 		<thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
 		<weixin-java-pay.version>3.2.0</weixin-java-pay.version>
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<mapstruct.version>1.3.0.Beta2</mapstruct.version>
 		<lombok.version>1.18.8</lombok.version>
-		<fastjson.version>1.2.57</fastjson.version>
+		<fastjson.version>1.2.59</fastjson.version>
 		<qcloudsms.version>1.0.6</qcloudsms.version>
 		<hibernate.version>5.4.3.Final</hibernate.version>
-		<myexcel.version>2.7.4</myexcel.version>
+		<myexcel.version>2.8.2</myexcel.version>
+		<gson.version>2.8.5</gson.version>
+		<mysql-connector-java.version>8.0.13</mysql-connector-java.version>
+		<postgresql.version>42.2.5</postgresql.version>
+		<ojdbc14.version>10.2.0.3.0</ojdbc14.version>
+		<mssql-jdbc.version>7.2.2.jre8</mssql-jdbc.version>
+		<sqljdbc4.version>4.0</sqljdbc4.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -55,12 +62,12 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-oauth2</artifactId>
-				<version>1.2.4.RELEASE</version>
+				<version>${spring-cloud.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-security</artifactId>
-				<version>1.2.4.RELEASE</version>
+				<version>${spring-cloud.version}</version>
 			</dependency>
 			<!--<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -160,12 +167,12 @@
 			<dependency>
 				<groupId>org.thymeleaf.extras</groupId>
 				<artifactId>thymeleaf-extras-springsecurity4</artifactId>
-				<version>3.0.2.RELEASE</version>
+				<version>3.0.4.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.thymeleaf.extras</groupId>
 				<artifactId>thymeleaf-extras-java8time</artifactId>
-				<version>3.0.2.RELEASE</version>
+				<version>3.0.4.RELEASE</version>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-rest -->
 			<dependency>
@@ -230,30 +237,30 @@
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
-				<version>8.0.13</version>
+				<version>${mysql-connector-java.version}</version>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>42.2.5</version>
+				<version>${postgresql.version}</version>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>ojdbc14</groupId>
 				<artifactId>ojdbc14</artifactId>
-				<version>10.2.0.3.0</version>
+				<version>${ojdbc14.version}</version>
 				<scope>runtime</scope>
 			</dependency>
             <dependency>
                 <groupId>com.microsoft.sqlserver</groupId>
                 <artifactId>mssql-jdbc</artifactId>
-                <version>7.2.2.jre8</version>
+                <version>${mssql-jdbc.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.sqlserver</groupId>
                 <artifactId>sqljdbc4</artifactId>
-                <version>4.0</version>
+                <version>${sqljdbc4.version}</version>
             </dependency>
 
 			<dependency>
@@ -264,7 +271,7 @@
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
-				<version>2.8.5</version>
+				<version>${gson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -414,7 +421,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
+				<version>${spring-cloud-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
