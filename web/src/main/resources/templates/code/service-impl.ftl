@@ -1,7 +1,7 @@
 
 package ${basePackage}.service.impl;
 
-import com.simon.common.service.impl.CrudServiceImpl;
+import ${basePackage}.common.service.impl.CrudServiceImpl;
 import ${basePackage}.mapper.${modelNameUpperCamel}Mapper;
 import ${basePackage}.model.${modelNameUpperCamel};
 import ${basePackage}.service.${modelNameUpperCamel}Service;

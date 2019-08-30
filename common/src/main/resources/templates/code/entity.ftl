@@ -1,6 +1,6 @@
 package ${basePackage}.model;
 
-import com.simon.common.domain.BasePo;
+import ${basePackage}.common.domain.BasePo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
