@@ -26,6 +26,7 @@ public interface ${modelNameUpperCamel}Mapper extends CrudMapper<${modelNameUppe
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = ${modelNameUpperCamel}Provider.class, method = "getList")
     List<${modelNameUpperCamel}> getList(Map<String, Object> map);
