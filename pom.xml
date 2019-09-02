@@ -122,12 +122,13 @@
 				<artifactId>spring-boot-starter-jetty</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
+			<!-- 配置文件加密 start -->
 			<dependency>
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-spring-boot-starter</artifactId>
 				<version>1.18</version>
 			</dependency>
-
+			<!-- 配置文件加密 end -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>

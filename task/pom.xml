@@ -23,6 +23,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <fastjson.version>1.2.59</fastjson.version>
         <druid.version>1.1.19</druid.version>
+        <ojdbc14.version>10.2.0.3.0</ojdbc14.version>
 
         <base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
     </properties>
@@ -182,6 +183,21 @@
             <artifactId>druid</artifactId>
             <version>1.1.19</version>
         </dependency>
+
+        <dependency>
+            <groupId>ojdbc14</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>${ojdbc14.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 配置文件加密 start -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <!-- 配置文件加密 end -->
     </dependencies>
 
     <build>

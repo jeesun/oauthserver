@@ -1,4 +1,4 @@
-package com.simon.task;
+package com.simon;
 
 import com.simon.common.plugins.quartz.QuartzManager;
 import com.simon.mapper.QuartzJobMapper;

@@ -4,11 +4,9 @@ server:
     context-path: /task
 
 spring:
+  profiles:
+    active: mysql #pg, mysql, oracle，sqlserver。默认使用MySQL数据库连接配置。
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/thymelte?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
-    username: root
-    password: 19941017
-    driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       validation-query: SELECT 1
       max-active: 20
@@ -85,6 +83,10 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 
+jasypt:
+  encryptor:
+    password: 19941017
+
 # mybatis配置
 mybatis:
   check-config-location: false
@@ -94,15 +96,6 @@ mybatis:
     # 二级缓存的总开关
     cache-enabled: false
   mapper-locations: classpath:mapping/*.xml
-
-#pagehelper分页插件
-pagehelper:
-  #禁用reasonable分页参数合理化，页码小于1或者大于最大页码返回空数据
-  reasonable: false
-  params: count=countSql
-  # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
-  helper-dialect: mysql
-  support-methods-arguments: true
 
 swagger2:
   title: restful api documentation
