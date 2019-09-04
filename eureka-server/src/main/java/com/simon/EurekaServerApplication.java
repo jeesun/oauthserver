@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.TimeZone;
 
+/**
+ * @author simon
+ * @version 1.0
+ * @date 2019-09-05
+ */
 @SpringBootApplication
 @EnableEurekaServer
 @EnableZuulProxy
