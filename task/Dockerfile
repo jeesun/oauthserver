@@ -1,5 +1,5 @@
-FROM java
+FROM openjdk:8u222-jdk
 MAINTAINER "jeesun"<simon.sun.dev@hotmail.com>
-ADD oauthserver-*.jar app.jar
-EXPOSE 8182
+ADD /target/task-*.jar app.jar
+EXPOSE 8183
 CMD java -jar app.jar

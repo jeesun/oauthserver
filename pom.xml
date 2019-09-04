@@ -26,6 +26,8 @@
         <module>web</module>
 		<module>api</module>
 		<module>common</module>
+		<module>old-task</module>
+		<module>eureka-server</module>
     </modules>
 
 	<properties>
@@ -53,6 +55,7 @@
 		<ojdbc14.version>10.2.0.3.0</ojdbc14.version>
 		<mssql-jdbc.version>7.2.2.jre8</mssql-jdbc.version>
 		<sqljdbc4.version>4.0</sqljdbc4.version>
+		<spring-cloud-starter-netflix.version>1.4.7.RELEASE</spring-cloud-starter-netflix.version>
 
 		<base.package>com.simon</base.package><!-- 基础包名，用于代码生成器 -->
 	</properties>
@@ -69,11 +72,31 @@
 				<artifactId>spring-cloud-starter-security</artifactId>
 				<version>${spring-cloud.version}</version>
 			</dependency>
-			<!--<dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-eureka-server</artifactId>
+				<version>${spring-cloud-starter-netflix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+				<version>${spring-cloud-starter-netflix.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-zuul</artifactId>
-				<version>1.4.6.RELEASE</version>
-			</dependency>-->
+				<version>${spring-cloud-starter-netflix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-ribbon</artifactId>
+				<version>${spring-cloud-starter-netflix.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-hystrix</artifactId>
+				<version>${spring-cloud-starter-netflix.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -218,7 +241,21 @@
 				<version>${spring-boot.version}</version>
 			</dependency>
 			<!--actuator end-->
-
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-hateoas</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.webjars</groupId>
+				<artifactId>hal-browser</artifactId>
+				<version>ad9b865</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-actuator-docs</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-typehandlers-jsr310</artifactId>

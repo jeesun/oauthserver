@@ -11,20 +11,15 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
 
-/**
- * @author simon
- * @version 1.0
- * @date 2019-09-03
- */
 @SpringBootApplication
 @MapperScan("com.simon.mapper")
 @EnableAsync
 @EnableDiscoveryClient
-public class ApiApplication implements CommandLineRunner {
+public class OldTaskApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-		ApplicationContext applicationContext = SpringApplication.run(ApiApplication.class, args);
+		ApplicationContext applicationContext = SpringApplication.run(OldTaskApplication.class, args);
 		SpringBeanLoader.setApplicationContext(applicationContext);
 //		new SpringApplicationBuilder(Application.class).web(true).run(args);
 	}
