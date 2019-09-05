@@ -20,7 +20,7 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
 3. api模块是提供api服务的，主要是oauth token等其他业务接口；
 4. web是一个基于Element UI的管理后台；
 5. old-task是Spring Boot 1.x版本的Quartz Job模块；
-6. task是Spring Boot 21.x版本的Quartz Job模块。
+6. task是Spring Boot 2.x版本的Quartz Job模块。
 
 支持的关系型数据库：
 - MySQL
@@ -89,6 +89,7 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 ### 1. 安装jar
 有部分自建jar在中央仓库是没有的，需要使用`mvn install`安装到本地。执行“需要安装的jars”文件夹下的`install.bat`安装。
 ### 2. 建表
+**注意：数据库都要忽略大小写。**
 所有SQL文件都在“SQL初始化”目录下。
 - MySQL  
 请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。之后，请执行相应的增量更新SQL。
