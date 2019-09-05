@@ -23,7 +23,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
@@ -36,7 +36,7 @@
                     <artifactId>bcpkix-jdk15on</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -125,11 +125,6 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.qcloudsms</groupId>
-            <artifactId>qcloudsms</artifactId>
-        </dependency>
-
         <!-- logback输出日志到数据库 start -->
         <!--<dependency>
             <groupId>commons-dbcp</groupId>
@@ -141,13 +136,6 @@
         </dependency>-->
         <!-- logback输出日志到数据库 end -->
 
-        <!-- 七牛云 start -->
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>qiniu-java-sdk</artifactId>
-        </dependency>
-        <!-- 七牛云 end -->
-
         <!-- 不推荐使用apache的beanutils，性能不好。 -->
         <!-- 参考http://www.cnblogs.com/kaka/archive/2013/03/06/2945514.html -->
         <!--<dependency>
@@ -158,29 +146,6 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-        </dependency>
-
-        <!-- 支付宝支付 -->
-        <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- 微信支付 -->
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>bcpkix-jdk15on</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
