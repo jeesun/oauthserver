@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.simon.common.handler.CurrentUserMethodArgumentResolver;
-import com.simon.common.interceptor.AuthInterceptor;
 import com.simon.common.resolver.CustomLocaleResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -91,11 +90,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //默认值就是locale
         lci.setParamName("locale");
         return lci;
-    }
-
-    @Bean
-    public AuthInterceptor authInterceptor(){
-        return new AuthInterceptor();
     }
 
     @Bean
