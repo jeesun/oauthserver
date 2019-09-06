@@ -4,16 +4,22 @@ import com.simon.common.utils.SpringBeanLoader;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
 
+/**
+ * @author simon
+ * @version 1.0
+ * @date 2019-09-03
+ */
 @SpringBootApplication
 @MapperScan("com.simon.mapper")
 @EnableAsync
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 public class ApiApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {

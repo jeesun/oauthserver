@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  eureka: # 指定服务名称
+    container_name: eureka
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    ports:
+      - "8761:8761" # 暴露端口信息  - "宿主机端口:容器暴露端口"
+  api:
+    container_name: api
+    build: api
+    ports:
+      - "8181:8181"
+    links: # 指定服务名称:别名
+      - "eureka:eureka"
+    external_links:
+      - mysql00:mysql
+    networks:
+      mysql_net:
+        aliases:
+          - mysql
+# https://docs.docker.com/compose/compose-file/#network-configuration-reference
+# 若要将正在运行的容器连接到现有用户定义的桥接网络，请使用docker network connect命令。
+# docker network create mysql_net;
+# docker network connect mysql_net mysql00
+# docker network ls
+networks:
+  mysql_net:
+    external: true
+
+#  web:
+#    build: web
+#    ports:
+#      - "8182:8182"
+#  old-task:
+#    build: old-task
+#    ports:
+#      - "8184:8184"
+#  task:
+#    build: task
+#    ports:
+#      - "8183:8183"

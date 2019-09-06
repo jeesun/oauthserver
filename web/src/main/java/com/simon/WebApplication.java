@@ -5,15 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableAsync;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
 
+/**
+ * @author simon
+ * @version 1.0
+ * @date 2019-09-03
+ */
 @SpringBootApplication
 @MapperScan(value = "com.simon.mapper")
 @EnableAsync
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 public class WebApplication implements CommandLineRunner {
 	@Autowired
 	private QuartzJobService quartzJobService;

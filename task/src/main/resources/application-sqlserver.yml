@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # MySQL连接信息
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1010;DatabaseName=test
+    username: sa
+    password: 123456
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+
+#pagehelper分页插件
+pagehelper:
+  #禁用reasonable分页参数合理化，页码小于1或者大于最大页码返回空数据
+  reasonable: false
+  params: count=countSql
+  # oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012
+  helper-dialect: sqlserver
+  support-methods-arguments: true

@@ -110,44 +110,19 @@ logging:
     io.swagger.models.parameters.AbstractSerializableParameter: error
     # 设置MyBatis SQL日志等级（该配置已移动到logback.xml）
     # com.simon.mapper: DEBUG
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://127.0.0.1:8761/eureka/
-#  instance:
-#    prefer-ip-address: true
 
 jasypt:
   encryptor:
     password: 19941017
 
-info:
-  app:
-    name: "@project.name@"
-    description: "@project.description@"
-  build:
-    groupId: "@project.groupId@"
-    artifact: "@project.artifactId@"
-    name: "@project.name@"
-    version: '@project.version@'
-  git:
-    branch: ${git.branch}
-    commit:
-      id: ${git.commit.id}
-      time: ${git.commit.time}
-  env:
-    java:
-      vendor: ${java.specification.vendor}
-      vm-name: ${java.vm.name}
-      runtime-version: ${java.runtime.version}
-
-# 获取更全面的git信息
-management:
-  info:
-    git:
-      mode: full
-  security:
-    enabled: false
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    #实例名
+    instance-id: ${spring.application.name}:${server.port}
 
 #endpoints:
 #  jmx:

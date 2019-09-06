@@ -14,10 +14,13 @@
 
 ## 简介
 oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。项目的目的是，仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
-为了开发方便，项目拆分成三个模块，api、web和common：
-1. api运行在8181端口，api模块是提供api服务的，主要是oauth token等其他业务接口；
-2. web运行在8182端口，是一个基于Element UI的管理后台；
-3. common是公共工具模块。
+为了开发方便，项目拆分成6个模块，eureka-server、common、api、web、old-task、task：
+1. eureka-server是eureka服务模块；
+2. common是公共工具模块，目前api、web、old-task都依赖该模块；task是Spring Boot 2.x版本，所以不依赖于common。
+3. api模块是提供api服务的，主要是oauth token等其他业务接口；
+4. web是一个基于Element UI的管理后台；
+5. old-task是Spring Boot 1.x版本的Quartz Job模块；
+6. task是Spring Boot 2.x版本的Quartz Job模块。
 
 支持的关系型数据库：
 - MySQL
@@ -52,6 +55,10 @@ oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server�
    4. 日志管理
 
 ## 更新日志
+### 2.0.20190904-alpha
+1. 新增eureka-server模块；
+2. 删除一些重复依赖；
+3. 更新Dockerfile。
 ### 2.0.20190805-alpha
 1. 支持SQL Server。
 
@@ -82,14 +89,16 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 ### 1. 安装jar
 有部分自建jar在中央仓库是没有的，需要使用`mvn install`安装到本地。执行“需要安装的jars”文件夹下的`install.bat`安装。
 ### 2. 建表
+**注意：数据库都要忽略大小写。**
+所有SQL文件都在“SQL初始化”目录下。
 - MySQL  
-请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
+请执行`schema-mysql.sql`，完成数据表的创建和测试数据的导入。之后，请执行相应的增量更新SQL。
 - Oracle  
-请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
+请执行`schema-oracle.sql`，完成数据表的创建和测试数据的导入。之后，请执行相应的增量更新SQL。
 - PostgreSQL  
-请执行`schema-postgresql.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
+请执行`schema-postgresql.sql`，完成数据表的创建和测试数据的导入。之后，请执行相应的增量更新SQL。
 - SQL Server  
-请执行`schema-sqlserver.sql`，完成数据表的创建和测试数据的导入。之后，请执行SQL增量更新目录下的增量更新SQL。
+请执行`schema-sqlserver.sql`，完成数据表的创建和测试数据的导入。之后，请执行相应的增量更新SQL。
 ### 3. 修改数据库连接信息
 - MySQL  
 连接信息在`application-mysql.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=mysql`。    
@@ -100,7 +109,7 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 - Microsoft SQL Server  
 连接信息在`application-sqlserver.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=sqlserver`。  
 ### 4. 运行
-现在，一切已准备就绪。运行项目，当程序成功启动时，即表明你已配置成功。
+优先启动eureka-server，第一次启动可能需要先打包common模块，即在common目录下执行`mvn clean install -Dmaven.test.skip=true`。其他模块没有固定的启动顺序。
 
 ## api测试
 [oauth接口调用示例](tutorial/api.md)
