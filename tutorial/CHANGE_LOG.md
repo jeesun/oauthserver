@@ -1,3 +1,16 @@
+### 2.0.20190708-alpha
+1. 代码生成器多语言bug修复；
+2. postgresql环境下的sql bug修复；
+3. 更新全局异常处理；
+4. session有效期为半小时，解决登录失效时，跳转登录页面的iframe嵌套问题；
+5. 升级element-ui 2.9.1->2.10.1；
+6. 添加验证码测试接口；
+7. 减少一些依赖；
+8. 给t_users表的username列添加唯一键；
+9. 修复使用refresh_token刷新access_token时，报“不支持的登录方式”的bug；
+10. web模块支持用户名登录；
+11. api模块新增常用用户相关接口。
+
 ### 2.0.20190621-alpha
 1. 代码生成器bug修复；
 2. t_s_column_ui添加字段；
