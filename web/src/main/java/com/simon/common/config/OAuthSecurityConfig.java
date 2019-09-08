@@ -88,11 +88,6 @@ public class OAuthSecurityConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(11);
-    }
-
-    @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
         //return new RedisTokenStore(connectionFactory);
