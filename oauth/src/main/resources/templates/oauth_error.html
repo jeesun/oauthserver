@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
+    <style>
+        body,html {
+            height: 100%;
+            background-color: #F1F3F4;
+        }
+        body {
+            display:flex;
+            align-items:center;
+        }
+        form {
+            background-color: white;
+            padding: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+        <form class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+            <div class="col-md-12 well">
+                <h3 class="text-center" th:text="#{error}"></h3>
+                <p style="color:red;">出错了！不能继续授权操作！</p>
+                <p th:utext="${errorSummary}">errorSummary
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

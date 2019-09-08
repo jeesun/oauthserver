@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    include: common
+  application:
+    name: oauth
+security:
+  oauth2:
+    authorization:
+      check-token-access: isAuthenticated()
+    resource:
+      # refer to: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.5-Release-Notes#oauth-2-resource-filter
+      # 此处的 filter-order 非常重要，因为自Spring Boot 1.5.* 之后，resource server 的 filter 的顺序默认在 basic authentication filter chain 之后，所以如果不配置此项，将会导致使用 access_token 访问 resource server 的时候返回 401 状态码。
+      filter-order: 3
+info:
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+  build:
+    groupId: "@project.groupId@"
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    version: '@project.version@'
+  env:
+    java:
+      vendor: ${java.specification.vendor}
+      vm-name: ${java.vm.name}
+      runtime-version: ${java.runtime.version}

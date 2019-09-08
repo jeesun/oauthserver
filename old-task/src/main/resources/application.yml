@@ -3,7 +3,6 @@ spring:
     name: old-task
   profiles:
     include: common
-
 info:
   app:
     name: "@project.name@"
@@ -13,21 +12,8 @@ info:
     artifact: "@project.artifactId@"
     name: "@project.name@"
     version: '@project.version@'
-  git:
-    branch: ${git.branch}
-    commit:
-      id: ${git.commit.id}
-      time: ${git.commit.time}
   env:
     java:
       vendor: ${java.specification.vendor}
       vm-name: ${java.vm.name}
       runtime-version: ${java.runtime.version}
-
-# 获取更全面的git信息
-management:
-  info:
-    git:
-      mode: full
-  security:
-    enabled: false

@@ -4,7 +4,7 @@
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
     <property name="log.dir" value="logs" /><!-- 日志文件所在目录 -->
-    <property name="log.file.name" value="old-task" /><!-- 日志文件名称 -->
+    <property name="log.file.name" value="api" /><!-- 日志文件名称 -->
     <property name="log.pattern" value="%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(%5p) %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx" />
 
     <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -68,7 +68,6 @@
     </appender>-->
 
     <!-- additivity属性为false，表示此logger的打印信息不再向上级传递。 -->
-    <logger name="logging.level.org.springframework.security" level="DEBUG" additivity="true" />
     <logger name="org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport" level="ERROR" additivity="false" />
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="ERROR" additivity="false" />
     <logger name="org.springframework.security.oauth2.provider.endpoint.FrameworkEndpointHandlerMapping" level="ERROR" additivity="false" />

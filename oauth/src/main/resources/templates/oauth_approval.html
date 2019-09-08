@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="#{appApproval}"></title>
+    <style>
+        body,html {
+            height: 100%;
+            background-color: #F1F3F4;
+        }
+        body {
+            display:flex;
+            align-items:center;
+        }
+        form {
+            background-color: white;
+            padding: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+        <form id="confirmationForm" name="confirmationForm" th:action="@{/oauth/authorize}" method="post" class="offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-sm-12 mx-auto">
+            <h1 class="text-center" th:text="#{appApproval}"></h1>
+            <p><span th:text="#{doYouAuthorize}"></span> <span th:text="${client_id}" class="font-weight-bold"></span> <span th:text="#{toAccessYouProtectedResources}"></span></p>
+            <input name="user_oauth_approval" value="true" type="hidden"/>
+            <div class="form-group">
+                <div class="radio">
+                    <input type="radio" th:name="${scopes}" value="true"><span th:text="#{approve}"></span>
+                </div>
+                <div class="radio">
+                    <input type="radio" th:name="${scopes}" value="false" checked><span th:text="#{deny}"></span>
+                </div>
+            </div>
+            <input type="submit" name="authorize" th:value="#{authorize}" class="btn btn-primary col-12" />
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.14.3/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

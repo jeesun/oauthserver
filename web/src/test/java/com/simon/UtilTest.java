@@ -1,13 +1,19 @@
 package com.simon;
 
 import com.google.common.base.CaseFormat;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+
+import java.text.MessageFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author simon
  * @date 2018-12-06
  **/
-
+@Slf4j
 public class UtilTest {
     //@Test
     public void codeTest(){
@@ -40,5 +46,25 @@ public class UtilTest {
     @Test
     public void dirTest(){
         System.out.println("路径为" + UtilTest.class.getResource("/").getPath());
+    }
+
+    @Test
+    public void messageFormatTest() {
+        String msg = MessageFormat.format("尊敬的用户，您的订单已支付成功，我们会尽快安排发货，如果您有任何疑问，欢迎拨打客服热线：4008782968。", "21");
+        System.out.println(msg);
+
+        System.out.println(StringUtils.isNumericSpace("15.01"));
+    }
+
+    @Test
+    public void arrayTest() {
+        Map<Object, Object> map = new LinkedHashMap<>();
+
+        System.out.println();
+    }
+
+    @Test
+    public void demoTest() {
+        log.info("{}-{}-{}", 2019, 5, 6);
     }
 }

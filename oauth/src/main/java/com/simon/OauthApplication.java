@@ -6,11 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -24,14 +21,14 @@ import java.util.TimeZone;
 @SpringBootApplication
 @MapperScan("com.simon.mapper")
 @EnableAsync
+@EnableAuthorizationServer
 @EnableResourceServer
-@EnableOAuth2Client
 @EnableDiscoveryClient
-public class ApiApplication implements CommandLineRunner {
+public class OauthApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
-		ApplicationContext applicationContext = SpringApplication.run(ApiApplication.class, args);
+		ApplicationContext applicationContext = SpringApplication.run(OauthApplication.class, args);
 		SpringBeanLoader.setApplicationContext(applicationContext);
 //		new SpringApplicationBuilder(Application.class).web(true).run(args);
 	}
@@ -39,10 +36,5 @@ public class ApiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... strings) throws Exception {
 
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(11);
 	}
 }
