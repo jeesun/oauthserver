@@ -48,9 +48,6 @@ public class HelloWorldController extends BaseController {
     @ApiOperation("测试")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
-    /*public ResultMsg all(@CurrentUser UserInfo userInfo){
-        return ResultMsg.success(200, "", userInfo);
-    }*/
     public ResultMsg all(){
         return ResultMsg.success(200, "需要登录");
     }

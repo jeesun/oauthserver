@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
@@ -19,6 +21,8 @@ import java.util.TimeZone;
 @SpringBootApplication
 @MapperScan("com.simon.mapper")
 @EnableAsync
+@EnableAuthorizationServer
+@EnableResourceServer
 @EnableDiscoveryClient
 public class OauthApplication implements CommandLineRunner {
 

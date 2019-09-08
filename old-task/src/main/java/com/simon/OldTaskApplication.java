@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import tk.mybatis.spring.annotation.MapperScan;
 
@@ -24,6 +25,7 @@ import java.util.TimeZone;
 @MapperScan("com.simon.mapper")
 @EnableAsync
 @EnableResourceServer
+@EnableOAuth2Client
 @EnableDiscoveryClient
 public class OldTaskApplication implements CommandLineRunner {
 

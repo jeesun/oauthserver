@@ -31,8 +31,6 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
         map.put("code", response.getStatus());
         map.put("message", authException.getMessage());
         map.put("data", null);
-        //map.put("path", request.getServletPath());
-        //map.put("timestamp", String.valueOf(new Date().getTime()));
 
         try {
             ObjectMapper mapper = new ObjectMapper();

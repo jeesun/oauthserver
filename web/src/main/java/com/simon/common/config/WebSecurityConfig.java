@@ -16,7 +16,9 @@ import javax.sql.DataSource;
 import java.net.URLEncoder;
 
 /**
- * Created by simon on 2017/2/18.
+ *
+ * @author simon
+ * @date 2017/2/18
  */
 @Slf4j
 //WebSecurityConfigurerAdapter的配置的拦截要优先于ResourceServerConfigurerAdapter
@@ -38,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean()
             throws Exception {
-        return super.authenticationManagerBean();
+        return authenticationManager();
     }
 
     @Override

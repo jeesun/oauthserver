@@ -2,7 +2,7 @@ spring:
   datasource:
     # MySQL连接信息
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost:1433;DatabaseName=thymelte
+    url: jdbc:sqlserver://localhost:1010;DatabaseName=test
     username: sa
     password: 123456
     druid:
