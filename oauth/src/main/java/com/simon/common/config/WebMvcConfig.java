@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -94,19 +92,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         super.addViewControllers(registry);
         registry.addViewController("/login").setViewName("login");
-        //registry.addViewController("/").setViewName("index");
-        //registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/index_iframe").setViewName("index_iframe");
-        registry.addViewController("/demo/file_upload_demo").setViewName("demo/file_upload_demo");
-        registry.addViewController("/demo/bootstrap_demo").setViewName("demo/bootstrap_demo");
-        registry.addViewController("/demo/froala_editor_demo").setViewName("demo/froala_editor_demo");
-        registry.addViewController("/demo/roll_demo").setViewName("demo/roll_demo");
-        registry.addViewController("/easyui/index").setViewName("easyui/index");
-        registry.addViewController("/easyui/tab1").setViewName("easyui/tab1");
-        registry.addViewController("/easyui/tab2").setViewName("easyui/tab2");
-        registry.addViewController("/easyui/tab3").setViewName("easyui/tab3");
-        registry.addViewController("/easyui/oauth_user").setViewName("easyui/oauth_user");
-        registry.addViewController("/easyui/home.html").setViewName("easyui/home");
 
         //app用户隐私协议
         registry.addViewController("/protocol.html").setViewName("protocol");
@@ -116,10 +101,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/fileUpload/**").addResourceLocations("file:fileUpload/");
         super.addResourceHandlers(registry);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(11);
     }
 }

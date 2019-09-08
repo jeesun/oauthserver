@@ -28,9 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    /*@Autowired
-    private CustomLoginAuthProvider authProvider;*/
-
     @Autowired
     private AuthSuccessHandler authSuccessHandler;
 
@@ -43,17 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
         return super.authenticationManagerBean();
     }
-
-    /*@Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/hystrix.stream*//**", "/info", "/error");
-     }*/
-
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authProvider);
-        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(new BCryptPasswordEncoder(11));
-    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

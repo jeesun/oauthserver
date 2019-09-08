@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.simon.common.handler.CurrentUserMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -87,11 +86,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //默认值就是locale
         lci.setParamName("locale");
         return lci;
-    }
-
-    @Bean
-    public CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver(){
-        return new CurrentUserMethodArgumentResolver();
     }
 
     @Override

@@ -10,14 +10,24 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>api</artifactId>
+    <artifactId>oauth</artifactId>
     <version>${parent.version}</version>
     <packaging>jar</packaging>
 
-    <name>api</name>
-    <description>Api Module</description>
+    <name>oauth</name>
+    <description>oauth Module</description>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -147,14 +157,6 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
 
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>-->
-
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>font-awesome</artifactId>
@@ -247,6 +249,13 @@
                 <configuration>
                     <!-- 配置devtools -->
                     <fork>true</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
                 </configuration>
             </plugin>
             <plugin>
