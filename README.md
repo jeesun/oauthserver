@@ -14,10 +14,11 @@
 
 ## 简介
 oauthserver是一个基于Spring Boot Oauth2的完整的独立的Oauth2 Server微服务。项目的目的是，仅仅需要创建相关数据表，修改数据库的连接信息，你就可以得到一个Oauth2 Server微服务。  
-为了开发方便，项目拆分成6个模块，eureka-server、common、api、web、old-task、task：
+为了开发方便，项目拆分成6个模块，eureka-server、oauth、common、api、web、old-task、task：
 1. eureka-server是eureka服务模块；
-2. common是公共工具模块，目前api、web、old-task都依赖该模块；task是Spring Boot 2.x版本，所以不依赖于common。
-3. api模块是提供api服务的，主要是oauth token等其他业务接口；
+2. oauth是Authentication Server模块，用于授权。
+2. common是公共工具模块，包括了Service和Model层，目前api、web、old-task都依赖该模块；task是Spring Boot 2.x版本，所以不依赖于common。
+3. api模块是提供api接口的服务；
 4. web是一个基于Element UI的管理后台；
 5. old-task是Spring Boot 1.x版本的Quartz Job模块；
 6. task是Spring Boot 2.x版本的Quartz Job模块。
