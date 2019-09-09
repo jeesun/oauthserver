@@ -1,3 +1,13 @@
+security:
+  basic:
+    enabled: true
+  user:
+    password: password
+  oauth2:
+    resource:
+      id: service
+      user-info-uri: http://localhost:8180/api/users/current
+
 spring:
   application:
     name: old-task
