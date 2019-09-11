@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
@@ -24,6 +25,7 @@ import java.util.TimeZone;
 @EnableAuthorizationServer
 @EnableResourceServer
 @EnableDiscoveryClient
+@EnableTransactionManagement
 public class OauthApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
