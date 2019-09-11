@@ -16,6 +16,7 @@
         <result column="trigger_name" jdbcType="VARCHAR" property="triggerName"/>
         <result column="job_status" jdbcType="INTEGER" property="jobStatus"/>
         <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="job_group" jdbcType="VARCHAR" property="jobGroup" />
     </resultMap>
 
     <resultMap id="SuperMap" type="com.simon.model.QuartzJob" extends="BaseResultMap">

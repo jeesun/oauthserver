@@ -84,6 +84,10 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @Column(name = "job_name")
     private String jobName;
 
+    @ApiModelProperty(value = "任务组")
+    @Column(name = "job_group")
+    private String jobGroup;
+
     @ApiModelProperty(value = "创建人名称")
     @Transient
     private String createUser;
