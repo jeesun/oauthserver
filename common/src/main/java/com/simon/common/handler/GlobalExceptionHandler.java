@@ -30,28 +30,28 @@ public class GlobalExceptionHandler extends ExceptionHandlerExceptionResolver {
     public ResponseEntity<ResultMsg> grantAccessDeniedError(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) {
         log.error(e.getMessage());
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(response.getStatus(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(HttpStatus.FORBIDDEN.value(), e.getMessage()));
     }
 
     @ExceptionHandler(value = {BadCredentialsException.class})
     public ResponseEntity<ResultMsg> grantBadCredentialsError(HttpServletRequest request, HttpServletResponse response, BadCredentialsException e) {
         log.error(e.getMessage());
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(response.getStatus(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(HttpStatus.FORBIDDEN.value(), e.getMessage()));
     }
 
     @ExceptionHandler(value = {OAuth2Exception.class, InvalidGrantException.class})
     public ResponseEntity<ResultMsg> grantOAuth2Error(HttpServletRequest request, HttpServletResponse response, Exception e) {
         log.error(e.getMessage());
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(response.getStatus(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResultMsg.fail(HttpStatus.FORBIDDEN.value(), e.getMessage()));
     }
 
     @ExceptionHandler(value = {BusinessException.class})
     public ResponseEntity<ResultMsg> grantBusinessError(HttpServletRequest request, HttpServletResponse response, Exception e) {
         log.error(e.getMessage());
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMsg.fail(response.getStatus(), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResultMsg.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
 
     @ExceptionHandler(value = {Exception.class})

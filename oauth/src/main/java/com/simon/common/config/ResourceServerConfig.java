@@ -24,7 +24,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .antMatcher("/api/**")
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests().antMatchers("/api/helloWorlds/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .httpStrictTransportSecurity().disable()
