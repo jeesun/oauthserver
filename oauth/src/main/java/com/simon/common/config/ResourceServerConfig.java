@@ -23,14 +23,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                .antMatcher("/api/**")
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
                 .headers().frameOptions().sameOrigin()
                 .httpStrictTransportSecurity().disable()
                 .and()
+                .httpBasic().disable()
                 .csrf().disable()
-                .formLogin().loginPage("/login").permitAll()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").permitAll()
-                .anyRequest().permitAll();
+                .formLogin().loginPage("/login").permitAll();
     }
 }
