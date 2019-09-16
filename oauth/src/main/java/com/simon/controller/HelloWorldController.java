@@ -12,8 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ import java.util.Locale;
  * @author simon
  * @create 2018-05-31 10:10
  **/
-@ApiIgnore
+//@ApiIgnore
 @Slf4j
 @Api("测试")
 @RestController
@@ -99,6 +99,8 @@ public class HelloWorldController extends BaseController {
         return ResultMsg.success(new Date());
     }
 
+    @PreAuthorize("permitAll()")
+    @PermitAll
     @ApiOperation(value = "测试返回格式化日期2")
     @GetMapping("/time")
     public ResultMsg time(){
