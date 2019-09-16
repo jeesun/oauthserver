@@ -19,6 +19,7 @@ public interface VillageMapper extends CrudMapper<Village> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = VillageProvider.class, method = "getList")
     List<Village> getList(Map<String, Object> map);

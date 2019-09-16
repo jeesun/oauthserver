@@ -25,9 +25,6 @@
 --# JTDS driver
 --#
 
-USE [enter_db_name_here]
-GO
-
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[FK_QRTZ_TRIGGERS_QRTZ_JOB_DETAILS]') AND OBJECTPROPERTY(id, N'ISFOREIGNKEY') = 1)
 ALTER TABLE [dbo].[QRTZ_TRIGGERS] DROP CONSTRAINT FK_QRTZ_TRIGGERS_QRTZ_JOB_DETAILS
 GO
@@ -367,3 +364,15 @@ GO
 
 
 -- 2019-09-02 by simon quartz集群SQL end
+
+
+-- 2019-09-11 by simon 新增字段 start
+ALTER TABLE [dbo].[t_s_quartz_job] ADD [job_group] nvarchar(50) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'任务组',
+'SCHEMA', N'dbo',
+'TABLE', N't_s_quartz_job',
+'COLUMN', N'job_group'
+-- 2019-09-11 by simon 新增字段 end

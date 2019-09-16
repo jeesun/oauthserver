@@ -41,34 +41,34 @@ public class HelloWorldController extends BaseController {
     @ApiOperation("测试仅ADMIN可访问")
     @RolesAllowed("ADMIN")
     @GetMapping(value = "/admin")
-    public ResultMsg admin(){
+    public ResultMsg admin() {
         return ResultMsg.success(200, "你是admin用户");
     }
 
     @ApiOperation("测试")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
-    public ResultMsg all(){
+    public ResultMsg all() {
         return ResultMsg.success(200, "需要登录");
     }
 
     @ApiOperation("测试（不需要传Authentication）")
     @GetMapping("notAuth")
-    public ResultMsg notAuth(){
+    public ResultMsg notAuth() {
         return ResultMsg.success(200, "无需登录");
     }
 
     //@IgnoreSecurity
     @ApiOperation(value = "测试国际化，传locale参数，值可取zh_CN, en_US等，例如locale=zh_CN", notes = "忽略安全，不需要传token")
     @GetMapping("testLocale")
-    public ResultMsg testLocale(HttpServletRequest request, HttpServletResponse response, Locale locale){
+    public ResultMsg testLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
         return ResultMsg.success(200, messageSource.getMessage("helloWorld", null, locale));
     }
 
     @ApiOperation(value = "测试获取用户名")
     @GetMapping("getUsername")
-    public ResultMsg getUserName(Principal principal){
-        return ResultMsg.success(200, "",principal);
+    public ResultMsg getUserName(Principal principal) {
+        return ResultMsg.success(200, "", principal);
     }
 
     @ApiOperation(value = "测试获取用户名2")
@@ -92,13 +92,13 @@ public class HelloWorldController extends BaseController {
 
     @ApiOperation(value = "测试返回格式化日期")
     @GetMapping("/date")
-    public ResultMsg date(){
+    public ResultMsg date() {
         return ResultMsg.success(new Date());
     }
 
     @ApiOperation(value = "测试返回格式化日期2")
     @GetMapping("/time")
-    public ResultMsg time(){
+    public ResultMsg time() {
         return ResultMsg.success(Time.valueOf(LocalTime.now()));
     }
 }

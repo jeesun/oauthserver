@@ -6,9 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import java.util.TimeZone;
@@ -21,9 +22,10 @@ import java.util.TimeZone;
 @SpringBootApplication
 @MapperScan("com.simon.mapper")
 @EnableAsync
-@EnableResourceServer
 @EnableOAuth2Client
 @EnableDiscoveryClient
+@EnableTransactionManagement
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class OldTaskApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {

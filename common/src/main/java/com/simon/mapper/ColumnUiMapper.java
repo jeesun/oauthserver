@@ -19,6 +19,7 @@ public interface ColumnUiMapper extends CrudMapper<ColumnUi> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = ColumnUiProvider.class, method = "getList")
     List<ColumnUi> getList(Map<String, Object> map);

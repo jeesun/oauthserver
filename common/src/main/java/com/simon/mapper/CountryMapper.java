@@ -21,6 +21,7 @@ public interface CountryMapper extends CrudMapper<Country> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = CountryProvider.class, method = "getList")
     List<Country> getList(Map<String, Object> map);

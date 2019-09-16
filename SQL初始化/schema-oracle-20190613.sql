@@ -661,3 +661,8 @@ create index idx_qrtz_ft_tg on qrtz_fired_triggers(SCHED_NAME,TRIGGER_GROUP);
 
 
 -- 2019-09-02 by simon quartz集群SQL end
+
+-- 2019-09-11 by simon 新增字段 start
+ALTER TABLE t_s_quartz_job ADD (job_group nvarchar2 ( 50 ));
+COMMENT ON COLUMN t_s_quartz_job.job_group IS '任务组';
+-- 2019-09-11 by simon 新增字段 end

@@ -21,6 +21,7 @@ public interface CityMapper extends CrudMapper<City> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = CityProvider.class, method = "getList")
     List<City> getList(Map<String, Object> map);

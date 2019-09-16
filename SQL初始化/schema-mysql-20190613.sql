@@ -590,3 +590,7 @@ CREATE TABLE QRTZ_LOCKS
 
 commit;
 -- 2019-09-02 by simon quartz集群SQL end
+
+-- 2019-09-11 by simon 新增字段 start
+ALTER TABLE t_s_quartz_job ADD COLUMN job_group varchar(50) NULL COMMENT '任务组' AFTER job_name;
+-- 2019-09-11 by simon 新增字段 end

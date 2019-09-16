@@ -26,5 +26,6 @@ public interface AuthorityMapper extends CrudMapper<Authority> {
      */
     int deleteByUserIds(@Param("userIds") String userIds);
 
+    @Override
     List<Authority> getList(@Param("map") Map<String, Object> map);
 }

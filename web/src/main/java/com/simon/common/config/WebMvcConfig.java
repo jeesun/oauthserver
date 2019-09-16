@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.simon.common.handler.CurrentUserMethodArgumentResolver;
 import com.simon.common.resolver.CustomLocaleResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         super.addArgumentResolvers(argumentResolvers);
-        //argumentResolvers.add(currentUserMethodArgumentResolver());
     }
 
     private MappingJackson2HttpMessageConverter jackson2HttpMessageConverter(){
@@ -78,9 +76,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        /*SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-        return slr;*/
         return new CustomLocaleResolver();
     }
 
@@ -92,17 +87,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return lci;
     }
 
-    @Bean
-    public CurrentUserMethodArgumentResolver currentUserMethodArgumentResolver(){
-        return new CurrentUserMethodArgumentResolver();
-    }
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         super.addViewControllers(registry);
         registry.addViewController("/login").setViewName("login");
-        //registry.addViewController("/").setViewName("index");
-        //registry.addViewController("/index").setViewName("index");
         registry.addViewController("/index_iframe").setViewName("index_iframe");
         registry.addViewController("/demo/file_upload_demo").setViewName("demo/file_upload_demo");
         registry.addViewController("/demo/bootstrap_demo").setViewName("demo/bootstrap_demo");

@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface LoggingEventMapper extends CrudMapper<LoggingEvent> {
+    @Override
     List<LoggingEvent> getList(@Param("map") Map<String, Object> map);
 }

@@ -4,7 +4,6 @@ import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.domain.UserEntity;
-import com.simon.common.plugins.quartz.QuartzManager;
 import com.simon.common.utils.BeanUtils;
 import com.simon.model.QuartzJob;
 import com.simon.service.DictTypeService;
@@ -104,7 +103,7 @@ public class QuartzJobController extends BaseController {
         QuartzJob quartzJob = quartzJobService.findById(body.getId());
         if (!quartzJob.getCronExpression().equals(body.getCronExpression())) {
             BeanUtils.copyPropertiesIgnoreNull(body, quartzJob);
-            QuartzManager.modifyJobTime(quartzJob, TRIGGER_GROUP_NAME);
+            //QuartzManager.modifyJobTime(quartzJob, TRIGGER_GROUP_NAME);
             //更新cron之后，定时任务会启动。
             quartzJob.setJobStatus(1);
         }
@@ -131,14 +130,14 @@ public class QuartzJobController extends BaseController {
         UserEntity userEntity = getCurrentUser(authentication);
         QuartzJob quartzJob = quartzJobService.findById(body.getId());
 
-        if (!QuartzManager.isJobExists(quartzJob)) {
+        /*if (!QuartzManager.isJobExists(quartzJob)) {
             QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
         }
         if (0 == body.getJobStatus()) {
             QuartzManager.pauseJob(quartzJob);
         } else {
             QuartzManager.resumeJob(quartzJob);
-        }
+        }*/
 
         quartzJob.setJobStatus(body.getJobStatus());
         quartzJob.setUpdateBy(userEntity.getId());

@@ -19,6 +19,7 @@ public interface SideMenuMultiLanguageMapper extends CrudMapper<SideMenuMultiLan
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = SideMenuMultiLanguageProvider.class, method = "getList")
     List<SideMenuMultiLanguage> getList(Map<String, Object> map);
