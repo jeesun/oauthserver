@@ -8,6 +8,9 @@ package com.simon.common.domain;
  **/
 
 public enum PaymentType {
+    /**
+     * 支付方式
+     */
     ALI_PAY(1, "alipay"),
     WX_PAY(2, "wxpay");
 

@@ -12,5 +12,6 @@ public interface BillMapper extends CrudMapper<Bill> {
 
     List<Bill> getDtoList(@Param("map") Map<String, Object> params);
 
+    @Override
     List<Bill> getList(@Param("map") Map<String, Object> map);
 }

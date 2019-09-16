@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface NoticeMsgMapper extends CrudMapper<NoticeMsg> {
+    @Override
     List<NoticeMsg> getList(@Param("map") Map<String, Object> map);
 }

@@ -22,6 +22,7 @@ public interface DictTypeMapper extends CrudMapper<DictType> {
 
     List<EasyUiTreeGridDto> getTreeGridDtos(@Param("groupCode") String groupCode, @Param("language") String language);
 
+    @Override
     List<DictType> getList(@Param("map") Map<String, Object> map);
 
     /**

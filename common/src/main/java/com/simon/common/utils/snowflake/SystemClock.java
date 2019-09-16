@@ -40,6 +40,7 @@ public class SystemClock {
 
     private void scheduleClockUpdating() {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+            @Override
             public Thread newThread(Runnable runnable) {
                 Thread thread = new Thread(runnable, "System Clock");
                 thread.setDaemon(true);
@@ -47,6 +48,7 @@ public class SystemClock {
             }
         });
         scheduler.scheduleAtFixedRate(new Runnable() {
+            @Override
             public void run() {
                 now.set(System.currentTimeMillis());
             }

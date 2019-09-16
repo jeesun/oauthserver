@@ -67,7 +67,7 @@ public class PageGeneratorUtil {
 
             //设置id列类型
             for(Column column : entityModel.getColumns()){
-                if (column.getName().equalsIgnoreCase("id")) {
+                if ("id".equalsIgnoreCase(column.getName())) {
                     entityModel.setIdType(column.getType());
                     break;
                 }
@@ -131,7 +131,7 @@ public class PageGeneratorUtil {
 
             //设置id列类型
             for(Column column : entityModel.getColumns()){
-                if (column.getName().equalsIgnoreCase("id")) {
+                if ("id".equalsIgnoreCase(column.getName())) {
                     entityModel.setIdType(column.getType());
                     break;
                 }

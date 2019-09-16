@@ -11,5 +11,6 @@ import java.util.Map;
 * @date 2019-01-20
 **/
 public interface NewsInfoService extends CrudService<NewsInfo, Long> {
+    @Override
     PageInfo<NewsInfo> getList(Map<String, Object> params, Integer pageNo, Integer pageSize, String orderBy);
 }

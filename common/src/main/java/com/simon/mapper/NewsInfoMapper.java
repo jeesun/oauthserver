@@ -19,6 +19,7 @@ public interface NewsInfoMapper extends CrudMapper<NewsInfo> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = NewsInfoProvider.class, method = "getList")
     List<NewsInfo> getList(Map<String, Object> map);

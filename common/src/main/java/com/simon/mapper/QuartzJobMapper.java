@@ -18,6 +18,7 @@ public interface QuartzJobMapper extends CrudMapper<QuartzJob> {
      * @param map map查询条件
      * @return 查询结果
      */
+    @Override
     List<QuartzJob> getList(@Param("map") Map<String, Object> map);
 
     int updateJobStatus(@Param("jobStatus") int jobStatus);

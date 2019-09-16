@@ -30,6 +30,7 @@ public interface OauthUserMapper extends CrudMapper<OauthUser> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("SuperMap")
     @SelectProvider(type = OauthUserProvider.class, method = "getList")
     List<OauthUser> getList(Map<String, Object> map);

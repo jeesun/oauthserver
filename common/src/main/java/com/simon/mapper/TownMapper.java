@@ -19,6 +19,7 @@ public interface TownMapper extends CrudMapper<Town> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = TownProvider.class, method = "getList")
     List<Town> getList(Map<String, Object> map);

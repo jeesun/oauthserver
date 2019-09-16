@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         map.put("error", "400");
         map.put("message", accessDeniedException.getMessage());
         map.put("path", request.getServletPath());
-        map.put("timestamp", String.valueOf(new Date().getTime()));
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(objectMapper.writeValueAsString(map));

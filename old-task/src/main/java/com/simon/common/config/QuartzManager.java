@@ -1,4 +1,4 @@
-package com.simon.common.plugins.quartz;
+package com.simon.common.config;
 
 import com.simon.model.QuartzJob;
 import org.quartz.*;

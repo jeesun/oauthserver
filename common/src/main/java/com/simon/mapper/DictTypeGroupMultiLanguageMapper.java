@@ -21,6 +21,7 @@ public interface DictTypeGroupMultiLanguageMapper extends CrudMapper<DictTypeGro
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = DictTypeGroupMultiLanguageProvider.class, method = "getList")
     List<DictTypeGroupMultiLanguage> getList(Map<String, Object> map);

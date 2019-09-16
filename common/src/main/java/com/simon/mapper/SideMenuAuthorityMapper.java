@@ -19,6 +19,7 @@ public interface SideMenuAuthorityMapper extends CrudMapper<SideMenuAuthority> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @SelectProvider(type = SideMenuAuthorityProvider.class, method = "getList")
     List<SideMenuAuthority> getList(Map<String, Object> map);
 

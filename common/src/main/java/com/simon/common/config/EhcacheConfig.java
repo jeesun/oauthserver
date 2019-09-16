@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableCaching
 public class EhcacheConfig extends CachingConfigurerSupport {
+    @Override
     @Bean
     public org.springframework.cache.CacheManager cacheManager(){
 

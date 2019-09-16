@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ResetPwdInfoMapper extends CrudMapper<ResetPwdInfo> {
+    @Override
     List<ResetPwdInfo> getList(@Param("map") Map<String, Object> map);
 }

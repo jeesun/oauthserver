@@ -20,6 +20,7 @@ public interface ProvinceMapper extends CrudMapper<Province> {
      * @param map 查询条件
      * @return 结果列表
      */
+    @Override
     @ResultMap("BaseResultMap")
     @SelectProvider(type = ProvinceProvider.class, method = "getList")
     List<Province> getList(Map<String, Object> map);

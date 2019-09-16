@@ -16,15 +16,15 @@ import javax.sql.DataSource;
 import java.net.URLEncoder;
 
 /**
- *
+ * WebSecurityConfigurerAdapter是默认情况下Spring security的http配置
+ * WebSecurityConfigurerAdapter的配置的拦截要优先于ResourceServerConfigurerAdapter，优先级高的http配置是可以覆盖优先级低的配置的。
+ * Spring Security默认是禁用注解的，要想开启注解，需要在继承WebSecurityConfigurerAdapter的类上加@EnableGlobalMethodSecurity注解，来判断用户对某个控制层的方法是否具有访问权限
  * @author simon
  * @date 2017/2/18
  */
 @Slf4j
-//WebSecurityConfigurerAdapter的配置的拦截要优先于ResourceServerConfigurerAdapter
 @Configuration
 @EnableWebSecurity
-//Spring Security默认是禁用注解的，要想开启注解，需要在继承WebSecurityConfigurerAdapter的类上加@EnableGlobalMethodSecurity注解，来判断用户对某个控制层的方法是否具有访问权限
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired

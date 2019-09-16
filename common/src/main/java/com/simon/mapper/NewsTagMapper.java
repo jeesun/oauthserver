@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface NewsTagMapper extends CrudMapper<NewsTag> {
+    @Override
     List<NewsTag> getList(@Param("map") Map<String, Object> map);
 }

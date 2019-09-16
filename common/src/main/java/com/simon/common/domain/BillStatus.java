@@ -8,6 +8,9 @@ package com.simon.common.domain;
  **/
 
 public enum BillStatus {
+    /**
+     * 订单状态
+     */
     WAIT_PAY(1, "待付款"),
     PAYED(2, "已付款，待发货"),
     DELIVERED(3, "已发货，待收货"),
