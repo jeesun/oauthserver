@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,11 +19,17 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @Api(tags = {"Quartz定时任务集群"})
-@Controller
+@RestController
 @RequestMapping("/api/tasks")
 public class TaskController extends BaseController {
     @Autowired
     private TaskService taskService;
+
+    @ApiOperation(value = "获取所有任务")
+    @GetMapping
+    public ResultMsg getAllJobs() {
+        return ResultMsg.success(taskService.list());
+    }
 
     @ApiOperation(value = "添加定时任务")
     @PostMapping
@@ -68,6 +73,7 @@ public class TaskController extends BaseController {
     }
 
     @ApiOperation(value = "判断定时任务是否存在")
+    @GetMapping("checkExists")
     public ResultMsg checkExists(
             @ApiParam(value = "任务名称", required = true) @RequestParam String jobName,
             @ApiParam(value = "任务组", required = true) @RequestParam String jobGroup) throws SchedulerException {

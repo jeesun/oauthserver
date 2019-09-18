@@ -1,13 +1,10 @@
 package com.simon.task;
 
-import com.simon.common.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
-
-import java.util.Date;
 
 /**
  * 任务示例
@@ -21,6 +18,6 @@ import java.util.Date;
 public class SampleTask implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
-        log.info(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        log.info("JobName: {}", jobExecutionContext.getJobDetail().getKey().getName());
     }
 }

@@ -42,6 +42,12 @@ public class DictTypeServiceImpl extends CrudServiceImpl<DictType, Long> impleme
     private DictTypeMultiLanguageRepository dictTypeMultiLanguageRepository;
 
     @Override
+    public void delete(Long id) {
+        super.delete(id);
+        dictTypeMultiLanguageRepository.deleteByDictTypeId(id);
+    }
+
+    @Override
     public List<DictType> getTypeByGroupCode(String groupCode, String language) {
         return dictTypeMapper.getByGroupCode(groupCode, language);
     }

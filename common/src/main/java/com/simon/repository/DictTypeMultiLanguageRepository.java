@@ -11,4 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DictTypeMultiLanguageRepository extends JpaRepository<DictTypeMultiLanguage, Long> {
     DictTypeMultiLanguage findByDictTypeIdAndLanguage(Long dictTypeId, String language);
+
+    void deleteByDictTypeId(Long dictTypeId);
+
+    void deleteByDictTypeIdAndLanguage(Long dictTypeId, String language);
 }
