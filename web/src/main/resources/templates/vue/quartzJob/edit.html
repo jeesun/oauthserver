@@ -10,11 +10,11 @@
                 <el-form-item th:label="#{quartzJob.jobName}" prop="jobName">
                     <el-input v-model="ruleForm.jobName" th:placeholder="#{pleaseInput} + #{quartzJob.jobName}" :disabled="true"></el-input>
                 </el-form-item>
+                <el-form-item th:label="#{quartzJob.jobGroup}" prop="jobGroup">
+                    <el-input v-model="ruleForm.jobGroup" th:placeholder="#{pleaseInput} + #{quartzJob.jobGroup}" :disabled="true"></el-input>
+                </el-form-item>
                 <el-form-item th:label="#{quartzJob.cronExpression}" prop="cronExpression">
                     <el-input v-model="ruleForm.cronExpression" th:placeholder="#{pleaseInput} + #{quartzJob.cronExpression}"></el-input>
-                </el-form-item>
-                <el-form-item th:label="#{quartzJob.beanName}" prop="beanName">
-                    <el-input v-model="ruleForm.beanName" th:placeholder="#{pleaseInput} + #{quartzJob.beanName}" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{quartzJob.description}" prop="description">
                     <el-input v-model="ruleForm.description" th:placeholder="#{pleaseInput} + #{quartzJob.description}"></el-input>
@@ -51,17 +51,15 @@
                 id: [[${entity.id}]],
                 cronExpression: [[${entity.cronExpression}]],
                 description: [[${entity.description}]],
-                beanName: [[${entity.beanName}]],
-                triggerName: [[${entity.triggerName}]],
-                jobStatus: [[${entity.jobStatus}]],
                 jobName: [[${entity.jobName}]],
+                jobGroup: [[${entity.jobGroup}]]
             },
             rules: {
                 jobName: [
                     {required: true, message: [[#{quartzJob.jobName}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
-                beanName: [
-                    {required: true, message: [[#{quartzJob.beanName}]] + [[#{notEmpty}]], trigger: 'blur'}
+                jobGroup: [
+                    {required: true, message: [[#{quartzJob.jobGroup}]] + [[#{notEmpty}]], trigger: 'blur'}
                 ],
                 cronExpression: [
                     {required: true, message: [[#{quartzJob.cronExpression}]] + [[#{notEmpty}]], trigger: 'blur'}

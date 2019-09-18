@@ -10,8 +10,8 @@
                 <el-form-item th:label="#{quartzJob.jobName}" prop="jobName">
                     <el-input v-model="ruleForm.jobName" th:placeholder="#{pleaseInput} + #{quartzJob.jobName}"></el-input>
                 </el-form-item>
-                <el-form-item th:label="#{quartzJob.beanName}" prop="beanName">
-                    <el-input v-model="ruleForm.beanName" th:placeholder="#{pleaseInput} + #{quartzJob.beanName}"></el-input>
+                <el-form-item th:label="#{quartzJob.jobGroup}" prop="jobGroup">
+                    <el-input v-model="ruleForm.jobGroup" th:placeholder="#{pleaseInput} + #{quartzJob.jobGroup}"></el-input>
                 </el-form-item>
                 <el-form-item th:label="#{quartzJob.cronExpression}" prop="cronExpression">
                     <el-input v-model="ruleForm.cronExpression" th:placeholder="#{pleaseInput} + #{quartzJob.cronExpression}"></el-input>
@@ -51,8 +51,8 @@
             ruleForm: {
                 cronExpression: "",
                 description: "",
-                beanName: "",
                 jobName: "",
+                jobGroup: ""
             },
             rules: {
                 jobName: [
