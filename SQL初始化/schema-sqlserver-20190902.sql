@@ -376,3 +376,64 @@ EXEC sp_addextendedproperty
 'TABLE', N't_s_quartz_job',
 'COLUMN', N'job_group'
 -- 2019-09-11 by simon 新增字段 end
+
+-- 2019-09-18 by simon 更新job_status字典 start
+DELETE from t_dict_type where type_group_id=108265224984854528
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205715833207390208,0,108265224984854528,'job_status',0)
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205715943718912000,1,108265224984854528,'job_status',1)
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205716000853721088,2,108265224984854528,'job_status',2)
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205716049054662656,3,108265224984854528,'job_status',3)
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205716089974292480,4,108265224984854528,'job_status',4)
+GO
+
+INSERT INTO t_dict_type (id,type_code,type_group_id,type_group_code,order_num) VALUES (205716131967664128,5,108265224984854528,'job_status',5)
+GO
+
+delete from t_s_dt_multi_languages WHERE dict_type_id in (SELECT id from t_dict_type WHERE type_group_id=108265224984854528)
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205715833312247808,205715833207390208,'NONE','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205715943781826560,205715943718912000,'NORMAL','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716000883081216,205716000853721088,'PAUSED','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716049075634176,205716049054662656,'COMPLETE','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716089995264000,205716089974292480,'ERROR','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829952,205716131967664128,'BLOCKED','zh_CN')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829953,205715833207390208,'NONE','en_US')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829954,205715943718912000,'NORMAL','en_US')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829955,205716000853721088,'PAUSED','en_US')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829956,205716049054662656,'COMPLETE','en_US')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829957,205716089974292480,'ERROR','en_US')
+GO
+
+insert into t_s_dt_multi_languages (id,dict_type_id,name,language) values (205716131992829958,205716131967664128,'BLOCKED','en_US')
+-- 2019-09-18 by simon 更新job_status字典 end
