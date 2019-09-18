@@ -10,4 +10,11 @@ import org.springframework.stereotype.Repository;
 **/
 @Repository
 public interface QuartzJobRepository extends JpaRepository<QuartzJob, Long> {
+    /**
+     * 根据任务名和任务组查询定时任务
+     * @param jobName 任务名
+     * @param jobGroup 任务组
+     * @return 定时任务
+     */
+    QuartzJob findByJobNameAndJobGroup(String jobName, String jobGroup);
 }

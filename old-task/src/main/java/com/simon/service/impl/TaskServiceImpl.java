@@ -1,5 +1,6 @@
 package com.simon.service.impl;
 
+import com.simon.common.utils.snowflake.SnowFlakeId;
 import com.simon.model.QuartzJob;
 import com.simon.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,12 +50,13 @@ public class TaskServiceImpl implements TaskService {
                         }
 
                         QuartzJob quartzJob = new QuartzJob();
+                        quartzJob.setId(SnowFlakeId.getId());
                         quartzJob.setJobName(jobKey.getName());
                         quartzJob.setJobGroup(jobKey.getGroup());
                         quartzJob.setDescription(jobDetail.getDescription());
-                        //quartzJob.setJobStatus(triggerState.name());
+
+                        quartzJob.setJobStatus(triggerState.ordinal());
                         quartzJob.setCronExpression(cronExpression);
-                        //quartzJob.setCreateDate(createTime);
                         list.add(quartzJob);
                     }
                 }
@@ -65,6 +67,20 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return list;
+    }
+
+    public static boolean isJobRunning(Scheduler scheduler, String jobName, String groupName)
+            throws SchedulerException {
+        List<JobExecutionContext> currentJobs = scheduler.getCurrentlyExecutingJobs();
+
+        for (JobExecutionContext jobCtx : currentJobs) {
+            String thisJobName = jobCtx.getJobDetail().getKey().getName();
+            String thisGroupName = jobCtx.getJobDetail().getKey().getGroup();
+            if (jobName.equalsIgnoreCase(thisJobName) && groupName.equalsIgnoreCase(thisGroupName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

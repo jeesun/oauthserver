@@ -37,10 +37,11 @@
             <!--<el-table-column align="center" prop="id" label="id" width="180"></el-table-column>-->
             <el-table-column align="center" prop="cronExpression" th:label="#{quartzJob.cronExpression}" width="180"></el-table-column>
             <el-table-column align="center" prop="jobName" th:label="#{quartzJob.jobName}" width="180" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column align="center" prop="beanName" th:label="#{quartzJob.beanName}" width="240"
-                             :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column align="center" prop="jobGroup" th:label="#{quartzJob.jobGroup}" width="180" :show-overflow-tooltip="true"></el-table-column>
+            <!--<el-table-column align="center" prop="beanName" th:label="#{quartzJob.beanName}" width="240"
+                             :show-overflow-tooltip="true"></el-table-column>-->
             <el-table-column align="center" prop="description" th:label="#{quartzJob.description}" width="180"></el-table-column>
-            <el-table-column align="center" prop="triggerName" th:label="#{quartzJob.triggerName}" width="180"></el-table-column>
+            <!--<el-table-column align="center" prop="triggerName" th:label="#{quartzJob.triggerName}" width="180"></el-table-column>-->
             <el-table-column align="center" prop="jobStatus" th:label="#{quartzJob.jobStatus}" width="180" :formatter="formatJobStatus"></el-table-column>
             <el-table-column align="center" th:label="#{operation}" width="400">
                 <template slot-scope="scope">
@@ -84,8 +85,8 @@
     var requestUrls = {
         list: "/api/quartzJobs/data",
         add: "/api/quartzJobs/add",
-        edit: "/api/quartzJobs/edit?id=",
-        delete: "/api/quartzJobs/ids/",
+        edit: "/api/quartzJobs/edit",
+        delete: "/api/quartzJobs",
         updateJobStatus: "/api/quartzJobs/updateJobStatus"
     };
 
@@ -180,7 +181,8 @@
             handleStartJob(index, row) {
                 parent.openLoading();
                 this.$http.post(requestUrls.updateJobStatus, {
-                    id: row.id,
+                    jobName: row.jobName,
+                    jobGroup: row.jobGroup,
                     jobStatus: 1
                 }).then((response) => {
                         parent.closeLoading();
@@ -199,7 +201,8 @@
             handleStopJob(index, row) {
                 parent.openLoading();
                 this.$http.post(requestUrls.updateJobStatus, {
-                    id: row.id,
+                    jobName: row.jobName,
+                    jobGroup: row.jobGroup,
                     jobStatus: 0
                 }).then((response) => {
                     parent.closeLoading();
@@ -218,7 +221,7 @@
             handleEdit(index, row) {
                 parent.showWindow({
                     title: [[#{edit}]],
-                    content: requestUrls.edit + row.id
+                    content: requestUrls.edit + "?jobName=" + row.jobName + "&jobGroup=" + row.jobGroup + "&cronExpression=" + row.cronExpression + "&description=" + row.description
                 });
             },
             handleDelete(index, row) {
@@ -234,7 +237,7 @@
 
             },
             doDelete(index, row) {
-                this.$http.delete(requestUrls.delete + row.id)
+                this.$http.delete(requestUrls.delete + "?jobName=" + row.jobName + "&jobGroup=" + row.jobGroup)
                     .then((response) => {
                         parent.showSuccess([[#{deleteSuccess}]]);
                         this.loadData(this.pageNo, this.pageSize);

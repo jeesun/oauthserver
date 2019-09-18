@@ -1,8 +1,9 @@
 package com.simon.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.simon.common.config.AppConfig;
 import com.simon.common.domain.BasePo;
 import com.simon.common.utils.SnowflakeGenId;
@@ -27,9 +28,10 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name="t_s_quartz_job")
-public class QuartzJob extends BasePo<Long> implements Serializable{
+public class QuartzJob extends BasePo<Long> implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @JSONField(serializeUsing = ToStringSerializer.class)
     @Id
     @Column(name = "id")
@@ -38,6 +40,7 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @GenericGenerator(name = "sequenceId", strategy = "com.simon.common.utils.snowflake.SequenceId")
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "创建人id")
     @Column(name = "create_by")
@@ -49,6 +52,7 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     @JSONField(serializeUsing = ToStringSerializer.class)
     @ApiModelProperty(value = "更新人id")
     @Column(name = "update_by")
@@ -60,7 +64,7 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    @ApiModelProperty(value = "cron表达式")
+    @ApiModelProperty(value = "cron表达式", example = "*/5 * * * * ?")
     @Column(name = "cron_expression")
     private String cronExpression;
 
@@ -68,11 +72,11 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @Column(name = "description")
     private String description;
 
-    @ApiModelProperty(value = "完全限定类名")
+    @ApiModelProperty(value = "完全限定类名", example = "com.simon.task.CtripScenicJob")
     @Column(name = "bean_name")
     private String beanName;
 
-    @ApiModelProperty(value = "触发器名称")
+    @ApiModelProperty(value = "触发器名称", example = "org.quartz.CronTrigger")
     @Column(name = "trigger_name")
     private String triggerName;
 
@@ -80,11 +84,11 @@ public class QuartzJob extends BasePo<Long> implements Serializable{
     @Column(name = "job_status")
     private Integer jobStatus;
 
-    @ApiModelProperty(value = "任务名")
+    @ApiModelProperty(value = "任务名", example = "com.simon.task.CtripScenicJob")
     @Column(name = "job_name")
     private String jobName;
 
-    @ApiModelProperty(value = "任务组")
+    @ApiModelProperty(value = "任务组", example = "group01")
     @Column(name = "job_group")
     private String jobGroup;
 

@@ -3,8 +3,6 @@ package com.simon.controller;
 import com.simon.common.controller.BaseController;
 import com.simon.common.domain.EasyUIDataGridResult;
 import com.simon.common.domain.ResultMsg;
-import com.simon.common.domain.UserEntity;
-import com.simon.common.utils.BeanUtils;
 import com.simon.model.QuartzJob;
 import com.simon.service.DictTypeService;
 import com.simon.service.QuartzJobService;
@@ -20,10 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * quartz任务
@@ -61,8 +56,13 @@ public class QuartzJobController extends BaseController {
 
     @ApiOperation(value = "编辑页面")
     @GetMapping("edit")
-    public String edit(@RequestParam Long id, Model model) {
-        model.addAttribute("entity", entityToMap(quartzJobService.findById(id)));
+    public String edit(@RequestParam String jobName, @RequestParam String jobGroup, @RequestParam String cronExpression, @RequestParam String description, Model model) {
+        QuartzJob quartzJob = new QuartzJob();
+        quartzJob.setJobName(jobName);
+        quartzJob.setJobGroup(jobGroup);
+        quartzJob.setCronExpression(cronExpression);
+        quartzJob.setDescription(description);
+        model.addAttribute("entity", quartzJob);
         return "vue/quartzJob/edit";
     }
 
@@ -71,26 +71,18 @@ public class QuartzJobController extends BaseController {
     @ResponseBody
     public EasyUIDataGridResult<QuartzJob> getEasyUIList(
             @ApiParam(value = "类名") @RequestParam(required = false) String beanName,
-            @ApiParam(value = "job状态") @RequestParam(required = false) Integer jobStatus,
             @ApiParam(value = "页码", defaultValue = "1", required = true) @RequestParam Integer pageNo,
             @ApiParam(value = "每页条数", defaultValue = "10", required = true) @RequestParam Integer pageSize,
             @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "") String orderBy) {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("beanName", beanName);
-        params.put("jobStatus", jobStatus);
-        return new EasyUIDataGridResult<>(quartzJobService.getList(params, pageNo, pageSize, orderBy));
+
+        return new EasyUIDataGridResult<>(quartzJobService.getAllJobs().getData());
     }
 
     @ApiOperation(value = "新增")
     @PostMapping("add")
     @ResponseBody
     public ResultMsg add(@RequestBody QuartzJob body, Authentication authentication) {
-        UserEntity userEntity = getCurrentUser(authentication);
-        body.setCreateDate(LocalDateTime.now());
-        body.setCreateBy(userEntity.getId());
-        //任务状态默认为停止
-        body.setJobStatus(0);
-        quartzJobService.insertSelective(body);
+        quartzJobService.addJob(body);
         return ResultMsg.success();
     }
 
@@ -98,28 +90,15 @@ public class QuartzJobController extends BaseController {
     @PatchMapping("edit")
     @ResponseBody
     public ResultMsg update(@RequestBody QuartzJob body, Authentication authentication) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
-        UserEntity userEntity = getCurrentUser(authentication);
-
-        QuartzJob quartzJob = quartzJobService.findById(body.getId());
-        if (!quartzJob.getCronExpression().equals(body.getCronExpression())) {
-            BeanUtils.copyPropertiesIgnoreNull(body, quartzJob);
-            //QuartzManager.modifyJobTime(quartzJob, TRIGGER_GROUP_NAME);
-            //更新cron之后，定时任务会启动。
-            quartzJob.setJobStatus(1);
-        }
-
-        quartzJob.setUpdateDate(LocalDateTime.now());
-        quartzJob.setUpdateBy(userEntity.getId());
-        quartzJobService.updateByPrimaryKeySelective(quartzJob);
-
+        quartzJobService.edit(body);
         return ResultMsg.success();
     }
 
     @ApiOperation(value = "删除")
-    @DeleteMapping("/ids/{ids}")
+    @DeleteMapping
     @ResponseBody
-    public ResultMsg delete(@PathVariable String ids) {
-        quartzJobService.deleteByIds(ids);
+    public ResultMsg delete(@RequestParam String jobName, @RequestParam String jobGroup) {
+        quartzJobService.delete(jobName, jobGroup);
         return ResultMsg.success();
     }
 
@@ -127,22 +106,11 @@ public class QuartzJobController extends BaseController {
     @PostMapping("/updateJobStatus")
     @ResponseBody
     public ResultMsg operation(@RequestBody QuartzJob body, Authentication authentication) throws ClassNotFoundException, InstantiationException, SchedulerException, IllegalAccessException {
-        UserEntity userEntity = getCurrentUser(authentication);
-        QuartzJob quartzJob = quartzJobService.findById(body.getId());
-
-        /*if (!QuartzManager.isJobExists(quartzJob)) {
-            QuartzManager.addJob(quartzJob, TRIGGER_GROUP_NAME);
-        }
         if (0 == body.getJobStatus()) {
-            QuartzManager.pauseJob(quartzJob);
+            quartzJobService.pauseJob(body.getJobName(), body.getJobGroup());
         } else {
-            QuartzManager.resumeJob(quartzJob);
-        }*/
-
-        quartzJob.setJobStatus(body.getJobStatus());
-        quartzJob.setUpdateBy(userEntity.getId());
-        quartzJob.setUpdateDate(LocalDateTime.now());
-        quartzJobService.updateByPrimaryKeySelective(quartzJob);
+            quartzJobService.resume(body.getJobName(), body.getJobGroup());
+        }
         return ResultMsg.success();
     }
 }

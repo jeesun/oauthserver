@@ -45,6 +45,12 @@ public class DictTypeGroupServiceImpl extends CrudServiceImpl<DictTypeGroup, Lon
     private DictTypeGroupMultiLanguageRepository dictTypeGroupMultiLanguageRepository;
 
     @Override
+    public void delete(Long id) {
+        super.delete(id);
+        dictTypeGroupMultiLanguageRepository.deleteByDictTypeGroupId(id);
+    }
+
+    @Override
     public List<DictTypeDto> getDtos(String language, Integer limit, Integer offset) {
         List<DictTypeDto> dtoList = new ArrayList<>();
         /*List<DictTypeGroup> groups = dictTypeGroupRepository.findAll(new PageRequest((offset/limit - 1), limit, Sort.Direction.DESC, "id")).getContent();*/

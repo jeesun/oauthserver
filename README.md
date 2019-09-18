@@ -101,7 +101,7 @@ IntelliJ IDEA或Eclipse请先安装lombok插件。
 - Microsoft SQL Server  
 连接信息在`application-sqlserver.yml`里。修改完数据库连接信息后，还需要设置`application-common.yml`的`spring.profiles.active=sqlserver`。  
 ### 4. 运行
-优先启动eureka-server，第一次启动可能需要先打包common模块，即在common目录下执行`mvn clean install -Dmaven.test.skip=true`。其他模块没有固定的启动顺序。
+优先启动eureka-server，然后启动oauth授权模块，其他模块没有固定的启动顺序。但是如果你需要使用到web模块的定时任务功能，需要优先启动old-task模块。
 
 ## api测试
 [oauth接口调用示例](tutorial/api.md)

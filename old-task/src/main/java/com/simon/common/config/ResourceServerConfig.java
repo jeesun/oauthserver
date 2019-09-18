@@ -19,7 +19,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
                 .antMatcher("/api/**")
                 .authorizeRequests().antMatchers("/api/helloWorlds/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .httpStrictTransportSecurity().disable()

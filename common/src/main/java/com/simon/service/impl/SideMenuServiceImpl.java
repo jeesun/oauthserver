@@ -14,6 +14,7 @@ import com.simon.model.SideMenu;
 import com.simon.model.SideMenuAuthority;
 import com.simon.model.SideMenuMultiLanguage;
 import com.simon.repository.SideMenuAuthorityRepository;
+import com.simon.repository.SideMenuMultiLanguageRepository;
 import com.simon.repository.SideMenuRepository;
 import com.simon.service.SideMenuService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,9 @@ public class SideMenuServiceImpl extends CrudServiceImpl<SideMenu, Long> impleme
     @Autowired
     private SideMenuMultiLanguageMapper sideMenuMultiLanguageMapper;
 
+    @Autowired
+    private SideMenuMultiLanguageRepository sideMenuMultiLanguageRepository;
+
     @Override
     public SideMenu save(SideMenu sideMenu) {
         if (null == sideMenu.getAuthorities() || sideMenu.getAuthorities().length <= 0) {
@@ -67,20 +71,23 @@ public class SideMenuServiceImpl extends CrudServiceImpl<SideMenu, Long> impleme
 
     @Override
     public void delete(Long id) {
+        List<Long> subIds = sideMenuMapper.selectIdByPid(id);
         sideMenuAuthorityMapper.deleteBySideMenuIdIn(id);
         sideMenuRepository.deleteByIdOrPid(id, id);
+        sideMenuMultiLanguageRepository.deleteBySideMenuIdIn(subIds);
     }
 
     @Override
     public int deleteByIds(String ids) {
         String[] idArr = ids.split(",");
         for (String id : idArr) {
+            List<Long> subIds = sideMenuMapper.selectIdByPid(Long.parseLong(id));
             sideMenuAuthorityMapper.deleteBySideMenuIdIn(Long.parseLong(id));
             sideMenuRepository.deleteByIdOrPid(Long.parseLong(id), Long.parseLong(id));
+            sideMenuMultiLanguageRepository.deleteBySideMenuIdIn(subIds);
         }
         return 1;
     }
-
 
     @Override
     public PageInfo<SideMenu> getAll(Map<String, Object> params, Integer limit, Integer offset) {
