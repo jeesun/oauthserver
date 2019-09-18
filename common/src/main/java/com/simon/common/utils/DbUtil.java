@@ -423,6 +423,7 @@ public class DbUtil {
                 if ("Long".equalsIgnoreCase(propertyType)) {
                     //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
                     annotation = "@ExcelColumn(title = \"id\", index = " + index + ", convertToString = true)\n" +
+                            "    @JsonSerialize(using = ToStringSerializer.class)\n" +
                             "    @JSONField(serializeUsing = ToStringSerializer.class)\n" +
                             "    @Id\n" +
                             "    @Column(name = \"id\")\n" +
@@ -456,6 +457,7 @@ public class DbUtil {
                 } else if ("Long".equalsIgnoreCase(propertyType)) {
                     //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", convertToString = true)\n" +
+                            "    @JsonSerialize(using = ToStringSerializer.class)\n" +
                             "    @JSONField(serializeUsing = ToStringSerializer.class)\n";
                 } else if ("LocalDateTime".equalsIgnoreCase(propertyType)) {
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
