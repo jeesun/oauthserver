@@ -35,7 +35,7 @@ public class ThymeleafConfig {
             }else{
                 vars.put("filePathPrefix", "http://localhost:" + serverPort);
             }
-
+            vars.put("elementUiVersion", "2.12.0");
             viewResolver.setStaticVariables(vars);
         }
     }

@@ -448,41 +448,44 @@ public class DbUtil {
                             "    @Column(name = \"id\")\n" +
                             "    @GeneratedValue(strategy = GenerationType.IDENTITY)";
                 }
+                if (StringUtils.isNotEmpty(annotation)) {
+                    annotation += "    @ApiModelProperty(value = \"id\")\n";
+                }
             } else {
                 if ("Date".equalsIgnoreCase(propertyType)) {
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
                             "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_TIME)\n" +
                             "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
-                            "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n";
+                            "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\", example = \"2019-09-24 17:28:45\")\n";
                 } else if ("Long".equalsIgnoreCase(propertyType)) {
                     //fastjson转换成map时，将Long转换成String，保证前端不丢失精度
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", convertToString = true)\n" +
                             "    @JsonSerialize(using = ToStringSerializer.class)\n" +
-                            "    @JSONField(serializeUsing = ToStringSerializer.class)\n";
+                            "    @JSONField(serializeUsing = ToStringSerializer.class)\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\")\n";
                 } else if ("LocalDateTime".equalsIgnoreCase(propertyType)) {
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
                             "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_DATETIME)\n" +
                             "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
-                            "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n";
+                            "    @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\", example = \"2019-09-24 17:28:45\")\n";
                 } else if ("LocalDate".equalsIgnoreCase(propertyType)) {
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_DAY)\n" +
                             "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_DAY)\n" +
                             "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DAY, timezone = AppConfig.DATE_TIMEZONE)\n" +
-                            "    @JSONField(format = AppConfig.DATE_PATTERN_DAY)\n";
+                            "    @JSONField(format = AppConfig.DATE_PATTERN_DAY)\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\", example = \"2019-09-24\")\n";
                 } else if ("LocalTime".equalsIgnoreCase(propertyType)) {
                     annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ", dateFormatPattern = AppConfig.DATE_PATTERN_TIME)\n" +
                             "    @DateTimeFormat(pattern = AppConfig.DATE_PATTERN_TIME)\n" +
                             "    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_TIME, timezone = AppConfig.DATE_TIMEZONE)\n" +
-                            "    @JSONField(format = AppConfig.DATE_PATTERN_TIME)\n";
+                            "    @JSONField(format = AppConfig.DATE_PATTERN_TIME)\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\", example = \"17:28:45\")\n";
                 } else {
-                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ")\n";
+                    annotation = "@ExcelColumn(title = \"" + comment + "\", index = " + index + ")\n" +
+                            "    @ApiModelProperty(value = \"" + comment + "\")\n";;
                 }
-
-                if (StringUtils.isNotEmpty(annotation)) {
-                    annotation += "    ";
-                }
-
-                annotation += "@ApiModelProperty(value = \"" + comment + "\")\n";
 
                 String charPattern = "char\\(\\d+\\)";
                 if (Pattern.matches(charPattern, columnType)) {

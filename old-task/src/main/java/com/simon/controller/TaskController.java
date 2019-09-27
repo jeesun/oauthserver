@@ -12,6 +12,8 @@ import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author simon
  * @version 1.0
@@ -27,7 +29,7 @@ public class TaskController extends BaseController {
 
     @ApiOperation(value = "获取所有任务")
     @GetMapping
-    public ResultMsg getAllJobs() {
+    public ResultMsg<List<QuartzJob>> getAllJobs() {
         return ResultMsg.success(taskService.list());
     }
 

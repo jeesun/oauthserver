@@ -1,6 +1,7 @@
 
 package com.simon.service.impl;
 
+import com.simon.client.TaskClient;
 import com.simon.common.domain.ResultMsg;
 import com.simon.common.service.impl.CrudServiceImpl;
 import com.simon.model.QuartzJob;
@@ -26,9 +27,13 @@ public class QuartzJobServiceImpl extends CrudServiceImpl<QuartzJob, Long> imple
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private TaskClient taskClient;
+
     @Override
     public ResultMsg<List<QuartzJob>> getAllJobs() {
-        return restTemplate.getForObject("http://old-task/api/tasks", ResultMsg.class);
+        //return restTemplate.getForObject("http://old-task/api/tasks", ResultMsg.class);
+        return taskClient.getAllJobs();
     }
 
     @Override

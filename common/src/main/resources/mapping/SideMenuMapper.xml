@@ -498,7 +498,7 @@
         LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id=tsmml.side_menu_id AND tsmml.language=#{language}
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
     GROUP BY
-        tsm.id
+        tsm.id,tsm.pid,tsmml.name,tsm.order_num,tsm.link_id
   </select>
 
     <select id="findEasyUiTreeDtoByAuthority" resultMap="EasyUiTreeDtoMap"
@@ -515,7 +515,7 @@
         LEFT JOIN t_s_side_menu_multi_languages tsmml ON tsm.id=tsmml.side_menu_id AND tsmml.language=#{language}
         LEFT JOIN t_side_menu_authority tsma ON tsm.id = tsma.side_menu_id
         GROUP BY
-        tsm.id,tsmml.name
+        tsm.id,tsm.pid,tsmml.name,tsm.order_num,tsm.link_id
     </select>
 
     <select id="findEasyUiTreeDtoByAuthority" resultMap="EasyUiTreeDtoMap"
