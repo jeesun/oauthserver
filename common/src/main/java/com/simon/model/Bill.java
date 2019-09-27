@@ -18,16 +18,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
-* 订单
-* @author SimonSun
-* @date 2018-11-20
-**/
+ * 订单
+ *
+ * @author SimonSun
+ * @date 2018-11-20
+ **/
 @ApiModel(description = "订单")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="t_bill")
-public class Bill extends BasePo<Long> implements Serializable{
+@Table(name = "t_bill")
+public class Bill extends BasePo<Long> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @JSONField(serializeUsing = ToStringSerializer.class)
@@ -45,7 +46,7 @@ public class Bill extends BasePo<Long> implements Serializable{
 
     @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
-@ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间")
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
@@ -56,7 +57,7 @@ public class Bill extends BasePo<Long> implements Serializable{
 
     @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
-@ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "更新时间")
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
@@ -90,7 +91,7 @@ public class Bill extends BasePo<Long> implements Serializable{
 
     @JSONField(format = AppConfig.DATE_PATTERN_DATETIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = AppConfig.DATE_PATTERN_DATETIME, timezone = AppConfig.DATE_TIMEZONE)
-@ApiModelProperty(value = "账单日期")
+    @ApiModelProperty(value = "账单日期")
     @Column(name = "bill_date")
     private LocalDateTime billDate;
 
