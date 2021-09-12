@@ -138,11 +138,11 @@ public class CodeGenerator {
     /**
      * 可选的要生成的代码部分
      */
-    private static String MODULE_MODEL_AND_MAPPER = "modelandmapper";
-    private static String MODULE_REPOSITORY = "repository";
-    private static String MODULE_SERVICE = "service";
-    private static String MODULE_CONTROLLER = "controller";
-    private static String MODULE_CONTROLLER_AND_PAGE = "controllerandpage";
+    private static final String MODULE_MODEL_AND_MAPPER = "modelandmapper";
+    private static final String MODULE_REPOSITORY = "repository";
+    private static final String MODULE_SERVICE = "service";
+    private static final String MODULE_CONTROLLER = "controller";
+    private static final String MODULE_CONTROLLER_AND_PAGE = "controllerandpage";
 
     private static Properties prop;
     static {
