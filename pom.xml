@@ -468,7 +468,7 @@
 			<dependency>
 				<groupId>org.yaml</groupId>
 				<artifactId>snakeyaml</artifactId>
-				<version>1.23</version>
+				<version>1.32</version>
 			</dependency>
 
 			<!-- 支付宝支付 -->
